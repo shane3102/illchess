@@ -1,1 +1,8 @@
-<p>chess-piece works!</p>
+<div [ngSwitch]="pieceInfo.piece">
+    <app-pawn [ngSwitchCase]="Piece.PAWN" [color]="pieceInfo.color"></app-pawn>
+    <app-knight [ngSwitchCase]="Piece.KNIGHT" [color]="pieceInfo.color"></app-knight>
+    <app-bishop [ngSwitchCase]="Piece.BISHOP" [color]="pieceInfo.color"></app-bishop>
+    <app-rook [ngSwitchCase]="Piece.ROOK" [color]="pieceInfo.color"></app-rook>
+    <app-queen [ngSwitchCase]="Piece.QUEEN" [color]="pieceInfo.color"></app-queen>
+    <app-king [ngSwitchCase]="Piece.KING" [color]="pieceInfo.color"></app-king>
+</div>

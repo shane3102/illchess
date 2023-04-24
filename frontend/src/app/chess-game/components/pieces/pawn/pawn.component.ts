@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { PieceColor } from 'src/app/chess-game/model/PieceInfo';
 
 @Component({
   selector: 'app-pawn',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pawn.component.scss']
 })
 export class PawnComponent implements OnInit {
+
+  @Input() color: PieceColor;
 
   constructor() { }
 

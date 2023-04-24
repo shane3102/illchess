@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Piece, PieceInfo } from '../../model/PieceInfo';
 
 @Component({
   selector: 'app-chess-piece',
@@ -6,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chess-piece.component.scss']
 })
 export class ChessPieceComponent implements OnInit {
+
+  Piece = Piece
+
+  pieceInfo: PieceInfo;
 
   constructor() { }
 
