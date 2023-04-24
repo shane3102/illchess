@@ -1,3 +1,5 @@
 <div class="chess-square" [ngStyle]="{'background-color': calculateSquareColor()}">
-    {{rank}}{{file}}
+    <div class="chess-square-info">
+        {{file}}{{rank}}
+    </div>
 </div>

@@ -1,4 +1,11 @@
+$chess-square-size: 12vh;
+
 .chess-square{
-    width: 10vh;
-    height: 10vh;
+    width: $chess-square-size;
+    height: $chess-square-size;
+}
+
+.chess-square-info{
+    padding-top: calc($chess-square-size - 2vh);
+    line-height: 2vh;
 }
