@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PieceColor } from 'src/app/chess-game/model/PieceInfo';
+import { PieceColor, getColorByPieceColor } from 'src/app/chess-game/model/PieceInfo';
+import { faChessPawn } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-pawn',
@@ -7,6 +8,10 @@ import { PieceColor } from 'src/app/chess-game/model/PieceInfo';
   styleUrls: ['./pawn.component.scss']
 })
 export class PawnComponent implements OnInit {
+
+  getColorByPieceColor = getColorByPieceColor
+
+  pawnIcon = faChessPawn;
 
   @Input() color: PieceColor;
 

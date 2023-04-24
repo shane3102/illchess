@@ -1,1 +1,3 @@
-<p>bishop works!</p>
+<div [ngStyle]="{'color': getColorByPieceColor(this.color)}" class="piece">
+    <fa-icon [icon]="bishopIcon"></fa-icon>
+</div>

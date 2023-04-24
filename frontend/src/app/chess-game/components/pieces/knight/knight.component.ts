@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PieceColor } from 'src/app/chess-game/model/PieceInfo';
+import { PieceColor, getColorByPieceColor } from 'src/app/chess-game/model/PieceInfo';
+import { faChessKnight } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-knight',
@@ -7,6 +8,10 @@ import { PieceColor } from 'src/app/chess-game/model/PieceInfo';
   styleUrls: ['./knight.component.scss']
 })
 export class KnightComponent implements OnInit {
+
+  getColorByPieceColor = getColorByPieceColor
+  
+  knightIcon = faChessKnight;
 
   @Input() color: PieceColor;
 
