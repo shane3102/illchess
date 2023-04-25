@@ -2,4 +2,7 @@
     <div class="chess-square-info">
         {{file}}{{rank}}
     </div>
+    <div class="chess-piece-wrapper" *ngIf="piece!= undefined">
+        <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
+    </div>
 </div>

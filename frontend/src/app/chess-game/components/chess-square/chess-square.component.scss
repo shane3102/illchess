@@ -1,11 +1,22 @@
 $chess-square-size: 12vh;
+$chess-file-rank-info: 3vh;
 
-.chess-square{
+.chess-square {
+    display: flex;
+    justify-content: left;
     width: $chess-square-size;
     height: $chess-square-size;
 }
 
-.chess-square-info{
-    padding-top: calc($chess-square-size - 2vh);
-    line-height: 2vh;
+.chess-square-info {
+    position: relative;
+    top: calc($chess-square-size - 2vh);
+    width: $chess-file-rank-info;
+}
+
+.chess-piece-wrapper {
+    position: relative; 
+    top: 15%;
+    left: calc(50% - $chess-file-rank-info);
+    transform: translateX(-50%);
 }

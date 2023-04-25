@@ -11,6 +11,6 @@ export enum PieceColor {
     WHITE, BLACK
 }
 
-export function getColorByPieceColor(color: PieceColor): string{
+export function getColorByPieceColor(color: PieceColor): string {
     return color == PieceColor.WHITE ? 'white' : 'black';
 }

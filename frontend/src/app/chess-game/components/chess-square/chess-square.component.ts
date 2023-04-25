@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { PieceInfo } from '../../model/PieceInfo';
 
 @Component({
   selector: 'app-chess-square',
@@ -9,6 +10,7 @@ export class ChessSquareComponent implements OnInit {
 
   @Input() rank: number;
   @Input() file: string;
+  @Input() piece: PieceInfo | undefined;
 
   constructor() { }
 
@@ -16,7 +18,7 @@ export class ChessSquareComponent implements OnInit {
   }
 
   public calculateSquareColor(): string {
-    return (this.rank + this.fileToNumber()) % 2 == 0 ? 'white' : 'brown';
+    return (this.rank + this.fileToNumber()) % 2 == 0 ? '#F3E5AB' : 'brown';
   }
 
   private fileToNumber(): number {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Piece, PieceInfo } from '../../model/PieceInfo';
 
 @Component({
@@ -10,7 +10,7 @@ export class ChessPieceComponent implements OnInit {
 
   Piece = Piece
 
-  pieceInfo: PieceInfo;
+  @Input() pieceInfo: PieceInfo;
 
   constructor() { }
 
