@@ -10,7 +10,7 @@ import { QueenComponent } from './components/pieces/queen/queen.component';
 import { KingComponent } from './components/pieces/king/king.component';
 import { ChessSquareComponent } from './components/chess-square/chess-square.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -27,7 +27,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    DragDropModule
   ],
   exports:[
     ChessBoardComponent
