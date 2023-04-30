@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PieceInfo } from '../../model/PieceInfo';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-chess-square',
@@ -10,7 +11,7 @@ export class ChessSquareComponent implements OnInit {
 
   @Input() rank: number;
   @Input() file: string;
-  @Input() piece: PieceInfo | undefined;
+  @Input() piece: PieceInfo[];
 
   constructor() { }
 
@@ -19,6 +20,20 @@ export class ChessSquareComponent implements OnInit {
 
   public calculateSquareColor(): string {
     return (this.rank + this.fileToNumber()) % 2 == 0 ? 'brown' : '#F3E5AB';
+  }
+
+  piecePut(event: CdkDragDrop<PieceInfo[]>){
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+    console.log(event);
+
+    console.log(this.piece)
+    console.log(this.file)
+    console.log(this.rank)
   }
 
   private fileToNumber(): number {

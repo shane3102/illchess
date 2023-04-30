@@ -1,4 +1,4 @@
-<div [ngSwitch]="pieceInfo.piece">
+<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.piece">
     <app-pawn *ngSwitchCase="Piece.PAWN" [color]="pieceInfo.color"></app-pawn>
     <app-knight *ngSwitchCase="Piece.KNIGHT" [color]="pieceInfo.color"></app-knight>
     <app-bishop *ngSwitchCase="Piece.BISHOP" [color]="pieceInfo.color"></app-bishop>

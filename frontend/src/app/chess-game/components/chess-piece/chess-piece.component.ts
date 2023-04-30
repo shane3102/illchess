@@ -10,7 +10,7 @@ export class ChessPieceComponent implements OnInit {
 
   Piece = Piece
 
-  @Input() pieceInfo: PieceInfo;
+  @Input() pieceInfo: PieceInfo | undefined;
 
   constructor() { }
 
