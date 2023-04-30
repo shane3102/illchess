@@ -18,7 +18,7 @@ export class ChessSquareComponent implements OnInit {
   }
 
   public calculateSquareColor(): string {
-    return (this.rank + this.fileToNumber()) % 2 == 0 ? '#F3E5AB' : 'brown';
+    return (this.rank + this.fileToNumber()) % 2 == 0 ? 'brown' : '#F3E5AB';
   }
 
   private fileToNumber(): number {

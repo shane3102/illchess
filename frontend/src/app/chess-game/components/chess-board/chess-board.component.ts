@@ -43,11 +43,11 @@ export class ChessBoardComponent implements OnInit {
       piece.piece = Piece.BISHOP
     }
 
-    if (file == 'D') {
+    if (file == 'E') {
       piece.piece = Piece.KING
     }
 
-    if (file == 'E') {
+    if (file == 'D') {
       piece.piece = Piece.QUEEN
     }
 

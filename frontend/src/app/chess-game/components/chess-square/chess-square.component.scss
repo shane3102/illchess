@@ -12,10 +12,22 @@ $chess-file-rank-info: 3vh;
     position: relative;
     top: calc($chess-square-size - 2vh);
     width: $chess-file-rank-info;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 .chess-piece-wrapper {
-    position: relative; 
+    position: relative;
     top: 15%;
     left: calc(50% - $chess-file-rank-info);
     transform: translateX(-50%);

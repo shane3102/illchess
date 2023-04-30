@@ -12,5 +12,5 @@ export enum PieceColor {
 }
 
 export function getColorByPieceColor(color: PieceColor): string {
-    return color == PieceColor.WHITE ? 'white' : 'black';
+    return color == PieceColor.WHITE ? 'lightgray' : 'black';
 }
