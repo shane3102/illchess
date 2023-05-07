@@ -27,13 +27,10 @@ export class ChessSquareComponent implements OnInit {
     this.moveSubject.subscribe(move => {
       if (this.squareInfo == move.squareFromInfo) {
         this.piece = undefined;
-        console.log("DZIAŁAJ: " + JSON.stringify(this.piece) + " " + JSON.stringify(this.squareInfo))
-
       }
 
       if (this.squareInfo == move.squareToInfo) {
         this.piece = move.pieceInfo;
-        console.log("DZIAŁAJ: " + JSON.stringify(this.piece) + " " + JSON.stringify(this.squareInfo))
       }
     });
 
@@ -72,13 +69,11 @@ export class ChessSquareComponent implements OnInit {
   }
 
   pieceDragged() {
-    console.log("dragged")
     this.pieceDraggedInfoEmitter.emit(new PieceDraggedInfo(<PieceInfo>this.piece, this.squareInfo))
   }
 
   pieceDropped() {
     this.isDraggedOver = false
-    console.log("dropped")
     this.pieceDroppedInfoEmitter.emit(this.squareInfo)
   }
 
@@ -90,8 +85,6 @@ export class ChessSquareComponent implements OnInit {
   }
 
   getPieceBySquare(file: string, rank: number): PieceInfo | undefined {
-
-    console.log("siema")
 
     let piece: PieceInfo = new PieceInfo()
 

@@ -25,12 +25,10 @@ export class ChessBoardComponent implements OnInit {
   }
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo){
-    console.log(pieceDraggedInfo);
     this.currentllyDraggedPiece = pieceDraggedInfo;
   }
 
   pieceDroppedChange(pieceDroppedInfo: SquareInfo){
-    console.log(pieceDroppedInfo);
     this.moveSubject.next({pieceInfo: this.currentllyDraggedPiece.pieceInfo, squareFromInfo: this.currentllyDraggedPiece.squareInfo, squareToInfo: pieceDroppedInfo})
   }
 
