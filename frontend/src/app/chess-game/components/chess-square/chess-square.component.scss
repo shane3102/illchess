@@ -12,6 +12,7 @@ $chess-file-rank-info: 3vh;
     position: relative;
     top: calc($chess-square-size - 2vh);
     width: $chess-file-rank-info;
+    height: min-content;
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -28,6 +29,7 @@ $chess-file-rank-info: 3vh;
 
 .chess-piece-wrapper {
     position: relative;
+    height: min-content;
     top: 15%;
     left: calc(50% - $chess-file-rank-info);
     transform: translateX(-50%);

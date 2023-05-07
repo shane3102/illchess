@@ -1,8 +1,8 @@
-<div class="chess-square" [ngStyle]="{'background-color': calculateSquareColor()}">
+<div class="chess-square" (drop)="pieceDropped()" (dragover)="pieceDraggedOver($event)" (dragleave)="isDragged = false" [ngStyle]="{'background-color': calculateSquareColor(isDragged)}">
     <div class="chess-square-info">
         {{file}}{{rank}}
     </div>
-    <div class="chess-piece-wrapper" *ngIf="piece!= undefined">
-        <app-chess-piece [pieceInfo]="piece[0]"></app-chess-piece>
+    <div draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper" *ngIf="piece!= undefined">
+        <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
     </div>
 </div>

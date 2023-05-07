@@ -16,12 +16,12 @@ export class ChessBoardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getpieceBySquare(file: string, rank: number): PieceInfo[] {
+  getpieceBySquare(file: string, rank: number): PieceInfo | undefined {
 
     let piece: PieceInfo = new PieceInfo()
 
     if (rank > 2 && rank < 7) {
-      return [];
+      return undefined;
     }
     if (rank == 1 || rank == 2) {
       piece.color = PieceColor.WHITE
@@ -55,7 +55,7 @@ export class ChessBoardComponent implements OnInit {
       piece.piece = Piece.PAWN
     }
 
-    return [piece];
+    return piece;
   }
 
 }

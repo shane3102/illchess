@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PieceInfo } from '../../model/PieceInfo';
+import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 
 @Component({
   selector: 'app-chess-square',
@@ -10,14 +11,23 @@ export class ChessSquareComponent implements OnInit {
 
   @Input() rank: number;
   @Input() file: string;
-  @Input() piece: PieceInfo[];
+  @Input() piece: PieceInfo | undefined;
+
+  @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
+
+  isDragged: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  public calculateSquareColor(): string {
+  public calculateSquareColor(isDragged: boolean): string {
+
+    if(isDragged) {
+      return 'green';
+    }
+
     return (this.rank + this.fileToNumber()) % 2 == 0 ? 'brown' : '#F3E5AB';
   }
 
@@ -41,6 +51,23 @@ export class ChessSquareComponent implements OnInit {
         return 8;
     }
     return 0;
+  }
+
+  pieceDragged() {
+    console.log("dragged")
+    this.pieceDraggedInfoEmitter.emit(new PieceDraggedInfo(<PieceInfo>this.piece, this.rank, this.file))
+  }
+
+  pieceDropped() {
+    this.isDragged = false
+    console.log("dropped")
+  }
+
+  pieceDraggedOver(event: any) {
+    event.preventDefault()
+
+    this.isDragged = true;
+
   }
 
 }
