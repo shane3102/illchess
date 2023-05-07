@@ -1,0 +1,7 @@
+name: illchess
+services:
+    gamedb:
+        container_name: gamedb
+        image: redis:7.0.11-alpine
+        ports:
+            - 6379:6379
