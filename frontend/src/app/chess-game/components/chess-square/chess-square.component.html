@@ -1,8 +1,8 @@
-<div cdkDropList [cdkDropListData]="piece" (cdkDropListDropped)="piecePut($event)" class="chess-square" [ngStyle]="{'background-color': calculateSquareColor()}">
+<div class="chess-square" [ngStyle]="{'background-color': calculateSquareColor()}">
     <div class="chess-square-info">
         {{file}}{{rank}}
     </div>
-    <div cdkDrag class="chess-piece-wrapper" *ngIf="piece!= undefined">
+    <div class="chess-piece-wrapper" *ngIf="piece!= undefined">
         <app-chess-piece [pieceInfo]="piece[0]"></app-chess-piece>
     </div>
 </div>
