@@ -1,13 +1,12 @@
 import { PieceInfo } from "./PieceInfo";
+import { SquareInfo } from "./SquareInfo";
 
 export class PieceDraggedInfo {
     pieceInfo: PieceInfo;
-    rank: number;
-    file: string;
+    squareInfo: SquareInfo;
 
-    constructor(pieceInfo: PieceInfo, rank: number, file: string){
+    constructor(pieceInfo: PieceInfo, squareInfo: SquareInfo){
         this.pieceInfo = pieceInfo;
-        this.rank = rank;
-        this.file = file;
+        this.squareInfo = squareInfo
     }
 }

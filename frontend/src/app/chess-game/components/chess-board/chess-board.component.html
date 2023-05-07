@@ -2,7 +2,12 @@
     <div *ngFor="let rank of ranks">
         <div style="display: flex; justify-content: center;">
             <div *ngFor="let file of files">
-                <app-chess-square [piece]="getpieceBySquare(file, rank)" [file]="file" [rank]="rank"></app-chess-square>
+                <app-chess-square 
+                (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
+                (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
+                [moveSubject]="moveSubject.asObservable()"
+                [squareInfo]="{file: file, rank: rank}">
+            </app-chess-square>
             </div>
         </div>
     </div>
