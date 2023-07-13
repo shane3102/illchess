@@ -7,6 +7,8 @@
     <description>Adapter layer of illchess websocket</description>
     <properties>
         <java.version>20</java.version>
+        <redis.version>3.1.0</redis.version>
+        <jedis.version>4.3.1</jedis.version>
     </properties>
 
     <dependencies>
@@ -14,6 +16,16 @@
             <groupId>pl.illchess.application</groupId>
             <artifactId>application</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
     </dependencies>
 
