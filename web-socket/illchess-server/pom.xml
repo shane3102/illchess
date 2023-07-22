@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>server</name>
 	<description>Server layer of illchess websocket</description>
+
 	<properties>
 		<adapter.version>0.0.1-SNAPSHOT</adapter.version>
 	</properties>

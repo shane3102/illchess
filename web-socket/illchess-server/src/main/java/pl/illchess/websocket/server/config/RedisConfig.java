@@ -9,7 +9,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import pl.illchess.adapter.ChessBoardHash;
 
+// TODO może przenieść do warstwy adapterów (?)
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -31,8 +33,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, ChessBoardHash> chessBoardHashRedisTemplate() {
+        RedisTemplate<String, ChessBoardHash> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
