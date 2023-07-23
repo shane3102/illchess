@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>pl.illchess.websocket</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>illchess-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>server</name>
+	<name>illchess-server</name>
 	<description>Server layer of illchess websocket</description>
 
 	<properties>
