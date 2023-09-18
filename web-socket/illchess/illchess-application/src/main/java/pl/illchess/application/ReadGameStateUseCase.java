@@ -2,7 +2,7 @@ package pl.illchess.application;
 
 import java.util.UUID;
 
-public interface ReadChessBoardStateUseCase {
+public interface ReadGameStateUseCase {
 
     String readChessBoard(UUID chessBoardId);
 }

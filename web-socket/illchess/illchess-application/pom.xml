@@ -9,8 +9,9 @@
     <dependencies>
         <dependency>
             <groupId>pl.illchess.domain</groupId>
-            <artifactId>domain</artifactId>
+            <artifactId>illchess-domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

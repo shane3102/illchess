@@ -1,4 +1,4 @@
-package pl.illchess.domain;
+package pl.illchess.domain.chess_board;
 
 import java.io.Serializable;
 
