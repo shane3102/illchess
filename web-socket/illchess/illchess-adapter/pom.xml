@@ -10,6 +10,7 @@
         <redis.version>3.1.0</redis.version>
         <jedis.version>4.3.1</jedis.version>
         <web-socket.version>6.0.11</web-socket.version>
+        <spring-messaging.version>6.0.10</spring-messaging.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,12 @@
             <groupId>pl.illchess.application</groupId>
             <artifactId>illchess-application</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>${spring-messaging.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
