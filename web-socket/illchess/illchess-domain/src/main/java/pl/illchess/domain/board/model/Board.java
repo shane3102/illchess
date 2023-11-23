@@ -8,6 +8,7 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.piece.info.PieceColor;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public record Board(
         BoardId boardId,
@@ -28,6 +29,15 @@ public record Board(
     public void takeBackMove() {
         Move moveTakenBack = moveHistory().takeBackLastMove();
         piecesLocations.takeBackMove(moveTakenBack);
+    }
+
+    public static Board generateNewBoard(BoardId boardId) {
+        return new Board(
+                boardId,
+                PiecesLocations.createBasicBoard(),
+                PieceColor.WHITE,
+                new MoveHistory()
+        );
     }
 
 }

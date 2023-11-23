@@ -4,6 +4,10 @@ import java.util.Stack;
 
 public record MoveHistory(Stack<Move> moveStack) {
 
+    public MoveHistory() {
+        this(new Stack<>());
+    }
+
     public void addMoveToHistory(Move addedMove) {
         moveStack().add(addedMove);
     }
