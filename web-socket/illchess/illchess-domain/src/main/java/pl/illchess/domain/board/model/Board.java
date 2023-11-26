@@ -8,7 +8,6 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.piece.info.PieceColor;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public record Board(
         BoardId boardId,

@@ -9,7 +9,7 @@ public record MoveHistory(Stack<Move> moveStack) {
     }
 
     public void addMoveToHistory(Move addedMove) {
-        moveStack().add(addedMove);
+        moveStack().push(addedMove);
     }
 
     public Move peekLastMove() {
