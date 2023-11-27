@@ -1,5 +1,6 @@
 package pl.illchess.adapter.board.command.out.redis;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.adapter.board.command.out.redis.mapper.BoardMapper;
@@ -12,11 +13,12 @@ import pl.illchess.domain.board.model.BoardId;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class BoardRedisRepository implements SaveBoard, LoadBoard {
 
     private static final String BOARD_HASH_KEY = "BOARD";
 
-    private RedisTemplate<String, BoardEntity> template;
+    private final RedisTemplate<String, BoardEntity> template;
 
     @Override
     public Optional<Board> loadBoard(BoardId boardId) {

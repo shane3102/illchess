@@ -15,7 +15,7 @@ public record BoardEntity(
     public record PieceEntity(
             String pieceColor,
             String pieceType
-    ) {
+    ) implements Serializable {
     }
 
     public record MoveEntity(
@@ -23,6 +23,6 @@ public record BoardEntity(
             String targetSquare,
             PieceEntity movedPiece,
             PieceEntity capturedPiece
-    ) {
+    ) implements Serializable {
     }
 }

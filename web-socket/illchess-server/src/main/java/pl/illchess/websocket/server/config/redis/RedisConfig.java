@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 
 @Configuration
 @EnableRedisRepositories
@@ -22,8 +23,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> boardRedisTemplate() {
-        RedisTemplate<String, Object> boardTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, BoardEntity> boardRedisTemplate() {
+        RedisTemplate<String, BoardEntity> boardTemplate = new RedisTemplate<>();
         boardTemplate.setConnectionFactory(connectionFactory());
 
         boardTemplate.setKeySerializer(new StringRedisSerializer());
