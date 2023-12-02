@@ -38,6 +38,7 @@ public record PiecesLocations(
         Piece capturedPiece = locations.get(command.targetSquare());
 
         locations.put(command.targetSquare(), command.movedPiece());
+        locations.remove(command.currentSquare());
 
         return new Move(
                 command.currentSquare(),

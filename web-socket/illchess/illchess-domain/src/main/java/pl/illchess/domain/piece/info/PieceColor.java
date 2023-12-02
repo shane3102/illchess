@@ -1,5 +1,9 @@
 package pl.illchess.domain.piece.info;
 
 public enum PieceColor {
-    WHITE, BLACK
+    WHITE, BLACK;
+
+    public PieceColor invert() {
+        return this == WHITE ? BLACK : WHITE;
+    }
 }

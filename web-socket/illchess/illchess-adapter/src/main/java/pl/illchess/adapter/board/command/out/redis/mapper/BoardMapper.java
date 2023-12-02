@@ -8,6 +8,7 @@ import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.Piece;
+import pl.illchess.domain.piece.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.info.PieceColor;
 import pl.illchess.domain.piece.info.PieceType;
 
@@ -26,7 +27,7 @@ public class BoardMapper {
             return new BoardEntity(
                     board.boardId().uuid(),
                     toPiecesLocationsEntity(board.piecesLocations()),
-                    board.currentPlayerColor().toString(),
+                    board.currentPlayerColor().color().toString(),
                     toMoveHistoryEntity(board.moveHistory())
             );
         }
@@ -40,7 +41,7 @@ public class BoardMapper {
             return new Board(
                     new BoardId(entity.boardId()),
                     toPiecesLocations(entity.piecesLocations()),
-                    PieceColor.valueOf(entity.currentPlayerColor()),
+                    new CurrentPlayerColor(PieceColor.valueOf(entity.currentPlayerColor())),
                     toMoveHistory(entity.moveStackData())
             );
         }
@@ -62,7 +63,7 @@ public class BoardMapper {
 
     private static MoveHistory toMoveHistory(List<BoardEntity.MoveEntity> moveHistoryList) {
         Stack<Move> moveStack = new Stack<>();
-        Stream.iterate(moveHistoryList.size() - 1, i -> i + 1)
+        Stream.iterate(moveHistoryList.size() - 1, i -> i - 1)
                 .limit(moveHistoryList.size())
                 .forEach(i -> {
                     BoardEntity.MoveEntity moveEntity = moveHistoryList.get(i);
@@ -71,7 +72,7 @@ public class BoardMapper {
                             Square.valueOf(moveEntity.startSquare()),
                             Square.valueOf(moveEntity.targetSquare()),
                             new Piece(PieceColor.valueOf(moveEntity.movedPiece().pieceColor()), PieceType.valueOf(moveEntity.movedPiece().pieceType())),
-                            new Piece(PieceColor.valueOf(moveEntity.capturedPiece().pieceColor()), PieceType.valueOf(moveEntity.capturedPiece().pieceType()))
+                            moveEntity.capturedPiece() == null ? null : new Piece(PieceColor.valueOf(moveEntity.capturedPiece().pieceColor()), PieceType.valueOf(moveEntity.capturedPiece().pieceType()))
                     );
 
                     moveStack.push(move);
@@ -107,10 +108,12 @@ public class BoardMapper {
                                         move.movedPiece().color().toString(),
                                         move.movedPiece().type().toString()
                                 ),
-                                new BoardEntity.PieceEntity(
-                                        move.capturedPiece().color().toString(),
-                                        move.capturedPiece().type().toString()
-                                )
+                                move.capturedPiece() == null ?
+                                        null :
+                                        new BoardEntity.PieceEntity(
+                                                move.capturedPiece().color().toString(),
+                                                move.capturedPiece().type().toString()
+                                        )
                         )
                 ).toList();
     }

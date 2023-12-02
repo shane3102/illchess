@@ -5,6 +5,7 @@ import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
+import pl.illchess.domain.piece.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.info.PieceColor;
 
 import java.util.Objects;
@@ -12,17 +13,18 @@ import java.util.Objects;
 public record Board(
         BoardId boardId,
         PiecesLocations piecesLocations,
-        PieceColor currentPlayerColor,
+        CurrentPlayerColor currentPlayerColor,
         MoveHistory moveHistory
 ) {
 
     public void movePiece(MovePiece command) {
         PieceColor movedPieceColor = command.movedPiece().color();
-        if (!Objects.equals(movedPieceColor, currentPlayerColor())) {
-            throw new PieceColorIncorrectException(movedPieceColor, currentPlayerColor());
+        if (!Objects.equals(movedPieceColor, currentPlayerColor().color())) {
+            throw new PieceColorIncorrectException(movedPieceColor, currentPlayerColor().color());
         }
         Move performedMove = piecesLocations().movePiece(command);
         moveHistory().addMoveToHistory(performedMove);
+        currentPlayerColor.invert();
     }
 
     public void takeBackMove() {
@@ -34,7 +36,7 @@ public record Board(
         return new Board(
                 boardId,
                 PiecesLocations.createBasicBoard(),
-                PieceColor.WHITE,
+                new CurrentPlayerColor(PieceColor.WHITE),
                 new MoveHistory()
         );
     }
