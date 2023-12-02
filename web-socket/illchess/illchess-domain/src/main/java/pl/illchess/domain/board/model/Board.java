@@ -1,5 +1,6 @@
 package pl.illchess.domain.board.model;
 
+import pl.illchess.domain.board.command.InitializeNewBoard;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.history.Move;
@@ -32,9 +33,9 @@ public record Board(
         piecesLocations.takeBackMove(moveTakenBack);
     }
 
-    public static Board generateNewBoard(BoardId boardId) {
+    public static Board generateNewBoard(InitializeNewBoard initializeNewBoard) {
         return new Board(
-                boardId,
+                initializeNewBoard.boardId(),
                 PiecesLocations.createBasicBoard(),
                 new CurrentPlayerColor(PieceColor.WHITE),
                 new MoveHistory()

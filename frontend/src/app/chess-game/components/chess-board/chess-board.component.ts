@@ -6,7 +6,7 @@ import { PieceDroppedInfo } from '../../model/PieceDroppedInfo';
 import { Subject } from 'rxjs';
 import { StompService } from '../../service/StompService';
 import { BoardView, Square } from '../../model/BoardView';
-import { BoardService } from '../../service/BoardService';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-chess-board',
@@ -26,16 +26,13 @@ export class ChessBoardComponent implements OnInit {
 
   constructor(
     private stompService: StompService,
-    private boardService: BoardService
   ) {
     stompService.subscribe("/chess-topic", this.updateChessBoard)
   }
 
   ngOnInit(): void {
-    this.boardService.tmpInitializeBoard().subscribe((response) => {
-      this.boardView = response
-    })
     this.stompService.subscribe("/chess-topic", (boardView: BoardView) => this.updateChessBoard(boardView))
+    setTimeout(() => this.sendChessBoardInitializeRequest(), 1000)
   }
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
@@ -64,6 +61,21 @@ export class ChessBoardComponent implements OnInit {
     )
   }
 
+  sendChessBoardInitializeRequest() {
+
+    let initializeNewBoardRequest = {
+      'newBoardId': uuidv4()
+    }
+
+    console.log(JSON.stringify(initializeNewBoardRequest))
+
+    this.stompService.stompClient!.send(
+      '/app/board/create',
+      {},
+      JSON.stringify(initializeNewBoardRequest)
+    )
+  }
+
   getPieceByFileAndRank(file: string, rank: number): PieceInfo | undefined {
     if (this.boardView) {
 
@@ -89,3 +101,4 @@ export class ChessBoardComponent implements OnInit {
   }
 
 }
+

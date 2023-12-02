@@ -6,13 +6,12 @@ import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.in.PublishEvent;
+import pl.illchess.domain.board.command.InitializeNewBoard;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.event.BoardUpdated;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
 import pl.illchess.domain.board.model.Board;
 import pl.illchess.domain.board.model.BoardId;
-
-import java.util.UUID;
 
 public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, InitializeNewBoardUseCase {
 
@@ -52,13 +51,13 @@ public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, Init
     }
 
     @Override
-    public BoardId initializeNewGame() {
+    public void initializeNewGame(InitializeNewBoardCmd cmd) {
 
-        BoardId boardId = new BoardId(UUID.randomUUID());
+        InitializeNewBoard command = cmd.toCommand();
 
-        Board initializedBoard = Board.generateNewBoard(boardId);
+        Board initializedBoard = Board.generateNewBoard(command);
         saveBoard.saveBoard(initializedBoard);
 
-        return boardId;
+        eventPublisher.publishDomainEvent(new BoardUpdated(command.boardId().uuid()));
     }
 }

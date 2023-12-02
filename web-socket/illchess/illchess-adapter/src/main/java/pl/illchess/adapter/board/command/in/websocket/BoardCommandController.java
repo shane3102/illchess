@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import pl.illchess.adapter.board.command.in.websocket.request.InitializeNewBoardRequest;
 import pl.illchess.adapter.board.command.in.websocket.request.MovePieceRequest;
 import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
@@ -24,7 +25,7 @@ public class BoardCommandController implements BoardCommandApi {
 
     @Override
     @MessageMapping("/board/create")
-    public void initializeNewBoard() {
-        initializeNewBoardUseCase.initializeNewGame();
+    public void initializeNewBoard(InitializeNewBoardRequest initializeNewBoardRequest) {
+        initializeNewBoardUseCase.initializeNewGame(initializeNewBoardRequest.toCmd());
     }
 }
