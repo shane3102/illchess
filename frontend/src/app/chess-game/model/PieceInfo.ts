@@ -1,14 +1,20 @@
 export class PieceInfo {
-    piece: Piece;
+    type: Piece;
     color: PieceColor;
 }
 
 export enum Piece {
-    PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
+    PAWN = "PAWN", 
+    KNIGHT = "KNIGHT", 
+    BISHOP = "BISHOP", 
+    ROOK = "ROOK", 
+    QUEEN = "QUEEN", 
+    KING = "KING"
 }
 
 export enum PieceColor {
-    WHITE, BLACK
+    WHITE = "WHITE", 
+    BLACK = "BLACK"
 }
 
 export function getColorByPieceColor(color: PieceColor): string {

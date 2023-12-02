@@ -1,10 +1,16 @@
-<div>
+<div *ngIf="boardView">
     <div *ngFor="let rank of ranks">
         <div style="display: flex; justify-content: center;">
             <div *ngFor="let file of files">
                 <app-chess-square 
                 (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
                 (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
+                [piece]="
+                    this.boardView.piecesLocations ? 
+                    this.boardView.piecesLocations[file+rank] ? 
+                    this.boardView.piecesLocations[file+rank] : 
+                    undefined : 
+                    undefined"
                 [moveSubject]="moveSubject.asObservable()"
                 [squareInfo]="{file: file, rank: rank}">
             </app-chess-square>

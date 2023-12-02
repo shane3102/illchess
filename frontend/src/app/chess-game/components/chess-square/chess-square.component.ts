@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class ChessSquareComponent implements OnInit {
 
-  piece: PieceInfo | undefined;
+  @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
   @Input() moveSubject: Observable<PieceDroppedInfo>
 
@@ -34,7 +34,7 @@ export class ChessSquareComponent implements OnInit {
       }
     });
 
-    this.piece = this.getPieceBySquare(this.squareInfo.file, this.squareInfo.rank)
+    // this.piece = this.getPieceBySquare(this.squareInfo.file, this.squareInfo.rank)
   }
 
   public calculateSquareColor(isDraggedOver: boolean): string {
@@ -100,27 +100,27 @@ export class ChessSquareComponent implements OnInit {
 
 
     if (file == 'A' || file == 'H') {
-      piece.piece = Piece.ROOK
+      piece.type = Piece.ROOK
     }
 
     if (file == 'B' || file == 'G') {
-      piece.piece = Piece.KNIGHT
+      piece.type = Piece.KNIGHT
     }
 
     if (file == 'C' || file == 'F') {
-      piece.piece = Piece.BISHOP
+      piece.type = Piece.BISHOP
     }
 
     if (file == 'E') {
-      piece.piece = Piece.KING
+      piece.type = Piece.KING
     }
 
     if (file == 'D') {
-      piece.piece = Piece.QUEEN
+      piece.type = Piece.QUEEN
     }
 
     if (rank == 7 || rank == 2) {
-      piece.piece = Piece.PAWN
+      piece.type = Piece.PAWN
     }
 
     return piece;

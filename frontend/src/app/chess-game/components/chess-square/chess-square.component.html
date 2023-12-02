@@ -2,7 +2,7 @@
     <div class="chess-square-info">
         {{squareInfo.file}}{{squareInfo.rank}}
     </div>
-    <div draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper" *ngIf="piece != undefined">
+    <div *ngIf="piece" draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper">
         <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
     </div>
 </div>
