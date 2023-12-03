@@ -1,4 +1,4 @@
-package pl.illchess.application.commons.command.in;
+package pl.illchess.application.commons.command.out;
 
 import pl.illchess.domain.commons.event.DomainEvent;
 

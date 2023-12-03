@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import pl.illchess.application.commons.command.in.PublishEvent;
+import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.commons.event.DomainEvent;
 
 @Service

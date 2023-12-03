@@ -21,6 +21,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>pl.illchess.application</groupId>
+            <artifactId>illchess-application</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
             <version>${redis.version}</version>
@@ -29,12 +35,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
             <version>${web-socket.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>pl.illchess.application</groupId>
-            <artifactId>illchess-application</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

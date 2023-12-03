@@ -7,7 +7,7 @@ import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
-import pl.illchess.application.commons.command.in.PublishEvent;
+import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.board.command.InitializeNewBoard;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.event.BoardUpdated;

@@ -7,7 +7,7 @@ import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
-import pl.illchess.application.commons.command.in.PublishEvent;
+import pl.illchess.application.commons.command.out.PublishEvent;
 
 @Configuration
 public class BoardUseCaseBeanConfiguration {
