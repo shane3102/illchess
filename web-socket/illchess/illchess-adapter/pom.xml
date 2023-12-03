@@ -14,12 +14,9 @@
     </parent>
 
     <properties>
-        <java.version>20</java.version>
         <redis.version>3.1.0</redis.version>
-        <jedis.version>4.3.1</jedis.version>
         <web-socket.version>6.0.11</web-socket.version>
         <spring-messaging.version>6.0.10</spring-messaging.version>
-        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <dependencies>
