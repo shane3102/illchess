@@ -6,7 +6,7 @@ import { PieceDroppedInfo } from '../../model/PieceDroppedInfo';
 import { Subject } from 'rxjs';
 import { StompService } from '../../service/StompService';
 import { BoardView, Square } from '../../model/BoardView';
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-chess-board',
@@ -67,8 +67,6 @@ export class ChessBoardComponent implements OnInit {
       'newBoardId': uuidv4()
     }
 
-    console.log(JSON.stringify(initializeNewBoardRequest))
-
     this.stompService.stompClient!.send(
       '/app/board/create',
       {},
@@ -82,10 +80,6 @@ export class ChessBoardComponent implements OnInit {
       let square: string = file + rank
 
       let result: PieceInfo | undefined;
-      
-      console.log("SIEMSON")
-      console.log(this.boardView.piecesLocations)
-      console.log(this.boardView.piecesLocations[square])
 
       return result = this.boardView.piecesLocations[square]
     } else {
@@ -93,10 +87,8 @@ export class ChessBoardComponent implements OnInit {
     }
   }
 
-  // TODO sprawdzić czy się updatuje + przekazć figury z tego view
   updateChessBoard(board: any) {
-    console.log("OTRZYMANED")
-    this.boardView = {boardId: "", piecesLocations: {}, currentPlayerColor: PieceColor.BLACK}
+    this.boardView = { boardId: "", piecesLocations: {}, currentPlayerColor: PieceColor.BLACK }
     this.boardView = JSON.parse(board.body)
   }
 
