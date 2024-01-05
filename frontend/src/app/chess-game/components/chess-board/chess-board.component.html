@@ -11,7 +11,7 @@
                     this.boardView.piecesLocations[file+rank] : 
                     undefined : 
                     undefined"
-                [moveSubject]="moveSubject.asObservable()"
+                [illegalMoveViewSubject]="illegalMoveViewSubject.asObservable()"
                 [squareInfo]="{file: file, rank: rank}">
             </app-chess-square>
             </div>

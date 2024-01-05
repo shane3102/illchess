@@ -7,16 +7,18 @@ import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
+import pl.illchess.application.board.query.InMemoryIllegalMoveViewQueryPortImpl;
+import pl.illchess.application.board.query.out.IllegalMoveViewQueryPort;
 import pl.illchess.application.commons.command.out.PublishEvent;
 
 @Configuration
-public class BoardUseCaseBeanConfiguration {
+public class BoardBeanConfiguration {
 
     @Bean
     public MovePieceUseCase movePieceUseCase(
-          LoadBoard loadBoard,
-          SaveBoard saveBoard,
-          PublishEvent eventPublisher
+            LoadBoard loadBoard,
+            SaveBoard saveBoard,
+            PublishEvent eventPublisher
     ) {
         return new BoardManager(
                 loadBoard,
@@ -36,5 +38,10 @@ public class BoardUseCaseBeanConfiguration {
                 saveBoard,
                 eventPublisher
         );
+    }
+
+    @Bean
+    public IllegalMoveViewQueryPort illegalMoveViewQueryPort() {
+        return new InMemoryIllegalMoveViewQueryPortImpl();
     }
 }

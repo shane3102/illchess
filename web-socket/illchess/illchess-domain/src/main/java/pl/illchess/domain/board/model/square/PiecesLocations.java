@@ -28,11 +28,19 @@ public record PiecesLocations(
 
     public Move movePiece(MovePiece command) {
         if (!isPieceOnLocation(command)) {
-            throw new PieceNotPresentOnGivenSquare();
+            throw new PieceNotPresentOnGivenSquare(
+                    command.boardId(),
+                    command.movedPiece(),
+                    command.currentSquare()
+            );
         }
 
         if (isSquareOccupiedBySameColorPiece(command)) {
-            throw new TargetSquareOccupiedBySameColorPieceException();
+            throw new TargetSquareOccupiedBySameColorPieceException(
+                    command.boardId(),
+                    command.currentSquare(),
+                    command.targetSquare()
+            );
         }
 
         Piece capturedPiece = locations.get(command.targetSquare());

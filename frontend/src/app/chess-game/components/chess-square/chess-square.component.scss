@@ -34,3 +34,13 @@ $chess-file-rank-info: 3vh;
     left: calc(50% - $chess-file-rank-info);
     transform: translateX(-50%);
 }
+
+.illegal-move-animation-wrapper {
+    animation: illegal-move-animation 0.5s infinite;
+}
+
+@keyframes illegal-move-animation {
+    0%{
+        background-color: red;
+    }
+}

@@ -6,31 +6,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
-import pl.illchess.adapter.commons.ErrorMessage;
 import pl.illchess.application.board.command.BoardManager;
-import pl.illchess.domain.board.exception.BoardNotFoundException;
+import pl.illchess.application.commons.command.out.PublishEvent;
+import pl.illchess.domain.board.event.MoveIllegal;
+import pl.illchess.domain.board.exception.IllegalMoveException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.exception.TargetSquareOccupiedBySameColorPieceException;
-import pl.illchess.domain.commons.exception.DomainException;
 
+// TODO obsłużyć pozostałe warunki
 @ControllerAdvice
 @AllArgsConstructor
 public class BoardCommandControllerAdvice extends StompSubProtocolErrorHandler {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
+    private final PublishEvent eventPublisher;
+
     @MessageExceptionHandler({
-            BoardNotFoundException.class,
             PieceColorIncorrectException.class,
             PieceNotPresentOnGivenSquare.class,
             TargetSquareOccupiedBySameColorPieceException.class
     })
-    public ErrorMessage badRequestExceptionHandler(DomainException domainException) {
-        ErrorMessage errorMessage = new ErrorMessage(
-                domainException.getMessage()
-        );
-        log.error("Error was handled: {}", errorMessage);
-        return errorMessage;
+    public void illegalMoveExceptionHandler(IllegalMoveException domainException) {
+        MoveIllegal moveIllegal = domainException.toMoveIllegalEvent();
+        log.error("Error was handled: {}", domainException.getMessage());
+        eventPublisher.publishDomainEvent(moveIllegal);
     }
 }

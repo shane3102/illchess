@@ -1,4 +1,10 @@
-<div class="chess-square" (drop)="pieceDropped()" (dragover)="pieceDraggedOver($event)" (dragleave)="isDraggedOver = false" [ngStyle]="{'background-color': calculateSquareColor(isDraggedOver)}">
+<div class="chess-square" 
+    (drop)="pieceDropped()" 
+    (dragover)="pieceDraggedOver($event)" 
+    (dragleave)="isDraggedOver = false" 
+    [ngStyle]="{'background-color': calculateSquareColor(isDraggedOver)}"
+    [ngClass]="illegalMove ? 'illegal-move-animation-wrapper' : null"
+    >
     <div class="chess-square-info">
         {{squareInfo.file}}{{squareInfo.rank}}
     </div>

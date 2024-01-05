@@ -21,7 +21,12 @@ public record Board(
     public void movePiece(MovePiece command) {
         PieceColor movedPieceColor = command.movedPiece().color();
         if (!Objects.equals(movedPieceColor, currentPlayerColor().color())) {
-            throw new PieceColorIncorrectException(movedPieceColor, currentPlayerColor().color());
+            throw new PieceColorIncorrectException(
+                    boardId,
+                    movedPieceColor,
+                    currentPlayerColor().color(),
+                    command.currentSquare()
+            );
         }
         Move performedMove = piecesLocations().movePiece(command);
         moveHistory().addMoveToHistory(performedMove);

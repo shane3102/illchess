@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Piece, PieceColor, PieceInfo } from '../../model/PieceInfo';
+import { PieceInfo } from '../../model/PieceInfo';
 import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { SquareInfo } from '../../model/SquareInfo';
-import { PieceDroppedInfo } from '../../model/PieceDroppedInfo';
 import { Observable } from 'rxjs';
+import { IllegalMoveView } from '../../model/IllegalMoveView';
 
 @Component({
   selector: 'app-chess-square',
@@ -14,27 +14,25 @@ export class ChessSquareComponent implements OnInit {
 
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
-  @Input() moveSubject: Observable<PieceDroppedInfo>
+  @Input() illegalMoveViewSubject: Observable<IllegalMoveView>
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDroppedInfoEmitter: EventEmitter<SquareInfo> = new EventEmitter();
 
   isDraggedOver: boolean = false;
+  illegalMove: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.moveSubject.subscribe(move => {
-      if (this.squareInfo == move.squareFromInfo) {
-        this.piece = undefined;
-      }
 
-      if (this.squareInfo == move.squareToInfo) {
-        this.piece = move.pieceInfo;
+    this.illegalMoveViewSubject.subscribe(
+      illegalMoveView => {
+        if (illegalMoveView.highlightSquare == this.squareInfo.file + this.squareInfo.rank) {
+          this.displayIllegalMoveAnimation()
+        }
       }
-    });
-
-    // this.piece = this.getPieceBySquare(this.squareInfo.file, this.squareInfo.rank)
+    )
   }
 
   public calculateSquareColor(isDraggedOver: boolean): string {
@@ -44,6 +42,11 @@ export class ChessSquareComponent implements OnInit {
     }
 
     return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0 ? 'brown' : '#F3E5AB';
+  }
+
+  public displayIllegalMoveAnimation() {
+    this.illegalMove = true
+    setTimeout(() => this.illegalMove = false, 2000)
   }
 
   private fileToNumber(): number {
@@ -82,48 +85,6 @@ export class ChessSquareComponent implements OnInit {
 
     this.isDraggedOver = true;
 
-  }
-
-  getPieceBySquare(file: string, rank: number): PieceInfo | undefined {
-
-    let piece: PieceInfo = new PieceInfo()
-
-    if (rank > 2 && rank < 7) {
-      return undefined;
-    }
-    if (rank == 1 || rank == 2) {
-      piece.color = PieceColor.WHITE
-    }
-    if (rank == 8 || rank == 7) {
-      piece.color = PieceColor.BLACK
-    }
-
-
-    if (file == 'A' || file == 'H') {
-      piece.type = Piece.ROOK
-    }
-
-    if (file == 'B' || file == 'G') {
-      piece.type = Piece.KNIGHT
-    }
-
-    if (file == 'C' || file == 'F') {
-      piece.type = Piece.BISHOP
-    }
-
-    if (file == 'E') {
-      piece.type = Piece.KING
-    }
-
-    if (file == 'D') {
-      piece.type = Piece.QUEEN
-    }
-
-    if (rank == 7 || rank == 2) {
-      piece.type = Piece.PAWN
-    }
-
-    return piece;
   }
 
 }
