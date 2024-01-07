@@ -1,4 +1,4 @@
-package pl.illchess.domain.piece.info;
+package pl.illchess.domain.piece.model.info;
 
 public final class CurrentPlayerColor {
     private PieceColor color;

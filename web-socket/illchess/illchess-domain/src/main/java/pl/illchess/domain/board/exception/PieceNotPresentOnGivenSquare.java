@@ -3,12 +3,12 @@ package pl.illchess.domain.board.exception;
 
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.Piece;
+import pl.illchess.domain.piece.model.PieceBehaviour;
 
 public class PieceNotPresentOnGivenSquare extends IllegalMoveException {
     public PieceNotPresentOnGivenSquare(
             BoardId boardId,
-            Piece piece,
+            PieceBehaviour piece,
             Square square
     ) {
         super(

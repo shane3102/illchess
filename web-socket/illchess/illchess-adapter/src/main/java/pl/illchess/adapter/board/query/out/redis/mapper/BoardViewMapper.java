@@ -3,8 +3,8 @@ package pl.illchess.adapter.board.query.out.redis.mapper;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.application.board.query.out.model.BoardView;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.info.PieceColor;
-import pl.illchess.domain.piece.info.PieceType;
+import pl.illchess.domain.piece.model.info.PieceColor;
+import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class BoardViewMapper {
                                 Square.valueOf(entry.getKey()),
                                 new BoardView.PieceView(
                                         PieceColor.valueOf(entry.getValue().pieceColor()),
-                                        PieceType.valueOf(entry.getValue().pieceType())
+                                        entry.getValue().pieceType()
                                 )
                         )
                 )

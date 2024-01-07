@@ -4,26 +4,26 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.exception.TargetSquareOccupiedBySameColorPieceException;
 import pl.illchess.domain.board.model.history.Move;
-import pl.illchess.domain.piece.Piece;
-import pl.illchess.domain.piece.info.PieceColor;
-import pl.illchess.domain.piece.info.PieceType;
+import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.info.PieceColor;
+import pl.illchess.domain.piece.model.type.Bishop;
+import pl.illchess.domain.piece.model.type.King;
+import pl.illchess.domain.piece.model.type.Knight;
+import pl.illchess.domain.piece.model.type.Pawn;
+import pl.illchess.domain.piece.model.type.Queen;
+import pl.illchess.domain.piece.model.type.Rook;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static pl.illchess.domain.piece.info.PieceColor.BLACK;
-import static pl.illchess.domain.piece.info.PieceColor.WHITE;
-import static pl.illchess.domain.piece.info.PieceType.BISHOP;
-import static pl.illchess.domain.piece.info.PieceType.KING;
-import static pl.illchess.domain.piece.info.PieceType.KNIGHT;
-import static pl.illchess.domain.piece.info.PieceType.PAWN;
-import static pl.illchess.domain.piece.info.PieceType.QUEEN;
-import static pl.illchess.domain.piece.info.PieceType.ROOK;
+import static pl.illchess.domain.piece.model.info.PieceColor.BLACK;
+import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public record PiecesLocations(
-        Map<Square, Piece> locations
+        Set<PieceBehaviour> locations
 ) {
 
     public Move movePiece(MovePiece command) {
@@ -31,25 +31,24 @@ public record PiecesLocations(
             throw new PieceNotPresentOnGivenSquare(
                     command.boardId(),
                     command.movedPiece(),
-                    command.currentSquare()
+                    command.movedPiece().square()
             );
         }
 
         if (isSquareOccupiedBySameColorPiece(command)) {
             throw new TargetSquareOccupiedBySameColorPieceException(
                     command.boardId(),
-                    command.currentSquare(),
+                    command.movedPiece().square(),
                     command.targetSquare()
             );
         }
 
-        Piece capturedPiece = locations.get(command.targetSquare());
+        PieceBehaviour capturedPiece = getPieceOnSquare(command.targetSquare()).orElse(null);
 
-        locations.put(command.targetSquare(), command.movedPiece());
-        locations.remove(command.currentSquare());
+        movePieceMechanic(command);
 
         return new Move(
-                command.currentSquare(),
+                command.movedPiece().square(),
                 command.targetSquare(),
                 command.movedPiece(),
                 capturedPiece
@@ -57,69 +56,98 @@ public record PiecesLocations(
     }
 
     public void takeBackMove(Move moveTakenBack) {
-        locations.put(moveTakenBack.startSquare(), moveTakenBack.movedPiece());
+
+        locations.removeIf(
+                piece -> Objects.equals(piece.square(), moveTakenBack.startSquare()) ||
+                        Objects.equals(piece.square(), moveTakenBack.targetSquare())
+        );
+
+        moveTakenBack.movedPiece().setSquare(moveTakenBack.startSquare());
+        locations.add(moveTakenBack.movedPiece());
 
         if (moveTakenBack.capturedPiece() != null) {
-            locations.put(moveTakenBack.targetSquare(), moveTakenBack.movedPiece());
+            moveTakenBack.capturedPiece().setSquare(moveTakenBack.targetSquare());
+            locations.add(moveTakenBack.capturedPiece());
         }
     }
 
+    public Optional<PieceBehaviour> getPieceOnSquare(Square square) {
+        return locations.stream()
+                .filter(piece -> Objects.equals(piece.square(), square))
+                .findFirst();
+    }
+
+    public Set<PieceBehaviour> getEnemyPieces(PieceColor color) {
+        return locations.stream()
+                .filter(piece -> !Objects.equals(piece.color(), color))
+                .collect(Collectors.toSet());
+    }
+
     private boolean isPieceOnLocation(MovePiece command) {
-        return Objects.equals(locations.get(command.currentSquare()), command.movedPiece());
+        return Objects.equals(getPieceOnSquare(command.movedPiece().square()).orElse(null), command.movedPiece());
     }
 
     private boolean isSquareOccupiedBySameColorPiece(MovePiece command) {
-        Piece possiblePiece = locations.get(command.targetSquare());
+        Optional<PieceBehaviour> possiblePiece = getPieceOnSquare(command.targetSquare());
 
-        if (possiblePiece == null) {
+        if (possiblePiece.isEmpty()) {
             return false;
         }
 
         PieceColor movedPieceColor = command.movedPiece().color();
 
-        return Objects.equals(possiblePiece.color(), movedPieceColor);
+        return Objects.equals(possiblePiece.get().color(), movedPieceColor);
+    }
+
+    private void movePieceMechanic(MovePiece command) {
+        locations.removeIf(
+                piece -> Objects.equals(piece.square(), command.movedPiece().square()) ||
+                        Objects.equals(piece.square(), command.targetSquare())
+        );
+
+        command.movedPiece().setSquare(command.targetSquare());
+
+        locations.add(command.movedPiece());
     }
 
     public static PiecesLocations createBasicBoard() {
         return new PiecesLocations(
-                new HashMap<>(
-                        Map.ofEntries(
-                                new AbstractMap.SimpleEntry<>(Square.A1, new Piece(WHITE, ROOK)),
-                                new AbstractMap.SimpleEntry<>(Square.B1, new Piece(WHITE, KNIGHT)),
-                                new AbstractMap.SimpleEntry<>(Square.C1, new Piece(WHITE, BISHOP)),
-                                new AbstractMap.SimpleEntry<>(Square.D1, new Piece(WHITE, QUEEN)),
-                                new AbstractMap.SimpleEntry<>(Square.E1, new Piece(WHITE, KING)),
-                                new AbstractMap.SimpleEntry<>(Square.F1, new Piece(WHITE, BISHOP)),
-                                new AbstractMap.SimpleEntry<>(Square.G1, new Piece(WHITE, KNIGHT)),
-                                new AbstractMap.SimpleEntry<>(Square.H1, new Piece(WHITE, ROOK)),
+                Set.of(
+                        new Rook(WHITE, Square.A1),
+                        new Knight(WHITE, Square.B1),
+                        new Bishop(WHITE, Square.C1),
+                        new Queen(WHITE, Square.D1),
+                        new King(WHITE, Square.E1),
+                        new Bishop(WHITE, Square.F1),
+                        new Knight(WHITE, Square.G1),
+                        new Rook(WHITE, Square.H1),
 
-                                new AbstractMap.SimpleEntry<>(Square.A2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.B2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.C2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.D2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.E2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.F2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.G2, new Piece(WHITE, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.H2, new Piece(WHITE, PAWN)),
+//                        new Pawn(WHITE, Square.A2),
+//                        new Pawn(WHITE, Square.B2),
+//                        new Pawn(WHITE, Square.C2),
+//                        new Pawn(WHITE, Square.D2),
+//                        new Pawn(WHITE, Square.E2),
+//                        new Pawn(WHITE, Square.F2),
+//                        new Pawn(WHITE, Square.G2),
+//                        new Pawn(WHITE, Square.H2),
 
-                                new AbstractMap.SimpleEntry<>(Square.A7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.B7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.C7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.D7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.E7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.F7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.G7, new Piece(BLACK, PAWN)),
-                                new AbstractMap.SimpleEntry<>(Square.H7, new Piece(BLACK, PAWN)),
+//                        new Pawn(BLACK, Square.A7),
+//                        new Pawn(BLACK, Square.B7),
+//                        new Pawn(BLACK, Square.C7),
+//                        new Pawn(BLACK, Square.D7),
+//                        new Pawn(BLACK, Square.E7),
+//                        new Pawn(BLACK, Square.F7),
+//                        new Pawn(BLACK, Square.G7),
+//                        new Pawn(BLACK, Square.H7),
 
-                                new AbstractMap.SimpleEntry<>(Square.A8, new Piece(BLACK, ROOK)),
-                                new AbstractMap.SimpleEntry<>(Square.B8, new Piece(BLACK, KNIGHT)),
-                                new AbstractMap.SimpleEntry<>(Square.C8, new Piece(BLACK, BISHOP)),
-                                new AbstractMap.SimpleEntry<>(Square.D8, new Piece(BLACK, QUEEN)),
-                                new AbstractMap.SimpleEntry<>(Square.E8, new Piece(BLACK, KING)),
-                                new AbstractMap.SimpleEntry<>(Square.F8, new Piece(BLACK, BISHOP)),
-                                new AbstractMap.SimpleEntry<>(Square.G8, new Piece(BLACK, KNIGHT)),
-                                new AbstractMap.SimpleEntry<>(Square.H8, new Piece(BLACK, ROOK))
-                        )
+                        new Rook(BLACK, Square.A8),
+                        new Knight(BLACK, Square.B8),
+                        new Bishop(BLACK, Square.C8),
+                        new Queen(BLACK, Square.D8),
+                        new King(BLACK, Square.E8),
+                        new Bishop(BLACK, Square.F8),
+                        new Knight(BLACK, Square.G8),
+                        new Rook(BLACK, Square.H8)
                 )
         );
     }

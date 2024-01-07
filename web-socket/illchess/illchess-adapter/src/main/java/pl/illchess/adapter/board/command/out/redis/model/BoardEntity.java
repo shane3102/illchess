@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public record BoardEntity(
         UUID boardId,
+        // rewrite to list/set
         Map<String, PieceEntity> piecesLocations,
         String currentPlayerColor,
         List<MoveEntity> moveStackData
