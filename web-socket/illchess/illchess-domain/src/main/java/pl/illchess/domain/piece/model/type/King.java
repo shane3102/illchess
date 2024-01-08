@@ -1,5 +1,6 @@
 package pl.illchess.domain.piece.model.type;
 
+import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.PieceBehaviour;
@@ -26,16 +27,16 @@ public final class King extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations) {
+    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> standardKingMovement = extractStandardKingMovement();
 
         return standardKingMovement.stream()
-                .filter(square -> checkIfKingCanMove(square, piecesLocations))
+                .filter(square -> checkIfKingCanMove(square, piecesLocations, lastPerformedMove))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations) {
+    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return extractStandardKingMovement().stream()
                 .anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }
@@ -53,20 +54,25 @@ public final class King extends PieceBehaviour {
 
     private boolean checkIfKingCanMove(
             Square square,
-            PiecesLocations piecesLocations
+            PiecesLocations piecesLocations,
+            Move lastPerformedMove
     ) {
         Optional<PieceBehaviour> pieceOnSquare = piecesLocations.getPieceOnSquare(square);
 
-        return pieceOnSquare.map(this::isSamePieceOnSquare).orElse(false) || isEnemyDefendingSquare(square, piecesLocations);
+        return pieceOnSquare.map(this::isSamePieceOnSquare).orElse(false) || isEnemyDefendingSquare(square, piecesLocations, lastPerformedMove);
     }
 
-    private boolean isEnemyDefendingSquare(Square square, PiecesLocations piecesLocations) {
+    private boolean isEnemyDefendingSquare(
+            Square square,
+            PiecesLocations piecesLocations,
+            Move lastPerformedMove
+    ) {
         Set<PieceBehaviour> enemyPieces = piecesLocations.getEnemyPieces(color);
 
         return enemyPieces
                 .stream()
                 .noneMatch(
-                        piece -> piece.isDefendingSquare(square, piecesLocations)
+                        piece -> piece.isDefendingSquare(square, piecesLocations, lastPerformedMove)
                 );
     }
 

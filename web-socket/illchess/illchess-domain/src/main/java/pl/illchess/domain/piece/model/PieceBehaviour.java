@@ -1,5 +1,6 @@
 package pl.illchess.domain.piece.model;
 
+import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
@@ -21,12 +22,15 @@ public abstract class PieceBehaviour {
 
     abstract public Square square();
 
-    abstract public Set<Square> possibleMoves(PiecesLocations piecesLocations);
+    abstract public Set<Square> possibleMoves(
+            PiecesLocations piecesLocations,
+            Move lastPerformedMove
+    );
 
     abstract public PieceType typeName();
 
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations) {
-        Set<Square> squares = possibleMoves(piecesLocations);
+    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> squares = possibleMoves(piecesLocations, lastPerformedMove);
         return squares.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }
 

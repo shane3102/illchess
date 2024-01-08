@@ -13,7 +13,6 @@ import pl.illchess.domain.piece.model.type.Pawn;
 import pl.illchess.domain.piece.model.type.Queen;
 import pl.illchess.domain.piece.model.type.Rook;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +25,9 @@ public record PiecesLocations(
         Set<PieceBehaviour> locations
 ) {
 
-    public Move movePiece(MovePiece command) {
+    public Move movePiece(MovePiece command, Move lastPerformedMove) {
+        Square movedPieceStartSquare = command.movedPiece().square();
+
         if (!isPieceOnLocation(command)) {
             throw new PieceNotPresentOnGivenSquare(
                     command.boardId(),
@@ -45,10 +46,11 @@ public record PiecesLocations(
 
         PieceBehaviour capturedPiece = getPieceOnSquare(command.targetSquare()).orElse(null);
 
+        removePieceIfEnPassantMove(command, lastPerformedMove);
         movePieceMechanic(command);
 
         return new Move(
-                command.movedPiece().square(),
+                movedPieceStartSquare,
                 command.targetSquare(),
                 command.movedPiece(),
                 capturedPiece
@@ -110,6 +112,16 @@ public record PiecesLocations(
         locations.add(command.movedPiece());
     }
 
+    private void removePieceIfEnPassantMove(MovePiece command, Move lastPerformedMove) {
+        if (command.movedPiece() instanceof Pawn pawn) {
+            Square square = pawn.getSquareOfPieceCapturedEnPassant(command.targetSquare(), lastPerformedMove);
+            if (square != null) {
+                locations.removeIf(piece -> Objects.equals(piece.square(), square));
+            }
+        }
+
+    }
+
     public static PiecesLocations createBasicBoard() {
         return new PiecesLocations(
                 Set.of(
@@ -122,23 +134,23 @@ public record PiecesLocations(
                         new Knight(WHITE, Square.G1),
                         new Rook(WHITE, Square.H1),
 
-//                        new Pawn(WHITE, Square.A2),
-//                        new Pawn(WHITE, Square.B2),
-//                        new Pawn(WHITE, Square.C2),
-//                        new Pawn(WHITE, Square.D2),
-//                        new Pawn(WHITE, Square.E2),
-//                        new Pawn(WHITE, Square.F2),
-//                        new Pawn(WHITE, Square.G2),
-//                        new Pawn(WHITE, Square.H2),
+                        new Pawn(WHITE, Square.A2),
+                        new Pawn(WHITE, Square.B2),
+                        new Pawn(WHITE, Square.C2),
+                        new Pawn(WHITE, Square.D2),
+                        new Pawn(WHITE, Square.E2),
+                        new Pawn(WHITE, Square.F2),
+                        new Pawn(WHITE, Square.G2),
+                        new Pawn(WHITE, Square.H2),
 
-//                        new Pawn(BLACK, Square.A7),
-//                        new Pawn(BLACK, Square.B7),
-//                        new Pawn(BLACK, Square.C7),
-//                        new Pawn(BLACK, Square.D7),
-//                        new Pawn(BLACK, Square.E7),
-//                        new Pawn(BLACK, Square.F7),
-//                        new Pawn(BLACK, Square.G7),
-//                        new Pawn(BLACK, Square.H7),
+                        new Pawn(BLACK, Square.A7),
+                        new Pawn(BLACK, Square.B7),
+                        new Pawn(BLACK, Square.C7),
+                        new Pawn(BLACK, Square.D7),
+                        new Pawn(BLACK, Square.E7),
+                        new Pawn(BLACK, Square.F7),
+                        new Pawn(BLACK, Square.G7),
+                        new Pawn(BLACK, Square.H7),
 
                         new Rook(BLACK, Square.A8),
                         new Knight(BLACK, Square.B8),

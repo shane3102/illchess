@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// TODO operate on streams instead of collecting everything every five fucking minutes
 public final class SquaresBidirectionalLinkedList {
     private final SimpleSquare square;
     private SquaresBidirectionalLinkedList leftNode;
@@ -38,30 +39,29 @@ public final class SquaresBidirectionalLinkedList {
                 .toList();
     }
 
-    public List<SimpleSquare> getAllConnected() {
-        return getAllConnectedRememberVisited(List.of());
-    }
-
-    private List<SimpleSquare> getAllConnectedRememberVisited(
-            List<SimpleSquare> visited
+    public Set<SimpleSquare> getClosestNeighboursByOccupiedStatus(
+            PiecesLocations piecesLocations,
+            boolean occupiedStatus
     ) {
-
-        List<SimpleSquare> newVisited = Stream.concat(visited.stream(), Stream.of(square)).toList();
-
-        List<SimpleSquare> leftNodeDependends = leftNode == null || visited.contains(leftNode.square)
-                ? List.of()
-                : leftNode.getAllConnectedRememberVisited(newVisited);
-
-        List<SimpleSquare> rightNodeDependends = rightNode == null || visited.contains(rightNode.square)
-                ? List.of()
-                : rightNode.getAllConnectedRememberVisited(newVisited);
-
-        return Stream.concat(
-                        newVisited.stream(),
-                        Stream.concat(rightNodeDependends.stream(), leftNodeDependends.stream())
+        return Stream.of(
+                        leftNode == null
+                                ||
+                                (occupiedStatus
+                                        ? piecesLocations.getPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
+                                        : piecesLocations.getPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
+                                )
+                                ? null :
+                                leftNode.square,
+                        rightNode == null
+                                || (occupiedStatus
+                                ? piecesLocations.getPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
+                                : piecesLocations.getPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
+                        )
+                                ? null :
+                                rightNode.square
                 )
-                .toList();
-
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     SquaresBidirectionalLinkedList getNodeBySquare(SimpleSquare square) {

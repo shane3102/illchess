@@ -34,7 +34,7 @@ public record Board(
             );
         }
         // TODO cache it (somehow)
-        Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations);
+        Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory.peekLastMove());
 
         if (!possibleMoves.contains(command.targetSquare())) {
             throw new PieceCantMoveToGivenSquareException(
@@ -45,7 +45,7 @@ public record Board(
             );
         }
 
-        Move performedMove = piecesLocations().movePiece(command);
+        Move performedMove = piecesLocations().movePiece(command, moveHistory().peekLastMove());
         moveHistory().addMoveToHistory(performedMove);
         currentPlayerColor.invert();
     }

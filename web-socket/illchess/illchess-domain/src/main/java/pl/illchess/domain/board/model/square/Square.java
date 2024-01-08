@@ -53,22 +53,11 @@ public enum Square {
         return squareDiagonal2;
     }
 
-    public Set<Square> getPieceMovement(
-            PieceBehaviour piece,
-            PiecesLocations piecesLocations
-    ) {
+    public boolean isHigher(Square compared) {
+        return this.rank.getNumber() > compared.rank.getNumber();
+    }
 
-        if (piece instanceof King) {
-            return Stream.of(
-                            file.getContainedSquares().getClosestNeighbours(this),
-                            rank.getContainedSquares().getClosestNeighbours(this),
-                            squareDiagonal1.getContainedSquares().getClosestNeighbours(this),
-                            squareDiagonal2.getContainedSquares().getClosestNeighbours(this)
-                    )
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
-        }
-
-        return Set.of();
+    public boolean isLower(Square compared) {
+        return this.rank.getNumber() < compared.rank.getNumber();
     }
 }

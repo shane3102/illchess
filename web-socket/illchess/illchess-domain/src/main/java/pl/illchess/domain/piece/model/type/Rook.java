@@ -1,8 +1,8 @@
 package pl.illchess.domain.piece.model.type;
 
+import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.board.model.square.SquaresConnectedContents;
 import pl.illchess.domain.piece.model.PieceBehaviour;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
@@ -26,14 +26,14 @@ public final class Rook extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations) {
+    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> result = getRookConnectedContents(piecesLocations);
         // TODO ograniczenie przez przywiązanie
         return result;
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations) {
+    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> reachableSquaresXrayingKing = getRookXrayOfEnemyKing(piecesLocations);
         return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }

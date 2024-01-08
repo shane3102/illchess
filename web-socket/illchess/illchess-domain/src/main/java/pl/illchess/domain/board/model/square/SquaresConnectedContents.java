@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+// TODO operate on streams instead of collecting everything every five fucking minutes
 public class SquaresConnectedContents {
 
     private final SquaresBidirectionalLinkedList root;
@@ -40,7 +41,10 @@ public class SquaresConnectedContents {
                 .collect(Collectors.toSet());
     }
 
-    public Set<Square> getAllConnected(Square square) {
+    public Set<Square> getClosestNonOccupiedNeighbours(
+            Square square,
+            PiecesLocations piecesLocations
+    )  {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
         if (root == null) {
@@ -53,7 +57,29 @@ public class SquaresConnectedContents {
             return Collections.emptySet();
         }
 
-        return nodeBySquare.getAllConnected()
+        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, false)
+                .stream()
+                .map(it -> Square.valueOf(it.name()))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Square> getClosestOccupiedNeighbours(
+            Square square,
+            PiecesLocations piecesLocations
+    )  {
+        SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
+
+        if (root == null) {
+            return Collections.emptySet();
+        }
+
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
+
+        if (nodeBySquare == null) {
+            return Collections.emptySet();
+        }
+
+        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, true)
                 .stream()
                 .map(it -> Square.valueOf(it.name()))
                 .collect(Collectors.toSet());
