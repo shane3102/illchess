@@ -26,10 +26,13 @@ public final class Bishop extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> result = getBishopConnectedContents(piecesLocations);
-        // TODO ograniczenie przez przywiązanie
-        return result;
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return Stream.of(
+                        square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
+                        square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -75,15 +78,6 @@ public final class Bishop extends PieceBehaviour {
         return "Bishop[" +
                 "color=" + color + ", " +
                 "square=" + square + ']';
-    }
-
-    private Set<Square> getBishopConnectedContents(PiecesLocations piecesLocations) {
-        return Stream.of(
-                        square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
     }
 
     private Set<Square> getBishopXrayOfEnemyKing(PiecesLocations piecesLocations) {

@@ -26,23 +26,18 @@ public final class Pawn extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return extractPawnMoves(piecesLocations, lastPerformedMove);
+    }
 
-        Set<Square> standardPawnMovement = getStandardPawnMovement(piecesLocations);
-
-        Set<Square> standardCaptures = getStandardPawnPossibleCaptures(piecesLocations);
-
-        Set<Square> enPassantPossibleCaptures = getEnPassantPossibleCaptures(lastPerformedMove);
-
-        return Stream.of(
-                        standardPawnMovement.stream(),
-                        standardCaptures.stream(),
-                        enPassantPossibleCaptures.stream()
+    @Override
+    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return Stream.concat(
+                        this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream(),
+                        this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream()
                 )
-                .flatMap(it -> it)
                 .filter(this::filterByPawnColor)
-                .collect(Collectors.toSet());
-
+                .anyMatch(capturableSquare -> Objects.equals(capturableSquare.name(), square.name()));
     }
 
     public PieceColor color() {
@@ -89,6 +84,23 @@ public final class Pawn extends PieceBehaviour {
             return lastPerformedMove.targetSquare();
         }
         return null;
+    }
+
+    private Set<Square> extractPawnMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> standardPawnMovement = getStandardPawnMovement(piecesLocations);
+
+        Set<Square> standardCaptures = getStandardPawnPossibleCaptures(piecesLocations);
+
+        Set<Square> enPassantPossibleCaptures = getEnPassantPossibleCaptures(lastPerformedMove);
+
+        return Stream.of(
+                        standardPawnMovement.stream(),
+                        standardCaptures.stream(),
+                        enPassantPossibleCaptures.stream()
+                )
+                .flatMap(it -> it)
+                .filter(this::filterByPawnColor)
+                .collect(Collectors.toSet());
     }
 
     private Set<Square> getStandardPawnMovement(PiecesLocations piecesLocations) {

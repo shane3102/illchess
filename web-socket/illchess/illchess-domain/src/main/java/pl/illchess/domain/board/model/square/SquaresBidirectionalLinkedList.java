@@ -115,7 +115,7 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(leftNode.square)) {
             Square nextSquareValue = Square.valueOf(leftNode.square.name());
             Optional<PieceBehaviour> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent() && !(skipKing && pieceOnSquare.get() instanceof King)) {
+            if (pieceOnSquare.isPresent() && (skipKing && !(pieceOnSquare.get() instanceof King))) {
                 if (Objects.equals(pieceOnSquare.get().color(), currentPieceColor)) {
                     leftNodeSquares = null;
                 } else {
@@ -142,7 +142,7 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(rightNode.square)) {
             Square nextSquareValue = Square.valueOf(rightNode.square.name());
             Optional<PieceBehaviour> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent() && (skipKing && pieceOnSquare.get() instanceof King)) {
+            if (pieceOnSquare.isPresent() && (skipKing && !(pieceOnSquare.get() instanceof King))) {
                 if (Objects.equals(pieceOnSquare.get().color(), currentPieceColor)) {
                     rightNodeSquares = null;
                 } else {

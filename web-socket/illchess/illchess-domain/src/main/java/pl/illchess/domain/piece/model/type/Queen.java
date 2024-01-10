@@ -26,10 +26,8 @@ public final class Queen extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> result = getQueenConnectedContents(piecesLocations);
-        // TODO ograniczenie przez przywiązanie
-        return result;
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return extractStandardQueenMoves(piecesLocations);
     }
 
     @Override
@@ -77,7 +75,7 @@ public final class Queen extends PieceBehaviour {
                 "square=" + square + ']';
     }
 
-    private Set<Square> getQueenConnectedContents(PiecesLocations piecesLocations) {
+    private Set<Square> extractStandardQueenMoves(PiecesLocations piecesLocations) {
         return Stream.of(
                         square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
                         square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),

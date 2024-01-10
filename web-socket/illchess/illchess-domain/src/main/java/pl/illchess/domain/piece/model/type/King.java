@@ -27,21 +27,7 @@ public final class King extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> standardKingMovement = extractStandardKingMovement();
-
-        return standardKingMovement.stream()
-                .filter(square -> checkIfKingCanMove(square, piecesLocations, lastPerformedMove))
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return extractStandardKingMovement().stream()
-                .anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
-    }
-
-    private Set<Square> extractStandardKingMovement() {
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         return Stream.of(
                         square.getFile().getContainedSquares().getClosestNeighbours(square),
                         square.getRank().getContainedSquares().getClosestNeighbours(square),
@@ -52,14 +38,19 @@ public final class King extends PieceBehaviour {
                 .collect(Collectors.toSet());
     }
 
-    private boolean checkIfKingCanMove(
-            Square square,
-            PiecesLocations piecesLocations,
-            Move lastPerformedMove
-    ) {
-        Optional<PieceBehaviour> pieceOnSquare = piecesLocations.getPieceOnSquare(square);
+    @Override
+    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> standardKingMovement = standardLegalMoves(piecesLocations, lastPerformedMove);
 
-        return pieceOnSquare.map(this::isSamePieceOnSquare).orElse(false) || isEnemyDefendingSquare(square, piecesLocations, lastPerformedMove);
+        return standardKingMovement.stream()
+                .filter(square -> isEnemyDefendingSquare(square, piecesLocations, lastPerformedMove))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return standardLegalMoves(piecesLocations, lastPerformedMove).stream()
+                .anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }
 
     private boolean isEnemyDefendingSquare(
@@ -74,10 +65,6 @@ public final class King extends PieceBehaviour {
                 .noneMatch(
                         piece -> piece.isDefendingSquare(square, piecesLocations, lastPerformedMove)
                 );
-    }
-
-    private boolean isSamePieceOnSquare(PieceBehaviour pieceOnSquare) {
-        return Objects.equals(pieceOnSquare.color(), this.color);
     }
 
     public PieceColor color() {

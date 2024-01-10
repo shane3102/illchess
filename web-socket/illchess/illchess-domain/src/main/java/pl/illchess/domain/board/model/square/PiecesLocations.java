@@ -13,6 +13,7 @@ import pl.illchess.domain.piece.model.type.Pawn;
 import pl.illchess.domain.piece.model.type.Queen;
 import pl.illchess.domain.piece.model.type.Rook;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -124,42 +125,44 @@ public record PiecesLocations(
 
     public static PiecesLocations createBasicBoard() {
         return new PiecesLocations(
-                Set.of(
-                        new Rook(WHITE, Square.A1),
-                        new Knight(WHITE, Square.B1),
-                        new Bishop(WHITE, Square.C1),
-                        new Queen(WHITE, Square.D1),
-                        new King(WHITE, Square.E1),
-                        new Bishop(WHITE, Square.F1),
-                        new Knight(WHITE, Square.G1),
-                        new Rook(WHITE, Square.H1),
+                new HashSet<>(
+                        Set.of(
+                                new Rook(WHITE, Square.A1),
+                                new Knight(WHITE, Square.B1),
+                                new Bishop(WHITE, Square.C1),
+                                new Queen(WHITE, Square.D1),
+                                new King(WHITE, Square.E1),
+                                new Bishop(WHITE, Square.F1),
+                                new Knight(WHITE, Square.G1),
+                                new Rook(WHITE, Square.H1),
 
-                        new Pawn(WHITE, Square.A2),
-                        new Pawn(WHITE, Square.B2),
-                        new Pawn(WHITE, Square.C2),
-                        new Pawn(WHITE, Square.D2),
-                        new Pawn(WHITE, Square.E2),
-                        new Pawn(WHITE, Square.F2),
-                        new Pawn(WHITE, Square.G2),
-                        new Pawn(WHITE, Square.H2),
+                                new Pawn(WHITE, Square.A2),
+                                new Pawn(WHITE, Square.B2),
+                                new Pawn(WHITE, Square.C2),
+                                new Pawn(WHITE, Square.D2),
+                                new Pawn(WHITE, Square.E2),
+                                new Pawn(WHITE, Square.F2),
+                                new Pawn(WHITE, Square.G2),
+                                new Pawn(WHITE, Square.H2),
 
-                        new Pawn(BLACK, Square.A7),
-                        new Pawn(BLACK, Square.B7),
-                        new Pawn(BLACK, Square.C7),
-                        new Pawn(BLACK, Square.D7),
-                        new Pawn(BLACK, Square.E7),
-                        new Pawn(BLACK, Square.F7),
-                        new Pawn(BLACK, Square.G7),
-                        new Pawn(BLACK, Square.H7),
+                                new Pawn(BLACK, Square.A7),
+                                new Pawn(BLACK, Square.B7),
+                                new Pawn(BLACK, Square.C7),
+                                new Pawn(BLACK, Square.D7),
+                                new Pawn(BLACK, Square.E7),
+                                new Pawn(BLACK, Square.F7),
+                                new Pawn(BLACK, Square.G7),
+                                new Pawn(BLACK, Square.H7),
 
-                        new Rook(BLACK, Square.A8),
-                        new Knight(BLACK, Square.B8),
-                        new Bishop(BLACK, Square.C8),
-                        new Queen(BLACK, Square.D8),
-                        new King(BLACK, Square.E8),
-                        new Bishop(BLACK, Square.F8),
-                        new Knight(BLACK, Square.G8),
-                        new Rook(BLACK, Square.H8)
+                                new Rook(BLACK, Square.A8),
+                                new Knight(BLACK, Square.B8),
+                                new Bishop(BLACK, Square.C8),
+                                new Queen(BLACK, Square.D8),
+                                new King(BLACK, Square.E8),
+                                new Bishop(BLACK, Square.F8),
+                                new Knight(BLACK, Square.G8),
+                                new Rook(BLACK, Square.H8)
+                        )
                 )
         );
     }

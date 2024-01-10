@@ -26,10 +26,8 @@ public final class Rook extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> result = getRookConnectedContents(piecesLocations);
-        // TODO ograniczenie przez przywiązanie
-        return result;
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return extractStandardRookMoves(piecesLocations);
     }
 
     @Override
@@ -77,7 +75,7 @@ public final class Rook extends PieceBehaviour {
                 "square=" + square + ']';
     }
 
-    private Set<Square> getRookConnectedContents(PiecesLocations piecesLocations) {
+    private Set<Square> extractStandardRookMoves(PiecesLocations piecesLocations) {
         return Stream.of(
                         square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
                         square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)

@@ -9,6 +9,10 @@ import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class Knight extends PieceBehaviour {
     private final PieceColor color;
@@ -23,9 +27,8 @@ public final class Knight extends PieceBehaviour {
     }
 
     @Override
-    public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        //  TODO
-        return Set.of();
+    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return extractStandardKnightMovement();
     }
 
     public PieceColor color() {
@@ -65,6 +68,46 @@ public final class Knight extends PieceBehaviour {
         return "Knight[" +
                 "color=" + color + ", " +
                 "square=" + square + ']';
+    }
+
+    private Set<Square> extractStandardKnightMovement() {
+        Stream<Square> possibleSquaresStream = Stream.of(
+                        square.getSquareDiagonal1()
+                                .getContainedSquares()
+                                .getClosestNeighbours(square)
+                                .stream()
+                                .map(square -> square.getFile().getContainedSquares().getClosestNeighbours(square)),
+                        square.getSquareDiagonal2()
+                                .getContainedSquares()
+                                .getClosestNeighbours(square)
+                                .stream()
+                                .map(square -> square.getFile().getContainedSquares().getClosestNeighbours(square)),
+                        square.getSquareDiagonal1()
+                                .getContainedSquares()
+                                .getClosestNeighbours(square)
+                                .stream()
+                                .map(square -> square.getRank().getContainedSquares().getClosestNeighbours(square)),
+                        square.getSquareDiagonal2()
+                                .getContainedSquares()
+                                .getClosestNeighbours(square)
+                                .stream()
+                                .map(square -> square.getRank().getContainedSquares().getClosestNeighbours(square))
+                )
+                .flatMap(it -> it)
+                .flatMap(Set::stream);
+
+        Supplier<Stream<Square>> closestKnightNeighbours = () -> Stream.of(
+                        square.getFile().getContainedSquares().getClosestNeighbours(square),
+                        square.getRank().getContainedSquares().getClosestNeighbours(square)
+                )
+                .flatMap(Set::stream);
+
+        return possibleSquaresStream.filter(
+                        checkedSquare -> closestKnightNeighbours.get().noneMatch(
+                                closesNeighbourSquare -> closesNeighbourSquare.equals(checkedSquare)
+                        )
+                )
+                .collect(Collectors.toSet());
     }
 
 

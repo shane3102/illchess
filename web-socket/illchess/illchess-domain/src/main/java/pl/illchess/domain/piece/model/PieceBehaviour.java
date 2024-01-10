@@ -22,7 +22,16 @@ public abstract class PieceBehaviour {
 
     abstract public Square square();
 
-    abstract public Set<Square> possibleMoves(
+    public Set<Square> possibleMoves(
+            PiecesLocations piecesLocations,
+            Move lastPerformedMove
+    ) {
+        Set<Square> reachableSquares = standardLegalMoves(piecesLocations, lastPerformedMove);
+        // TODO ograniczenie przez przywiązanie
+        return reachableSquares;
+    }
+
+    abstract public Set<Square> standardLegalMoves(
             PiecesLocations piecesLocations,
             Move lastPerformedMove
     );
@@ -30,7 +39,7 @@ public abstract class PieceBehaviour {
     abstract public PieceType typeName();
 
     public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> squares = possibleMoves(piecesLocations, lastPerformedMove);
+        Set<Square> squares = standardLegalMoves(piecesLocations, lastPerformedMove);
         return squares.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }
 
