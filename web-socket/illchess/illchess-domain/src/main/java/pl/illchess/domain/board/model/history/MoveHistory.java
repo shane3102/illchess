@@ -1,6 +1,5 @@
 package pl.illchess.domain.board.model.history;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 // TODO seraizliation of this  class  if fucked, taking back last move not possible
@@ -19,8 +18,7 @@ public record MoveHistory(Stack<Move> moveStack) {
         if (moveStack.isEmpty()) {
             return null;
         } else {
-            // TODO temporary fix en passant purposes
-            return (new ArrayList<>(moveStack)).get(0);
+            return moveStack.peek();
         }
     }
 

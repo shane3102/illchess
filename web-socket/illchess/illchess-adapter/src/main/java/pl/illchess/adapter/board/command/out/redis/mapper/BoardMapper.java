@@ -64,7 +64,7 @@ public class BoardMapper {
 
     private static MoveHistory toMoveHistory(List<BoardEntity.MoveEntity> moveHistoryList) {
         Stack<Move> moveStack = new Stack<>();
-        Stream.iterate(moveHistoryList.size() - 1, i -> i - 1)
+        Stream.iterate(0, i -> i + 1)
                 .limit(moveHistoryList.size())
                 .forEach(i -> {
                     BoardEntity.MoveEntity moveEntity = moveHistoryList.get(i);
@@ -127,6 +127,7 @@ public class BoardMapper {
                                                 move.capturedPiece().typeName().text()
                                         )
                         )
-                ).toList();
+                )
+                .toList();
     }
 }
