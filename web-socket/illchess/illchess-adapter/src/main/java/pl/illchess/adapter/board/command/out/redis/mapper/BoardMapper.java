@@ -13,7 +13,6 @@ import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,15 +46,14 @@ public class BoardMapper {
         }
     }
 
-    private static PiecesLocations toPiecesLocations(Map<String, BoardEntity.PieceEntity> piecesLocationsInEntity) {
+    private static PiecesLocations toPiecesLocations(List<BoardEntity.PieceEntity> piecesLocationsInEntity) {
         return new PiecesLocations(
-                piecesLocationsInEntity.entrySet()
-                        .stream()
+                piecesLocationsInEntity.stream()
                         .map(
-                                entry -> PieceBehaviour.getPieceByPieceType(
-                                        new PieceType(entry.getValue().pieceType()),
-                                        PieceColor.valueOf(entry.getValue().pieceColor()),
-                                        Square.valueOf(entry.getKey())
+                                piece -> PieceBehaviour.getPieceByPieceType(
+                                        new PieceType(piece.pieceType()),
+                                        PieceColor.valueOf(piece.pieceColor()),
+                                        Square.valueOf(piece.square())
                                 )
                         )
                         .collect(Collectors.toSet())
@@ -94,19 +92,17 @@ public class BoardMapper {
         return new MoveHistory(moveStack);
     }
 
-    private static Map<String, BoardEntity.PieceEntity> toPiecesLocationsEntity(PiecesLocations piecesLocations) {
+    private static List<BoardEntity.PieceEntity> toPiecesLocationsEntity(PiecesLocations piecesLocations) {
         return piecesLocations.locations()
                 .stream()
                 .map(
-                        entry -> Map.entry(
-                                entry.square().toString(),
-                                new BoardEntity.PieceEntity(
-                                        entry.color().toString(),
-                                        entry.typeName().text()
-                                )
+                        piece -> new BoardEntity.PieceEntity(
+                                piece.square().toString(),
+                                piece.color().toString(),
+                                piece.typeName().text()
                         )
                 )
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .toList();
     }
 
     private static List<BoardEntity.MoveEntity> toMoveHistoryEntity(MoveHistory moveHistory) {
@@ -117,12 +113,14 @@ public class BoardMapper {
                                 move.startSquare().toString(),
                                 move.targetSquare().toString(),
                                 new BoardEntity.PieceEntity(
+                                        move.movedPiece().square().toString(),
                                         move.movedPiece().color().toString(),
                                         move.movedPiece().typeName().text()
                                 ),
                                 move.capturedPiece() == null ?
                                         null :
                                         new BoardEntity.PieceEntity(
+                                                move.capturedPiece().square().toString(),
                                                 move.capturedPiece().color().toString(),
                                                 move.capturedPiece().typeName().text()
                                         )

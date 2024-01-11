@@ -2,18 +2,18 @@ package pl.illchess.adapter.board.command.out.redis.model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public record BoardEntity(
         UUID boardId,
         // rewrite to list/set
-        Map<String, PieceEntity> piecesLocations,
+        List<PieceEntity> piecesLocations,
         String currentPlayerColor,
         List<MoveEntity> moveStackData
 ) implements Serializable {
 
     public record PieceEntity(
+            String square,
             String pieceColor,
             String pieceType
     ) implements Serializable {
