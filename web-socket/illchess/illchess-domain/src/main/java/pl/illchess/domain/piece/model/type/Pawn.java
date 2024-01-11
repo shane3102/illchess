@@ -3,7 +3,7 @@ package pl.illchess.domain.piece.model.type;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Pawn extends PieceBehaviour {
+public final class Pawn extends Piece {
     private final PieceColor color;
     private Square square;
 

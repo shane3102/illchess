@@ -2,14 +2,14 @@ package pl.illchess.domain.board.exception;
 
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 
 import java.util.Set;
 
 public class PieceCantMoveToGivenSquareException extends IllegalMoveException {
 
     public PieceCantMoveToGivenSquareException(
-            PieceBehaviour piece,
+            Piece piece,
             Square targetSquare,
             Set<Square> possibleSquares,
             BoardId boardId

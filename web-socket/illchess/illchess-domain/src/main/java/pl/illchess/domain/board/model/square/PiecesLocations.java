@@ -4,7 +4,8 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.exception.TargetSquareOccupiedBySameColorPieceException;
 import pl.illchess.domain.board.model.history.Move;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.type.Bishop;
 import pl.illchess.domain.piece.model.type.King;
@@ -23,7 +24,7 @@ import static pl.illchess.domain.piece.model.info.PieceColor.BLACK;
 import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public record PiecesLocations(
-        Set<PieceBehaviour> locations
+        Set<Piece> locations
 ) {
 
     public Move movePiece(MovePiece command, Move lastPerformedMove) {
@@ -45,7 +46,7 @@ public record PiecesLocations(
             );
         }
 
-        PieceBehaviour capturedPiece = getPieceOnSquare(command.targetSquare()).orElse(null);
+        Piece capturedPiece = getPieceOnSquare(command.targetSquare()).orElse(null);
 
         removePieceIfEnPassantMove(command, lastPerformedMove);
         movePieceMechanic(command);
@@ -74,15 +75,32 @@ public record PiecesLocations(
         }
     }
 
-    public Optional<PieceBehaviour> getPieceOnSquare(Square square) {
+    public Optional<Piece> getPieceByTypeAndColor(Class<? extends Piece> pieceType, PieceColor pieceColor) {
+        return locations.stream()
+                .filter(piece ->
+                        Objects.equals(piece.getClass(), pieceType)
+                                && Objects.equals(piece.color(), pieceColor)
+                )
+                .findFirst();
+    }
+
+    public Optional<Piece> getPieceOnSquare(Square square) {
         return locations.stream()
                 .filter(piece -> Objects.equals(piece.square(), square))
                 .findFirst();
     }
 
-    public Set<PieceBehaviour> getEnemyPieces(PieceColor color) {
+    public Set<Piece> getEnemyPieces(PieceColor color) {
         return locations.stream()
                 .filter(piece -> !Objects.equals(piece.color(), color))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<PieceCapableOfPinning> getEnemyPiecesCapableOfPinning(PieceColor color) {
+        return locations.stream()
+                .filter(piece -> !Objects.equals(piece.color(), color))
+                .filter(piece -> piece instanceof PieceCapableOfPinning)
+                .map(piece -> (PieceCapableOfPinning) piece)
                 .collect(Collectors.toSet());
     }
 
@@ -91,7 +109,7 @@ public record PiecesLocations(
     }
 
     private boolean isSquareOccupiedBySameColorPiece(MovePiece command) {
-        Optional<PieceBehaviour> possiblePiece = getPieceOnSquare(command.targetSquare());
+        Optional<Piece> possiblePiece = getPieceOnSquare(command.targetSquare());
 
         if (possiblePiece.isEmpty()) {
             return false;
@@ -136,23 +154,23 @@ public record PiecesLocations(
                                 new Knight(WHITE, Square.G1),
                                 new Rook(WHITE, Square.H1),
 
-                                new Pawn(WHITE, Square.A2),
-                                new Pawn(WHITE, Square.B2),
-                                new Pawn(WHITE, Square.C2),
-                                new Pawn(WHITE, Square.D2),
-                                new Pawn(WHITE, Square.E2),
-                                new Pawn(WHITE, Square.F2),
-                                new Pawn(WHITE, Square.G2),
-                                new Pawn(WHITE, Square.H2),
-
-                                new Pawn(BLACK, Square.A7),
-                                new Pawn(BLACK, Square.B7),
-                                new Pawn(BLACK, Square.C7),
-                                new Pawn(BLACK, Square.D7),
-                                new Pawn(BLACK, Square.E7),
-                                new Pawn(BLACK, Square.F7),
-                                new Pawn(BLACK, Square.G7),
-                                new Pawn(BLACK, Square.H7),
+//                                new Pawn(WHITE, Square.A2),
+//                                new Pawn(WHITE, Square.B2),
+//                                new Pawn(WHITE, Square.C2),
+//                                new Pawn(WHITE, Square.D2),
+//                                new Pawn(WHITE, Square.E2),
+//                                new Pawn(WHITE, Square.F2),
+//                                new Pawn(WHITE, Square.G2),
+//                                new Pawn(WHITE, Square.H2),
+//
+//                                new Pawn(BLACK, Square.A7),
+//                                new Pawn(BLACK, Square.B7),
+//                                new Pawn(BLACK, Square.C7),
+//                                new Pawn(BLACK, Square.D7),
+//                                new Pawn(BLACK, Square.E7),
+//                                new Pawn(BLACK, Square.F7),
+//                                new Pawn(BLACK, Square.G7),
+//                                new Pawn(BLACK, Square.H7),
 
                                 new Rook(BLACK, Square.A8),
                                 new Knight(BLACK, Square.B8),

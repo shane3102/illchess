@@ -3,7 +3,8 @@ package pl.illchess.domain.piece.model.type;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Queen extends PieceBehaviour {
+public final class Queen extends PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
 
@@ -34,6 +35,11 @@ public final class Queen extends PieceBehaviour {
     public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> reachableSquaresXrayingKing = getQueenXrayOfEnemyKing(piecesLocations);
         return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
+    }
+
+    @Override
+    public Set<Square> pinningRayIfImPinning(Piece askingPiece, King enemyKing, PiecesLocations piecesLocations) {
+        return getQueenPinningRay(askingPiece, enemyKing, piecesLocations);
     }
 
     public PieceColor color() {
@@ -94,6 +100,49 @@ public final class Queen extends PieceBehaviour {
                         square.getSquareDiagonal2().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations)
                 )
                 .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<Square> getQueenPinningRay(
+            Piece askingPiece,
+            King enemyKing,
+            PiecesLocations piecesLocations
+    ) {
+        return Stream.of(
+                        askingPiece.square().getRank().getContainedSquares().getPinningRayBySquare(
+                                        askingPiece.square(),
+                                        this.square,
+                                        enemyKing.square(),
+                                        askingPiece.color(),
+                                        piecesLocations
+                                )
+                                .stream(),
+                        askingPiece.square().getFile().getContainedSquares().getPinningRayBySquare(
+                                        askingPiece.square(),
+                                        this.square,
+                                        enemyKing.square(),
+                                        askingPiece.color(),
+                                        piecesLocations
+                                )
+                                .stream(),
+                        askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
+                                        askingPiece.square(),
+                                        this.square,
+                                        enemyKing.square(),
+                                        askingPiece.color(),
+                                        piecesLocations
+                                )
+                                .stream(),
+                        askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
+                                        askingPiece.square(),
+                                        this.square,
+                                        enemyKing.square(),
+                                        askingPiece.color(),
+                                        piecesLocations
+                                )
+                                .stream()
+                )
+                .flatMap(it -> it)
                 .collect(Collectors.toSet());
     }
 

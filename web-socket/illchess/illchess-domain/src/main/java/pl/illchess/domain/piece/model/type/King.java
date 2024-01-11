@@ -3,18 +3,17 @@ package pl.illchess.domain.piece.model.type;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class King extends PieceBehaviour {
+public final class King extends Piece {
     private final PieceColor color;
     private Square square;
 
@@ -58,7 +57,7 @@ public final class King extends PieceBehaviour {
             PiecesLocations piecesLocations,
             Move lastPerformedMove
     ) {
-        Set<PieceBehaviour> enemyPieces = piecesLocations.getEnemyPieces(color);
+        Set<Piece> enemyPieces = piecesLocations.getEnemyPieces(color);
 
         return enemyPieces
                 .stream()

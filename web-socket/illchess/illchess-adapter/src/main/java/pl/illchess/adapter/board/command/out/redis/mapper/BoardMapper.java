@@ -7,7 +7,7 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
@@ -50,7 +50,7 @@ public class BoardMapper {
         return new PiecesLocations(
                 piecesLocationsInEntity.stream()
                         .map(
-                                piece -> PieceBehaviour.getPieceByPieceType(
+                                piece -> Piece.getPieceByPieceType(
                                         new PieceType(piece.pieceType()),
                                         PieceColor.valueOf(piece.pieceColor()),
                                         Square.valueOf(piece.square())
@@ -70,7 +70,7 @@ public class BoardMapper {
                     Move move = new Move(
                             Square.valueOf(moveEntity.startSquare()),
                             Square.valueOf(moveEntity.targetSquare()),
-                            PieceBehaviour.getPieceByPieceType(
+                            Piece.getPieceByPieceType(
                                     new PieceType(moveEntity.movedPiece().pieceType()),
                                     PieceColor.valueOf(moveEntity.movedPiece().pieceColor()),
                                     Square.valueOf(moveEntity.targetSquare())
@@ -79,7 +79,7 @@ public class BoardMapper {
                                     ?
                                     null
                                     :
-                                    PieceBehaviour.getPieceByPieceType(
+                                    Piece.getPieceByPieceType(
                                             new PieceType(moveEntity.capturedPiece().pieceType()),
                                             PieceColor.valueOf(moveEntity.capturedPiece().pieceColor()),
                                             Square.valueOf(moveEntity.targetSquare())

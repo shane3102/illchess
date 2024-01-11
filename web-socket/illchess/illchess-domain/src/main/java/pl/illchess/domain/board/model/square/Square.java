@@ -3,13 +3,6 @@ package pl.illchess.domain.board.model.square;
 import pl.illchess.domain.board.model.square.info.SquareDiagonal;
 import pl.illchess.domain.board.model.square.info.SquareFile;
 import pl.illchess.domain.board.model.square.info.SquareRank;
-import pl.illchess.domain.piece.model.type.King;
-import pl.illchess.domain.piece.model.PieceBehaviour;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static pl.illchess.domain.board.model.square.info.SquareDiagonal.*;
 import static pl.illchess.domain.board.model.square.info.SquareFile.*;

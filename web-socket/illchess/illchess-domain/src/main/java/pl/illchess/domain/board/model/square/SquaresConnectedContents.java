@@ -44,7 +44,7 @@ public class SquaresConnectedContents {
     public Set<Square> getClosestNonOccupiedNeighbours(
             Square square,
             PiecesLocations piecesLocations
-    )  {
+    ) {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
         if (root == null) {
@@ -66,7 +66,7 @@ public class SquaresConnectedContents {
     public Set<Square> getClosestOccupiedNeighbours(
             Square square,
             PiecesLocations piecesLocations
-    )  {
+    ) {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
         if (root == null) {
@@ -127,6 +127,40 @@ public class SquaresConnectedContents {
                 .filter(it -> !Objects.equals(it.name(), checkedSquare.name()))
                 .map(it -> Square.valueOf(it.name()))
                 .collect(Collectors.toSet());
+    }
+
+    public Set<Square> getPinningRayBySquare(
+            Square possiblePinningPieceSquare,
+            Square pinningCapablePieceSquare,
+            Square kingPieceSquare,
+            PieceColor currentPieceColor,
+            PiecesLocations locations
+    ) {
+        if (root == null) {
+            return Collections.emptySet();
+        }
+        SimpleSquare possiblePinningSquare = SimpleSquare.valueOf(possiblePinningPieceSquare.name());
+        SimpleSquare pinningCapableSquare = SimpleSquare.valueOf(pinningCapablePieceSquare.name());
+        SimpleSquare kingSquare = SimpleSquare.valueOf(kingPieceSquare.name());
+        if (!root.containsSquares(possiblePinningSquare, pinningCapableSquare, kingSquare)) {
+            return Collections.emptySet();
+        }
+
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(possiblePinningSquare);
+        if (nodeBySquare == null) {
+            return Collections.emptySet();
+        }
+
+        return nodeBySquare.getPinningRayBySquare(
+                        pinningCapableSquare,
+                        kingSquare,
+                        currentPieceColor,
+                        locations
+                )
+                .stream()
+                .map(it -> Square.valueOf(it.name()))
+                .collect(Collectors.toSet());
+
     }
 
     public static SquaresConnectedContents of(SimpleSquare... squares) {

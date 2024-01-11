@@ -8,7 +8,7 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 
@@ -23,7 +23,7 @@ public record Board(
 ) {
 
     public void movePiece(MovePiece command) {
-        PieceBehaviour movedPiece = command.movedPiece();
+        Piece movedPiece = command.movedPiece();
         PieceColor movedPieceColor = movedPiece.color();
         if (!Objects.equals(movedPieceColor, currentPlayerColor().color())) {
             throw new PieceColorIncorrectException(

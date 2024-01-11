@@ -1,10 +1,11 @@
 package pl.illchess.domain.board.model.square;
 
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -82,6 +83,21 @@ public final class SquaresBidirectionalLinkedList {
         return getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, Set.of(square), false);
     }
 
+    public Set<SimpleSquare> getPinningRayBySquare(
+            SimpleSquare pinningCapableSquare,
+            SimpleSquare kingSquare,
+            PieceColor currentPieceColor,
+            PiecesLocations piecesLocations
+    ) {
+        Set<SimpleSquare> pinningRay = getAllConnectedXRayingKing(currentPieceColor, piecesLocations);
+
+        if (!pinningRay.contains(pinningCapableSquare) || !pinningRay.contains(kingSquare)) {
+            return Collections.emptySet();
+        }
+
+        return pinningRay;
+    }
+
     private Set<SimpleSquare> getAllConnectedTillPieceEncounteredRememberVisited(
             PieceColor currentPieceColor,
             PiecesLocations locations,
@@ -114,7 +130,7 @@ public final class SquaresBidirectionalLinkedList {
             leftNodeSquares = null;
         } else if (!newVisitedSquares.contains(leftNode.square)) {
             Square nextSquareValue = Square.valueOf(leftNode.square.name());
-            Optional<PieceBehaviour> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
+            Optional<Piece> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
             if (pieceOnSquare.isPresent() && (skipKing && !(pieceOnSquare.get() instanceof King))) {
                 if (Objects.equals(pieceOnSquare.get().color(), currentPieceColor)) {
                     leftNodeSquares = null;
@@ -141,7 +157,7 @@ public final class SquaresBidirectionalLinkedList {
             rightNodeSquares = null;
         } else if (!newVisitedSquares.contains(rightNode.square)) {
             Square nextSquareValue = Square.valueOf(rightNode.square.name());
-            Optional<PieceBehaviour> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
+            Optional<Piece> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
             if (pieceOnSquare.isPresent() && (skipKing && !(pieceOnSquare.get() instanceof King))) {
                 if (Objects.equals(pieceOnSquare.get().color(), currentPieceColor)) {
                     rightNodeSquares = null;
@@ -183,6 +199,36 @@ public final class SquaresBidirectionalLinkedList {
                 ? null
                 : rightNode.getNodeBySquareWithAndRememberVisited(square, updatedSet);
         return rightNodeResult != null ? rightNodeResult : leftNodeResult;
+    }
+
+    public boolean containsSquares(SimpleSquare... squares) {
+        return getAllConnected().containsAll(List.of(squares));
+    }
+
+    private List<SimpleSquare> getAllConnected() {
+        return getAllConnectedRememberVisited(List.of());
+    }
+
+    private List<SimpleSquare> getAllConnectedRememberVisited(
+            List<SimpleSquare> visited
+    ) {
+
+        List<SimpleSquare> newVisited = Stream.concat(visited.stream(), Stream.of(square)).toList();
+
+        List<SimpleSquare> leftNodeDependends = leftNode == null || visited.contains(leftNode.square)
+                ? List.of()
+                : leftNode.getAllConnectedRememberVisited(newVisited);
+
+        List<SimpleSquare> rightNodeDependends = rightNode == null || visited.contains(rightNode.square)
+                ? List.of()
+                : rightNode.getAllConnectedRememberVisited(newVisited);
+
+        return Stream.concat(
+                        newVisited.stream(),
+                        Stream.concat(rightNodeDependends.stream(), leftNodeDependends.stream())
+                )
+                .toList();
+
     }
 
 }

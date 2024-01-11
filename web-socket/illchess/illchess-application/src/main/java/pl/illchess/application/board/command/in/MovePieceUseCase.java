@@ -3,7 +3,7 @@ package pl.illchess.application.board.command.in;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.PieceBehaviour;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -28,7 +28,7 @@ public interface MovePieceUseCase {
 
             return new MovePiece(
                     new BoardId(boardId),
-                    PieceBehaviour.getPieceByPieceType(pieceType, pieceColor, startSquare),
+                    Piece.getPieceByPieceType(pieceType, pieceColor, startSquare),
                     targetSquare
             );
         }
