@@ -32,7 +32,7 @@ public final class Queen extends PieceCapableOfPinning {
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> reachableSquaresXrayingKing = getQueenXrayOfEnemyKing(piecesLocations);
         return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }

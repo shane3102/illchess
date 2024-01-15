@@ -56,7 +56,7 @@ public abstract class Piece {
 
     abstract public PieceType typeName();
 
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> squares = standardLegalMoves(piecesLocations, lastPerformedMove);
         return squares.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }

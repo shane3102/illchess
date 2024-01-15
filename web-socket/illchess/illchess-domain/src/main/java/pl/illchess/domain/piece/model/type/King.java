@@ -42,17 +42,17 @@ public final class King extends Piece {
         Set<Square> standardKingMovement = standardLegalMoves(piecesLocations, lastPerformedMove);
 
         return standardKingMovement.stream()
-                .filter(square -> isEnemyDefendingSquare(square, piecesLocations, lastPerformedMove))
+                .filter(square -> isEnemyAttackingSquare(square, piecesLocations, lastPerformedMove))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return standardLegalMoves(piecesLocations, lastPerformedMove).stream()
                 .anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }
 
-    private boolean isEnemyDefendingSquare(
+    private boolean isEnemyAttackingSquare(
             Square square,
             PiecesLocations piecesLocations,
             Move lastPerformedMove
@@ -62,7 +62,7 @@ public final class King extends Piece {
         return enemyPieces
                 .stream()
                 .noneMatch(
-                        piece -> piece.isDefendingSquare(square, piecesLocations, lastPerformedMove)
+                        piece -> piece.isAttackingSquare(square, piecesLocations, lastPerformedMove)
                 );
     }
 

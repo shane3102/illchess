@@ -37,7 +37,7 @@ public final class Bishop extends PieceCapableOfPinning {
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> reachableSquaresXrayingKing = getBishopXrayOfEnemyKing(piecesLocations);
         return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
     }

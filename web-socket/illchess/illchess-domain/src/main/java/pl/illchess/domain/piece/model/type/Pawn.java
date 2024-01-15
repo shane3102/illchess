@@ -31,7 +31,7 @@ public final class Pawn extends Piece {
     }
 
     @Override
-    public boolean isDefendingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return Stream.concat(
                         this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream(),
                         this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream()
