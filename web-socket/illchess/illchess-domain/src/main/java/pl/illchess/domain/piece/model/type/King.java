@@ -47,13 +47,14 @@ public final class King extends Piece {
     }
 
     @Override
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return standardLegalMoves(piecesLocations, lastPerformedMove).stream()
-                .anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
+                .filter(checkedSquare -> Objects.equals(checkedSquare.name(), possibleAttackedSquare.name()))
+                .collect(Collectors.toSet());
     }
 
     private boolean isEnemyAttackingSquare(
-            Square square,
+            Square possibleAttackedSquare,
             PiecesLocations piecesLocations,
             Move lastPerformedMove
     ) {
@@ -61,8 +62,8 @@ public final class King extends Piece {
 
         return enemyPieces
                 .stream()
-                .noneMatch(
-                        piece -> piece.isAttackingSquare(square, piecesLocations, lastPerformedMove)
+                .allMatch(
+                        piece -> piece.attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).isEmpty()
                 );
     }
 

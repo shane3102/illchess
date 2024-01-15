@@ -5,7 +5,6 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
-import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -33,9 +32,8 @@ public final class Rook extends PieceCapableOfPinning {
     }
 
     @Override
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> reachableSquaresXrayingKing = getRookXrayOfEnemyKing(piecesLocations);
-        return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return getRookAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
     }
 
     @Override
@@ -91,10 +89,10 @@ public final class Rook extends PieceCapableOfPinning {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Square> getRookXrayOfEnemyKing(PiecesLocations piecesLocations) {
+    private Set<Square> getRookAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
         return Stream.of(
-                        square.getFile().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations),
-                        square.getRank().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations)
+                        square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                        square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
                 )
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

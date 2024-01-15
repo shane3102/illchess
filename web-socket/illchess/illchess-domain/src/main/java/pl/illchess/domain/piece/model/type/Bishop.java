@@ -37,9 +37,8 @@ public final class Bishop extends PieceCapableOfPinning {
     }
 
     @Override
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> reachableSquaresXrayingKing = getBishopXrayOfEnemyKing(piecesLocations);
-        return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return getBishopAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
     }
 
     @Override
@@ -86,10 +85,10 @@ public final class Bishop extends PieceCapableOfPinning {
                 "square=" + square + ']';
     }
 
-    private Set<Square> getBishopXrayOfEnemyKing(PiecesLocations piecesLocations) {
+    private Set<Square> getBishopAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
         return Stream.of(
-                        square.getSquareDiagonal1().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations)
+                        square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                        square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
                 )
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

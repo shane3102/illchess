@@ -107,28 +107,6 @@ public class SquaresConnectedContents {
                 .collect(Collectors.toSet());
     }
 
-    public Set<Square> getConnectedXrayingKing(
-            Square checkedSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations
-    ) {
-        if (root == null) {
-            return Collections.emptySet();
-        }
-        SimpleSquare simpleSquare = SimpleSquare.valueOf(checkedSquare.name());
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
-
-        if (nodeBySquare == null) {
-            return Collections.emptySet();
-        }
-
-        return nodeBySquare.getAllConnectedXRayingKing(currentPieceColor, locations)
-                .stream()
-                .filter(it -> !Objects.equals(it.name(), checkedSquare.name()))
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
-    }
-
     public Set<Square> getPinningRayBySquare(
             Square possiblePinningPieceSquare,
             Square pinningCapablePieceSquare,
@@ -161,6 +139,32 @@ public class SquaresConnectedContents {
                 .map(it -> Square.valueOf(it.name()))
                 .collect(Collectors.toSet());
 
+    }
+
+    public Set<Square> getAttackRayOnGivenSquare(
+            Square checkRayPieceCapableSquare,
+            Square givenPieceSquare,
+            PieceColor currentPieceColor,
+            PiecesLocations locations
+    ) {
+        if (root == null) {
+            return Collections.emptySet();
+        }
+
+        SimpleSquare checkRayCapableSquare = SimpleSquare.valueOf(checkRayPieceCapableSquare.name());
+        SimpleSquare givenSquare = SimpleSquare.valueOf(givenPieceSquare.name());
+
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(checkRayCapableSquare);
+        if (nodeBySquare == null) {
+            return Collections.emptySet();
+        }
+
+        Set<SimpleSquare> attackRayOnGivenSquare = nodeBySquare.getAttackRayOnGivenSquare(givenSquare, currentPieceColor, locations);
+
+        return attackRayOnGivenSquare
+                .stream()
+                .map(it -> Square.valueOf(it.name()))
+                .collect(Collectors.toSet());
     }
 
     public static SquaresConnectedContents of(SimpleSquare... squares) {

@@ -98,6 +98,45 @@ public final class SquaresBidirectionalLinkedList {
         return pinningRay;
     }
 
+    public Set<SimpleSquare> getAttackRayOnGivenSquare(
+            SimpleSquare givenSquare,
+            PieceColor currentPieceColor,
+            PiecesLocations locations
+    ) {
+        return getConnectedContainingKingSquareRememberVisited(givenSquare, currentPieceColor, locations, Set.of(square));
+    }
+
+    private Set<SimpleSquare> getConnectedContainingKingSquareRememberVisited(
+            SimpleSquare givenSquare,
+            PieceColor currentPieceColor,
+            PiecesLocations locations,
+            Set<SimpleSquare> visitedSquares
+    ) {
+        Set<SimpleSquare> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(square)).collect(Collectors.toSet());
+
+        Set<SimpleSquare> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, false);
+        Set<SimpleSquare> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, false);
+
+        if (leftNodeSquares != null && leftNodeSquares.contains(givenSquare)) {
+            return Stream.of(
+                            newVisitedSquares,
+                            leftNodeSquares
+                    )
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toSet());
+        } else if (rightNodeSquares != null && rightNodeSquares.contains(givenSquare)) {
+            return Stream.of(
+                            newVisitedSquares,
+                            rightNodeSquares
+                    )
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toSet());
+        } else {
+            return Collections.emptySet();
+        }
+    }
+
+
     private Set<SimpleSquare> getAllConnectedTillPieceEncounteredRememberVisited(
             PieceColor currentPieceColor,
             PiecesLocations locations,
@@ -132,12 +171,8 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(examinedNode.square)) {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
             Optional<Piece> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent() && (skipKing && !(pieceOnSquare.get() instanceof King))) {
-                if (Objects.equals(pieceOnSquare.get().color(), currentPieceColor)) {
-                    nodeSquares = Set.of(examinedNode.square);
-                } else {
-                    nodeSquares = null;
-                }
+            if (pieceOnSquare.isPresent() && (!skipKing || !(pieceOnSquare.get() instanceof King))) {
+                nodeSquares = Set.of(examinedNode.square);
             } else {
                 nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, skipKing);
             }

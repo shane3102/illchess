@@ -15,7 +15,6 @@ import pl.illchess.domain.piece.model.type.Queen;
 import pl.illchess.domain.piece.model.type.Rook;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,18 +34,22 @@ public abstract class Piece {
                 .orElseThrow(KingNotFoundOnBoardException::new);
 
         Set<PieceCapableOfPinning> enemyPiecesCapableOfPinning = piecesLocations.getEnemyPiecesCapableOfPinning(color());
-
         Set<Square> availableSquaresAsPinnedPiece = enemyPiecesCapableOfPinning.stream()
                 .map(piece -> piece.pinningRayIfImPinning(this, king, piecesLocations))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 
-        if (availableSquaresAsPinnedPiece.isEmpty()) {
-            return reachableSquares;
-        }
+        Set<Piece> enemyPieces = piecesLocations.getEnemyPieces(color());
+        Set<Square> kingDefendingSquareMoves = enemyPieces.stream()
+                .map(piece -> piece.attackingRayOfSquare(king.square(), piecesLocations, lastPerformedMove))
+                .filter(foundRay -> !foundRay.isEmpty())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
 
         return reachableSquares.stream()
-                .filter(availableSquaresAsPinnedPiece::contains).collect(Collectors.toSet());
+                .filter(square -> availableSquaresAsPinnedPiece.isEmpty() || availableSquaresAsPinnedPiece.contains(square))
+                .filter(square -> kingDefendingSquareMoves.isEmpty() || kingDefendingSquareMoves.contains(square))
+                .collect(Collectors.toSet());
     }
 
     abstract public Set<Square> standardLegalMoves(
@@ -56,10 +59,7 @@ public abstract class Piece {
 
     abstract public PieceType typeName();
 
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> squares = standardLegalMoves(piecesLocations, lastPerformedMove);
-        return squares.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
-    }
+    abstract public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
 
     abstract public void setSquare(Square square);
 

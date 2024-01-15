@@ -32,9 +32,8 @@ public final class Queen extends PieceCapableOfPinning {
     }
 
     @Override
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> reachableSquaresXrayingKing = getQueenXrayOfEnemyKing(piecesLocations);
-        return reachableSquaresXrayingKing.stream().anyMatch(checkedSquare -> Objects.equals(checkedSquare.name(), square.name()));
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return getQueenAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
     }
 
     @Override
@@ -92,12 +91,13 @@ public final class Queen extends PieceCapableOfPinning {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Square> getQueenXrayOfEnemyKing(PiecesLocations piecesLocations) {
+    private Set<Square> getQueenAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
+
         return Stream.of(
-                        square.getFile().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations),
-                        square.getRank().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations),
-                        square.getSquareDiagonal1().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getConnectedXrayingKing(square, color, piecesLocations)
+                        square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                        square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                        square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                        square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
                 )
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

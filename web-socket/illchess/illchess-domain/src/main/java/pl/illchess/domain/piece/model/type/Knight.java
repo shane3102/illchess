@@ -7,6 +7,7 @@ import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -28,6 +29,15 @@ public final class Knight extends Piece {
     @Override
     public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         return extractStandardKnightMovement();
+    }
+
+    @Override
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        if (extractStandardKnightMovement().contains(possibleAttackedSquare)) {
+            return Set.of(possibleAttackedSquare, square);
+        } else {
+            return Collections.emptySet();
+        }
     }
 
     public PieceColor color() {

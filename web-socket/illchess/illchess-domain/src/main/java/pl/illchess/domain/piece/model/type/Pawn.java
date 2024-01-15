@@ -31,13 +31,13 @@ public final class Pawn extends Piece {
     }
 
     @Override
-    public boolean isAttackingSquare(Square square, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return Stream.concat(
-                        this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream(),
-                        this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream()
+                        this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name())),
+                        this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name()))
                 )
                 .filter(this::filterByPawnColor)
-                .anyMatch(capturableSquare -> Objects.equals(capturableSquare.name(), square.name()));
+                .collect(Collectors.toSet());
     }
 
     public PieceColor color() {
