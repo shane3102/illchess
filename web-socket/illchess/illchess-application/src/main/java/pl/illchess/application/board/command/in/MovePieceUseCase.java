@@ -28,7 +28,7 @@ public interface MovePieceUseCase {
 
             return new MovePiece(
                     new BoardId(boardId),
-                    Piece.getPieceByPieceType(pieceType, pieceColor, startSquare),
+                    PieceType.getPieceByPieceType(pieceType, pieceColor, startSquare),
                     targetSquare
             );
         }

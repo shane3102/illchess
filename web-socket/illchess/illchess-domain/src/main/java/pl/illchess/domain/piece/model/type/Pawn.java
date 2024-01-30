@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Pawn extends Piece {
+public final class Pawn implements Piece {
     private final PieceColor color;
     private Square square;
 

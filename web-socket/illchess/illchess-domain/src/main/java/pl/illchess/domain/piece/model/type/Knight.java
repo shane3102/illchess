@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Knight extends Piece {
+public final class Knight implements Piece {
     private final PieceColor color;
     private Square square;
 

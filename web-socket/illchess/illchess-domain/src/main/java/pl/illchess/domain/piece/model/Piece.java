@@ -4,27 +4,21 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
-import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
-import pl.illchess.domain.piece.model.type.Bishop;
 import pl.illchess.domain.piece.model.type.King;
-import pl.illchess.domain.piece.model.type.Knight;
-import pl.illchess.domain.piece.model.type.Pawn;
-import pl.illchess.domain.piece.model.type.Queen;
-import pl.illchess.domain.piece.model.type.Rook;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class Piece {
+public interface Piece {
 
-    abstract public PieceColor color();
+    PieceColor color();
 
-    abstract public Square square();
+    Square square();
 
-    public Set<Square> possibleMoves(
+    default Set<Square> possibleMoves(
             PiecesLocations piecesLocations,
             Move lastPerformedMove
     ) {
@@ -52,27 +46,15 @@ public abstract class Piece {
                 .collect(Collectors.toSet());
     }
 
-    abstract public Set<Square> standardLegalMoves(
+    Set<Square> standardLegalMoves(
             PiecesLocations piecesLocations,
             Move lastPerformedMove
     );
 
-    abstract public PieceType typeName();
+    PieceType typeName();
 
-    abstract public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
+    Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
 
-    abstract public void setSquare(Square square);
-
-    public static Piece getPieceByPieceType(PieceType type, PieceColor color, Square currentSquare) {
-        return switch (type.text()) {
-            case "KING" -> new King(color, currentSquare);
-            case "QUEEN" -> new Queen(color, currentSquare);
-            case "ROOK" -> new Rook(color, currentSquare);
-            case "BISHOP" -> new Bishop(color, currentSquare);
-            case "KNIGHT" -> new Knight(color, currentSquare);
-            case "PAWN" -> new Pawn(color, currentSquare);
-            default -> throw new PieceTypeNotRecognisedException(type);
-        };
-    }
+    void setSquare(Square square);
 
 }

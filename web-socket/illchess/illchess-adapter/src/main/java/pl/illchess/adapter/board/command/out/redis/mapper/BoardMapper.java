@@ -7,10 +7,17 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
+import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
+import pl.illchess.domain.piece.model.type.Bishop;
+import pl.illchess.domain.piece.model.type.King;
+import pl.illchess.domain.piece.model.type.Knight;
+import pl.illchess.domain.piece.model.type.Pawn;
+import pl.illchess.domain.piece.model.type.Queen;
+import pl.illchess.domain.piece.model.type.Rook;
 
 import java.util.List;
 import java.util.Stack;
@@ -50,7 +57,7 @@ public class BoardMapper {
         return new PiecesLocations(
                 piecesLocationsInEntity.stream()
                         .map(
-                                piece -> Piece.getPieceByPieceType(
+                                piece -> PieceType.getPieceByPieceType(
                                         new PieceType(piece.pieceType()),
                                         PieceColor.valueOf(piece.pieceColor()),
                                         Square.valueOf(piece.square())
@@ -70,7 +77,7 @@ public class BoardMapper {
                     Move move = new Move(
                             Square.valueOf(moveEntity.startSquare()),
                             Square.valueOf(moveEntity.targetSquare()),
-                            Piece.getPieceByPieceType(
+                            PieceType.getPieceByPieceType(
                                     new PieceType(moveEntity.movedPiece().pieceType()),
                                     PieceColor.valueOf(moveEntity.movedPiece().pieceColor()),
                                     Square.valueOf(moveEntity.targetSquare())
@@ -79,7 +86,7 @@ public class BoardMapper {
                                     ?
                                     null
                                     :
-                                    Piece.getPieceByPieceType(
+                                    PieceType.getPieceByPieceType(
                                             new PieceType(moveEntity.capturedPiece().pieceType()),
                                             PieceColor.valueOf(moveEntity.capturedPiece().pieceColor()),
                                             Square.valueOf(moveEntity.targetSquare())

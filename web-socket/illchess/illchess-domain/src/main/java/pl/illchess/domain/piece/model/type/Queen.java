@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Queen extends PieceCapableOfPinning {
+public final class Queen implements PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
 

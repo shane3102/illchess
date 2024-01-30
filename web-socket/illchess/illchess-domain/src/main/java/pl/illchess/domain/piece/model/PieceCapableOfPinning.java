@@ -6,7 +6,7 @@ import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Set;
 
-public abstract class PieceCapableOfPinning extends Piece {
+public interface PieceCapableOfPinning extends Piece {
 
-    public abstract Set<Square> pinningRayIfImPinning(Piece askingPiece, King enemyKing, PiecesLocations piecesLocations);
+    Set<Square> pinningRayIfImPinning(Piece askingPiece, King enemyKing, PiecesLocations piecesLocations);
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class King extends Piece {
+public final class King implements Piece {
     private final PieceColor color;
     private Square square;
 

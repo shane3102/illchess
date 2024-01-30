@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Bishop extends PieceCapableOfPinning {
+public final class Bishop implements PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
 
