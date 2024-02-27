@@ -14,7 +14,7 @@ export class ChessSquareComponent implements OnInit {
 
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
-  @Input() illegalMoveViewSubject: Observable<IllegalMoveView>
+  @Input() illegalMoveView: Observable<IllegalMoveView>
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDroppedInfoEmitter: EventEmitter<SquareInfo> = new EventEmitter();
@@ -26,7 +26,7 @@ export class ChessSquareComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.illegalMoveViewSubject.subscribe(
+    this.illegalMoveView.subscribe(
       illegalMoveView => {
         if (illegalMoveView.highlightSquare == this.squareInfo.file + this.squareInfo.rank) {
           this.displayIllegalMoveAnimation()

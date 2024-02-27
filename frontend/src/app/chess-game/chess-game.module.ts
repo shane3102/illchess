@@ -10,6 +10,10 @@ import { QueenComponent } from './components/pieces/queen/queen.component';
 import { KingComponent } from './components/pieces/king/king.component';
 import { ChessSquareComponent } from './components/chess-square/chess-square.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { StoreModule } from '@ngrx/store';
+import { boardReducer } from './state/board/board.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { BoardEffects } from './state/board/board.effects';
 
 
 @NgModule({
@@ -26,7 +30,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     CommonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    StoreModule.forRoot({boardState: boardReducer}),
+    EffectsModule.forRoot([BoardEffects])
   ],
   exports:[
     ChessBoardComponent

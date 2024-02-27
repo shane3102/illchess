@@ -6,12 +6,12 @@
                 (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
                 (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
                 [piece]="
-                    this.boardView.piecesLocations ? 
-                    this.boardView.piecesLocations[file+rank] ? 
-                    this.boardView.piecesLocations[file+rank] : 
+                    (this.boardView | async)?.piecesLocations ? 
+                    (this.boardView | async)?.piecesLocations![file+rank] ? 
+                    (this.boardView | async)?.piecesLocations![file+rank] : 
                     undefined : 
                     undefined"
-                [illegalMoveViewSubject]="illegalMoveViewSubject.asObservable()"
+                [illegalMoveView]="illegalMoveView"
                 [squareInfo]="{file: file, rank: rank}">
             </app-chess-square>
             </div>
