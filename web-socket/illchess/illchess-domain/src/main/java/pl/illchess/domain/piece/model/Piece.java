@@ -40,9 +40,15 @@ public interface Piece {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 
+        Set<Square> alliedOccupiedSquares = piecesLocations.getAlliedPieces(color())
+                .stream()
+                .map(Piece::square)
+                .collect(Collectors.toSet());
+
         return reachableSquares.stream()
                 .filter(square -> availableSquaresAsPinnedPiece.isEmpty() || availableSquaresAsPinnedPiece.contains(square))
                 .filter(square -> kingDefendingSquareMoves.isEmpty() || kingDefendingSquareMoves.contains(square))
+                .filter(square -> alliedOccupiedSquares.isEmpty() || !alliedOccupiedSquares.contains(square))
                 .collect(Collectors.toSet());
     }
 

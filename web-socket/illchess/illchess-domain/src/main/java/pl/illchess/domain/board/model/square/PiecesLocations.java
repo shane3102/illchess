@@ -2,7 +2,6 @@ package pl.illchess.domain.board.model.square;
 
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
-import pl.illchess.domain.board.exception.TargetSquareOccupiedBySameColorPieceException;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
@@ -35,14 +34,6 @@ public record PiecesLocations(
                     command.boardId(),
                     command.movedPiece(),
                     command.movedPiece().square()
-            );
-        }
-
-        if (isSquareOccupiedBySameColorPiece(command)) {
-            throw new TargetSquareOccupiedBySameColorPieceException(
-                    command.boardId(),
-                    command.movedPiece().square(),
-                    command.targetSquare()
             );
         }
 
@@ -96,6 +87,12 @@ public record PiecesLocations(
                 .collect(Collectors.toSet());
     }
 
+    public Set<Piece> getAlliedPieces(PieceColor color) {
+        return locations.stream()
+                .filter(piece -> Objects.equals(piece.color(), color))
+                .collect(Collectors.toSet());
+    }
+
     public Set<PieceCapableOfPinning> getEnemyPiecesCapableOfPinning(PieceColor color) {
         return locations.stream()
                 .filter(piece -> !Objects.equals(piece.color(), color))
@@ -106,18 +103,6 @@ public record PiecesLocations(
 
     private boolean isPieceOnLocation(MovePiece command) {
         return Objects.equals(getPieceOnSquare(command.movedPiece().square()).orElse(null), command.movedPiece());
-    }
-
-    private boolean isSquareOccupiedBySameColorPiece(MovePiece command) {
-        Optional<Piece> possiblePiece = getPieceOnSquare(command.targetSquare());
-
-        if (possiblePiece.isEmpty()) {
-            return false;
-        }
-
-        PieceColor movedPieceColor = command.movedPiece().color();
-
-        return Objects.equals(possiblePiece.get().color(), movedPieceColor);
     }
 
     private void movePieceMechanic(MovePiece command) {

@@ -15,7 +15,7 @@ public enum SquareDiagonal {
     A1_H8(SquaresConnectedContents.of(A1, B2, C3, D4, E5, F6, G7, H8)),
     B1_H7(SquaresConnectedContents.of(B1, C2, D3, E4, F5, G6, H8)),
     C1_H6(SquaresConnectedContents.of(C1, D2, E3, F4, G5, H6)),
-    D1_H5(SquaresConnectedContents.of(D1, E2, F3, G4, H8)),
+    D1_H5(SquaresConnectedContents.of(D1, E2, F3, G4, H5)),
     E1_H4(SquaresConnectedContents.of(E1, F2, G3, H4)),
     F1_H3(SquaresConnectedContents.of(F1, G2, H3)),
     G1_H2(SquaresConnectedContents.of(G1, H2)),

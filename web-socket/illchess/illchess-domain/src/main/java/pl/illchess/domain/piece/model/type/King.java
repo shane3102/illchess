@@ -41,8 +41,14 @@ public final class King implements Piece {
     public Set<Square> possibleMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         Set<Square> standardKingMovement = standardLegalMoves(piecesLocations, lastPerformedMove);
 
+        Set<Square> alliedOccupiedSquares = piecesLocations.getAlliedPieces(color())
+                .stream()
+                .map(Piece::square)
+                .collect(Collectors.toSet());
+
         return standardKingMovement.stream()
                 .filter(square -> isEnemyAttackingSquare(square, piecesLocations, lastPerformedMove))
+                .filter(square -> alliedOccupiedSquares.isEmpty() || !alliedOccupiedSquares.contains(square))
                 .collect(Collectors.toSet());
     }
 
