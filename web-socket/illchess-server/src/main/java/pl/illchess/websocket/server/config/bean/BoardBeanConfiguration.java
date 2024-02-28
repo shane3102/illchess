@@ -15,20 +15,7 @@ import pl.illchess.application.commons.command.out.PublishEvent;
 public class BoardBeanConfiguration {
 
     @Bean
-    public MovePieceUseCase movePieceUseCase(
-            LoadBoard loadBoard,
-            SaveBoard saveBoard,
-            PublishEvent eventPublisher
-    ) {
-        return new BoardManager(
-                loadBoard,
-                saveBoard,
-                eventPublisher
-        );
-    }
-
-    @Bean
-    public InitializeNewBoardUseCase initializeNewBoardUseCase(
+    public BoardManager boardManager(
             LoadBoard loadBoard,
             SaveBoard saveBoard,
             PublishEvent eventPublisher

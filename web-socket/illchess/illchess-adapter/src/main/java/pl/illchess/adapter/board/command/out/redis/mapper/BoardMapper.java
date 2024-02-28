@@ -7,17 +7,10 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
-import pl.illchess.domain.piece.model.Piece;
-import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
+import pl.illchess.domain.board.model.state.BoardState;
+import pl.illchess.domain.board.model.state.GameState;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
-import pl.illchess.domain.piece.model.type.Bishop;
-import pl.illchess.domain.piece.model.type.King;
-import pl.illchess.domain.piece.model.type.Knight;
-import pl.illchess.domain.piece.model.type.Pawn;
-import pl.illchess.domain.piece.model.type.Queen;
-import pl.illchess.domain.piece.model.type.Rook;
 
 import java.util.List;
 import java.util.Stack;
@@ -33,10 +26,18 @@ public class BoardMapper {
             return new BoardEntity(
                     board.boardId().uuid(),
                     toPiecesLocationsEntity(board.piecesLocations()),
-                    board.currentPlayerColor().color().toString(),
-                    toMoveHistoryEntity(board.moveHistory())
+                    toMoveHistoryEntity(board.moveHistory()),
+                    toBoardStateEntity(board.boardState())
             );
         }
+    }
+
+    private static BoardEntity.BoardStateEntity toBoardStateEntity(BoardState boardState) {
+        return new BoardEntity.BoardStateEntity(
+                boardState.currentPlayerColor().color().toString(),
+                boardState.gameState().toString(),
+                boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString()
+        );
     }
 
     public static Board toDomain(BoardEntity entity) {
@@ -47,10 +48,18 @@ public class BoardMapper {
             return new Board(
                     new BoardId(entity.boardId()),
                     toPiecesLocations(entity.piecesLocations()),
-                    new CurrentPlayerColor(PieceColor.valueOf(entity.currentPlayerColor())),
-                    toMoveHistory(entity.moveStackData())
+                    toMoveHistory(entity.moveStackData()),
+                    toBoardState(entity.boardState())
             );
         }
+    }
+
+    private static BoardState toBoardState(BoardEntity.BoardStateEntity boardState) {
+        return BoardState.of(
+                PieceColor.valueOf(boardState.currentPlayerColor()),
+                GameState.valueOf(boardState.gameState()),
+                boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor())
+        );
     }
 
     private static PiecesLocations toPiecesLocations(List<BoardEntity.PieceEntity> piecesLocationsInEntity) {

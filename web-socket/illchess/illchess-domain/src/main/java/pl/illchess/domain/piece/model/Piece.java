@@ -61,6 +61,10 @@ public interface Piece {
 
     Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
 
+    default boolean isAttackingSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return !attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).isEmpty();
+    }
+
     void setSquare(Square square);
 
 }

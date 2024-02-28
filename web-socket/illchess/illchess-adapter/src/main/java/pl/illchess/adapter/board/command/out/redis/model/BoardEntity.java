@@ -8,8 +8,8 @@ public record BoardEntity(
         UUID boardId,
         // rewrite to list/set
         List<PieceEntity> piecesLocations,
-        String currentPlayerColor,
-        List<MoveEntity> moveStackData
+        List<MoveEntity> moveStackData,
+        BoardStateEntity boardState
 ) implements Serializable {
 
     public record PieceEntity(
@@ -25,5 +25,13 @@ public record BoardEntity(
             PieceEntity movedPiece,
             PieceEntity capturedPiece
     ) implements Serializable {
+    }
+
+    public record BoardStateEntity(
+            String currentPlayerColor,
+            String gameState,
+            String victoriousPlayerColor
+    ) implements Serializable {
+
     }
 }

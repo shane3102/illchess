@@ -17,4 +17,8 @@
             </div>
         </div>
     </div>
+    <div style="text-align: center;">
+        {{(boardView | async)!.gameState}}
+        {{(boardView|async)!.victoriousPlayerColor}}
+    </div>
 </div>

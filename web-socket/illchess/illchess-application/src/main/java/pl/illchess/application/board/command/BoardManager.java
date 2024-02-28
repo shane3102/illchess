@@ -2,20 +2,30 @@ package pl.illchess.application.board.command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
+import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.InitializeNewBoard;
 import pl.illchess.domain.board.command.MovePiece;
-import pl.illchess.domain.board.event.BoardUpdated;
+import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
+import pl.illchess.domain.board.event.GameFinished;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
 import pl.illchess.domain.board.model.Board;
 import pl.illchess.domain.board.model.BoardId;
+import pl.illchess.domain.board.model.state.GameState;
 
-public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, InitializeNewBoardUseCase {
+import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
+
+public class BoardManager implements
+        MovePieceUseCase,
+        TakeBackMoveUseCase,
+        InitializeNewBoardUseCase,
+        CheckIfCheckmateOrStalemateUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
@@ -52,7 +62,7 @@ public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, Init
                 cmd.boardId()
         );
 
-        eventPublisher.publishDomainEvent(new BoardUpdated(cmd.boardId()));
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
     }
 
     @Override
@@ -73,7 +83,7 @@ public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, Init
                 cmd.boardId()
         );
 
-        eventPublisher.publishDomainEvent(new BoardUpdated(cmd.boardId()));
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
     }
 
     @Override
@@ -94,6 +104,20 @@ public class BoardManager implements MovePieceUseCase, TakeBackMoveUseCase, Init
                 cmd.newBoardId()
         );
 
-        eventPublisher.publishDomainEvent(new BoardUpdated(command.boardId().uuid()));
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
+    }
+
+    @Override
+    public void checkIfCheckmateOrStalemate(CheckIsCheckmateOrStaleMateCmd cmd) {
+        log.info("Checking if checkmate or stalemate on board  = {}", cmd.boardId());
+        CheckIsCheckmateOrStaleMate command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+                .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        GameState stateOfBoard = board.establishBoardState();
+        if (stateOfBoard != CONTINUE) {
+            saveBoard.saveBoard(board);
+            eventPublisher.publishDomainEvent(new GameFinished(board.boardId()));
+        }
+        log.info("Successfully checked state on board = {}. State is {}", cmd.boardId(), stateOfBoard);
     }
 }

@@ -16,7 +16,9 @@ public class BoardViewMapper {
             return new BoardView(
                     entity.boardId(),
                     toPiecesLocations(entity.piecesLocations()),
-                    entity.currentPlayerColor()
+                    entity.boardState().currentPlayerColor(),
+                    entity.boardState().gameState(),
+                    entity.boardState().victoriousPlayerColor()
             );
         }
     }

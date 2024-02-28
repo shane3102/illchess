@@ -12,6 +12,6 @@ public final class CurrentPlayerColor {
     }
 
     public void invert() {
-        this.color = color.invert();
+        this.color = color.inverted();
     }
 }

@@ -29,7 +29,7 @@ public class BoardInfoSupplier implements BoardViewSupplier, IllegalMoveViewSupp
                 "Update event of board with id = {} was catched, sending update of chess board view",
                 event.boardId()
         );
-        BoardView boardView = boardViewQueryPort.findById(event.boardId())
+        BoardView boardView = boardViewQueryPort.findById(event.boardId().uuid())
                 .orElseThrow(() -> new BoardNotFoundException(event.boardId()));
         messagingTemplate.convertAndSend("/chess-topic", boardView);
         log.info(

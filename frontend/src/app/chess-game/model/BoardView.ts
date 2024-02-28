@@ -3,8 +3,10 @@ import { SquareInfo } from "./SquareInfo"
 
 export interface BoardView {
     boardId: string
-    piecesLocations: PiecesLocations,
+    piecesLocations: PiecesLocations
     currentPlayerColor: PieceColor
+    gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE'
+    victoriousPlayerColor: PieceColor
 }
 
 interface PiecesLocations {
