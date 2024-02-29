@@ -1,6 +1,7 @@
 package pl.illchess.domain.piece.model;
 
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
@@ -20,8 +21,10 @@ public interface Piece {
 
     default Set<Square> possibleMoves(
             PiecesLocations piecesLocations,
-            Move lastPerformedMove
+            MoveHistory moveHistory
     ) {
+        Move lastPerformedMove = moveHistory.peekLastMove();
+
         Set<Square> reachableSquares = standardLegalMoves(piecesLocations, lastPerformedMove);
 
         King king = (King) piecesLocations.getPieceByTypeAndColor(King.class, color())
@@ -63,6 +66,10 @@ public interface Piece {
 
     default boolean isAttackingSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
         return !attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).isEmpty();
+    }
+
+    default boolean isAttackingAnyOfSquares(Set<Square> possibleAttackedSquares, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        return possibleAttackedSquares.stream().allMatch(square -> isAttackingSquare(square, piecesLocations, lastPerformedMove));
     }
 
     void setSquare(Square square);

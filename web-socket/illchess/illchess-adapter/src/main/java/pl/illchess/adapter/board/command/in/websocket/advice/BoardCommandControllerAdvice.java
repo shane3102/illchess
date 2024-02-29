@@ -13,7 +13,6 @@ import pl.illchess.domain.board.exception.IllegalMoveException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
-import pl.illchess.domain.board.exception.TargetSquareOccupiedBySameColorPieceException;
 
 // TODO obsłużyć pozostałe warunki
 @ControllerAdvice
@@ -27,7 +26,6 @@ public class BoardCommandControllerAdvice extends StompSubProtocolErrorHandler {
     @MessageExceptionHandler({
             PieceColorIncorrectException.class,
             PieceNotPresentOnGivenSquare.class,
-            TargetSquareOccupiedBySameColorPieceException.class,
             PieceCantMoveToGivenSquareException.class
     })
     public void illegalMoveExceptionHandler(IllegalMoveException domainException) {

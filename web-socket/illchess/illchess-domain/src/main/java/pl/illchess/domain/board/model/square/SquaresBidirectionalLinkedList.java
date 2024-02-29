@@ -48,15 +48,15 @@ public final class SquaresBidirectionalLinkedList {
                         leftNode == null
                                 ||
                                 (occupiedStatus
-                                        ? piecesLocations.getPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
-                                        : piecesLocations.getPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
+                                        ? piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
+                                        : piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
                                 )
                                 ? null :
                                 leftNode.square,
                         rightNode == null
                                 || (occupiedStatus
-                                ? piecesLocations.getPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
-                                : piecesLocations.getPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
+                                ? piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
+                                : piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
                         )
                                 ? null :
                                 rightNode.square
@@ -170,7 +170,7 @@ public final class SquaresBidirectionalLinkedList {
             nodeSquares = null;
         } else if (!newVisitedSquares.contains(examinedNode.square)) {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
-            Optional<Piece> pieceOnSquare = locations.getPieceOnSquare(nextSquareValue);
+            Optional<Piece> pieceOnSquare = locations.findPieceOnSquare(nextSquareValue);
             if (pieceOnSquare.isPresent() && (!skipKing || !(pieceOnSquare.get() instanceof King))) {
                 nodeSquares = Set.of(examinedNode.square);
             } else {

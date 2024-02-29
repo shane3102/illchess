@@ -17,4 +17,16 @@ public class PieceNotPresentOnGivenSquare extends IllegalMoveException {
                 square
         );
     }
+
+    public PieceNotPresentOnGivenSquare(
+        BoardId boardId,
+        Class<? extends Piece> expectedPieceType,
+        Square square
+    ) {
+        super(
+            "Expected piece %s not present on %s square".formatted(expectedPieceType, square),
+            boardId,
+            square
+        );
+    }
 }

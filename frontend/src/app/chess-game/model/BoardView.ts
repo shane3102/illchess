@@ -6,7 +6,7 @@ export interface BoardView {
     piecesLocations: PiecesLocations
     currentPlayerColor: PieceColor
     gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE'
-    victoriousPlayerColor: PieceColor
+    victoriousPlayerColor?: PieceColor
 }
 
 interface PiecesLocations {

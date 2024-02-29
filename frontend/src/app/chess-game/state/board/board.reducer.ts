@@ -14,7 +14,7 @@ export interface BoardState {
 }
 
 export const initialState: BoardState = {
-    boardView: { boardId: '', piecesLocations: {}, currentPlayerColor: PieceColor.WHITE, gameState: 'CONTINUE', victoriousPlayerColor: PieceColor.WHITE },
+    boardView: { boardId: '', piecesLocations: {}, currentPlayerColor: PieceColor.WHITE, gameState: 'CONTINUE', victoriousPlayerColor: undefined },
     error: '',
     illegalMoveHighlightSquare: '',
     illegalMoveMessage: '',

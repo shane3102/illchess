@@ -23,7 +23,9 @@ public record BoardEntity(
             String startSquare,
             String targetSquare,
             PieceEntity movedPiece,
-            PieceEntity capturedPiece
+            PieceEntity capturedPiece,
+            boolean isEnPassant,
+            boolean isCastling
     ) implements Serializable {
     }
 

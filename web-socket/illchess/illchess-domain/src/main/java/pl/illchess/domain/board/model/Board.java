@@ -37,7 +37,7 @@ public record Board(
             );
         }
         // TODO cache it (somehow)
-        Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory.peekLastMove());
+        Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory);
 
         if (!possibleMoves.contains(command.targetSquare())) {
             throw new PieceCantMoveToGivenSquareException(
@@ -67,7 +67,7 @@ public record Board(
                 .anyMatch(piece -> piece.isAttackingSquare(king.square(), piecesLocations, moveHistory.peekLastMove()));
 
         boolean anyPieceCanMove = piecesLocations.getAlliedPieces(boardState().currentPlayerColor().color()).stream()
-                .anyMatch(piece -> !piece.possibleMoves(piecesLocations, moveHistory.peekLastMove()).isEmpty());
+                .anyMatch(piece -> !piece.possibleMoves(piecesLocations, moveHistory).isEmpty());
 
         GameState establishedState;
 
