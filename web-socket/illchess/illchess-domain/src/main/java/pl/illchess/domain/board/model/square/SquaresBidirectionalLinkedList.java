@@ -33,36 +33,36 @@ public final class SquaresBidirectionalLinkedList {
 
     public List<SimpleSquare> getClosestNeighbours() {
         return Stream.of(
-                        leftNode == null ? null : leftNode.square,
-                        rightNode == null ? null : rightNode.square
-                )
-                .filter(Objects::nonNull)
-                .toList();
+                leftNode == null ? null : leftNode.square,
+                rightNode == null ? null : rightNode.square
+            )
+            .filter(Objects::nonNull)
+            .toList();
     }
 
     public Set<SimpleSquare> getClosestNeighboursByOccupiedStatus(
-            PiecesLocations piecesLocations,
-            boolean occupiedStatus
+        PiecesLocations piecesLocations,
+        boolean occupiedStatus
     ) {
         return Stream.of(
-                        leftNode == null
-                                ||
-                                (occupiedStatus
-                                        ? piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
-                                        : piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
-                                )
-                                ? null :
-                                leftNode.square,
-                        rightNode == null
-                                || (occupiedStatus
-                                ? piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
-                                : piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
-                        )
-                                ? null :
-                                rightNode.square
+                leftNode == null
+                    ||
+                    (occupiedStatus
+                        ? piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
+                        : piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
+                    )
+                    ? null :
+                    leftNode.square,
+                rightNode == null
+                    || (occupiedStatus
+                    ? piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
+                    : piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
                 )
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                    ? null :
+                    rightNode.square
+            )
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
     }
 
     SquaresBidirectionalLinkedList getNodeBySquare(SimpleSquare square) {
@@ -70,24 +70,24 @@ public final class SquaresBidirectionalLinkedList {
     }
 
     public Set<SimpleSquare> getAllConnectedXRayingKing(
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         return getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, Set.of(square), true);
     }
 
     public Set<SimpleSquare> getAllConnectedTillPieceEncountered(
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         return getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, Set.of(square), false);
     }
 
     public Set<SimpleSquare> getPinningRayBySquare(
-            SimpleSquare pinningCapableSquare,
-            SimpleSquare kingSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations piecesLocations
+        SimpleSquare pinningCapableSquare,
+        SimpleSquare kingSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations piecesLocations
     ) {
         Set<SimpleSquare> pinningRay = getAllConnectedXRayingKing(currentPieceColor, piecesLocations);
 
@@ -99,38 +99,38 @@ public final class SquaresBidirectionalLinkedList {
     }
 
     public Set<SimpleSquare> getAttackRayOnGivenSquare(
-            SimpleSquare givenSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        SimpleSquare givenSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         return getConnectedContainingKingSquareRememberVisited(givenSquare, currentPieceColor, locations, Set.of(square));
     }
 
     private Set<SimpleSquare> getConnectedContainingKingSquareRememberVisited(
-            SimpleSquare givenSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations,
-            Set<SimpleSquare> visitedSquares
+        SimpleSquare givenSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations locations,
+        Set<SimpleSquare> visitedSquares
     ) {
         Set<SimpleSquare> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(square)).collect(Collectors.toSet());
 
-        Set<SimpleSquare> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, false);
-        Set<SimpleSquare> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, false);
+        Set<SimpleSquare> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, true);
+        Set<SimpleSquare> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, true);
 
         if (leftNodeSquares != null && leftNodeSquares.contains(givenSquare)) {
             return Stream.of(
-                            newVisitedSquares,
-                            leftNodeSquares
-                    )
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
+                    newVisitedSquares,
+                    leftNodeSquares
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
         } else if (rightNodeSquares != null && rightNodeSquares.contains(givenSquare)) {
             return Stream.of(
-                            newVisitedSquares,
-                            rightNodeSquares
-                    )
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
+                    newVisitedSquares,
+                    rightNodeSquares
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
         } else {
             return Collections.emptySet();
         }
@@ -138,10 +138,10 @@ public final class SquaresBidirectionalLinkedList {
 
 
     private Set<SimpleSquare> getAllConnectedTillPieceEncounteredRememberVisited(
-            PieceColor currentPieceColor,
-            PiecesLocations locations,
-            Set<SimpleSquare> visitedSquares,
-            boolean skipKing
+        PieceColor currentPieceColor,
+        PiecesLocations locations,
+        Set<SimpleSquare> visitedSquares,
+        boolean skipKing
     ) {
         Set<SimpleSquare> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(square)).collect(Collectors.toSet());
 
@@ -149,21 +149,21 @@ public final class SquaresBidirectionalLinkedList {
         Set<SimpleSquare> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, skipKing);
 
         return Stream.of(
-                        newVisitedSquares,
-                        leftNodeSquares,
-                        rightNodeSquares
-                )
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                newVisitedSquares,
+                leftNodeSquares,
+                rightNodeSquares
+            )
+            .filter(Objects::nonNull)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
     private Set<SimpleSquare> getNodeSquares(
-            SquaresBidirectionalLinkedList examinedNode,
-            PieceColor currentPieceColor,
-            PiecesLocations locations,
-            Set<SimpleSquare> newVisitedSquares,
-            boolean skipKing
+        SquaresBidirectionalLinkedList examinedNode,
+        PieceColor currentPieceColor,
+        PiecesLocations locations,
+        Set<SimpleSquare> newVisitedSquares,
+        boolean skipKing
     ) {
         Set<SimpleSquare> nodeSquares;
         if (examinedNode == null) {
@@ -171,8 +171,16 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(examinedNode.square)) {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
             Optional<Piece> pieceOnSquare = locations.findPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent() && (!skipKing || !(pieceOnSquare.get() instanceof King))) {
-                nodeSquares = Set.of(examinedNode.square);
+            if (pieceOnSquare.isPresent()) {
+                if (skipKing) {
+                    if (pieceOnSquare.get() instanceof King) {
+                        nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, true);
+                    } else {
+                        nodeSquares = Set.of();
+                    }
+                } else {
+                    nodeSquares = Set.of(examinedNode.square);
+                }
             } else {
                 nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, skipKing);
             }
@@ -183,8 +191,8 @@ public final class SquaresBidirectionalLinkedList {
     }
 
     private SquaresBidirectionalLinkedList getNodeBySquareWithAndRememberVisited(
-            SimpleSquare square,
-            Set<SimpleSquare> visitedSquares
+        SimpleSquare square,
+        Set<SimpleSquare> visitedSquares
     ) {
         if (Objects.equals(square, this.square)) {
             return this;
@@ -195,14 +203,14 @@ public final class SquaresBidirectionalLinkedList {
         }
 
         Set<SimpleSquare> updatedSet = Stream.concat(visitedSquares.stream(), Stream.of(this.square))
-                .collect(Collectors.toSet());
+            .collect(Collectors.toSet());
 
         SquaresBidirectionalLinkedList leftNodeResult = leftNode == null || updatedSet.contains(leftNode.square)
-                ? null
-                : leftNode.getNodeBySquareWithAndRememberVisited(square, updatedSet);
+            ? null
+            : leftNode.getNodeBySquareWithAndRememberVisited(square, updatedSet);
         SquaresBidirectionalLinkedList rightNodeResult = rightNode == null || updatedSet.contains(rightNode.square)
-                ? null
-                : rightNode.getNodeBySquareWithAndRememberVisited(square, updatedSet);
+            ? null
+            : rightNode.getNodeBySquareWithAndRememberVisited(square, updatedSet);
         return rightNodeResult != null ? rightNodeResult : leftNodeResult;
     }
 
@@ -215,24 +223,24 @@ public final class SquaresBidirectionalLinkedList {
     }
 
     private List<SimpleSquare> getAllConnectedRememberVisited(
-            List<SimpleSquare> visited
+        List<SimpleSquare> visited
     ) {
 
         List<SimpleSquare> newVisited = Stream.concat(visited.stream(), Stream.of(square)).toList();
 
         List<SimpleSquare> leftNodeDependends = leftNode == null || visited.contains(leftNode.square)
-                ? List.of()
-                : leftNode.getAllConnectedRememberVisited(newVisited);
+            ? List.of()
+            : leftNode.getAllConnectedRememberVisited(newVisited);
 
         List<SimpleSquare> rightNodeDependends = rightNode == null || visited.contains(rightNode.square)
-                ? List.of()
-                : rightNode.getAllConnectedRememberVisited(newVisited);
+            ? List.of()
+            : rightNode.getAllConnectedRememberVisited(newVisited);
 
         return Stream.concat(
-                        newVisited.stream(),
-                        Stream.concat(rightNodeDependends.stream(), leftNodeDependends.stream())
-                )
-                .toList();
+                newVisited.stream(),
+                Stream.concat(rightNodeDependends.stream(), leftNodeDependends.stream())
+            )
+            .toList();
 
     }
 
