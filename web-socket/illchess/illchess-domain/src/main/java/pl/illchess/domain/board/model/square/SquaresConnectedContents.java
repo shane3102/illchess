@@ -21,7 +21,7 @@ public class SquaresConnectedContents {
     }
 
     public Set<Square> getClosestNeighbours(
-            Square square
+        Square square
     ) {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
@@ -36,14 +36,14 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getClosestNeighbours()
-                .stream()
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+            .stream()
+            .map(it -> Square.valueOf(it.name()))
+            .collect(Collectors.toSet());
     }
 
     public Set<Square> getClosestNonOccupiedNeighbours(
-            Square square,
-            PiecesLocations piecesLocations
+        Square square,
+        PiecesLocations piecesLocations
     ) {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
@@ -58,14 +58,14 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, false)
-                .stream()
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+            .stream()
+            .map(it -> Square.valueOf(it.name()))
+            .collect(Collectors.toSet());
     }
 
     public Set<Square> getClosestOccupiedNeighbours(
-            Square square,
-            PiecesLocations piecesLocations
+        Square square,
+        PiecesLocations piecesLocations
     ) {
         SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
 
@@ -80,15 +80,15 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, true)
-                .stream()
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+            .stream()
+            .map(it -> Square.valueOf(it.name()))
+            .collect(Collectors.toSet());
     }
 
     public Set<Square> getConnectedUntilPieceEncountered(
-            Square checkedSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        Square checkedSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         if (root == null) {
             return Collections.emptySet();
@@ -101,18 +101,18 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getAllConnectedTillPieceEncountered(currentPieceColor, locations)
-                .stream()
-                .filter(it -> !Objects.equals(it.name(), checkedSquare.name()))
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+            .stream()
+            .filter(it -> !Objects.equals(it.name(), checkedSquare.name()))
+            .map(it -> Square.valueOf(it.name()))
+            .collect(Collectors.toSet());
     }
 
     public Set<Square> getPinningRayBySquare(
-            Square possiblePinningPieceSquare,
-            Square pinningCapablePieceSquare,
-            Square kingPieceSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        Square possiblePinningPieceSquare,
+        Square pinningCapablePieceSquare,
+        Square kingPieceSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         if (root == null) {
             return Collections.emptySet();
@@ -130,22 +130,22 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getPinningRayBySquare(
-                        pinningCapableSquare,
-                        kingSquare,
-                        currentPieceColor,
-                        locations
-                )
-                .stream()
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+                pinningCapableSquare,
+                kingSquare,
+                currentPieceColor,
+                locations
+            )
+            .stream()
+            .map(it -> Square.valueOf(it.name()))
+            .collect(Collectors.toSet());
 
     }
 
     public Set<Square> getAttackRayOnGivenSquare(
-            Square checkRayPieceCapableSquare,
-            Square givenPieceSquare,
-            PieceColor currentPieceColor,
-            PiecesLocations locations
+        Square checkRayPieceCapableSquare,
+        Square givenPieceSquare,
+        PieceColor currentPieceColor,
+        PiecesLocations locations
     ) {
         if (root == null) {
             return Collections.emptySet();
@@ -162,9 +162,10 @@ public class SquaresConnectedContents {
         Set<SimpleSquare> attackRayOnGivenSquare = nodeBySquare.getAttackRayOnGivenSquare(givenSquare, currentPieceColor, locations);
 
         return attackRayOnGivenSquare
-                .stream()
-                .map(it -> Square.valueOf(it.name()))
-                .collect(Collectors.toSet());
+            .stream()
+            .map(it -> Square.valueOf(it.name()))
+            .filter(it -> !it.equals(checkRayPieceCapableSquare))
+            .collect(Collectors.toSet());
     }
 
     public static SquaresConnectedContents of(SimpleSquare... squares) {

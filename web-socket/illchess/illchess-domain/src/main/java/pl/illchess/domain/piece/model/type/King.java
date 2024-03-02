@@ -6,11 +6,11 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.square.info.SquareFile;
 import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,7 +44,6 @@ public final class King implements Piece {
             .collect(Collectors.toSet());
     }
 
-    // TODO król nie może zbić nie-chronioną figurę przeciwnika
     @Override
     public Set<Square> possibleMoves(PiecesLocations piecesLocations, MoveHistory moveHistory) {
         Move lastPerformedMove = moveHistory.peekLastMove();
@@ -62,16 +61,17 @@ public final class King implements Piece {
             .collect(Collectors.toSet());
 
         return standardMovesWithCastlingMoves.stream()
-            .filter(square -> isEnemyAttackingSquare(square, piecesLocations, lastPerformedMove))
+            .filter(square -> !isEnemyAttackingSquare(square, piecesLocations, lastPerformedMove))
             .filter(square -> alliedOccupiedSquares.isEmpty() || !alliedOccupiedSquares.contains(square))
             .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return standardLegalMoves(piecesLocations, lastPerformedMove).stream()
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> attackingRay = standardLegalMoves(piecesLocations, lastPerformedMove).stream()
             .filter(checkedSquare -> Objects.equals(checkedSquare.name(), possibleAttackedSquare.name()))
             .collect(Collectors.toSet());
+        return new PieceAttackingRay(square, attackingRay);
     }
 
     private boolean isEnemyAttackingSquare(
@@ -83,8 +83,10 @@ public final class King implements Piece {
 
         return enemyPieces
             .stream()
-            .allMatch(
-                piece -> piece.attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).isEmpty()
+            .anyMatch(
+                piece -> piece.attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove)
+                    .attackingRay()
+                    .contains(possibleAttackedSquare)
             );
     }
 

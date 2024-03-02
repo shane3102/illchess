@@ -172,12 +172,8 @@ public final class SquaresBidirectionalLinkedList {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
             Optional<Piece> pieceOnSquare = locations.findPieceOnSquare(nextSquareValue);
             if (pieceOnSquare.isPresent()) {
-                if (skipKing) {
-                    if (pieceOnSquare.get() instanceof King) {
-                        nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, true);
-                    } else {
-                        nodeSquares = Set.of();
-                    }
+                if (skipKing && pieceOnSquare.get() instanceof King) {
+                    nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, true);
                 } else {
                     nodeSquares = Set.of(examinedNode.square);
                 }

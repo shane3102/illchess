@@ -5,6 +5,7 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -32,8 +33,9 @@ public final class Rook implements PieceCapableOfPinning {
     }
 
     @Override
-    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return getRookAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> rookAttackingRayOfSquare = getRookAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+        return new PieceAttackingRay(square, rookAttackingRayOfSquare);
     }
 
     @Override

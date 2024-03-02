@@ -5,6 +5,7 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -19,8 +20,8 @@ public final class Bishop implements PieceCapableOfPinning {
     private Square square;
 
     public Bishop(
-            PieceColor color,
-            Square square
+        PieceColor color,
+        Square square
     ) {
         this.color = color;
         this.square = square;
@@ -29,16 +30,17 @@ public final class Bishop implements PieceCapableOfPinning {
     @Override
     public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
         return Stream.of(
-                        square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
+                square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
+            )
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return getBishopAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> bishopAttackingRayOfSquare = getBishopAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+        return new PieceAttackingRay(square, bishopAttackingRayOfSquare);
     }
 
     @Override
@@ -70,7 +72,7 @@ public final class Bishop implements PieceCapableOfPinning {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Bishop) obj;
         return Objects.equals(this.color, that.color) &&
-                Objects.equals(this.square, that.square);
+            Objects.equals(this.square, that.square);
     }
 
     @Override
@@ -81,44 +83,44 @@ public final class Bishop implements PieceCapableOfPinning {
     @Override
     public String toString() {
         return "Bishop[" +
-                "color=" + color + ", " +
-                "square=" + square + ']';
+            "color=" + color + ", " +
+            "square=" + square + ']';
     }
 
     private Set<Square> getBishopAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
         return Stream.of(
-                        square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
+            )
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
     private Set<Square> getBishopPinningRay(
-            Piece askingPiece,
-            King enemyKing,
-            PiecesLocations piecesLocations
+        Piece askingPiece,
+        King enemyKing,
+        PiecesLocations piecesLocations
     ) {
         return Stream.of(
-                        askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream(),
-                        askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream()
-                )
-                .flatMap(it -> it)
-                .collect(Collectors.toSet());
+                askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream(),
+                askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream()
+            )
+            .flatMap(it -> it)
+            .collect(Collectors.toSet());
     }
 
 }

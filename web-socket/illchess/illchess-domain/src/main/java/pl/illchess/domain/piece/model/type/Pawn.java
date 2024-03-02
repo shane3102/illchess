@@ -4,6 +4,7 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -31,13 +32,14 @@ public final class Pawn implements Piece {
     }
 
     @Override
-    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return Stream.concat(
-                        this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name())),
-                        this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name()))
-                )
-                .filter(this::filterByPawnColor)
-                .collect(Collectors.toSet());
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+        Set<Square> pawnAttackingRay = Stream.concat(
+                this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name())),
+                this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name()))
+            )
+            .filter(this::filterByPawnColor)
+            .collect(Collectors.toSet());
+        return new PieceAttackingRay(square, pawnAttackingRay);
     }
 
     public PieceColor color() {

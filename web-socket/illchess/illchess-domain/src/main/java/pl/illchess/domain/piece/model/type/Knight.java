@@ -4,6 +4,7 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -32,11 +33,11 @@ public final class Knight implements Piece {
     }
 
     @Override
-    public Set<Square> attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
         if (extractStandardKnightMovement().contains(possibleAttackedSquare)) {
-            return Set.of(possibleAttackedSquare, square);
+            return new PieceAttackingRay(square, Set.of(possibleAttackedSquare));
         } else {
-            return Collections.emptySet();
+            return new PieceAttackingRay(square, Collections.emptySet());
         }
     }
 
