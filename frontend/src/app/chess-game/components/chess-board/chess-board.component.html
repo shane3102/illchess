@@ -5,6 +5,7 @@
                 <app-chess-square 
                 (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
                 (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
+                [boardId]="boardId"
                 [piece]="
                     (this.boardView | async)?.piecesLocations ? 
                     (this.boardView | async)?.piecesLocations![file+rank] ? 
@@ -12,6 +13,7 @@
                     undefined : 
                     undefined"
                 [illegalMoveView]="illegalMoveView"
+                [draggedPieceInfo]="draggedPieceInfo | async"
                 [squareInfo]="{file: file, rank: rank}">
             </app-chess-square>
             </div>

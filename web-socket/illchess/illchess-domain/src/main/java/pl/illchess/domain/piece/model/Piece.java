@@ -69,7 +69,7 @@ public interface Piece {
     }
 
     default boolean isAttackingAnyOfSquares(Set<Square> possibleAttackedSquares, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return possibleAttackedSquares.stream().allMatch(square -> isAttackingSquare(square, piecesLocations, lastPerformedMove));
+        return possibleAttackedSquares.stream().anyMatch(square -> isAttackingSquare(square, piecesLocations, lastPerformedMove));
     }
 
     void setSquare(Square square);

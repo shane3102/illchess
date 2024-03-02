@@ -1,0 +1,14 @@
+<div [ngClass]="{'promotion-squares-wrapper-lower': rank == 1}" class="promotion-squares-wrapper">
+    <div class="promotion-square-background"> 
+        <app-chess-piece class="promotion-square chess-piece-wrapper" [pieceInfo]="{'type': Piece.QUEEN, 'color': rank==1 ? PieceColor.WHITE : PieceColor.BLACK}"></app-chess-piece>
+    </div>
+    <div class="promotion-square-background"> 
+        <app-chess-piece class="promotion-square chess-piece-wrapper" [pieceInfo]="{'type': Piece.KNIGHT, 'color': rank==1 ? PieceColor.WHITE : PieceColor.BLACK}"></app-chess-piece> 
+    </div>
+    <div class="promotion-square-background"> 
+        <app-chess-piece class="promotion-square chess-piece-wrapper" [pieceInfo]="{'type': Piece.ROOK, 'color': rank==1 ? PieceColor.WHITE : PieceColor.BLACK}"></app-chess-piece>
+    </div>
+    <div class="promotion-square-background"> 
+        <app-chess-piece  class="promotion-square chess-piece-wrapper" [pieceInfo]="{'type': Piece.BISHOP, 'color': rank==1 ? PieceColor.WHITE : PieceColor.BLACK}"></app-chess-piece>
+    </div>
+</div>

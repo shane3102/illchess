@@ -44,6 +44,7 @@ public final class King implements Piece {
             .collect(Collectors.toSet());
     }
 
+    // TODO król nie może zbić nie-chronioną figurę przeciwnika
     @Override
     public Set<Square> possibleMoves(PiecesLocations piecesLocations, MoveHistory moveHistory) {
         Move lastPerformedMove = moveHistory.peekLastMove();

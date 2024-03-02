@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { boardReducer } from './state/board/board.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { BoardEffects } from './state/board/board.effects';
+import { ChessPromotingPieceComponent } from './components/chess-promoting-piece/chess-promoting-piece.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { BoardEffects } from './state/board/board.effects';
     RookComponent,
     QueenComponent,
     KingComponent,
-    ChessSquareComponent
+    ChessSquareComponent,
+    ChessPromotingPieceComponent
   ],
   imports: [
     CommonModule,

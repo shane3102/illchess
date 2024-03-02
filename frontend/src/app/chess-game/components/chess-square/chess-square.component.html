@@ -8,6 +8,9 @@
     <div class="chess-square-info">
         {{squareInfo.file}}{{squareInfo.rank}}
     </div>
+    <div *ngIf="(squareInfo.file == 'A' && squareInfo.rank == 1) || (squareInfo.file == 'H' && squareInfo.rank == 8)">
+        <app-chess-promoting-piece [rank]="squareInfo.rank"></app-chess-promoting-piece>
+    </div>
     <div *ngIf="piece" draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper">
         <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
     </div>

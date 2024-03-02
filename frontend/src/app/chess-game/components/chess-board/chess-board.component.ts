@@ -8,8 +8,8 @@ import { IllegalMoveView } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
-import { initializeBoard, movePiece } from '../../state/board/board.actions';
-import { boardSelector, invalidMoveSelector } from '../../state/board/board.selectors';
+import { draggedPieceChanged, initializeBoard, movePiece } from '../../state/board/board.actions';
+import { boardSelector, draggedPieceSelector, invalidMoveSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
 
 @Component({
@@ -21,14 +21,13 @@ export class ChessBoardComponent implements OnInit {
 
   boardId: string = uuidv4()
   boardView: Observable<BoardView>= this.store.select(boardSelector);
-  illegalMoveView: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector)
+  illegalMoveView: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
+  draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
 
   illegalMoveViewSubject: Subject<IllegalMoveView> = new Subject<IllegalMoveView>();
 
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-
-  currentllyDraggedPiece: PieceDraggedInfo;
 
   constructor(private store: Store<ChessGameState>) { }
 
@@ -37,22 +36,10 @@ export class ChessBoardComponent implements OnInit {
   }
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
-    this.currentllyDraggedPiece = pieceDraggedInfo;
+    this.store.dispatch(draggedPieceChanged(pieceDraggedInfo))
   }
 
-  pieceDroppedChange(pieceDroppedInfo: SquareInfo) {
-    this.sendChessBoardUpdateRequest(pieceDroppedInfo)
-  }
-
-  sendChessBoardUpdateRequest(pieceDroppedInfo: SquareInfo) {
-
-    let moveRequest: MovePieceRequest = {
-      'boardId': this.boardId,
-      'startSquare': this.currentllyDraggedPiece.squareInfo.file + this.currentllyDraggedPiece.squareInfo.rank,
-      'targetSquare': pieceDroppedInfo.file + pieceDroppedInfo.rank,
-      'pieceColor': this.currentllyDraggedPiece.pieceInfo.color,
-      'pieceType': this.currentllyDraggedPiece.pieceInfo.type
-    }
+  pieceDroppedChange(moveRequest: MovePieceRequest) {
     this.store.dispatch(movePiece(moveRequest))
   }
 

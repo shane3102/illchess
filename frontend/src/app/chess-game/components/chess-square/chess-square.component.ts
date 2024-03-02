@@ -4,6 +4,7 @@ import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { SquareInfo } from '../../model/SquareInfo';
 import { Observable } from 'rxjs';
 import { IllegalMoveView } from '../../model/IllegalMoveView';
+import { MovePieceRequest } from '../../model/MovePieceRequest';
 
 @Component({
   selector: 'app-chess-square',
@@ -12,12 +13,14 @@ import { IllegalMoveView } from '../../model/IllegalMoveView';
 })
 export class ChessSquareComponent implements OnInit {
 
+  @Input() boardId: string;
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
   @Input() illegalMoveView: Observable<IllegalMoveView>
+  @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
-  @Output() pieceDroppedInfoEmitter: EventEmitter<SquareInfo> = new EventEmitter();
+  @Output() pieceDroppedInfoEmitter: EventEmitter<MovePieceRequest> = new EventEmitter();
 
   isDraggedOver: boolean = false;
   illegalMove: boolean = false;
@@ -41,7 +44,7 @@ export class ChessSquareComponent implements OnInit {
       return 'green';
     }
 
-    return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0 ? 'brown' : '#F3E5AB';
+    return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0 ? 'rgba(150, 75, 0)' : '#F3E5AB';
   }
 
   public displayIllegalMoveAnimation() {
@@ -77,7 +80,16 @@ export class ChessSquareComponent implements OnInit {
 
   pieceDropped() {
     this.isDraggedOver = false
-    this.pieceDroppedInfoEmitter.emit(this.squareInfo)
+    if (this.draggedPieceInfo) {
+      let moveRequest: MovePieceRequest = {
+        'boardId': this.boardId,
+        'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
+        'targetSquare': this.squareInfo.file + this.squareInfo.rank,
+        'pieceColor': this.draggedPieceInfo.pieceInfo.color,
+        'pieceType': this.draggedPieceInfo.pieceInfo.type
+      }
+      this.pieceDroppedInfoEmitter.emit(moveRequest)
+    }
   }
 
   pieceDraggedOver(event: any) {

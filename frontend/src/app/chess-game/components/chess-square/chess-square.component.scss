@@ -1,18 +1,22 @@
-$chess-square-size: 12vh;
+@import "../../../../styles.scss";
+
 $chess-file-rank-info: 3vh;
+// $chess-square-size: 12vh;
 
 .chess-square {
+    position: relative;
     display: flex;
     justify-content: left;
+    flex-direction: column;
     width: $chess-square-size;
     height: $chess-square-size;
 }
 
 .chess-square-info {
-    position: relative;
-    top: calc($chess-square-size - 2vh);
+    position: absolute;
     width: $chess-file-rank-info;
     height: min-content;
+    bottom: 0;
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -27,12 +31,8 @@ $chess-file-rank-info: 3vh;
     /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
-.chess-piece-wrapper {
-    position: relative;
-    height: min-content;
-    top: 15%;
-    left: calc(50% - $chess-file-rank-info);
-    transform: translateX(-50%);
+.chess-piece-wrapper:active {
+    background-color: transparent;
 }
 
 .illegal-move-animation-wrapper {
@@ -40,7 +40,7 @@ $chess-file-rank-info: 3vh;
 }
 
 @keyframes illegal-move-animation {
-    0%{
+    0% {
         background-color: red;
     }
 }
