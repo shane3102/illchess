@@ -1,5 +1,6 @@
 package pl.illchess.domain.board.model;
 
+import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.InitializeNewBoard;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
@@ -19,10 +20,10 @@ import java.util.Objects;
 import java.util.Set;
 
 public record Board(
-        BoardId boardId,
-        PiecesLocations piecesLocations,
-        MoveHistory moveHistory,
-        BoardState boardState
+    BoardId boardId,
+    PiecesLocations piecesLocations,
+    MoveHistory moveHistory,
+    BoardState boardState
 ) {
 
     public void movePiece(MovePiece command) {
@@ -30,10 +31,10 @@ public record Board(
         PieceColor movedPieceColor = movedPiece.color();
         if (!Objects.equals(movedPieceColor, boardState().currentPlayerColor().color())) {
             throw new PieceColorIncorrectException(
-                    boardId,
-                    movedPieceColor,
-                    boardState().currentPlayerColor().color(),
-                    movedPiece.square()
+                boardId,
+                movedPieceColor,
+                boardState().currentPlayerColor().color(),
+                movedPiece.square()
             );
         }
         // TODO cache it (somehow)
@@ -41,16 +42,31 @@ public record Board(
 
         if (!possibleMoves.contains(command.targetSquare())) {
             throw new PieceCantMoveToGivenSquareException(
-                    movedPiece,
-                    command.targetSquare(),
-                    possibleMoves,
-                    command.boardId()
+                movedPiece,
+                command.targetSquare(),
+                possibleMoves,
+                command.boardId()
             );
         }
 
         Move performedMove = piecesLocations().movePiece(command, moveHistory().peekLastMove());
         moveHistory().addMoveToHistory(performedMove);
         boardState().invertCurrentPlayerColor();
+    }
+
+    public Set<Square> isMoveLegal(CheckLegalMoves command) {
+        Piece movedPiece = command.movedPiece();
+        PieceColor movedPieceColor = movedPiece.color();
+        if (!Objects.equals(movedPieceColor, boardState().currentPlayerColor().color())) {
+            throw new PieceColorIncorrectException(
+                boardId,
+                movedPieceColor,
+                boardState().currentPlayerColor().color(),
+                movedPiece.square()
+            );
+        }
+        // TODO cache it (somehow)
+        return movedPiece.possibleMoves(piecesLocations, moveHistory);
     }
 
     public void takeBackMove() {
@@ -60,14 +76,14 @@ public record Board(
 
     public GameState establishBoardState() {
         King king = (King) piecesLocations.getPieceByTypeAndColor(King.class, boardState().currentPlayerColor().color())
-                .orElseThrow(KingNotFoundOnBoardException::new);
+            .orElseThrow(KingNotFoundOnBoardException::new);
 
         boolean kingIsAttacked = piecesLocations.getEnemyPieces(boardState().currentPlayerColor().color())
-                .stream()
-                .anyMatch(piece -> piece.isAttackingSquare(king.square(), piecesLocations, moveHistory.peekLastMove()));
+            .stream()
+            .anyMatch(piece -> piece.isAttackingSquare(king.square(), piecesLocations, moveHistory.peekLastMove()));
 
         boolean anyPieceCanMove = piecesLocations.getAlliedPieces(boardState().currentPlayerColor().color()).stream()
-                .anyMatch(piece -> !piece.possibleMoves(piecesLocations, moveHistory).isEmpty());
+            .anyMatch(piece -> !piece.possibleMoves(piecesLocations, moveHistory).isEmpty());
 
         GameState establishedState;
 
@@ -88,10 +104,10 @@ public record Board(
 
     public static Board generateNewBoard(InitializeNewBoard initializeNewBoard) {
         return new Board(
-                initializeNewBoard.boardId(),
-                PiecesLocations.createBasicBoard(),
-                new MoveHistory(),
-                BoardState.defaultState()
+            initializeNewBoard.boardId(),
+            PiecesLocations.createBasicBoard(),
+            new MoveHistory(),
+            BoardState.defaultState()
         );
     }
 

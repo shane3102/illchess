@@ -14,7 +14,8 @@
                     undefined"
                 [illegalMoveView]="illegalMoveView"
                 [draggedPieceInfo]="draggedPieceInfo | async"
-                [squareInfo]="{file: file, rank: rank}">
+                [squareInfo]="{file: file, rank: rank}"
+                [legalMoves]="legalMoves | async">
             </app-chess-square>
             </div>
         </div>
@@ -22,5 +23,6 @@
     <div style="text-align: center;">
         {{(boardView | async)!.gameState}}
         {{(boardView | async)!.victoriousPlayerColor}}
+        {{(legalMoves | async) | json}}
     </div>
 </div>

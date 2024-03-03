@@ -19,4 +19,7 @@
     <div *ngIf="piece" draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper">
         <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
     </div>
+    <div *ngIf="isSquareLegalMove()">
+        <app-chess-legal-move-circle></app-chess-legal-move-circle>
+    </div>
 </div>

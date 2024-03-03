@@ -5,6 +5,7 @@ import { SquareInfo } from '../../model/SquareInfo';
 import { Observable } from 'rxjs';
 import { IllegalMoveView } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
+import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 
 @Component({
   selector: 'app-chess-square',
@@ -18,6 +19,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() squareInfo: SquareInfo;
   @Input() illegalMoveView: Observable<IllegalMoveView>
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
+  @Input() legalMoves: BoardLegalMovesResponse |  undefined | null;
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDroppedInfoEmitter: EventEmitter<MovePieceRequest> = new EventEmitter();
@@ -53,6 +55,49 @@ export class ChessSquareComponent implements OnInit {
     setTimeout(() => this.illegalMove = false, 2000)
   }
 
+  pieceDragged() {
+    if (this.draggedPieceInfo?.pieceInfo != this.piece) {
+      this.pieceDraggedInfoEmitter.emit(new PieceDraggedInfo(<PieceInfo>this.piece, this.squareInfo))
+    }
+  }
+
+  pieceDropped() {
+    this.isDraggedOver = false
+    if (this.draggedPieceInfo) {
+      if ((this.squareInfo.rank == 8 || this.squareInfo.rank == 1) && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN && this.isSquareLegalMove()) {
+        this.displayPiecePromotingComponent = true;
+      } else {
+        let moveRequest: MovePieceRequest = {
+          'boardId': this.boardId,
+          'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
+          'targetSquare': this.squareInfo.file + this.squareInfo.rank,
+          'pieceColor': this.draggedPieceInfo.pieceInfo.color,
+          'pieceType': this.draggedPieceInfo.pieceInfo.type
+        }
+        this.pieceDroppedInfoEmitter.emit(moveRequest)
+      }
+    }
+  }
+
+  piecePromotion(moveRequest: MovePieceRequest) {
+    this.displayPiecePromotingComponent = false;
+    this.isDraggedOver = false;
+    this.pieceDroppedInfoEmitter.emit(moveRequest);
+  }
+
+  pieceDraggedOver(event: any) {
+    event.preventDefault()
+
+    this.isDraggedOver = true;
+  }
+
+  isSquareLegalMove(): boolean {
+    if(this.draggedPieceInfo && this.legalMoves) {
+      return this.legalMoves.legalSquares.some(it => it.toString() == this.squareInfo.file + this.squareInfo.rank)
+    }
+    return false
+  }
+
   private fileToNumber(): number {
     switch (this.squareInfo.file) {
       case 'A':
@@ -73,41 +118,6 @@ export class ChessSquareComponent implements OnInit {
         return 8;
     }
     return 0;
-  }
-
-  pieceDragged() {
-    this.pieceDraggedInfoEmitter.emit(new PieceDraggedInfo(<PieceInfo>this.piece, this.squareInfo))
-  }
-
-  pieceDropped() {
-    this.isDraggedOver = false
-    if (this.draggedPieceInfo) {
-      if ((this.squareInfo.rank == 8 || this.squareInfo.rank == 1) && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN) {
-        this.displayPiecePromotingComponent = true;
-      } else {
-        let moveRequest: MovePieceRequest = {
-          'boardId': this.boardId,
-          'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
-          'targetSquare': this.squareInfo.file + this.squareInfo.rank,
-          'pieceColor': this.draggedPieceInfo.pieceInfo.color,
-          'pieceType': this.draggedPieceInfo.pieceInfo.type
-        }
-        this.pieceDroppedInfoEmitter.emit(moveRequest)
-      } 
-    }
-  }
-
-  piecePromotion(moveRequest: MovePieceRequest) {
-    this.displayPiecePromotingComponent = false;
-    this.isDraggedOver = false;
-    this.pieceDroppedInfoEmitter.emit(moveRequest);
-  }
-
-  pieceDraggedOver(event: any) {
-    event.preventDefault()
-
-    this.isDraggedOver = true;
-
   }
 
 }

@@ -7,15 +7,22 @@ import { IllegalMoveView } from "../model/IllegalMoveView";
 import { boardLoaded, illegalMove } from "../state/board/board.actions";
 import { Store } from "@ngrx/store";
 import { ChessGameState } from "../state/chess-game.state";
+import { HttpClient } from "@angular/common/http";
+import { BoardLegalMovesResponse } from "../model/BoardLegalMovesResponse";
+import { CheckLegalMovesRequest } from "../model/CheckLegalMovesRequest";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChessBoardService {
 
+    readonly PATH: string = "/api/board"
+
     constructor(
         private stompService: StompService,
-        private store: Store<ChessGameState>
+        private store: Store<ChessGameState>,
+        private httpService: HttpClient
     ) {
         // TODO TO JAKOŚ INNACZEJ PRZEZ EFEKTY
         this.stompService.subscribe(
@@ -48,6 +55,10 @@ export class ChessBoardService {
             {},
             JSON.stringify(movePieceRequest)
         )
+    }
+
+    async getLegalMoves(request: CheckLegalMovesRequest): Promise<BoardLegalMovesResponse> {
+        return firstValueFrom(this.httpService.put<BoardLegalMovesResponse>(this.PATH+"/legal-moves", request))
     }
 
 }

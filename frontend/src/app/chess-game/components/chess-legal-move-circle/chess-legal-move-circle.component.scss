@@ -1,0 +1,22 @@
+@import "../../../../styles.scss";
+
+.circel-wrapper {
+    height: $chess-square-size;
+    width: $chess-square-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: calc($chess-square-size/2);
+    height: calc($chess-square-size/2);
+    border-radius: calc($chess-square-size*0.8);
+    display: inline-block;
+    position: relative;
+    background-color: green;
+    opacity: 0.5;
+}

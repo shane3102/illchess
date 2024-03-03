@@ -25,3 +25,10 @@ export const draggedPieceSelector = createSelector(
         return state.pieceDraggedInfo
     }
 )
+
+export const legalMovesSelector = createSelector(
+    selectBoard,
+    (state: BoardState) => {
+        return state.legalMoves
+    }
+)

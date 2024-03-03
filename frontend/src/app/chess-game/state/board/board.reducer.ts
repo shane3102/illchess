@@ -1,10 +1,12 @@
 import { createReducer, on } from "@ngrx/store";
-import { BoardView } from "../../model/BoardView";
+import { BoardView, Square } from "../../model/BoardView";
 import { PieceColor } from "../../model/PieceInfo";
-import { boardLoaded, draggedPieceChanged, illegalMove } from "./board.actions";
+import { boardLoaded, draggedPieceChanged, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
 import { IllegalMoveView } from "../../model/IllegalMoveView";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { state } from "@angular/animations";
+import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
+import { MovePieceRequest } from "../../model/MovePieceRequest";
 
 
 export interface BoardState {
@@ -12,7 +14,8 @@ export interface BoardState {
     error: string;
     illegalMoveHighlightSquare: string
     illegalMoveMessage: string
-    pieceDraggedInfo?: PieceDraggedInfo
+    pieceDraggedInfo?: PieceDraggedInfo,
+    legalMoves?: BoardLegalMovesResponse
     status: 'pending' | 'loading' | 'error' | 'success'
 }
 
@@ -61,6 +64,28 @@ export const boardReducer = createReducer(
                 pieceDraggedInfo: content,
                 illegalMoveHighlightSquare: "",
                 illegalMoveMessage: ""
+            }
+        )
+    ),
+
+    // legal moves changed
+    on(
+        legalMovesChanged,
+        (state: BoardState, content: BoardLegalMovesResponse) => (
+            {
+                ...state,
+                legalMoves: content
+            }
+        )
+    ),
+
+    // reset legal moves if move performed
+    on(
+        movePiece,
+        (state: BoardState)  => (
+            {
+                ...state,
+                legalMoves: undefined
             }
         )
     )

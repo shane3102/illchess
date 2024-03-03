@@ -8,9 +8,11 @@ import { IllegalMoveView } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
-import { draggedPieceChanged, initializeBoard, movePiece } from '../../state/board/board.actions';
-import { boardSelector, draggedPieceSelector, invalidMoveSelector } from '../../state/board/board.selectors';
+import { checkLegalMoves, draggedPieceChanged, initializeBoard, movePiece } from '../../state/board/board.actions';
+import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
+import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
+import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 
 @Component({
   selector: 'app-chess-board',
@@ -20,9 +22,10 @@ import { ChessGameState } from '../../state/chess-game.state';
 export class ChessBoardComponent implements OnInit {
 
   boardId: string = uuidv4()
-  boardView: Observable<BoardView>= this.store.select(boardSelector);
+  boardView: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveView: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
+  legalMoves: Observable<BoardLegalMovesResponse |  undefined> = this.store.select(legalMovesSelector)
 
   illegalMoveViewSubject: Subject<IllegalMoveView> = new Subject<IllegalMoveView>();
 
@@ -37,6 +40,13 @@ export class ChessBoardComponent implements OnInit {
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
     this.store.dispatch(draggedPieceChanged(pieceDraggedInfo))
+    let request: CheckLegalMovesRequest = {
+      'boardId': this.boardId,
+      'startSquare': pieceDraggedInfo.squareInfo.file + pieceDraggedInfo.squareInfo.rank,
+      'pieceColor': pieceDraggedInfo.pieceInfo.color,
+      'pieceType': pieceDraggedInfo.pieceInfo.type
+    }
+    this.store.dispatch(checkLegalMoves(request))
   }
 
   pieceDroppedChange(moveRequest: MovePieceRequest) {

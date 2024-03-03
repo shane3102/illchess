@@ -15,6 +15,7 @@ import { boardReducer } from './state/board/board.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { BoardEffects } from './state/board/board.effects';
 import { ChessPromotingPieceComponent } from './components/chess-promoting-piece/chess-promoting-piece.component';
+import { ChessLegalMoveCircleComponent } from './components/chess-legal-move-circle/chess-legal-move-circle.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { ChessPromotingPieceComponent } from './components/chess-promoting-piece
     QueenComponent,
     KingComponent,
     ChessSquareComponent,
-    ChessPromotingPieceComponent
+    ChessPromotingPieceComponent,
+    ChessLegalMoveCircleComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,4 @@
 import { Piece, PieceColor, PieceInfo } from "./PieceInfo"
-import { SquareInfo } from "./SquareInfo"
 
 export interface BoardView {
     boardId: string
