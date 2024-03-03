@@ -25,7 +25,8 @@ public record BoardEntity(
             PieceEntity movedPiece,
             PieceEntity capturedPiece,
             boolean isEnPassant,
-            boolean isCastling
+            boolean isCastling,
+            String promotionPieceType
     ) implements Serializable {
     }
 

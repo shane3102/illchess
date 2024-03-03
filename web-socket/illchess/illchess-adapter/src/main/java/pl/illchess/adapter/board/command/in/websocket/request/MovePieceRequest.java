@@ -5,19 +5,21 @@ import pl.illchess.application.board.command.in.MovePieceUseCase;
 import java.util.UUID;
 
 public record MovePieceRequest(
-        UUID boardId,
-        String startSquare,
-        String targetSquare,
-        String pieceColor,
-        String pieceType
+    UUID boardId,
+    String startSquare,
+    String targetSquare,
+    String pieceColor,
+    String pieceType,
+    String pawnPromotedToPieceType
 ) {
     public MovePieceUseCase.MovePieceCmd toCmd() {
         return new MovePieceUseCase.MovePieceCmd(
-                boardId,
-                startSquare,
-                targetSquare,
-                pieceColor,
-                pieceType
+            boardId,
+            startSquare,
+            targetSquare,
+            pieceColor,
+            pieceType,
+            pawnPromotedToPieceType
         );
     }
 }

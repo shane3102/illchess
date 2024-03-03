@@ -4,7 +4,10 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.model.history.IsCastling;
 import pl.illchess.domain.board.model.history.IsEnPassant;
+import pl.illchess.domain.board.model.history.PromotionInfo;
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.piece.exception.PromotedPieceNotPawnException;
+import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.domain.piece.model.info.PieceColor;
@@ -43,8 +46,9 @@ public record PiecesLocations(
 
         IsEnPassant isEnPassant = removePieceIfEnPassantMove(command, lastPerformedMove);
         IsCastling isCastling = moveRookIfCastlingMove(command);
+        PromotionInfo promotionInfo = isPromotion(command);
 
-        movePieceMechanic(command);
+        movePieceMechanic(command, promotionInfo);
 
         return new Move(
             movedPieceStartSquare,
@@ -52,7 +56,8 @@ public record PiecesLocations(
             command.movedPiece(),
             capturedPiece,
             isEnPassant,
-            isCastling
+            isCastling,
+            promotionInfo
         );
     }
 
@@ -112,15 +117,27 @@ public record PiecesLocations(
         return Objects.equals(findPieceOnSquare(command.movedPiece().square()).orElse(null), command.movedPiece());
     }
 
-    private void movePieceMechanic(MovePiece command) {
+    private void movePieceMechanic(MovePiece command, PromotionInfo promotionInfo) {
         locations.removeIf(
             piece -> Objects.equals(piece.square(), command.movedPiece().square()) ||
                 Objects.equals(piece.square(), command.targetSquare())
         );
 
-        command.movedPiece().setSquare(command.targetSquare());
+        Piece movedPiece = command.movedPiece();
 
-        locations.add(command.movedPiece());
+        if (promotionInfo != null) {
+            if (!(command.movedPiece() instanceof Pawn pawn)) {
+                throw new PromotedPieceNotPawnException();
+            }
+            if (command.pawnPromotedToPieceType() == null) {
+                throw new PromotedPieceTargetTypeNotSupported();
+            }
+            movedPiece = pawn.promotePawn(command.pawnPromotedToPieceType());
+        }
+
+        movedPiece.setSquare(command.targetSquare());
+
+        locations.add(movedPiece);
     }
 
     private IsEnPassant removePieceIfEnPassantMove(MovePiece command, Move lastPerformedMove) {
@@ -170,6 +187,15 @@ public record PiecesLocations(
             return IsCastling.yep();
         }
         return IsCastling.nope();
+    }
+
+    private PromotionInfo isPromotion(MovePiece command) {
+        if (command.targetSquare().getRank().getNumber() == 8 && command.movedPiece() instanceof Pawn && Objects.equals(command.movedPiece().color(), WHITE)) {
+            return new PromotionInfo(command.pawnPromotedToPieceType());
+        } else if (command.targetSquare().getRank().getNumber() == 1 && command.movedPiece() instanceof Pawn && Objects.equals(command.movedPiece().color(), BLACK)) {
+            return new PromotionInfo(command.pawnPromotedToPieceType());
+        }
+        return null;
     }
 
     public static PiecesLocations createBasicBoard() {

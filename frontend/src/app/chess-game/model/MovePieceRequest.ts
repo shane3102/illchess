@@ -7,4 +7,5 @@ export interface MovePieceRequest {
     targetSquare: string
     pieceColor: PieceColor
     pieceType: Piece
+    pawnPromotedToPieceType?: Piece.QUEEN | Piece.KNIGHT | Piece.ROOK | Piece.BISHOP
 }

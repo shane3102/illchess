@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PieceInfo } from '../../model/PieceInfo';
+import { Piece, PieceInfo } from '../../model/PieceInfo';
 import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { SquareInfo } from '../../model/SquareInfo';
 import { Observable } from 'rxjs';
@@ -24,6 +24,7 @@ export class ChessSquareComponent implements OnInit {
 
   isDraggedOver: boolean = false;
   illegalMove: boolean = false;
+  displayPiecePromotingComponent: boolean = false;
 
   constructor() { }
 
@@ -81,15 +82,25 @@ export class ChessSquareComponent implements OnInit {
   pieceDropped() {
     this.isDraggedOver = false
     if (this.draggedPieceInfo) {
-      let moveRequest: MovePieceRequest = {
-        'boardId': this.boardId,
-        'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
-        'targetSquare': this.squareInfo.file + this.squareInfo.rank,
-        'pieceColor': this.draggedPieceInfo.pieceInfo.color,
-        'pieceType': this.draggedPieceInfo.pieceInfo.type
-      }
-      this.pieceDroppedInfoEmitter.emit(moveRequest)
+      if ((this.squareInfo.rank == 8 || this.squareInfo.rank == 1) && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN) {
+        this.displayPiecePromotingComponent = true;
+      } else {
+        let moveRequest: MovePieceRequest = {
+          'boardId': this.boardId,
+          'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
+          'targetSquare': this.squareInfo.file + this.squareInfo.rank,
+          'pieceColor': this.draggedPieceInfo.pieceInfo.color,
+          'pieceType': this.draggedPieceInfo.pieceInfo.type
+        }
+        this.pieceDroppedInfoEmitter.emit(moveRequest)
+      } 
     }
+  }
+
+  piecePromotion(moveRequest: MovePieceRequest) {
+    this.displayPiecePromotingComponent = false;
+    this.isDraggedOver = false;
+    this.pieceDroppedInfoEmitter.emit(moveRequest);
   }
 
   pieceDraggedOver(event: any) {

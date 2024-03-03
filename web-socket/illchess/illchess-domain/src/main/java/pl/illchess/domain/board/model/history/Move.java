@@ -9,6 +9,7 @@ public record Move(
     Piece movedPiece,
     Piece capturedPiece,
     IsEnPassant isEnPassant,
-    IsCastling isCastling
+    IsCastling isCastling,
+    PromotionInfo promotionInfo
 ) {
 }

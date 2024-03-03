@@ -23,4 +23,16 @@ public record PieceType(String text) {
             default -> throw new PieceTypeNotRecognisedException(type);
         };
     }
+
+    public static Class<? extends Piece> getPieceType(PieceType type) {
+        return switch (type.text()) {
+            case "KING" -> King.class;
+            case "QUEEN" -> Queen.class;
+            case "KNIGHT" -> Knight.class;
+            case "ROOK" -> Rook.class;
+            case "BISHOP" -> Bishop.class;
+            case "PAWN" -> Pawn.class;
+            default -> throw new PieceTypeNotRecognisedException(type);
+        };
+    }
 }

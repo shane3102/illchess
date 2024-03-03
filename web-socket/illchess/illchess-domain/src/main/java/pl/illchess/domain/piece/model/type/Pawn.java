@@ -3,6 +3,7 @@ package pl.illchess.domain.piece.model.type;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
+import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
@@ -15,12 +16,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class Pawn implements Piece {
+
+    private static final Set<Class<? extends Piece>> SUPPORTED_PROMOTION_TYPES = Set.of(Queen.class, Knight.class, Rook.class, Bishop.class);
+
     private final PieceColor color;
     private Square square;
 
     public Pawn(
-            PieceColor color,
-            Square square
+        PieceColor color,
+        Square square
     ) {
         this.color = color;
         this.square = square;
@@ -66,7 +70,7 @@ public final class Pawn implements Piece {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Pawn) obj;
         return Objects.equals(this.color, that.color) &&
-                Objects.equals(this.square, that.square);
+            Objects.equals(this.square, that.square);
     }
 
     @Override
@@ -77,8 +81,8 @@ public final class Pawn implements Piece {
     @Override
     public String toString() {
         return "Pawn[" +
-                "color=" + color + ", " +
-                "square=" + square + ']';
+            "color=" + color + ", " +
+            "square=" + square + ']';
     }
 
     public Square getSquareOfPieceCapturedEnPassant(Square targetSquareOfPerformedMove, Move lastPerformedMove) {
@@ -86,6 +90,14 @@ public final class Pawn implements Piece {
             return lastPerformedMove.targetSquare();
         }
         return null;
+    }
+
+    public Piece promotePawn(PieceType pawnPromotedToPieceType) {
+        Piece pieceByPieceType = PieceType.getPieceByPieceType(pawnPromotedToPieceType, color, square);
+        if (SUPPORTED_PROMOTION_TYPES.stream().noneMatch(supportedType -> supportedType.equals(pieceByPieceType.getClass()))) {
+            throw new PromotedPieceTargetTypeNotSupported(pieceByPieceType.getClass(), SUPPORTED_PROMOTION_TYPES);
+        }
+        return pieceByPieceType;
     }
 
     private Set<Square> extractPawnMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
@@ -96,75 +108,75 @@ public final class Pawn implements Piece {
         Set<Square> enPassantPossibleCaptures = getEnPassantPossibleCaptures(lastPerformedMove);
 
         return Stream.of(
-                        standardPawnMovement.stream(),
-                        standardCaptures.stream(),
-                        enPassantPossibleCaptures.stream()
-                )
-                .flatMap(it -> it)
-                .filter(this::filterByPawnColor)
-                .collect(Collectors.toSet());
+                standardPawnMovement.stream(),
+                standardCaptures.stream(),
+                enPassantPossibleCaptures.stream()
+            )
+            .flatMap(it -> it)
+            .filter(this::filterByPawnColor)
+            .collect(Collectors.toSet());
     }
 
     private Set<Square> getStandardPawnMovement(PiecesLocations piecesLocations) {
         Set<Square> result = square.getFile().getContainedSquares().getClosestNonOccupiedNeighbours(square, piecesLocations);
         if (isOnStartingSquare()) {
             result = Stream.concat(
-                            Stream.of(result),
-                            result.stream().map(
-                                    it -> it.getFile()
-                                            .getContainedSquares()
-                                            .getClosestNonOccupiedNeighbours(it, piecesLocations)
-                            )
+                    Stream.of(result),
+                    result.stream().map(
+                        it -> it.getFile()
+                            .getContainedSquares()
+                            .getClosestNonOccupiedNeighbours(it, piecesLocations)
                     )
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toSet());
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
         }
         return result;
     }
 
     private boolean isOnStartingSquare() {
         return (this.square.getRank().getNumber() == 2 && Objects.equals(this.color, PieceColor.WHITE)) ||
-                (this.square.getRank().getNumber() == 7 && Objects.equals(this.color, PieceColor.BLACK));
+            (this.square.getRank().getNumber() == 7 && Objects.equals(this.color, PieceColor.BLACK));
     }
 
     private Set<Square> getStandardPawnPossibleCaptures(PiecesLocations piecesLocations) {
         return Stream.concat(
-                        square.getSquareDiagonal1().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream(),
-                        square.getSquareDiagonal2().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream()
-                )
-                .collect(Collectors.toSet());
+                square.getSquareDiagonal1().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream(),
+                square.getSquareDiagonal2().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream()
+            )
+            .collect(Collectors.toSet());
     }
 
     private Set<Square> getEnPassantPossibleCaptures(
-            Move lastPerformedMove
+        Move lastPerformedMove
     ) {
         if (lastPerformedMove == null) {
             return Set.of();
         }
         if (isEnPassantPossible(lastPerformedMove)) {
             return lastPerformedMove.targetSquare()
-                    .getFile()
-                    .getContainedSquares()
-                    .getClosestNeighbours(lastPerformedMove.targetSquare());
+                .getFile()
+                .getContainedSquares()
+                .getClosestNeighbours(lastPerformedMove.targetSquare());
         }
         return Set.of();
     }
 
     private boolean isEnPassantPossible(
-            Move lastPerformedMove
+        Move lastPerformedMove
     ) {
         boolean whiteEnPassant = (
-                color.equals(PieceColor.WHITE)
-                        && lastPerformedMove.movedPiece() instanceof Pawn
-                        && lastPerformedMove.targetSquare().getRank().getNumber() == 5
-                        && square.getRank().getNumber() == 5
+            color.equals(PieceColor.WHITE)
+                && lastPerformedMove.movedPiece() instanceof Pawn
+                && lastPerformedMove.targetSquare().getRank().getNumber() == 5
+                && square.getRank().getNumber() == 5
         );
 
         boolean blackEnPassant = (
-                color.equals(PieceColor.BLACK)
-                        && lastPerformedMove.movedPiece() instanceof Pawn
-                        && lastPerformedMove.targetSquare().getRank().getNumber() == 4
-                        && square.getRank().getNumber() == 4
+            color.equals(PieceColor.BLACK)
+                && lastPerformedMove.movedPiece() instanceof Pawn
+                && lastPerformedMove.targetSquare().getRank().getNumber() == 4
+                && square.getRank().getNumber() == 4
         );
 
         return whiteEnPassant || blackEnPassant;
@@ -172,8 +184,8 @@ public final class Pawn implements Piece {
 
     private boolean filterByPawnColor(Square comparedSquare) {
         return color == PieceColor.WHITE
-                ? comparedSquare.isHigher(square)
-                : comparedSquare.isLower(square);
+            ? comparedSquare.isHigher(square)
+            : comparedSquare.isLower(square);
     }
 
 }

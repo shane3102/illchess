@@ -14,22 +14,25 @@ public interface MovePieceUseCase {
     void movePiece(MovePieceCmd cmd);
 
     record MovePieceCmd(
-            UUID boardId,
-            String startSquare,
-            String targetSquare,
-            String pieceColor,
-            String pieceType
+        UUID boardId,
+        String startSquare,
+        String targetSquare,
+        String pieceColor,
+        String pieceType,
+        String pawnPromotedToPieceType
     ) {
         public MovePiece toCommand() {
             PieceType pieceType = new PieceType(this.pieceType);
             PieceColor pieceColor = PieceColor.valueOf(this.pieceColor);
             Square startSquare = Square.valueOf(this.startSquare);
             Square targetSquare = Square.valueOf(this.targetSquare);
+            PieceType promotionPieceType = pawnPromotedToPieceType == null ? null : new PieceType(this.pawnPromotedToPieceType);
 
             return new MovePiece(
-                    new BoardId(boardId),
-                    PieceType.getPieceByPieceType(pieceType, pieceColor, startSquare),
-                    targetSquare
+                new BoardId(boardId),
+                PieceType.getPieceByPieceType(pieceType, pieceColor, startSquare),
+                targetSquare,
+                promotionPieceType
             );
         }
     }
