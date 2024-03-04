@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { BoardView, Square } from "../../model/BoardView";
 import { PieceColor } from "../../model/PieceInfo";
 import { boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
-import { IllegalMoveView } from "../../model/IllegalMoveView";
+import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { state } from "@angular/animations";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
@@ -46,7 +46,7 @@ export const boardReducer = createReducer(
     // illegal move 
     on(
         illegalMove,
-        (state: BoardState, content: IllegalMoveView) => (
+        (state: BoardState, content: any) => (
             {
                 ...state,
                 illegalMoveHighlightSquare: content.highlightSquare,

@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.command.in.websocket.request;
+package pl.illchess.adapter.board.command.in.websocket.dto;
 
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 

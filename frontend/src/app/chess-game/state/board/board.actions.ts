@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { MovePieceRequest } from "../../model/MovePieceRequest"
 import { BoardView, Square } from "../../model/BoardView";
-import { IllegalMoveView } from "../../model/IllegalMoveView";
+import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { InitializeBoardRequest } from "../../model/InitializeBoardRequest";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
@@ -24,7 +24,7 @@ export const boardLoaded = createAction(
 
 export const illegalMove = createAction(
     'Illegal move',
-    props<IllegalMoveView>()
+    props<IllegalMoveResponse>()
 )
 
 export const draggedPieceChanged = createAction(

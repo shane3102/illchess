@@ -1,4 +1,4 @@
-export interface IllegalMoveView {
+export interface IllegalMoveResponse {
     boardId: string
     highlightSquare: string
     message: string

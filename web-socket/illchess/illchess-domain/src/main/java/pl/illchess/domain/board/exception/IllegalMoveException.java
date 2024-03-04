@@ -1,6 +1,5 @@
 package pl.illchess.domain.board.exception;
 
-import pl.illchess.domain.board.event.MoveIllegal;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.commons.exception.DomainException;
@@ -16,12 +15,12 @@ public abstract class IllegalMoveException extends DomainException {
         this.highlightSquare = highlightSquare;
     }
 
-    public MoveIllegal toMoveIllegalEvent() {
-        return new MoveIllegal(
-                boardId.uuid(),
-                highlightSquare.toString(),
-                getMessage()
-        );
+    public BoardId getBoardId() {
+        return boardId;
+    }
+
+    public Square getHighlightSquare() {
+        return highlightSquare;
     }
 
 }

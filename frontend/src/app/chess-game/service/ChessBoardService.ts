@@ -3,7 +3,7 @@ import { StompService } from "./StompService";
 import { InitializeBoardRequest } from "../model/InitializeBoardRequest";
 import { MovePieceRequest } from "../model/MovePieceRequest";
 import { BoardView } from "../model/BoardView";
-import { IllegalMoveView } from "../model/IllegalMoveView";
+import { IllegalMoveResponse } from "../model/IllegalMoveView";
 import { boardLoaded, illegalMove } from "../state/board/board.actions";
 import { Store } from "@ngrx/store";
 import { ChessGameState } from "../state/chess-game.state";
@@ -32,13 +32,6 @@ export class ChessBoardService {
                 this.store.dispatch(boardLoaded(boardView))
             }
         )
-        this.stompService.subscribe(
-            "/illegal-move",
-            (response: any) => {
-                let illegalMoveView: IllegalMoveView = JSON.parse(response.body)
-                this.store.dispatch(illegalMove(illegalMoveView))
-            }
-        )
     }
 
     async initializeBoard(initializeBoardRequest: InitializeBoardRequest): Promise<void> {
@@ -50,11 +43,7 @@ export class ChessBoardService {
     }
 
     async movePiece(movePieceRequest: MovePieceRequest): Promise<void> {
-        this.stompService.stompClient!.send(
-            '/app/board/move-piece',
-            {},
-            JSON.stringify(movePieceRequest)
-        )
+        return firstValueFrom(this.httpService.put<void>(this.PATH+"/move-piece", movePieceRequest))
     }
 
     async getLegalMoves(request: CheckLegalMovesRequest): Promise<BoardLegalMovesResponse> {

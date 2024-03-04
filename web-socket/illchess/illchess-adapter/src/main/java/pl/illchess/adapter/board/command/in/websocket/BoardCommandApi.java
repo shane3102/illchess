@@ -2,20 +2,27 @@ package pl.illchess.adapter.board.command.in.websocket;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Payload;
-import pl.illchess.adapter.board.command.in.websocket.request.InitializeNewBoardRequest;
-import pl.illchess.adapter.board.command.in.websocket.request.LegalMovesResponse;
-import pl.illchess.adapter.board.command.in.websocket.request.CheckLegalMovesRequest;
-import pl.illchess.adapter.board.command.in.websocket.request.MovePieceRequest;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.LegalMovesResponse;
+import pl.illchess.adapter.board.command.in.websocket.dto.CheckLegalMovesRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.MovePieceRequest;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 
 public interface BoardCommandApi {
-
-    void movePiece(@Payload MovePieceRequest movePieceRequest);
 
     void initializeNewBoard(@Payload InitializeNewBoardRequest initializeNewBoardRequest);
 
     void checkGameState(BoardPiecesLocationsUpdated boardUpdated);
 
-    ResponseEntity<LegalMovesResponse> checkLegalityOfMove(CheckLegalMovesRequest request);
+    @ResponseBody
+    @PutMapping(value = "/move-piece", produces = "application/json")
+    ResponseEntity<Void> movePiece(@RequestBody MovePieceRequest movePieceRequest);
+
+    @ResponseBody
+    @PutMapping(value = "/legal-moves", produces = "application/json")
+    ResponseEntity<LegalMovesResponse> checkLegalityOfMove(@RequestBody CheckLegalMovesRequest request);
 
 }

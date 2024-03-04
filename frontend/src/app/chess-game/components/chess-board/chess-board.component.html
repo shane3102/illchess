@@ -13,7 +13,7 @@
                     (this.boardView | async)?.piecesLocations![file+rank] : 
                     undefined : 
                     undefined"
-                [illegalMoveView]="illegalMoveView"
+                [illegalMoveResponse]="illegalMoveResponse"
                 [draggedPieceInfo]="draggedPieceInfo | async"
                 [squareInfo]="{file: file, rank: rank}"
                 [legalMoves]="legalMoves | async">

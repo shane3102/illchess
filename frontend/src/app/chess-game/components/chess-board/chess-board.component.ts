@@ -4,7 +4,7 @@ import { SquareInfo } from '../../model/SquareInfo';
 import { Observable, Subject, of } from 'rxjs';
 import { BoardView } from '../../model/BoardView';
 import { v4 as uuidv4 } from 'uuid';
-import { IllegalMoveView } from '../../model/IllegalMoveView';
+import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
@@ -23,11 +23,11 @@ export class ChessBoardComponent implements OnInit {
 
   boardId: string = uuidv4()
   boardView: Observable<BoardView> = this.store.select(boardSelector);
-  illegalMoveView: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
+  illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
   legalMoves: Observable<BoardLegalMovesResponse | undefined> = this.store.select(legalMovesSelector)
 
-  illegalMoveViewSubject: Subject<IllegalMoveView> = new Subject<IllegalMoveView>();
+  illegalMoveViewSubject: Subject<IllegalMoveResponse> = new Subject<IllegalMoveResponse>();
 
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -66,7 +66,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   displayInfoWithIllegalMove(illegalMoveView: any) {
-    let illegalMoveViewParsed: IllegalMoveView = JSON.parse(illegalMoveView.body)
+    let illegalMoveViewParsed: IllegalMoveResponse = JSON.parse(illegalMoveView.body)
     this.illegalMoveViewSubject.next(illegalMoveViewParsed)
   }
 

@@ -3,7 +3,7 @@ import { Piece, PieceInfo } from '../../model/PieceInfo';
 import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { SquareInfo } from '../../model/SquareInfo';
 import { Observable } from 'rxjs';
-import { IllegalMoveView } from '../../model/IllegalMoveView';
+import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 
@@ -17,7 +17,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() boardId: string;
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
-  @Input() illegalMoveView: Observable<IllegalMoveView>
+  @Input() illegalMoveResponse: Observable<IllegalMoveResponse>
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
 
@@ -33,7 +33,7 @@ export class ChessSquareComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.illegalMoveView.subscribe(
+    this.illegalMoveResponse.subscribe(
       illegalMoveView => {
         this.isDraggedOver = false;
         if (illegalMoveView.highlightSquare == this.squareInfo.file + this.squareInfo.rank) {
