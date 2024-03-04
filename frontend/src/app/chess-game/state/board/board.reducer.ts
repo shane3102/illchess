@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { BoardView, Square } from "../../model/BoardView";
 import { PieceColor } from "../../model/PieceInfo";
-import { boardLoaded, draggedPieceChanged, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
+import { boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
 import { IllegalMoveView } from "../../model/IllegalMoveView";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { state } from "@angular/animations";
@@ -83,6 +83,17 @@ export const boardReducer = createReducer(
     on(
         movePiece,
         (state: BoardState)  => (
+            {
+                ...state,
+                legalMoves: undefined
+            }
+        )
+    ),
+
+    // dragged piece released
+    on(
+        draggedPieceReleased,
+        (state: BoardState)=> (
             {
                 ...state,
                 legalMoves: undefined

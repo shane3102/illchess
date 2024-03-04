@@ -19,9 +19,10 @@ export class ChessSquareComponent implements OnInit {
   @Input() squareInfo: SquareInfo;
   @Input() illegalMoveView: Observable<IllegalMoveView>
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
-  @Input() legalMoves: BoardLegalMovesResponse |  undefined | null;
+  @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
+  @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
   @Output() pieceDroppedInfoEmitter: EventEmitter<MovePieceRequest> = new EventEmitter();
 
   isDraggedOver: boolean = false;
@@ -34,6 +35,7 @@ export class ChessSquareComponent implements OnInit {
 
     this.illegalMoveView.subscribe(
       illegalMoveView => {
+        this.isDraggedOver = false;
         if (illegalMoveView.highlightSquare == this.squareInfo.file + this.squareInfo.rank) {
           this.displayIllegalMoveAnimation()
         }
@@ -41,9 +43,9 @@ export class ChessSquareComponent implements OnInit {
     )
   }
 
-  public calculateSquareColor(isDraggedOver: boolean): string {
+  public calculateSquareColor(): string {
 
-    if (isDraggedOver) {
+    if (this.isDraggedOver) {
       return 'green';
     }
 
@@ -56,9 +58,13 @@ export class ChessSquareComponent implements OnInit {
   }
 
   pieceDragged() {
-    if (this.draggedPieceInfo?.pieceInfo != this.piece) {
+    if (this.draggedPieceInfo?.pieceInfo != this.piece || !this.legalMoves) {
       this.pieceDraggedInfoEmitter.emit(new PieceDraggedInfo(<PieceInfo>this.piece, this.squareInfo))
     }
+  }
+
+  pieceDraggedRelease() {
+    this.pieceDraggedReleasedInfoEmitter.emit()
   }
 
   pieceDropped() {
@@ -92,7 +98,7 @@ export class ChessSquareComponent implements OnInit {
   }
 
   isSquareLegalMove(): boolean {
-    if(this.draggedPieceInfo && this.legalMoves) {
+    if (this.draggedPieceInfo && this.legalMoves) {
       return this.legalMoves.legalSquares.some(it => it.toString() == this.squareInfo.file + this.squareInfo.rank)
     }
     return false

@@ -8,7 +8,7 @@ import { IllegalMoveView } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
-import { checkLegalMoves, draggedPieceChanged, initializeBoard, movePiece } from '../../state/board/board.actions';
+import { checkLegalMoves, draggedPieceChanged, draggedPieceReleased, initializeBoard, movePiece } from '../../state/board/board.actions';
 import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
 import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
@@ -25,7 +25,7 @@ export class ChessBoardComponent implements OnInit {
   boardView: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveView: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
-  legalMoves: Observable<BoardLegalMovesResponse |  undefined> = this.store.select(legalMovesSelector)
+  legalMoves: Observable<BoardLegalMovesResponse | undefined> = this.store.select(legalMovesSelector)
 
   illegalMoveViewSubject: Subject<IllegalMoveView> = new Subject<IllegalMoveView>();
 
@@ -51,6 +51,10 @@ export class ChessBoardComponent implements OnInit {
 
   pieceDroppedChange(moveRequest: MovePieceRequest) {
     this.store.dispatch(movePiece(moveRequest))
+  }
+
+  pieceDraggedRelease() {
+    this.store.dispatch(draggedPieceReleased({}))
   }
 
   sendChessBoardInitializeRequest() {

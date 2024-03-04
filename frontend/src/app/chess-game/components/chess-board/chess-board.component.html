@@ -5,6 +5,7 @@
                 <app-chess-square 
                 (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
                 (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
+                (pieceDraggedReleasedInfoEmitter)="pieceDraggedRelease()"
                 [boardId]="boardId"
                 [piece]="
                     (this.boardView | async)?.piecesLocations ? 

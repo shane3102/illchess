@@ -2,7 +2,7 @@
     (drop)="pieceDropped()" 
     (dragover)="pieceDraggedOver($event)" 
     (dragleave)="isDraggedOver = false" 
-    [ngStyle]="{'background-color': calculateSquareColor(isDraggedOver)}"
+    [ngStyle]="{'background-color': calculateSquareColor()}"
     [ngClass]="illegalMove ? 'illegal-move-animation-wrapper' : null"
     >
     <div class="chess-square-info">
@@ -16,7 +16,7 @@
             (pieceDroppedInfoEmitter)="piecePromotion($event)">
         </app-chess-promoting-piece>
     </div>
-    <div *ngIf="piece" draggable="true" (drag)="pieceDragged()" class="chess-piece-wrapper">
+    <div *ngIf="piece" draggable="true" (dragstart)="pieceDragged()" (dragend)="pieceDraggedRelease()" class="chess-piece-wrapper">
         <app-chess-piece [pieceInfo]="piece"></app-chess-piece>
     </div>
     <div *ngIf="isSquareLegalMove()">

@@ -41,3 +41,8 @@ export const checkLegalMoves = createAction(
     'Check legal moves by piece on square',
     props<CheckLegalMovesRequest>()
 )
+
+export const draggedPieceReleased = createAction(
+    'Dragged piece was released',
+    props<any>()
+)
