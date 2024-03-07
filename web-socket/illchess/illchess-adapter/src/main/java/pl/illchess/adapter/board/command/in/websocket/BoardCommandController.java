@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.49:4200"})
 public class BoardCommandController implements BoardCommandApi {
 
     private final MovePieceUseCase movePieceUseCase;

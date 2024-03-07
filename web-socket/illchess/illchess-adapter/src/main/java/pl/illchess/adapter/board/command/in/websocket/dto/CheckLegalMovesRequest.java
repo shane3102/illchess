@@ -7,15 +7,13 @@ import java.util.UUID;
 public record CheckLegalMovesRequest(
     UUID boardId,
     String startSquare,
-    String pieceColor,
-    String pieceType
+    String pieceColor
 ) {
     public CheckLegalityMoveUseCase.MovePieceAttemptCmd toCmd() {
         return new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
             boardId,
             startSquare,
-            pieceColor,
-            pieceType
+            pieceColor
         );
     }
 }

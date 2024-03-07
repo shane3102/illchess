@@ -21,11 +21,11 @@ import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 })
 export class ChessBoardComponent implements OnInit {
 
-  boardId: string = uuidv4()
+  boardId: string = "9f30756c-b38f-4945-ae5f-012ed7a7449c"
   boardView: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
-  legalMoves: Observable<BoardLegalMovesResponse | undefined> = this.store.select(legalMovesSelector)
+  legalMoves: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
 
   illegalMoveViewSubject: Subject<IllegalMoveResponse> = new Subject<IllegalMoveResponse>();
 

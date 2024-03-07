@@ -9,7 +9,7 @@ export class StompService {
     private connecting: boolean = false;
     private topicQueue: any[] = [];
 
-    socket = new SockJS('http://localhost:8080/chess');
+    socket = new SockJS('http://192.168.1.49:8080/chess');
     stompClient = Stomp.over(this.socket);
 
     subscribe(topic: string, callback: any): void {

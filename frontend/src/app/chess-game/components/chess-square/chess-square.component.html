@@ -1,7 +1,7 @@
-<div class="chess-square" 
-    (drop)="pieceDropped()" 
-    (dragover)="pieceDraggedOver($event)" 
-    (dragleave)="isDraggedOver = false" 
+<div class="chess-square"
+    (drop)="pieceDropped()"
+    (dragover)="pieceDraggedOver($event)"
+    (dragleave)="isDraggedOver = false"
     [ngStyle]="{'background-color': calculateSquareColor()}"
     [ngClass]="illegalMove ? 'illegal-move-animation-wrapper' : null"
     >
@@ -9,7 +9,7 @@
         {{squareInfo.file}}{{squareInfo.rank}}
     </div>
     <div *ngIf="displayPiecePromotingComponent">
-        <app-chess-promoting-piece 
+        <app-chess-promoting-piece
             [boardId]="boardId"
             [squareInfo]="squareInfo"
             [draggedPieceInfo]="draggedPieceInfo"

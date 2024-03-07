@@ -1,10 +1,10 @@
 package pl.illchess.domain.board.command;
 
 import pl.illchess.domain.board.model.BoardId;
-import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.board.model.square.Square;
 
 public record CheckLegalMoves(
     BoardId boardId,
-    Piece movedPiece
+    Square square
 ) {
 }

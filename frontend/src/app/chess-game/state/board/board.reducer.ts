@@ -15,7 +15,7 @@ export interface BoardState {
     illegalMoveHighlightSquare: string
     illegalMoveMessage: string
     pieceDraggedInfo?: PieceDraggedInfo,
-    legalMoves?: BoardLegalMovesResponse
+    legalMoves?: BoardLegalMovesResponse,
     status: 'pending' | 'loading' | 'error' | 'success'
 }
 
@@ -24,6 +24,7 @@ export const initialState: BoardState = {
     error: '',
     illegalMoveHighlightSquare: '',
     illegalMoveMessage: '',
+    legalMoves: undefined,
     status: 'pending'
 }
 
@@ -38,12 +39,13 @@ export const boardReducer = createReducer(
                 ...state,
                 boardView: content,
                 illegalMoveHighlightSquare: "",
-                illegalMoveMessage: ""
+                illegalMoveMessage: "",
+                legalMoves: undefined
             }
         )
     ),
 
-    // illegal move 
+    // illegal move
     on(
         illegalMove,
         (state: BoardState, content: any) => (

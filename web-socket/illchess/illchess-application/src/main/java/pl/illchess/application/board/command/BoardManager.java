@@ -75,9 +75,8 @@ public class BoardManager implements
     @Override
     public Set<Square> checkLegalityOfMove(MovePieceAttemptCmd cmd) {
         log.info(
-            "At board with id = {} piece of type = {} and color = {} is checked which squares can reach from square = {}",
+            "At board with id = {} piece of color = {} is checked which squares can reach from square = {}",
             cmd.boardId(),
-            cmd.pieceType(),
             cmd.pieceColor(),
             cmd.startSquare()
         );
@@ -87,9 +86,8 @@ public class BoardManager implements
         CheckLegalMoves command = cmd.toCommand();
         Set<Square> isMoveLegal = board.isMoveLegal(command);
         log.info(
-            "At board with id = {} piece of type = {} and color = {} is allowed to move from square = {} to squares = {}",
+            "At board with id = {} piece of color = {} is allowed to move from square = {} to squares = {}",
             cmd.boardId(),
-            cmd.pieceType(),
             cmd.pieceColor(),
             cmd.startSquare(),
             isMoveLegal
