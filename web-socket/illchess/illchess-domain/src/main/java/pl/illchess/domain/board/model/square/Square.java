@@ -53,4 +53,8 @@ public enum Square {
     public boolean isLower(Square compared) {
         return this.rank.getNumber() < compared.rank.getNumber();
     }
+
+    public SimpleSquare toSimple() {
+        return SimpleSquare.valueOf(this.name());
+    }
 }

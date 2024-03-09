@@ -23,57 +23,45 @@ public class SquaresConnectedContents {
     public Set<Square> getClosestNeighbours(
         Square square
     ) {
-        SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
-
         if (root == null) {
             return Collections.emptySet();
         }
 
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(square.toSimple());
 
         if (nodeBySquare == null) {
             return Collections.emptySet();
         }
 
-        return nodeBySquare.getClosestNeighbours()
-            .stream()
-            .map(it -> Square.valueOf(it.name()))
-            .collect(Collectors.toSet());
+        return nodeBySquare.getClosestNeighbours();
     }
 
     public Set<Square> getClosestNonOccupiedNeighbours(
         Square square,
         PiecesLocations piecesLocations
     ) {
-        SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
-
         if (root == null) {
             return Collections.emptySet();
         }
 
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(square.toSimple());
 
         if (nodeBySquare == null) {
             return Collections.emptySet();
         }
 
-        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, false)
-            .stream()
-            .map(it -> Square.valueOf(it.name()))
-            .collect(Collectors.toSet());
+        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, false);
     }
 
     public Set<Square> getClosestOccupiedNeighbours(
         Square square,
         PiecesLocations piecesLocations
     ) {
-        SimpleSquare simpleSquare = SimpleSquare.valueOf(square.name());
-
         if (root == null) {
             return Collections.emptySet();
         }
 
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(square.toSimple());
 
         if (nodeBySquare == null) {
             return Collections.emptySet();
@@ -93,8 +81,7 @@ public class SquaresConnectedContents {
         if (root == null) {
             return Collections.emptySet();
         }
-        SimpleSquare simpleSquare = SimpleSquare.valueOf(checkedSquare.name());
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(simpleSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(checkedSquare.toSimple());
 
         if (nodeBySquare == null) {
             return Collections.emptySet();
@@ -117,21 +104,18 @@ public class SquaresConnectedContents {
         if (root == null) {
             return Collections.emptySet();
         }
-        SimpleSquare possiblePinningSquare = SimpleSquare.valueOf(possiblePinningPieceSquare.name());
-        SimpleSquare pinningCapableSquare = SimpleSquare.valueOf(pinningCapablePieceSquare.name());
-        SimpleSquare kingSquare = SimpleSquare.valueOf(kingPieceSquare.name());
-        if (!root.containsSquares(possiblePinningSquare, pinningCapableSquare, kingSquare)) {
+        if (!root.containsSquares(possiblePinningPieceSquare, pinningCapablePieceSquare, kingPieceSquare)) {
             return Collections.emptySet();
         }
 
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(possiblePinningSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(possiblePinningPieceSquare.toSimple());
         if (nodeBySquare == null) {
             return Collections.emptySet();
         }
 
         return nodeBySquare.getPinningRayBySquare(
-                pinningCapableSquare,
-                kingSquare,
+                pinningCapablePieceSquare,
+                kingPieceSquare,
                 currentPieceColor,
                 locations
             )
@@ -151,15 +135,12 @@ public class SquaresConnectedContents {
             return Collections.emptySet();
         }
 
-        SimpleSquare checkRayCapableSquare = SimpleSquare.valueOf(checkRayPieceCapableSquare.name());
-        SimpleSquare givenSquare = SimpleSquare.valueOf(givenPieceSquare.name());
-
-        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(checkRayCapableSquare);
+        SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(checkRayPieceCapableSquare.toSimple());
         if (nodeBySquare == null) {
             return Collections.emptySet();
         }
 
-        Set<SimpleSquare> attackRayOnGivenSquare = nodeBySquare.getAttackRayOnGivenSquare(givenSquare, currentPieceColor, locations);
+        Set<Square> attackRayOnGivenSquare = nodeBySquare.getAttackRayOnGivenSquare(givenPieceSquare, currentPieceColor, locations);
 
         return attackRayOnGivenSquare
             .stream()
