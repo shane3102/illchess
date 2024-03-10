@@ -6,6 +6,7 @@ import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.domain.piece.model.info.PieceAttackingRay;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay.SquaresInRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -39,7 +40,7 @@ public final class Bishop implements PieceCapableOfPinning {
 
     @Override
     public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> bishopAttackingRayOfSquare = getBishopAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+        SquaresInRay bishopAttackingRayOfSquare = getBishopAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
         return new PieceAttackingRay(square, bishopAttackingRayOfSquare);
     }
 
@@ -87,13 +88,14 @@ public final class Bishop implements PieceCapableOfPinning {
             "square=" + square + ']';
     }
 
-    private Set<Square> getBishopAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
+    private SquaresInRay getBishopAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
         return Stream.of(
                 square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
                 square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
             )
-            .flatMap(Collection::stream)
-            .collect(Collectors.toSet());
+            .filter(it -> !it.isEmpty())
+            .findFirst()
+            .orElse(SquaresInRay.empty());
     }
 
     private Set<Square> getBishopPinningRay(

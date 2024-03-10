@@ -1,5 +1,6 @@
 package pl.illchess.domain.board.model.square;
 
+import pl.illchess.domain.piece.model.info.PieceAttackingRay.SquaresInRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 
 import java.util.Collections;
@@ -125,28 +126,36 @@ public class SquaresConnectedContents {
 
     }
 
-    public Set<Square> getAttackRayOnGivenSquare(
+    public SquaresInRay getAttackRayOnGivenSquare(
         Square checkRayPieceCapableSquare,
         Square givenPieceSquare,
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
         if (root == null) {
-            return Collections.emptySet();
+            return SquaresInRay.empty();
         }
 
         SquaresBidirectionalLinkedList nodeBySquare = root.getNodeBySquare(checkRayPieceCapableSquare.toSimple());
         if (nodeBySquare == null) {
-            return Collections.emptySet();
+            return SquaresInRay.empty();
+        }
+        Set<Square> fullRay = nodeBySquare.getAllConnected();
+        if (!fullRay.contains(givenPieceSquare)) {
+            return SquaresInRay.empty();
         }
 
-        Set<Square> attackRayOnGivenSquare = nodeBySquare.getAttackRayOnGivenSquare(givenPieceSquare, currentPieceColor, locations);
+        Set<Square> rayUntilPieceEncountered = nodeBySquare.getAttackingRayOnGivenSquare(givenPieceSquare, currentPieceColor, locations);
 
-        return attackRayOnGivenSquare
+        Set<Square> attackRayOnGivenSquare = nodeBySquare.getFullAttackRayOnGivenSquare(givenPieceSquare, currentPieceColor, locations);
+
+        Set<Square> attackingRay = attackRayOnGivenSquare
             .stream()
             .map(it -> Square.valueOf(it.name()))
             .filter(it -> !it.equals(checkRayPieceCapableSquare))
             .collect(Collectors.toSet());
+
+        return new SquaresInRay(attackingRay, rayUntilPieceEncountered);
     }
 
     public static SquaresConnectedContents of(SimpleSquare... squares) {

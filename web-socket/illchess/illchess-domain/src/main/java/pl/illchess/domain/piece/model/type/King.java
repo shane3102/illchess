@@ -84,9 +84,11 @@ public final class King implements Piece {
         return enemyPieces
             .stream()
             .anyMatch(
-                piece -> piece.attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove)
-                    .attackingRay()
-                    .contains(possibleAttackedSquare)
+                piece -> {
+                    Set<Square> fullRay = piece.attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove)
+                        .rayUntilPieceEncounteredWithoutOccupiedSquare();
+                    return fullRay.contains(possibleAttackedSquare);
+                }
             );
     }
 

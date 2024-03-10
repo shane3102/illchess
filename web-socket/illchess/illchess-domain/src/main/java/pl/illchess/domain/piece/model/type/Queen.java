@@ -6,6 +6,7 @@ import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.domain.piece.model.info.PieceAttackingRay;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay.SquaresInRay;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -20,8 +21,8 @@ public final class Queen implements PieceCapableOfPinning {
     private Square square;
 
     public Queen(
-            PieceColor color,
-            Square square
+        PieceColor color,
+        Square square
     ) {
         this.color = color;
         this.square = square;
@@ -34,7 +35,7 @@ public final class Queen implements PieceCapableOfPinning {
 
     @Override
     public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> queenAttackingRayOfSquare = getQueenAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+        SquaresInRay queenAttackingRayOfSquare = getQueenAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
         return new PieceAttackingRay(square, queenAttackingRayOfSquare);
     }
 
@@ -67,7 +68,7 @@ public final class Queen implements PieceCapableOfPinning {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Queen) obj;
         return Objects.equals(this.color, that.color) &&
-                Objects.equals(this.square, that.square);
+            Objects.equals(this.square, that.square);
     }
 
     @Override
@@ -78,74 +79,75 @@ public final class Queen implements PieceCapableOfPinning {
     @Override
     public String toString() {
         return "Queen[" +
-                "color=" + color + ", " +
-                "square=" + square + ']';
+            "color=" + color + ", " +
+            "square=" + square + ']';
     }
 
     private Set<Square> extractStandardQueenMoves(PiecesLocations piecesLocations) {
         return Stream.of(
-                        square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                        square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                        square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
+                square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
+                square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
+                square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
+            )
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
-    private Set<Square> getQueenAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
+    private SquaresInRay getQueenAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
 
         return Stream.of(
-                        square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                        square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                        square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                        square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+                square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
+                square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
+            )
+            .filter(it -> !it.isEmpty())
+            .findFirst()
+            .orElse(SquaresInRay.empty());
     }
 
     private Set<Square> getQueenPinningRay(
-            Piece askingPiece,
-            King enemyKing,
-            PiecesLocations piecesLocations
+        Piece askingPiece,
+        King enemyKing,
+        PiecesLocations piecesLocations
     ) {
         return Stream.of(
-                        askingPiece.square().getRank().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream(),
-                        askingPiece.square().getFile().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream(),
-                        askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream(),
-                        askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
-                                        askingPiece.square(),
-                                        this.square,
-                                        enemyKing.square(),
-                                        askingPiece.color(),
-                                        piecesLocations
-                                )
-                                .stream()
-                )
-                .flatMap(it -> it)
-                .collect(Collectors.toSet());
+                askingPiece.square().getRank().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream(),
+                askingPiece.square().getFile().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream(),
+                askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream(),
+                askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
+                        askingPiece.square(),
+                        this.square,
+                        enemyKing.square(),
+                        askingPiece.color(),
+                        piecesLocations
+                    )
+                    .stream()
+            )
+            .flatMap(it -> it)
+            .collect(Collectors.toSet());
     }
 
 }

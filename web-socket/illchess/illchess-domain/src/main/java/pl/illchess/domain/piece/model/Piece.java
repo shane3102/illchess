@@ -40,7 +40,7 @@ public interface Piece {
         Set<Piece> enemyPieces = piecesLocations.getEnemyPieces(color());
         Set<Square> kingDefendingSquareMoves = enemyPieces.stream()
             .map(piece -> piece.attackingRayOfSquare(king.square(), piecesLocations, lastPerformedMove))
-            .filter(foundRay -> !foundRay.attackingRay().isEmpty())
+            .filter(foundRay -> !foundRay.squaresInRay().isAttackingRayEmpty())
             .map(PieceAttackingRay::fullAttackingRayWithOccupiedSquare)
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
@@ -67,7 +67,7 @@ public interface Piece {
     PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
 
     default boolean isAttackingSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return !attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).attackingRay().isEmpty();
+        return !attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).squaresInRay().isAttackingRayEmpty();
     }
 
     default boolean isAttackingAnyOfSquares(Set<Square> possibleAttackedSquares, PiecesLocations piecesLocations, Move lastPerformedMove) {
