@@ -156,8 +156,8 @@ public final class King implements Piece {
 
         boolean areExpectedSquaresEmpty = expectedEmptySquares.stream().allMatch(square -> piecesLocations.findPieceOnSquare(square).isEmpty());
         Set<Square> expectedNonAttackedSquares = Stream.concat(
-                expectedEmptySquares.stream(),
-                Stream.of(kingSquare, castlingSquare)
+                expectedEmptySquares.stream().filter(square -> !Square.B1.equals(square) && !Square.B8.equals(square)),
+                Stream.of(kingSquare)
             )
             .collect(Collectors.toSet());
 

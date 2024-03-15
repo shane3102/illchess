@@ -57,4 +57,8 @@ public enum Square {
     public SimpleSquare toSimple() {
         return SimpleSquare.valueOf(this.name());
     }
+
+    public static Square fromRankAndFile(char file, int rank) {
+        return Square.valueOf(file + "" + rank);
+    }
 }

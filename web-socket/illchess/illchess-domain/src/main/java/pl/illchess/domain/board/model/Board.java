@@ -27,6 +27,19 @@ public record Board(
     BoardState boardState
 ) {
 
+    public Board(
+        BoardId boardId,
+        String fenString,
+        MoveHistory moveHistory
+    ) {
+        this(
+            boardId,
+            PiecesLocations.fromFENString(fenString),
+            moveHistory,
+            BoardState.fromFenString(fenString)
+        );
+    }
+
     public void movePiece(MovePiece command) {
         Piece movedPiece = command.movedPiece();
         PieceColor movedPieceColor = movedPiece.color();
@@ -106,9 +119,8 @@ public record Board(
     public static Board generateNewBoard(InitializeNewBoard initializeNewBoard) {
         return new Board(
             initializeNewBoard.boardId(),
-            PiecesLocations.createBasicBoard(),
-            new MoveHistory(),
-            BoardState.defaultState()
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w",
+            new MoveHistory()
         );
     }
 

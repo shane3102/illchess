@@ -23,6 +23,9 @@
         <java.version>20</java.version>
         <jedis.version>4.3.1</jedis.version>
         <lombok.version>1.18.30</lombok.version>
+        <spock-core.version>2.4-M1-groovy-4.0</spock-core.version>
+        <groovy-all.version>4.0.16</groovy-all.version>
+        <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
     </properties>
 
     <modules>

@@ -198,47 +198,45 @@ public record PiecesLocations(
         return null;
     }
 
-    public static PiecesLocations createBasicBoard() {
-        return new PiecesLocations(
-            new HashSet<>(
-                Set.of(
-                    new Rook(WHITE, Square.A1),
-                    new Knight(WHITE, Square.B1),
-                    new Bishop(WHITE, Square.C1),
-                    new Queen(WHITE, Square.D1),
-                    new King(WHITE, Square.E1),
-                    new Bishop(WHITE, Square.F1),
-                    new Knight(WHITE, Square.G1),
-                    new Rook(WHITE, Square.H1),
+    public static PiecesLocations fromFENString(String fenPosition) {
 
-                    new Pawn(WHITE, Square.A2),
-                    new Pawn(WHITE, Square.B2),
-                    new Pawn(WHITE, Square.C2),
-                    new Pawn(WHITE, Square.D2),
-                    new Pawn(WHITE, Square.E2),
-                    new Pawn(WHITE, Square.F2),
-                    new Pawn(WHITE, Square.G2),
-                    new Pawn(WHITE, Square.H2),
+        Set<Piece> resultPosition = new HashSet<>();
 
-                    new Pawn(BLACK, Square.A7),
-                    new Pawn(BLACK, Square.B7),
-                    new Pawn(BLACK, Square.C7),
-                    new Pawn(BLACK, Square.D7),
-                    new Pawn(BLACK, Square.E7),
-                    new Pawn(BLACK, Square.F7),
-                    new Pawn(BLACK, Square.G7),
-                    new Pawn(BLACK, Square.H7),
+        char[] files = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+        String[] rankLines = fenPosition.split(" ")[0].split("/");
 
-                    new Rook(BLACK, Square.A8),
-                    new Knight(BLACK, Square.B8),
-                    new Bishop(BLACK, Square.C8),
-                    new Queen(BLACK, Square.D8),
-                    new King(BLACK, Square.E8),
-                    new Bishop(BLACK, Square.F8),
-                    new Knight(BLACK, Square.G8),
-                    new Rook(BLACK, Square.H8)
-                )
-            )
-        );
+        for (int i = 0; i < rankLines.length; i++) {
+            int currentRank = 8 - i;
+            char[] charArray = rankLines[i].toCharArray();
+            int shift = 0;
+            for (int j = 0; j < charArray.length; j++) {
+                char squareInfo = charArray[j];
+                char currentFile = files[j + shift];
+                Square currentSquare = Square.fromRankAndFile(currentFile, currentRank);
+                switch (squareInfo) {
+                    case 'R' -> resultPosition.add(new Rook(WHITE, currentSquare));
+                    case 'N' -> resultPosition.add(new Knight(WHITE, currentSquare));
+                    case 'B' -> resultPosition.add(new Bishop(WHITE, currentSquare));
+                    case 'Q' -> resultPosition.add(new Queen(WHITE, currentSquare));
+                    case 'K' -> resultPosition.add(new King(WHITE, currentSquare));
+                    case 'P' -> resultPosition.add(new Pawn(WHITE, currentSquare));
+                    case 'r' -> resultPosition.add(new Rook(BLACK, currentSquare));
+                    case 'n' -> resultPosition.add(new Knight(BLACK, currentSquare));
+                    case 'b' -> resultPosition.add(new Bishop(BLACK, currentSquare));
+                    case 'q' -> resultPosition.add(new Queen(BLACK, currentSquare));
+                    case 'k' -> resultPosition.add(new King(BLACK, currentSquare));
+                    case 'p' -> resultPosition.add(new Pawn(BLACK, currentSquare));
+                    case '-' -> {
+                    }
+                    default -> {
+                        int currentShift = Integer.parseInt(String.valueOf(squareInfo));
+                        shift = shift + currentShift - 1;
+                    }
+                }
+            }
+        }
+
+        return new PiecesLocations(resultPosition);
     }
+
 }

@@ -9,9 +9,9 @@ public class BoardState {
     private PieceColor victoriousPlayerColor;
 
     private BoardState(
-            CurrentPlayerColor currentPlayerColor,
-            GameState gameState,
-            PieceColor victoriousPlayerColor
+        CurrentPlayerColor currentPlayerColor,
+        GameState gameState,
+        PieceColor victoriousPlayerColor
     ) {
         this.currentPlayerColor = currentPlayerColor;
         this.gameState = gameState;
@@ -42,22 +42,24 @@ public class BoardState {
     }
 
     public static BoardState of(
-            PieceColor currentPlayerColor,
-            GameState gameState,
-            PieceColor victoriousPlayerColor
+        PieceColor currentPlayerColor,
+        GameState gameState,
+        PieceColor victoriousPlayerColor
     ) {
         return new BoardState(
-                new CurrentPlayerColor(currentPlayerColor),
-                gameState,
-                victoriousPlayerColor
+            new CurrentPlayerColor(currentPlayerColor),
+            gameState,
+            victoriousPlayerColor
         );
     }
 
-    public static BoardState defaultState() {
+    public static BoardState fromFenString(String fenString) {
+        String movingColor = fenString.split(" ")[1];
+
         return new BoardState(
-                new CurrentPlayerColor(PieceColor.WHITE),
-                GameState.CONTINUE,
-                null
+            new CurrentPlayerColor(movingColor.equals("w") ? PieceColor.WHITE : PieceColor.BLACK),
+            GameState.CONTINUE,
+            null
         );
     }
 }
