@@ -8,11 +8,12 @@ import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
-import { checkLegalMoves, draggedPieceChanged, draggedPieceReleased, initializeBoard, movePiece } from '../../state/board/board.actions';
+import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, initializeBoard, movePiece } from '../../state/board/board.actions';
 import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
 import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
+import { StompService } from '../../service/StompService';
 
 @Component({
   selector: 'app-chess-board',
@@ -21,7 +22,11 @@ import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 })
 export class ChessBoardComponent implements OnInit {
 
-  boardId: string = "9f30756c-b38f-4945-ae5f-012ed7a7449c"
+  randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
+
+  username: string = this.randomNames[Math.floor(Math.random() * this.randomNames.length)] + Math.floor(100 * Math.random())
+
+  boardId: string;
   boardView: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
@@ -32,10 +37,28 @@ export class ChessBoardComponent implements OnInit {
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
-  constructor(private store: Store<ChessGameState>) { }
+  constructor(
+    private store: Store<ChessGameState>,
+    private stompService: StompService
+  ) { }
 
   ngOnInit(): void {
-    setTimeout(() => this.sendChessBoardInitializeRequest(), 500)
+    this.sendChessBoardInitializeRequest()
+    this.store.select(boardSelector).subscribe(
+      boardView => {
+        if (!this.boardId && boardView.boardId.length != 0 ) {
+          this.boardId = boardView.boardId
+          // TODO sometimes it wont connect and stuck on "Opening Web Socket...". Possible solution: https://github.com/jmesnil/stomp-websocket/issues/81
+          this.stompService.subscribe(
+            `/chess-topic/${this.boardId}`,
+            (response: any) => {
+              let boardView: BoardView = JSON.parse(response.body)
+              this.store.dispatch(boardLoaded(boardView))
+            }
+          )
+        }
+      }
+    )
   }
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
@@ -60,7 +83,7 @@ export class ChessBoardComponent implements OnInit {
   sendChessBoardInitializeRequest() {
 
     let initializeNewBoardRequest: InitializeBoardRequest = {
-      'newBoardId': this.boardId
+      'username': this.username
     }
     this.store.dispatch(initializeBoard(initializeNewBoardRequest))
   }

@@ -7,6 +7,8 @@ public record BoardView(
         UUID boardId,
         Map<String, PieceView> piecesLocations,
         String currentPlayerColor,
+        String whitePlayer,
+        String blackPlayer,
         String gameState,
         String victoriousPlayerColor
 ) {

@@ -6,6 +6,7 @@ import pl.illchess.domain.board.model.history.IsCastling;
 import pl.illchess.domain.board.model.history.IsEnPassant;
 import pl.illchess.domain.board.model.history.PromotionInfo;
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.board.model.state.FenString;
 import pl.illchess.domain.piece.exception.PromotedPieceNotPawnException;
 import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
 import pl.illchess.domain.piece.model.Piece;
@@ -198,12 +199,12 @@ public record PiecesLocations(
         return null;
     }
 
-    public static PiecesLocations fromFENString(String fenPosition) {
+    public static PiecesLocations fromFENString(FenString fenPosition) {
 
         Set<Piece> resultPosition = new HashSet<>();
 
         char[] files = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-        String[] rankLines = fenPosition.split(" ")[0].split("/");
+        String[] rankLines = fenPosition.value().split(" ")[0].split("/");
 
         for (int i = 0; i < rankLines.length; i++) {
             int currentRank = 8 - i;

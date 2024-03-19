@@ -1,9 +1,6 @@
 package pl.illchess.application.board.command.in
 
 import pl.illchess.application.board.BoardSpecification
-import pl.illchess.domain.board.model.Board
-import pl.illchess.domain.board.model.BoardId
-import pl.illchess.domain.board.model.history.MoveHistory
 
 import static pl.illchess.domain.board.model.state.GameState.CHECKMATE
 import static pl.illchess.domain.board.model.state.GameState.STALEMATE
@@ -14,9 +11,12 @@ class CheckIfCheckmateOrStalemateUseCaseTest extends BoardSpecification {
 
     def "position should be correctly considered as checkmate or stalemate"() {
         given:
-        def boardId = new BoardId(UUID.randomUUID())
-        def board = new Board(boardId, fenString as String, new MoveHistory())
-        saveBoard.saveBoard(board)
+        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+        )
+        joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
+        )
 
         def cmd = new CheckIfCheckmateOrStalemateUseCase.CheckIsCheckmateOrStaleMateCmd(boardId.uuid())
         when:

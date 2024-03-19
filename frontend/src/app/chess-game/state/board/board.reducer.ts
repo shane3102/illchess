@@ -20,7 +20,7 @@ export interface BoardState {
 }
 
 export const initialState: BoardState = {
-    boardView: { boardId: '', piecesLocations: {}, currentPlayerColor: PieceColor.WHITE, gameState: 'CONTINUE'},
+    boardView: { boardId: '', piecesLocations: {}, currentPlayerColor: PieceColor.WHITE, gameState: 'CONTINUE', whitePlayer: "", blackPlayer: "" },
     error: '',
     illegalMoveHighlightSquare: '',
     illegalMoveMessage: '',
@@ -84,7 +84,7 @@ export const boardReducer = createReducer(
     // reset legal moves if move performed
     on(
         movePiece,
-        (state: BoardState)  => (
+        (state: BoardState) => (
             {
                 ...state,
                 legalMoves: undefined
@@ -95,7 +95,7 @@ export const boardReducer = createReducer(
     // dragged piece released
     on(
         draggedPieceReleased,
-        (state: BoardState)=> (
+        (state: BoardState) => (
             {
                 ...state,
                 legalMoves: undefined

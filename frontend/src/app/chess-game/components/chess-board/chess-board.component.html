@@ -1,3 +1,6 @@
+<div style="text-align: center;" [ngStyle]="username == (boardView | async)?.blackPlayer ? {'color': 'green'} : {'color': 'red'}">
+    {{(boardView | async)?.blackPlayer}}
+</div>
 <div *ngIf="boardView">
     <div *ngFor="let rank of ranks">
         <div style="display: flex; justify-content: center;">
@@ -16,14 +19,17 @@
                 [illegalMoveResponse]="illegalMoveResponse"
                 [draggedPieceInfo]="draggedPieceInfo | async"
                 [squareInfo]="{file: file, rank: rank}"
-                [legalMoves]="legalMoves | async">
+                [legalMoves]="legalMoves | async"
+                [username]="username">
             </app-chess-square>
             </div>
         </div>
     </div>
+    <div style="text-align: center;" [ngStyle]="username == (boardView | async)?.whitePlayer ? {'color': 'green'} : {'color': 'red'}">
+        {{(boardView | async)?.whitePlayer}}
+    </div>
     <div style="text-align: center;">
         {{(boardView | async)!.gameState}}
         {{(boardView | async)!.victoriousPlayerColor}}
-        {{(legalMoves | async) | json}}
     </div>
 </div>

@@ -1,7 +1,7 @@
 package pl.illchess.domain.board.model;
 
 import pl.illchess.domain.board.command.CheckLegalMoves;
-import pl.illchess.domain.board.command.InitializeNewBoard;
+import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
@@ -11,7 +11,10 @@ import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
+import pl.illchess.domain.board.model.state.FenString;
 import pl.illchess.domain.board.model.state.GameState;
+import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.PieceColor;
@@ -19,6 +22,7 @@ import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public record Board(
     BoardId boardId,
@@ -29,28 +33,22 @@ public record Board(
 
     public Board(
         BoardId boardId,
-        String fenString,
-        MoveHistory moveHistory
+        FenString fenString,
+        MoveHistory moveHistory,
+        Username username
     ) {
         this(
             boardId,
             PiecesLocations.fromFENString(fenString),
             moveHistory,
-            BoardState.fromFenString(fenString)
+            BoardState.fromFenStringAndByUsername(fenString, username)
         );
     }
 
     public void movePiece(MovePiece command) {
         Piece movedPiece = command.movedPiece();
-        PieceColor movedPieceColor = movedPiece.color();
-        if (!Objects.equals(movedPieceColor, boardState().currentPlayerColor().color())) {
-            throw new PieceColorIncorrectException(
-                boardId,
-                movedPieceColor,
-                boardState().currentPlayerColor().color(),
-                movedPiece.square()
-            );
-        }
+        boardState().checkIfAllowedToMove(boardId, movedPiece, command.username());
+
         // TODO cache it (somehow)
         Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory);
 
@@ -68,7 +66,7 @@ public record Board(
         boardState().invertCurrentPlayerColor();
     }
 
-    public Set<Square> isMoveLegal(CheckLegalMoves command) {
+    public Set<Square> legalMoves(CheckLegalMoves command) {
         Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
             .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
         if (!Objects.equals(movedPiece.color(), boardState().currentPlayerColor().color())) {
@@ -116,11 +114,16 @@ public record Board(
         return establishedState;
     }
 
-    public static Board generateNewBoard(InitializeNewBoard initializeNewBoard) {
+    public void assignSecondPlayer(Username username) {
+        boardState.setBlackPlayer(new Player(username, PieceColor.BLACK));
+    }
+
+    public static Board generateNewBoard(JoinOrInitializeNewGame joinOrInitializeNewGame) {
         return new Board(
-            initializeNewBoard.boardId(),
-            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w",
-            new MoveHistory()
+            new BoardId(UUID.randomUUID()),
+            joinOrInitializeNewGame.fen(),
+            new MoveHistory(),
+            joinOrInitializeNewGame.username()
         );
     }
 

@@ -3,7 +3,7 @@ package pl.illchess.application.board.command.in;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
-import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
@@ -19,7 +19,8 @@ public interface MovePieceUseCase {
         String targetSquare,
         String pieceColor,
         String pieceType,
-        String pawnPromotedToPieceType
+        String pawnPromotedToPieceType,
+        String username
     ) {
         public MovePiece toCommand() {
             PieceType pieceType = new PieceType(this.pieceType);
@@ -32,7 +33,8 @@ public interface MovePieceUseCase {
                 new BoardId(boardId),
                 PieceType.getPieceByPieceType(pieceType, pieceColor, startSquare),
                 targetSquare,
-                promotionPieceType
+                promotionPieceType,
+                new Username(username)
             );
         }
     }

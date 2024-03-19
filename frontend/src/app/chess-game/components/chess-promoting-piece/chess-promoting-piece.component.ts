@@ -13,6 +13,7 @@ export class ChessPromotingPieceComponent {
   @Input() boardId: string;
   @Input() squareInfo: SquareInfo;
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
+  @Input() username: string
 
   @Output() pieceDroppedInfoEmitter: EventEmitter<MovePieceRequest> = new EventEmitter();
 
@@ -27,7 +28,8 @@ export class ChessPromotingPieceComponent {
         'targetSquare': this.squareInfo.file + this.squareInfo.rank,
         'pieceColor': this.draggedPieceInfo.pieceInfo.color,
         'pieceType': this.draggedPieceInfo.pieceInfo.type,
-        'pawnPromotedToPieceType': piece
+        'pawnPromotedToPieceType': piece,
+        'username': this.username
       }
       this.pieceDroppedInfoEmitter.emit(moveRequest)
     }

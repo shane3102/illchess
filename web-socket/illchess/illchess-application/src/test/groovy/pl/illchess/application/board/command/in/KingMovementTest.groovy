@@ -1,9 +1,6 @@
 package pl.illchess.application.board.command.in
 
 import pl.illchess.application.board.BoardSpecification
-import pl.illchess.domain.board.model.Board
-import pl.illchess.domain.board.model.BoardId
-import pl.illchess.domain.board.model.history.MoveHistory
 import pl.illchess.domain.board.model.square.Square
 
 import static pl.illchess.domain.board.model.square.Square.*
@@ -13,9 +10,12 @@ class KingMovementTest extends BoardSpecification {
 
     def "check king movement in simple situation"() {
         given:
-        def boardId = new BoardId(UUID.randomUUID())
-        def board = new Board(boardId, fenString as String, new MoveHistory())
-        saveBoard.saveBoard(board)
+        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+        )
+        joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
+        )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),
@@ -62,9 +62,12 @@ class KingMovementTest extends BoardSpecification {
 
     def "check if king can 'hide' behind piece"() {
         given:
-        def boardId = new BoardId(UUID.randomUUID())
-        def board = new Board(boardId, fenString as String, new MoveHistory())
-        saveBoard.saveBoard(board)
+        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+        )
+        joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
+        )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),
@@ -88,9 +91,12 @@ class KingMovementTest extends BoardSpecification {
 
     def "check if can castle"() {
         given:
-        def boardId = new BoardId(UUID.randomUUID())
-        def board = new Board(boardId, fenString as String, new MoveHistory())
-        saveBoard.saveBoard(board)
+        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+        )
+        joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
+        )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),

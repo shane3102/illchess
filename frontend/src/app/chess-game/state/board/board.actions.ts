@@ -6,6 +6,7 @@ import { InitializeBoardRequest } from "../../model/InitializeBoardRequest";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
+import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
 
 export const movePiece = createAction(
     'Move piece',
@@ -46,3 +47,9 @@ export const draggedPieceReleased = createAction(
     'Dragged piece was released',
     props<any>()
 )
+
+export const connectToBoard = createAction(
+    'User joined, initialized or joined as spectator to game, connect to board',
+    props<InitializedBoardResponse>()
+)
+

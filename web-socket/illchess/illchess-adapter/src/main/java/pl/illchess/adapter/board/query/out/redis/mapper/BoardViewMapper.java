@@ -14,28 +14,30 @@ public class BoardViewMapper {
             return null;
         } else {
             return new BoardView(
-                    entity.boardId(),
-                    toPiecesLocations(entity.piecesLocations()),
-                    entity.boardState().currentPlayerColor(),
-                    entity.boardState().gameState(),
-                    entity.boardState().victoriousPlayerColor()
+                entity.boardId(),
+                toPiecesLocations(entity.piecesLocations()),
+                entity.boardState().currentPlayerColor(),
+                entity.boardState().player1().username(),
+                entity.boardState().player2() == null ? null : entity.boardState().player2().username(),
+                entity.boardState().gameState(),
+                entity.boardState().victoriousPlayerColor()
             );
         }
     }
 
     private static Map<String, BoardView.PieceView> toPiecesLocations(
-            List<BoardEntity.PieceEntity> piecesLocationsInEntity
+        List<BoardEntity.PieceEntity> piecesLocationsInEntity
     ) {
         return piecesLocationsInEntity.stream()
-                .map(
-                        pieceWithLocation -> Map.entry(
-                                pieceWithLocation.square(),
-                                new BoardView.PieceView(
-                                        pieceWithLocation.pieceColor(),
-                                        pieceWithLocation.pieceType()
-                                )
-                        )
+            .map(
+                pieceWithLocation -> Map.entry(
+                    pieceWithLocation.square(),
+                    new BoardView.PieceView(
+                        pieceWithLocation.pieceColor(),
+                        pieceWithLocation.pieceType()
+                    )
                 )
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            )
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -1,12 +1,13 @@
 package pl.illchess.adapter.board.command.in.websocket.dto;
 
-import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
+import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 
-import java.util.UUID;
+public record InitializeNewBoardRequest(String username) {
 
-public record InitializeNewBoardRequest(UUID newBoardId) {
-
-    public InitializeNewBoardUseCase.InitializeNewBoardCmd toCmd() {
-        return new InitializeNewBoardUseCase.InitializeNewBoardCmd(newBoardId);
+    public JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd toCmd() {
+        return new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(
+            username,
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"
+        );
     }
 }

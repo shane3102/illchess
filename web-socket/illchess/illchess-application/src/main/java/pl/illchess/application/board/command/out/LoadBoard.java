@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface LoadBoard {
     Optional<Board> loadBoard(BoardId boardId);
+
+    Optional<Board> loadBoardWithoutPlayer();
 }

@@ -10,7 +10,8 @@ public record MovePieceRequest(
     String targetSquare,
     String pieceColor,
     String pieceType,
-    String pawnPromotedToPieceType
+    String pawnPromotedToPieceType,
+    String username
 ) {
     public MovePieceUseCase.MovePieceCmd toCmd() {
         return new MovePieceUseCase.MovePieceCmd(
@@ -19,7 +20,8 @@ public record MovePieceRequest(
             targetSquare,
             pieceColor,
             pieceType,
-            pawnPromotedToPieceType
+            pawnPromotedToPieceType,
+            username
         );
     }
 }

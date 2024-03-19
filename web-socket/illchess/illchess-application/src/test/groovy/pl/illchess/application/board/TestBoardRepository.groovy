@@ -5,7 +5,7 @@ import pl.illchess.application.board.command.out.SaveBoard
 import pl.illchess.domain.board.model.Board
 import pl.illchess.domain.board.model.BoardId
 
-class TestBoardRepository implements LoadBoard, SaveBoard{
+class TestBoardRepository implements LoadBoard, SaveBoard {
 
     Map<BoardId, Board> repo = new HashMap<>()
 
@@ -15,7 +15,17 @@ class TestBoardRepository implements LoadBoard, SaveBoard{
     }
 
     @Override
-    void saveBoard(Board savedBoard) {
-        repo.put(savedBoard.boardId(), savedBoard)
+    Optional<Board> loadBoardWithoutPlayer() {
+        return repo.values()
+            .stream()
+            .filter {it.boardState().player2() == null}
+            .findFirst()
+    }
+
+    @Override
+    BoardId saveBoard(Board savedBoard) {
+        def boardId = savedBoard.boardId() == null ? new BoardId(UUID.randomUUID()) : savedBoard.boardId()
+        repo.put(boardId, savedBoard)
+        boardId
     }
 }

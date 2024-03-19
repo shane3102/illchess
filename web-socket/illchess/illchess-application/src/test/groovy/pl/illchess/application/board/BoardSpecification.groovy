@@ -3,6 +3,7 @@ package pl.illchess.application.board
 import pl.illchess.application.board.command.BoardManager
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase
+import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase
 import pl.illchess.application.board.command.out.LoadBoard
 import pl.illchess.application.board.command.out.SaveBoard
 import spock.lang.Specification
@@ -17,6 +18,7 @@ class BoardSpecification extends Specification {
 
     BoardManager boardManager = new BoardManager(loadBoard, saveBoard, testEventPublisher)
 
+    JoinOrInitializeNewGameUseCase joinOrInitializeNewGameUseCase = boardManager
     CheckIfCheckmateOrStalemateUseCase checkIfCheckmateOrStalemateUseCase = boardManager
     CheckLegalityMoveUseCase checkLegalityMoveUseCase = boardManager
 }

@@ -13,7 +13,8 @@
             [boardId]="boardId"
             [squareInfo]="squareInfo"
             [draggedPieceInfo]="draggedPieceInfo"
-            (pieceDroppedInfoEmitter)="piecePromotion($event)">
+            (pieceDroppedInfoEmitter)="piecePromotion($event)"
+            [username]="username">
         </app-chess-promoting-piece>
     </div>
     <div *ngIf="piece" draggable="true" (dragstart)="pieceDragged()" (dragend)="pieceDraggedRelease()" class="chess-piece-wrapper">

@@ -20,6 +20,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() illegalMoveResponse: Observable<IllegalMoveResponse>
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
+  @Input() username: string
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
@@ -78,7 +79,8 @@ export class ChessSquareComponent implements OnInit {
           'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
           'targetSquare': this.squareInfo.file + this.squareInfo.rank,
           'pieceColor': this.draggedPieceInfo.pieceInfo.color,
-          'pieceType': this.draggedPieceInfo.pieceInfo.type
+          'pieceType': this.draggedPieceInfo.pieceInfo.type,
+          'username': this.username
         }
         this.pieceDroppedInfoEmitter.emit(moveRequest)
       }

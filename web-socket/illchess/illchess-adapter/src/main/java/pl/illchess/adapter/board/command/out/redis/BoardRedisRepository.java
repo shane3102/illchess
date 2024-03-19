@@ -23,7 +23,7 @@ public class BoardRedisRepository implements SaveBoard, LoadBoard {
     @Override
     public Optional<Board> loadBoard(BoardId boardId) {
 
-        BoardEntity readBoardEntity = (BoardEntity) template.opsForHash().get(boardId.uuid().toString(), BOARD_HASH_KEY);
+        BoardEntity readBoardEntity = (BoardEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.uuid().toString());
 
         Board board = BoardMapper.toDomain(readBoardEntity);
 
@@ -31,9 +31,21 @@ public class BoardRedisRepository implements SaveBoard, LoadBoard {
     }
 
     @Override
-    public void saveBoard(Board savedBoard) {
-        BoardEntity savedEntity = BoardMapper.toEntity(savedBoard);
+    public Optional<Board> loadBoardWithoutPlayer() {
+        return template.opsForHash()
+            .entries(BOARD_HASH_KEY)
+            .values()
+            .stream()
+            .map(board -> (BoardEntity) board)
+            .map(BoardMapper::toDomain)
+            .filter(board -> board.boardState().player2() == null)
+            .findFirst();
+    }
 
-        template.opsForHash().put(savedEntity.boardId().toString(), BOARD_HASH_KEY, savedEntity);
+    @Override
+    public BoardId saveBoard(Board savedBoard) {
+        BoardEntity savedEntity = BoardMapper.toEntity(savedBoard);
+        template.opsForHash().put(BOARD_HASH_KEY, savedEntity.boardId().toString(), savedEntity);
+        return savedBoard.boardId();
     }
 }

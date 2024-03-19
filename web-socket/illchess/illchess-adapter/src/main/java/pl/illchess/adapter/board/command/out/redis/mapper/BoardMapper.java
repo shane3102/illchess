@@ -12,11 +12,14 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.GameState;
+import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +30,7 @@ public class BoardMapper {
             return null;
         } else {
             return new BoardEntity(
-                board.boardId().uuid(),
+                board.boardId() == null ? UUID.randomUUID() : board.boardId().uuid(),
                 toPiecesLocationsEntity(board.piecesLocations()),
                 toMoveHistoryEntity(board.moveHistory()),
                 toBoardStateEntity(board.boardState())
@@ -38,6 +41,8 @@ public class BoardMapper {
     private static BoardEntity.BoardStateEntity toBoardStateEntity(BoardState boardState) {
         return new BoardEntity.BoardStateEntity(
             boardState.currentPlayerColor().color().toString(),
+            boardState.player1() == null ? null : new BoardEntity.PlayerEntity(boardState.player1().username().text(), boardState.player1().color().toString()),
+            boardState.player2() == null ? null : new BoardEntity.PlayerEntity(boardState.player2().username().text(), boardState.player2().color().toString()),
             boardState.gameState().toString(),
             boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString()
         );
@@ -61,6 +66,8 @@ public class BoardMapper {
         return BoardState.of(
             PieceColor.valueOf(boardState.currentPlayerColor()),
             GameState.valueOf(boardState.gameState()),
+            boardState.player1() == null ? null : new Player(new Username(boardState.player1().username()), PieceColor.valueOf(boardState.player1().color())),
+            boardState.player2() == null ? null : new Player(new Username(boardState.player2().username()), PieceColor.valueOf(boardState.player2().color())),
             boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor())
         );
     }

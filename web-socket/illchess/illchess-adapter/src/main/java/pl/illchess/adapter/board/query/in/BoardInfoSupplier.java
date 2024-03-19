@@ -27,7 +27,10 @@ public class BoardInfoSupplier implements BoardViewSupplier {
         );
         BoardView boardView = boardViewQueryPort.findById(event.boardId().uuid())
             .orElseThrow(() -> new BoardNotFoundException(event.boardId()));
-        messagingTemplate.convertAndSend("/chess-topic", boardView);
+        messagingTemplate.convertAndSend(
+            "/chess-topic/%s".formatted(event.boardId().uuid()),
+            boardView
+        );
         log.info(
             "Update board view with id = {} was successfully send",
             event.boardId()

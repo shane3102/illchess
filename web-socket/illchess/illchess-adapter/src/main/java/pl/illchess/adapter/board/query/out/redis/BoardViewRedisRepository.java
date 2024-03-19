@@ -21,7 +21,7 @@ public class BoardViewRedisRepository implements BoardViewQueryPort {
 
     @Override
     public Optional<BoardView> findById(UUID boardId) {
-        BoardEntity readBoardEntity = (BoardEntity) template.opsForHash().get(boardId.toString(), BOARD_HASH_KEY);
+        BoardEntity readBoardEntity = (BoardEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
 
         BoardView board = BoardViewMapper.toView(readBoardEntity);
 

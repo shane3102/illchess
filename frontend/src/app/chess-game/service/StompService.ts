@@ -12,7 +12,7 @@ export class StompService {
     socket = new SockJS('http://192.168.1.49:8080/chess');
     stompClient = Stomp.over(this.socket);
 
-    subscribe(topic: string, callback: any): void {
+    async subscribe(topic: string, callback: any): Promise<void> {
         // If stomp client is currently connecting add the topic to the queue
         if (this.connecting) {
             this.topicQueue.push({

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
-import pl.illchess.application.board.command.in.InitializeNewBoardUseCase;
+import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
@@ -12,7 +12,7 @@ import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
-import pl.illchess.domain.board.command.InitializeNewBoard;
+import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.domain.board.event.GameFinished;
@@ -22,6 +22,7 @@ import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.GameState;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
@@ -29,7 +30,7 @@ import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
 public class BoardManager implements
     MovePieceUseCase,
     TakeBackMoveUseCase,
-    InitializeNewBoardUseCase,
+    JoinOrInitializeNewGameUseCase,
     CheckIfCheckmateOrStalemateUseCase,
     CheckLegalityMoveUseCase {
 
@@ -84,15 +85,15 @@ public class BoardManager implements
         Board board = loadBoard.loadBoard(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
 
         CheckLegalMoves command = cmd.toCommand();
-        Set<Square> isMoveLegal = board.isMoveLegal(command);
+        Set<Square> legalMoves = board.legalMoves(command);
         log.info(
             "At board with id = {} piece of color = {} is allowed to move from square = {} to squares = {}",
             cmd.boardId(),
             cmd.pieceColor(),
             cmd.startSquare(),
-            isMoveLegal
+            legalMoves
         );
-        return isMoveLegal;
+        return legalMoves;
     }
 
     @Override
@@ -117,24 +118,36 @@ public class BoardManager implements
     }
 
     @Override
-    public void initializeNewGame(InitializeNewBoardCmd cmd) {
+    public BoardId joinOrInitializeNewGame(JoinOrInitializeNewGameCmd cmd) {
 
         log.info(
-            "New board with id = {} is being initialized",
-            cmd.newBoardId()
+            "Username {} is joining or initializing new game",
+            cmd.username()
         );
 
-        InitializeNewBoard command = cmd.toCommand();
+        JoinOrInitializeNewGame command = cmd.toCommand();
+        BoardId savedBoardId;
 
-        Board initializedBoard = Board.generateNewBoard(command);
-        saveBoard.saveBoard(initializedBoard);
+        Optional<Board> boardWithoutPlayer = loadBoard.loadBoardWithoutPlayer();
+        if (boardWithoutPlayer.isPresent()) {
+            savedBoardId = boardWithoutPlayer.get().boardId();
+            boardWithoutPlayer.get().assignSecondPlayer(command.username());
+            saveBoard.saveBoard(boardWithoutPlayer.get());
+            log.info(
+                "Username {} has joined existing game",
+                cmd.username()
+            );
+        } else {
+            Board initializedBoard = Board.generateNewBoard(command);
+            savedBoardId = saveBoard.saveBoard(initializedBoard);
+            log.info(
+                "Username {} initialized new game",
+                cmd.username()
+            );
+        }
 
-        log.info(
-            "New board with id = {} was successfully initialized",
-            cmd.newBoardId()
-        );
-
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(savedBoardId));
+        return savedBoardId;
     }
 
     @Override

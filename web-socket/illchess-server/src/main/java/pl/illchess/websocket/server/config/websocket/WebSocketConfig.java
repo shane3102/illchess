@@ -14,13 +14,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // TODO path wariable z UUID-em
         registry.addEndpoint("/chess")
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
+            .setAllowedOriginPatterns("*")
+            .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/chess-topic");
+        registry.setApplicationDestinationPrefixes("/app");
     }
 }

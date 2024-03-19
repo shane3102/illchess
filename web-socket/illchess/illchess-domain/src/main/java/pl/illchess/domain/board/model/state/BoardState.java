@@ -1,19 +1,32 @@
 package pl.illchess.domain.board.model.state;
 
+import pl.illchess.domain.board.exception.PieceColorIncorrectException;
+import pl.illchess.domain.board.model.BoardId;
+import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.Username;
+import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 
+import java.util.Objects;
+
 public class BoardState {
     private final CurrentPlayerColor currentPlayerColor;
+    private Player whitePlayer;
+    private Player blackPlayer;
     private GameState gameState;
     private PieceColor victoriousPlayerColor;
 
     private BoardState(
         CurrentPlayerColor currentPlayerColor,
+        Player whitePlayer,
+        Player blackPlayer,
         GameState gameState,
         PieceColor victoriousPlayerColor
     ) {
         this.currentPlayerColor = currentPlayerColor;
+        this.whitePlayer = whitePlayer;
+        this.blackPlayer = blackPlayer;
         this.gameState = gameState;
         this.victoriousPlayerColor = victoriousPlayerColor;
     }
@@ -23,6 +36,34 @@ public class BoardState {
         if (gameState == GameState.CHECKMATE) {
             this.victoriousPlayerColor = currentPlayerColor.color().inverted();
         }
+    }
+
+    public void checkIfAllowedToMove(BoardId boardId, Piece movedPiece, Username usernamePerformingMove) {
+        if (!Objects.equals(movedPiece.color(), currentPlayerColor().color())) {
+            throw new PieceColorIncorrectException(
+                boardId,
+                movedPiece.color(),
+                currentPlayerColor().color(),
+                movedPiece.square()
+            );
+        }
+
+        // TODO uncomment to allow only to move by username
+//        Player validPlayer = switch (movedPiece.color()) {
+//            case WHITE -> whitePlayer;
+//            case BLACK -> blackPlayer;
+//        };
+//
+//
+//        if (!Objects.equals(validPlayer.username(), usernamePerformingMove)) {
+//            throw new InvalidUserPerformedMoveException(
+//                boardId,
+//                movedPiece.square(),
+//                usernamePerformingMove,
+//                validPlayer.username(),
+//                movedPiece.color()
+//            );
+//        }
     }
 
     public void invertCurrentPlayerColor() {
@@ -41,25 +82,46 @@ public class BoardState {
         return victoriousPlayerColor;
     }
 
+    public Player player1() {
+        return whitePlayer;
+    }
+
+    public Player player2() {
+        return blackPlayer;
+    }
+
     public static BoardState of(
         PieceColor currentPlayerColor,
         GameState gameState,
+        Player player1,
+        Player player2,
         PieceColor victoriousPlayerColor
     ) {
         return new BoardState(
             new CurrentPlayerColor(currentPlayerColor),
+            player1,
+            player2,
             gameState,
             victoriousPlayerColor
         );
     }
 
-    public static BoardState fromFenString(String fenString) {
-        String movingColor = fenString.split(" ")[1];
+    public static BoardState fromFenStringAndByUsername(
+        FenString fenString,
+        Username username
+    ) {
+        String movingColor = fenString.value().split(" ")[1];
 
         return new BoardState(
-            new CurrentPlayerColor(movingColor.equals("w") ? PieceColor.WHITE : PieceColor.BLACK),
+            new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : PieceColor.WHITE),
+            new Player(username, PieceColor.WHITE),
+            null,
             GameState.CONTINUE,
             null
         );
+    }
+
+    public void setBlackPlayer(Player player) {
+        this.blackPlayer = player;
     }
 }
