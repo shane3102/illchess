@@ -14,6 +14,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // TODO path wariable z UUID-em
         registry.addEndpoint("/chess")
+            .setAllowedOriginPatterns("*");
+        registry.addEndpoint("/chess")
             .setAllowedOriginPatterns("*")
             .withSockJS();
     }

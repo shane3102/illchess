@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { boardLoaded, checkLegalMoves, connectToBoard, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
-import { EMPTY, catchError, from, map, of, switchMap } from "rxjs";
+import { catchError, from, map, of, switchMap } from "rxjs";
 import { ChessBoardService } from "../../service/ChessBoardService";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
 import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
-import { StompService } from "../../service/StompService";
 import { BoardView } from "../../model/BoardView";
 
 @Injectable({
@@ -17,7 +16,6 @@ export class BoardEffects {
 
     constructor(
         private actions$: Actions,
-        private stompService: StompService,
         private chessBoardService: ChessBoardService
     ) { }
 

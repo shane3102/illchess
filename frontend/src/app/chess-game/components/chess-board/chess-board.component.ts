@@ -13,7 +13,7 @@ import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSel
 import { ChessGameState } from '../../state/chess-game.state';
 import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
-import { StompService } from '../../service/StompService';
+import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
 
 @Component({
   selector: 'app-chess-board',
@@ -39,7 +39,7 @@ export class ChessBoardComponent implements OnInit {
 
   constructor(
     private store: Store<ChessGameState>,
-    private stompService: StompService
+    private chessBoardWebSocketService: ChessBoardWebsocketService
   ) { }
 
   ngOnInit(): void {
@@ -48,11 +48,10 @@ export class ChessBoardComponent implements OnInit {
       boardView => {
         if (!this.boardId && boardView.boardId.length != 0 ) {
           this.boardId = boardView.boardId
-          // TODO sometimes it wont connect and stuck on "Opening Web Socket...". Possible solution: https://github.com/jmesnil/stomp-websocket/issues/81
-          this.stompService.subscribe(
+          this.chessBoardWebSocketService.subscribe(
             `/chess-topic/${this.boardId}`,
             (response: any) => {
-              let boardView: BoardView = JSON.parse(response.body)
+              let boardView: BoardView = JSON.parse(response)
               this.store.dispatch(boardLoaded(boardView))
             }
           )
