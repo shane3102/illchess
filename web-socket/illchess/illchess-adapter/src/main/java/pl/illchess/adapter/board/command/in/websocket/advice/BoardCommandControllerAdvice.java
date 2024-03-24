@@ -13,7 +13,6 @@ import pl.illchess.application.board.command.BoardManager;
 import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.board.exception.IllegalMoveException;
 
-// TODO obsłużyć pozostałe warunki
 @ControllerAdvice
 @AllArgsConstructor
 public class BoardCommandControllerAdvice extends StompSubProtocolErrorHandler {

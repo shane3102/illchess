@@ -32,8 +32,6 @@ export class ChessBoardComponent implements OnInit {
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
   legalMoves: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
 
-  illegalMoveViewSubject: Subject<IllegalMoveResponse> = new Subject<IllegalMoveResponse>();
-
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
@@ -85,11 +83,6 @@ export class ChessBoardComponent implements OnInit {
       'username': this.username
     }
     this.store.dispatch(initializeBoard(initializeNewBoardRequest))
-  }
-
-  displayInfoWithIllegalMove(illegalMoveView: any) {
-    let illegalMoveViewParsed: IllegalMoveResponse = JSON.parse(illegalMoveView.body)
-    this.illegalMoveViewSubject.next(illegalMoveViewParsed)
   }
 
 }

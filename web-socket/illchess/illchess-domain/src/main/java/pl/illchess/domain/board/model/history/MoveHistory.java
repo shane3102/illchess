@@ -4,7 +4,6 @@ import pl.illchess.domain.piece.model.Piece;
 
 import java.util.Stack;
 
-// TODO seraizliation of this  class  if fucked, taking back last move not possible
 public record MoveHistory(Stack<Move> moveStack) {
 
     public MoveHistory() {

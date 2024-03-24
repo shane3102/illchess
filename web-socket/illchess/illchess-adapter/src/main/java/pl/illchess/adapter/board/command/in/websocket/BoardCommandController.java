@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import pl.illchess.adapter.board.command.in.websocket.dto.CheckLegalMovesRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.InitializedBoardResponse;
@@ -25,7 +24,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Controller
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200", "http://192.168.1.49:4200"})
 public class BoardCommandController implements BoardCommandApi {
 
     private final MovePieceUseCase movePieceUseCase;
@@ -47,7 +45,6 @@ public class BoardCommandController implements BoardCommandApi {
         return ResponseEntity.ok(response);
     }
 
-    // TODO tutaj wysyłać username + frontend przystosować
     @Override
     public ResponseEntity<Void> movePiece(
         MovePieceRequest movePieceRequest

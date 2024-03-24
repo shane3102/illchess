@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public record BoardEntity(
     UUID boardId,
-    // rewrite to list/set
     List<PieceEntity> piecesLocations,
     List<MoveEntity> moveStackData,
     BoardStateEntity boardState
