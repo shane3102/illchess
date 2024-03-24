@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ChessGameModule } from './chess-game/chess-game.module';
 import { HttpClientModule } from '@angular/common/http';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,9 @@ import { HttpClientModule } from '@angular/common/http';
     FontAwesomeModule,
     ChessGameModule,
     HttpClientModule
+  ],
+  providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent]
 })

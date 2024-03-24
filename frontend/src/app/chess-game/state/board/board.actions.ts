@@ -7,6 +7,7 @@ import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
 import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
+import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 
 export const movePiece = createAction(
     'Move piece',
@@ -48,8 +49,13 @@ export const draggedPieceReleased = createAction(
     props<any>()
 )
 
-export const connectToBoard = createAction(
-    'User joined, initialized or joined as spectator to game, connect to board',
+export const boardInitialized = createAction(
+    'User joined, initialized or joined as spectator to game',
     props<InitializedBoardResponse>()
+)
+
+export const refreshBoard = createAction(
+    'Manual board refresh',
+    props<RefreshBoardDto>()
 )
 

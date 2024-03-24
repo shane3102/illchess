@@ -1,12 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
 import { BoardView, Square } from "../../model/BoardView";
 import { PieceColor } from "../../model/PieceInfo";
-import { boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
+import { boardInitialized, boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
 import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { state } from "@angular/animations";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
 import { MovePieceRequest } from "../../model/MovePieceRequest";
+import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
 
 
 export interface BoardState {
@@ -99,6 +100,20 @@ export const boardReducer = createReducer(
             {
                 ...state,
                 legalMoves: undefined
+            }
+        )
+    ),
+
+    // board was initialized
+    on(
+        boardInitialized,
+        (state: BoardState, content: InitializedBoardResponse) => (
+            {
+                ...state,
+                boardView: {
+                    ...state.boardView,
+                    "boardId": content.id
+                }
             }
         )
     )

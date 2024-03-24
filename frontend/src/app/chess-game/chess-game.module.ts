@@ -16,6 +16,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { BoardEffects } from './state/board/board.effects';
 import { ChessPromotingPieceComponent } from './components/chess-promoting-piece/chess-promoting-piece.component';
 import { ChessLegalMoveCircleComponent } from './components/chess-legal-move-circle/chess-legal-move-circle.component';
+import { JoinOrInitializeGameComponent } from './components/join-or-initialize-game/join-or-initialize-game.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ChessLegalMoveCircleComponent } from './components/chess-legal-move-cir
     KingComponent,
     ChessSquareComponent,
     ChessPromotingPieceComponent,
-    ChessLegalMoveCircleComponent
+    ChessLegalMoveCircleComponent,
+    JoinOrInitializeGameComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { ChessLegalMoveCircleComponent } from './components/chess-legal-move-cir
     EffectsModule.forRoot([BoardEffects])
   ],
   exports:[
-    ChessBoardComponent
+    ChessBoardComponent,
+    JoinOrInitializeGameComponent
   ]
 })
 export class ChessGameModule { }

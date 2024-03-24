@@ -8,12 +8,14 @@ import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
 import { Store } from '@ngrx/store';
-import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, initializeBoard, movePiece } from '../../state/board/board.actions';
+import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, initializeBoard, movePiece, refreshBoard } from '../../state/board/board.actions';
 import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
 import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
+import { ActivatedRoute } from '@angular/router';
+import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
 
 @Component({
   selector: 'app-chess-board',
@@ -22,11 +24,9 @@ import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketSer
 })
 export class ChessBoardComponent implements OnInit {
 
-  randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
-
-  username: string = this.randomNames[Math.floor(Math.random() * this.randomNames.length)] + Math.floor(100 * Math.random())
-
   boardId: string;
+  username: string
+
   boardView: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
@@ -37,15 +37,18 @@ export class ChessBoardComponent implements OnInit {
 
   constructor(
     private store: Store<ChessGameState>,
+    private route: ActivatedRoute,
     private chessBoardWebSocketService: ChessBoardWebsocketService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-    this.sendChessBoardInitializeRequest()
-    this.store.select(boardSelector).subscribe(
-      boardView => {
-        if (!this.boardId && boardView.boardId.length != 0 ) {
-          this.boardId = boardView.boardId
+    this.route.params.subscribe(
+      params => {
+        this.boardId = params['boardId']
+        this.username =  params['username']
+        if (this.boardId) {
+          this.sendChessBoardRefreshRequest()
           this.chessBoardWebSocketService.subscribe(
             `/chess-topic/${this.boardId}`,
             (response: any) => {
@@ -77,12 +80,11 @@ export class ChessBoardComponent implements OnInit {
     this.store.dispatch(draggedPieceReleased({}))
   }
 
-  sendChessBoardInitializeRequest() {
-
-    let initializeNewBoardRequest: InitializeBoardRequest = {
-      'username': this.username
+  sendChessBoardRefreshRequest() {
+    let initializeNewBoardRequest: RefreshBoardDto = {
+      'boardId': this.boardId
     }
-    this.store.dispatch(initializeBoard(initializeNewBoardRequest))
+    this.store.dispatch(refreshBoard(initializeNewBoardRequest))
   }
 
 }
