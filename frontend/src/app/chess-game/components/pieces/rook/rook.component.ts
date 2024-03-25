@@ -5,7 +5,10 @@ import { faChessRook } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-rook',
   templateUrl: './rook.component.html',
-  styleUrls: ['./rook.component.scss']
+  styleUrls: [
+    './rook.component.scss',
+    '../../chess-board-style.scss'
+  ]
 })
 export class RookComponent implements OnInit {
 

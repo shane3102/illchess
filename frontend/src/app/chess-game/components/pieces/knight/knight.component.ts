@@ -5,7 +5,10 @@ import { faChessKnight } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-knight',
   templateUrl: './knight.component.html',
-  styleUrls: ['./knight.component.scss']
+  styleUrls: [
+    './knight.component.scss',
+    '../../chess-board-style.scss'
+  ]
 })
 export class KnightComponent implements OnInit {
 

@@ -4,7 +4,10 @@ import { Piece, PieceInfo } from '../../model/PieceInfo';
 @Component({
   selector: 'app-chess-piece',
   templateUrl: './chess-piece.component.html',
-  styleUrls: ['./chess-piece.component.scss']
+  styleUrls: [
+    './chess-piece.component.scss',
+    '../chess-board-style.scss'
+  ]
 })
 export class ChessPieceComponent implements OnInit {
 

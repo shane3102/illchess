@@ -5,7 +5,10 @@ import { faChessBishop } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-bishop',
   templateUrl: './bishop.component.html',
-  styleUrls: ['./bishop.component.scss']
+  styleUrls: [
+    './bishop.component.scss',
+    '../../chess-board-style.scss'
+  ]
 })
 export class BishopComponent implements OnInit {
 

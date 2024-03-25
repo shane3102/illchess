@@ -1,0 +1,21 @@
+$chess-square-size: 11.25vh;
+
+.piece {
+    font-size: 8vh;
+}
+
+.piece:hover {
+    font-size: 9vh;
+}
+
+
+.chess-piece-wrapper {
+    position: absolute;
+    height: $chess-square-size;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // bez tego poza pionkiem można poruszać polem - WTF!?
+    transform: translateX(0);
+}

@@ -5,7 +5,10 @@ import { faChessPawn } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-pawn',
   templateUrl: './pawn.component.html',
-  styleUrls: ['./pawn.component.scss']
+  styleUrls: [
+    './pawn.component.scss',
+    '../../chess-board-style.scss'
+  ]
 })
 export class PawnComponent implements OnInit {
 

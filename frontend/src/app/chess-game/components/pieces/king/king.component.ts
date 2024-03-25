@@ -5,7 +5,10 @@ import { faChessKing } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-king',
   templateUrl: './king.component.html',
-  styleUrls: ['./king.component.scss']
+  styleUrls: [
+    './king.component.scss',
+    '../../chess-board-style.scss'
+  ]
 })
 export class KingComponent implements OnInit {
 
