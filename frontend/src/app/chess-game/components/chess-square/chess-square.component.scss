@@ -1,8 +1,5 @@
 @import "../chess-board-style.scss";
 
-$chess-file-rank-info: 3vh;
-// $chess-square-size: 12vh;
-
 .chess-square {
     position: relative;
     display: flex;
@@ -14,7 +11,6 @@ $chess-file-rank-info: 3vh;
 
 .chess-square-info {
     position: absolute;
-    width: $chess-file-rank-info;
     height: min-content;
     bottom: 0;
     -webkit-touch-callout: none;

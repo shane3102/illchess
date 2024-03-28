@@ -1,8 +1,7 @@
 import { createSelector } from "@ngrx/store";
+import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 import { ChessGameState } from "../chess-game.state";
 import { BoardState } from "./board.reducer";
-import { state } from "@angular/animations";
-import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 
 export const selectBoard = (state: ChessGameState) => state.boardState;
 

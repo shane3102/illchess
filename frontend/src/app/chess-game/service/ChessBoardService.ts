@@ -7,6 +7,7 @@ import { CheckLegalMovesRequest } from "../model/CheckLegalMovesRequest";
 import { firstValueFrom } from "rxjs";
 import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
 import { BoardView } from "../model/BoardView";
+import { ActiveBoardsView } from "../model/ActiveBoardsView";
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +33,10 @@ export class ChessBoardService {
 
     async refreshBoard(boardId: string): Promise<BoardView> {
         return firstValueFrom(this.httpService.get<BoardView>(`${this.PATH}/refresh/${boardId}`))
+    }
+
+    async refreshActiveBoards(): Promise<ActiveBoardsView> {
+        return firstValueFrom(this.httpService.get<ActiveBoardsView>(`${this.PATH}/active`))
     }
 
 }

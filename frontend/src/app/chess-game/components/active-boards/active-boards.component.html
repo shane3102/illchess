@@ -1,0 +1,8 @@
+<ng-container *ngIf="activeBoardsView$ | async as activeBoardsView">
+    <div class="boards">
+        <div *ngFor="let boardId of activeBoardsView.activeBoardsIds" style="margin: 10px">
+            <app-chess-board-mini [boardId]="boardId"></app-chess-board-mini>
+        </div>
+    </div>
+    
+</ng-container>

@@ -17,6 +17,11 @@ import { BoardEffects } from './state/board/board.effects';
 import { ChessPromotingPieceComponent } from './components/chess-promoting-piece/chess-promoting-piece.component';
 import { ChessLegalMoveCircleComponent } from './components/chess-legal-move-circle/chess-legal-move-circle.component';
 import { JoinOrInitializeGameComponent } from './components/join-or-initialize-game/join-or-initialize-game.component';
+import { ChessBoardMiniComponent } from './components/chess-board-mini/chess-board-mini.component';
+import { ChessPieceMiniComponent } from './components/chess-piece-mini/chess-piece-mini.component';
+import { ActiveBoardsComponent } from './components/active-boards/active-boards.component';
+import { activeBoardsReducer } from './state/active-boards/active-boards.reducer';
+import { ActiveBoardEffects } from './state/active-boards/active-boards.effects';
 
 
 @NgModule({
@@ -32,17 +37,21 @@ import { JoinOrInitializeGameComponent } from './components/join-or-initialize-g
     ChessSquareComponent,
     ChessPromotingPieceComponent,
     ChessLegalMoveCircleComponent,
-    JoinOrInitializeGameComponent
+    JoinOrInitializeGameComponent,
+    ChessBoardMiniComponent,
+    ChessPieceMiniComponent,
+    ActiveBoardsComponent
   ],
   imports: [
     CommonModule,
     FontAwesomeModule,
-    StoreModule.forRoot({boardState: boardReducer}),
-    EffectsModule.forRoot([BoardEffects])
+    StoreModule.forRoot({boardState: boardReducer, activeBoardsState: activeBoardsReducer}),
+    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects])
   ],
   exports:[
     ChessBoardComponent,
-    JoinOrInitializeGameComponent
+    JoinOrInitializeGameComponent,
+    ActiveBoardsComponent
   ]
 })
 export class ChessGameModule { }

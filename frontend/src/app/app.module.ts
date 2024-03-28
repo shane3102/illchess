@@ -7,10 +7,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ChessGameModule } from './chess-game/chess-game.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { MainPageComponent } from './components/main-page/main-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,

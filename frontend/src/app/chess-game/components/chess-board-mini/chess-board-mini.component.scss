@@ -1,0 +1,15 @@
+$chess-square-size: 4vh;
+
+.chess-square {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $chess-square-size;
+    height: $chess-square-size;
+    display: flex; 
+}
+
+.chess-piece-wrapper:active {
+    background-color: transparent;
+}

@@ -14,6 +14,7 @@ import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.domain.board.event.GameFinished;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
@@ -140,6 +141,7 @@ public class BoardManager implements
         } else {
             Board initializedBoard = Board.generateNewBoard(command);
             savedBoardId = saveBoard.saveBoard(initializedBoard);
+            eventPublisher.publishDomainEvent(new BoardInitialized(savedBoardId));
             log.info(
                 "Username {} initialized new game",
                 cmd.username()
