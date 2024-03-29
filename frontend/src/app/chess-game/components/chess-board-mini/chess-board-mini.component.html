@@ -1,18 +1,23 @@
-<ng-container *ngIf="boardView$ | async as boardView">
-    <div *ngFor="let rank of ranks">
-        <div style="display: flex; justify-content: center;">
-            <div *ngFor="let file of files">
-                <div class="chess-square"
-                    [ngStyle]="{'background-color': calculateSquareColor({file: file, rank: rank})}">
-                    <app-chess-piece-mini [pieceInfo]="
-                    boardView?.piecesLocations ?
-                    boardView?.piecesLocations![file+rank] ?
-                    boardView?.piecesLocations![file+rank] :
-                    undefined :
-                    undefined">
-                    </app-chess-piece-mini>
+<div class="board-wrapper">
+    <div *ngIf="boardView$ | async as boardView" class="board">
+        <div *ngFor="let rank of ranks">
+            <div style="display: flex; justify-content: center;">
+                <div *ngFor="let file of files">
+                    <div class="chess-square"
+                        [ngStyle]="{'background-color': calculateSquareColor({file: file, rank: rank})}">
+                        <app-chess-piece-mini [pieceInfo]="
+                            boardView?.piecesLocations ?
+                            boardView?.piecesLocations![file+rank] ?
+                            boardView?.piecesLocations![file+rank] :
+                            undefined :
+                            undefined">
+                        </app-chess-piece-mini>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</ng-container>
+    <div *ngIf="!(boardView$ | async)">
+        <app-spinner></app-spinner>
+    </div>
+</div>
