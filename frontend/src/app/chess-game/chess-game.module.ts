@@ -22,6 +22,7 @@ import { ChessPieceMiniComponent } from './components/chess-piece-mini/chess-pie
 import { ActiveBoardsComponent } from './components/active-boards/active-boards.component';
 import { activeBoardsReducer } from './state/active-boards/active-boards.reducer';
 import { ActiveBoardEffects } from './state/active-boards/active-boards.effects';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { ActiveBoardEffects } from './state/active-boards/active-boards.effects'
     ActiveBoardsComponent
   ],
   imports: [
+    SharedModule,
     CommonModule,
     FontAwesomeModule,
     StoreModule.forRoot({boardState: boardReducer, activeBoardsState: activeBoardsReducer}),

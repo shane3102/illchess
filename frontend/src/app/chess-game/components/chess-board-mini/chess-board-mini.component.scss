@@ -1,4 +1,28 @@
 $chess-square-size: 4vh;
+$board-wrapper-size: 34vh;
+
+.board-wrapper {
+    width: $board-wrapper-size;
+    height: $board-wrapper-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board {
+    opacity: 1;
+    animation: show-board 2s;
+}
+
+@keyframes show-board {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
 
 .chess-square {
     position: relative;
@@ -7,7 +31,7 @@ $chess-square-size: 4vh;
     align-items: center;
     width: $chess-square-size;
     height: $chess-square-size;
-    display: flex; 
+    display: flex;
 }
 
 .chess-piece-wrapper:active {
