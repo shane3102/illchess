@@ -6,6 +6,7 @@ import { ActiveBoardsView } from '../../model/ActiveBoardsView';
 import { activeBoardsRefreshed, refreshActiveBoards } from '../../state/active-boards/active-boards.actions';
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../state/active-boards/active-boards.selectors';
+import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-active-boards',
@@ -13,6 +14,14 @@ import { selectActiveBoards } from '../../state/active-boards/active-boards.sele
   styleUrls: ['./active-boards.component.scss']
 })
 export class ActiveBoardsComponent implements OnInit {
+
+  caretRight = faCaretRight
+  caretLeft = faCaretLeft
+
+  clickedLeft: boolean = false
+  clickedRight: boolean = false
+
+  page = 0
 
   activeBoardsView$: Observable<ActiveBoardsView> = this.store.select(selectActiveBoards)
 
@@ -32,6 +41,34 @@ export class ActiveBoardsComponent implements OnInit {
         this.store.dispatch(activeBoardsRefreshed(activeBoardsView))
       }
     )
+  }
+
+  isDisabled(side: 'left' | 'right', numberOfBoards: number) {
+    if (side == 'left') {
+      return (numberOfBoards) <= this.page + 3;
+    } else {
+      return this.page <= 0
+    }
+  }
+
+  slideLeft() {
+    this.clickedLeft = true
+    setTimeout(() => {
+      this.clickedLeft = false
+      this.page = this.page + 3
+    }, 900)
+  }
+
+  slideRight() {
+    this.clickedRight = true
+    setTimeout(() => {
+      this.clickedRight = false
+      this.page = this.page - 3
+    }, 900)
+  }
+
+  getSliceFrom() {
+    return Math.max(this.page-3, 0)
   }
 
 }
