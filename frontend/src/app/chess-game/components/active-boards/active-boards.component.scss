@@ -1,5 +1,103 @@
-.boards {
+@import "../chess-board-mini/chess-board-mini.component.scss";
+
+.content {
+    position: relative;
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: left;
+    align-items: center;
+    overflow: hidden;
+}
+
+.boards {
+    position: relative;
+    display: flex;
+    justify-content: left;
+    flex-wrap: nowrap;
+    margin-left: 8vw;
+    margin-right: 8vw;
+    right: calc(3 * $board-wrapper-size)
+}
+
+.empty-boards {
+    width: calc(3 * $board-wrapper-size);
+    height: $board-wrapper-size;
+    left: calc(3 * $board-wrapper-size)
+}
+
+.boards-sliden-left {
+    animation: slide-left 1s;
+}
+
+@keyframes slide-left {
+    from {
+        right: calc(3 * $board-wrapper-size);
+    }
+
+    to {
+        right: 2 * calc(3 * $board-wrapper-size);
+    }
+}
+
+.boards-sliden-right {
+    animation: slide-right 1s;
+}
+
+@keyframes slide-right {
+    from {
+        right: calc(3 * $board-wrapper-size);
+    }
+
+    to {
+        right: 0;
+    }
+}
+
+.caret-wrapper {
+    position: absolute;
+    z-index: 1;
+    font-size: 8vw;
+    background-color: white;
+    width: 8vw;
+    height: $board-wrapper-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5vw;
+}
+
+.caret-wrapper-left {
+    left: 0;
+    justify-content: right;
+}
+
+.caret-wrapper-right {
+    right: 0;
+    justify-content: left;
+}
+
+.caret {
+    position: absolute;
+    z-index: 1;
+    font-size: 8vw;
+    color: #F3E5AB;
+    background-color: white;
+    padding: 0.5vw;
+}
+
+.caret-left {
+    right: 0;
+    justify-content: right;
+}
+
+.caret-right {
+    left: 0;
+    justify-content: left;
+}
+
+.caret-disabled {
+    color: gray !important;
+}
+
+.caret:hover {
+    color: rgb(150, 75, 0);
 }
