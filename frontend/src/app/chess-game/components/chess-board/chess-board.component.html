@@ -1,4 +1,5 @@
-<div style="text-align: center;" [ngStyle]="username == (boardView | async)?.blackPlayer ? {'color': 'green'} : {'color': 'red'}">
+<div style="text-align: center;"
+    [ngStyle]="username == (boardView | async)?.blackPlayer ? {'color': 'green'} : {'color': 'red'}">
     {{(boardView | async)?.blackPlayer}}
 </div>
 <div *ngIf="boardView">
@@ -6,26 +7,27 @@
         <div style="display: flex; justify-content: center;">
             <div *ngFor="let file of files">
                 <app-chess-square 
-                (pieceDraggedInfoEmitter)="pieceDraggedChange($event)" 
-                (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
-                (pieceDraggedReleasedInfoEmitter)="pieceDraggedRelease()"
-                [boardId]="boardId"
-                [piece]="
-                    (this.boardView | async)?.piecesLocations ? 
+                    (pieceDraggedInfoEmitter)="pieceDraggedChange($event)"
+                    (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
+                    (pieceDraggedReleasedInfoEmitter)="pieceDraggedRelease()" 
+                    [boardId]="boardId" 
+                    [piece]="(this.boardView | async)?.piecesLocations ? 
                     (this.boardView | async)?.piecesLocations![file+rank] ? 
                     (this.boardView | async)?.piecesLocations![file+rank] : 
                     undefined : 
-                    undefined"
-                [illegalMoveResponse]="illegalMoveResponse"
-                [draggedPieceInfo]="draggedPieceInfo | async"
-                [squareInfo]="{file: file, rank: rank}"
-                [legalMoves]="legalMoves | async"
-                [username]="username">
-            </app-chess-square>
+                    undefined" 
+                    [illegalMoveResponse]="illegalMoveResponse"
+                    [draggedPieceInfo]="draggedPieceInfo | async" 
+                    [squareInfo]="{file: file, rank: rank}"
+                    [legalMoves]="legalMoves | async" 
+                    [username]="username"
+                    [lastPerformedMove]="(boardView | async)?.lastPerformedMove">
+                </app-chess-square>
             </div>
         </div>
     </div>
-    <div style="text-align: center;" [ngStyle]="username == (boardView | async)?.whitePlayer ? {'color': 'green'} : {'color': 'red'}">
+    <div style="text-align: center;"
+        [ngStyle]="username == (boardView | async)?.whitePlayer ? {'color': 'green'} : {'color': 'red'}">
         {{(boardView | async)?.whitePlayer}}
     </div>
     <div style="text-align: center;">

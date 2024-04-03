@@ -10,7 +10,8 @@ public record BoardView(
         String whitePlayer,
         String blackPlayer,
         String gameState,
-        String victoriousPlayerColor
+        String victoriousPlayerColor,
+        MoveView lastPerformedMove
 ) {
     public record PieceView(String color, String type) {
 

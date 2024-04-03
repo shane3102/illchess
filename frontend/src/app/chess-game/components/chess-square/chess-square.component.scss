@@ -9,22 +9,11 @@
     height: $chess-square-size;
 }
 
-.chess-square-info {
+.chess-square-highlight {
     position: absolute;
-    height: min-content;
-    bottom: 0;
-    -webkit-touch-callout: none;
-    /* iOS Safari */
-    -webkit-user-select: none;
-    /* Safari */
-    -khtml-user-select: none;
-    /* Konqueror HTML */
-    -moz-user-select: none;
-    /* Old versions of Firefox */
-    -ms-user-select: none;
-    /* Internet Explorer/Edge */
-    user-select: none;
-    /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+    width: $chess-square-size;
+    height: $chess-square-size;
+    opacity: 0.4;
 }
 
 .chess-piece-wrapper:active {

@@ -2,6 +2,7 @@ package pl.illchess.adapter.board.query.out.redis.mapper;
 
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.application.board.query.out.model.BoardView;
+import pl.illchess.application.board.query.out.model.MoveView;
 
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,19 @@ public class BoardViewMapper {
                 entity.boardState().player1().username(),
                 entity.boardState().player2() == null ? null : entity.boardState().player2().username(),
                 entity.boardState().gameState(),
-                entity.boardState().victoriousPlayerColor()
+                entity.boardState().victoriousPlayerColor(),
+                toLastPerformedMove(entity)
             );
         }
+    }
+
+    private static MoveView toLastPerformedMove(BoardEntity entity) {
+        return entity.moveStackData() == null || entity.moveStackData().isEmpty()
+            ? null
+            : new MoveView(
+            entity.moveStackData().get(entity.moveStackData().size() - 1).startSquare(),
+            entity.moveStackData().get(entity.moveStackData().size() - 1).targetSquare()
+        );
     }
 
     private static Map<String, BoardView.PieceView> toPiecesLocations(

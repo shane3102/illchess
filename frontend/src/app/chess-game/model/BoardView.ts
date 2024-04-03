@@ -7,11 +7,17 @@ export interface BoardView {
     gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE'
     victoriousPlayerColor?: PieceColor,
     whitePlayer: string,
-    blackPlayer: string
+    blackPlayer: string,
+    lastPerformedMove?: MoveView
 }
 
 interface PiecesLocations {
     [square: string]: PieceInfo
+}
+
+export interface MoveView {
+    startSquare: string,
+    targetSquare: string
 }
 
 export enum Square {

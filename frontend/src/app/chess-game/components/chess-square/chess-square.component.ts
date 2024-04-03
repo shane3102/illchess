@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
+import { MoveView } from '../../model/BoardView';
 
 @Component({
   selector: 'app-chess-square',
@@ -21,6 +22,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() draggedPieceInfo: PieceDraggedInfo | undefined | null;
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
   @Input() username: string
+  @Input() lastPerformedMove: MoveView | undefined
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
@@ -45,11 +47,6 @@ export class ChessSquareComponent implements OnInit {
   }
 
   public calculateSquareColor(): string {
-
-    if (this.isDraggedOver) {
-      return 'green';
-    }
-
     return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0 ? 'rgba(150, 75, 0)' : '#F3E5AB';
   }
 
@@ -104,6 +101,13 @@ export class ChessSquareComponent implements OnInit {
       return this.legalMoves.legalSquares.some(it => it.toString() == this.squareInfo.file + this.squareInfo.rank)
     }
     return false
+  }
+
+  isLastPerformedMove(): boolean {
+
+    let currentSquare: string = this.squareInfo.file+this.squareInfo.rank
+
+    return currentSquare == this.lastPerformedMove?.startSquare || currentSquare == this.lastPerformedMove?.targetSquare
   }
 
   private fileToNumber(): number {
