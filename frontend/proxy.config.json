@@ -1,12 +1,12 @@
 {
   "/api/*": {
-    "target": "http://192.168.1.49:8080",
+    "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
   },
   "/login/*": {
-    "target": "http://192.168.1.49:8080",
+    "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
