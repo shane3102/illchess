@@ -6,14 +6,8 @@ import java.util.UUID;
 public record BoardView(
         UUID boardId,
         Map<String, PieceView> piecesLocations,
-        String currentPlayerColor,
-        String whitePlayer,
-        String blackPlayer,
-        String gameState,
         String victoriousPlayerColor,
         MoveView lastPerformedMove
 ) {
-    public record PieceView(String color, String type) {
 
-    }
 }
