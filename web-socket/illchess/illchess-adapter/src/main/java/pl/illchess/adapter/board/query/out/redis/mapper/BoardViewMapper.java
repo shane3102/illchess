@@ -1,12 +1,17 @@
 package pl.illchess.adapter.board.query.out.redis.mapper;
 
+import io.micrometer.observation.Observation;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
 import pl.illchess.application.board.query.out.model.MoveView;
+import pl.illchess.application.board.query.out.model.PieceView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BoardViewMapper {
 
@@ -17,12 +22,29 @@ public class BoardViewMapper {
             return new BoardView(
                 entity.boardId(),
                 toPiecesLocations(entity.piecesLocations()),
+                entity.boardState().victoriousPlayerColor(),
+                toLastPerformedMove(entity)
+            );
+        }
+    }
+
+    public static BoardAdditionalInfoView toAdditionalInfoView(BoardEntity entity) {
+        if (entity == null) {
+            return null;
+        } else {
+
+            Supplier<Stream<BoardEntity.MoveEntity>> capturedPiecesStreamSupplier = () -> entity.moveStackData().stream().filter(it -> it.capturedPiece() != null);
+
+            return new BoardAdditionalInfoView(
+                entity.boardId(),
                 entity.boardState().currentPlayerColor(),
                 entity.boardState().player1().username(),
                 entity.boardState().player2() == null ? null : entity.boardState().player2().username(),
                 entity.boardState().gameState(),
                 entity.boardState().victoriousPlayerColor(),
-                toLastPerformedMove(entity)
+                capturedPiecesStreamSupplier.get().filter(move-> "WHITE".equals(move.capturedPiece().pieceColor())).map(move -> move.capturedPiece().pieceType()).toList(),
+                capturedPiecesStreamSupplier.get().filter(move-> "BLACK".equals(move.capturedPiece().pieceColor())).map(move -> move.capturedPiece().pieceType()).toList(),
+                toPerformedMoves(entity.moveStackData())
             );
         }
     }
@@ -36,19 +58,57 @@ public class BoardViewMapper {
         );
     }
 
-    private static Map<String, BoardView.PieceView> toPiecesLocations(
+    private static Map<String, PieceView> toPiecesLocations(
         List<BoardEntity.PieceEntity> piecesLocationsInEntity
     ) {
         return piecesLocationsInEntity.stream()
             .map(
                 pieceWithLocation -> Map.entry(
                     pieceWithLocation.square(),
-                    new BoardView.PieceView(
+                    new PieceView(
                         pieceWithLocation.pieceColor(),
                         pieceWithLocation.pieceType()
                     )
                 )
             )
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private static List<String> toPerformedMoves(List<BoardEntity.MoveEntity> moveEntities) {
+        return moveEntities.stream().map(BoardViewMapper::toPerformedMove).toList();
+    }
+
+    private static String toPerformedMove(BoardEntity.MoveEntity moveEntity) {
+
+        String startSquareLower = moveEntity.startSquare().toLowerCase();
+        String targetSquareLower = moveEntity.targetSquare().toLowerCase();
+
+        return switch (moveEntity.movedPiece().pieceType()) {
+            case "PAWN" -> {
+                if (moveEntity.capturedPiece() != null) {
+                    yield startSquareLower.charAt(0) + "x" + targetSquareLower;
+                }
+                yield targetSquareLower;
+            }
+            case "BISHOP", "KNIGHT", "ROOK", "QUEEN", "KING" -> {
+                String result = getPieceLetter(moveEntity.movedPiece().pieceType()) + startSquareLower;
+                if (moveEntity.capturedPiece() != null) {
+                    yield result + 'x' + targetSquareLower;
+                }
+                yield result + targetSquareLower;
+            }
+            default -> "";
+        };
+    }
+
+    private static String getPieceLetter(String pieceType) {
+        return switch (pieceType) {
+            case "BISHOP" -> "B";
+            case "KNIGHT" -> "N";
+            case "ROOK" -> "R";
+            case "QUEEN" -> "Q";
+            case "KING" -> "K";
+            default -> "";
+        };
     }
 }
