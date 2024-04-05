@@ -23,6 +23,9 @@ import { ActiveBoardsComponent } from './components/active-boards/active-boards.
 import { activeBoardsReducer } from './state/active-boards/active-boards.reducer';
 import { ActiveBoardEffects } from './state/active-boards/active-boards.effects';
 import { SharedModule } from '../shared/shared.module';
+import { BoardAdditionalInfoEffects } from './state/board-additional-info/board-additional-info.effects';
+import { boardAdditionalInfoReducer } from './state/board-additional-info/board-additional-info.reducers';
+import { ChessBoardAdditionalInfoComponent } from './components/chess-board-additional-info/chess-board-additional-info.component';
 
 
 @NgModule({
@@ -41,16 +44,23 @@ import { SharedModule } from '../shared/shared.module';
     JoinOrInitializeGameComponent,
     ChessBoardMiniComponent,
     ChessPieceMiniComponent,
-    ActiveBoardsComponent
+    ActiveBoardsComponent,
+    ChessBoardAdditionalInfoComponent
   ],
   imports: [
     SharedModule,
     CommonModule,
     FontAwesomeModule,
-    StoreModule.forRoot({boardState: boardReducer, activeBoardsState: activeBoardsReducer}),
-    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects])
+    StoreModule.forRoot(
+      {
+        boardState: boardReducer,
+        activeBoardsState: activeBoardsReducer,
+        boardAdditionalInfoState: boardAdditionalInfoReducer
+      }
+    ),
+    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects, BoardAdditionalInfoEffects])
   ],
-  exports:[
+  exports: [
     ChessBoardComponent,
     JoinOrInitializeGameComponent,
     ActiveBoardsComponent
