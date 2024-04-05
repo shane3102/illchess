@@ -1,0 +1,8 @@
+<div *ngIf="boardId && username" class="chess-game">
+    <div>
+        <app-chess-board [boardId]="boardId" [username]="username"></app-chess-board>
+    </div>
+    <div>
+        <app-chess-board-additional-info [boardId]="boardId" [username]="username"></app-chess-board-additional-info>
+    </div>
+</div>

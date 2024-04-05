@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -21,10 +21,10 @@ import { ChessGameState } from '../../state/chess-game.state';
 })
 export class ChessBoardComponent implements OnInit {
 
-  boardId: string;
-  username: string
+  @Input() boardId: string;
+  @Input() username: string
 
-  boardView: Observable<BoardView> = this.store.select(boardSelector);
+  boardView$: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
   legalMoves: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
@@ -34,26 +34,17 @@ export class ChessBoardComponent implements OnInit {
 
   constructor(
     private store: Store<ChessGameState>,
-    private route: ActivatedRoute,
     private chessBoardWebSocketService: ChessBoardWebsocketService
   ) {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
-      params => {
-        this.boardId = params['boardId']
-        this.username =  params['username']
-        if (this.boardId) {
-          this.sendChessBoardRefreshRequest()
-          this.chessBoardWebSocketService.subscribe(
-            `/chess-topic/${this.boardId}`,
-            (response: any) => {
-              let boardView: BoardView = JSON.parse(response)
-              this.store.dispatch(boardLoaded(boardView))
-            }
-          )
-        }
+    this.sendChessBoardRefreshRequest()
+    this.chessBoardWebSocketService.subscribe(
+      `/chess-topic/${this.boardId}`,
+      (response: any) => {
+        let boardView: BoardView = JSON.parse(response)
+        this.store.dispatch(boardLoaded(boardView))
       }
     )
   }

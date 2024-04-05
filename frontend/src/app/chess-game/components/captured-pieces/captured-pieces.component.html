@@ -1,0 +1,28 @@
+<div class="captured-pieces-wrapper">
+    <div class="captured-pieces">
+        <ng-container *ngFor="let capturedPiece of capturedPieces; let i = index">
+            <div [ngStyle]="{'color': getColorByPieceColor(this.color), 'z-index': i}" class="captured-piece">
+                <ng-container [ngSwitch]="capturedPiece">
+                    <ng-container *ngSwitchCase="Piece.PAWN">
+                        <fa-icon [icon]="pawnIcon"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Piece.KNIGHT">
+                        <fa-icon [icon]="knightIcon"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Piece.BISHOP">
+                        <fa-icon [icon]="bishopIcon"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Piece.ROOK">
+                        <fa-icon [icon]="rookIcon"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Piece.QUEEN">
+                        <fa-icon [icon]="queenIcon"></fa-icon>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="Piece.KING">
+                        <fa-icon [icon]="kingIcon"></fa-icon>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+</div>

@@ -26,6 +26,8 @@ import { SharedModule } from '../shared/shared.module';
 import { BoardAdditionalInfoEffects } from './state/board-additional-info/board-additional-info.effects';
 import { boardAdditionalInfoReducer } from './state/board-additional-info/board-additional-info.reducers';
 import { ChessBoardAdditionalInfoComponent } from './components/chess-board-additional-info/chess-board-additional-info.component';
+import { ChessGameComponent } from './components/chess-game/chess-game.component';
+import { CapturedPiecesComponent } from './components/captured-pieces/captured-pieces.component';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { ChessBoardAdditionalInfoComponent } from './components/chess-board-addi
     ChessBoardMiniComponent,
     ChessPieceMiniComponent,
     ActiveBoardsComponent,
-    ChessBoardAdditionalInfoComponent
+    ChessBoardAdditionalInfoComponent,
+    ChessGameComponent,
+    CapturedPiecesComponent
   ],
   imports: [
     SharedModule,
@@ -61,7 +65,7 @@ import { ChessBoardAdditionalInfoComponent } from './components/chess-board-addi
     EffectsModule.forRoot([BoardEffects, ActiveBoardEffects, BoardAdditionalInfoEffects])
   ],
   exports: [
-    ChessBoardComponent,
+    ChessGameComponent,
     JoinOrInitializeGameComponent,
     ActiveBoardsComponent
   ]
