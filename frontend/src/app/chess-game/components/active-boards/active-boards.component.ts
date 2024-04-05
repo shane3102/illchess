@@ -44,14 +44,14 @@ export class ActiveBoardsComponent implements OnInit {
   }
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {
-    if (side == 'left') {
-      return (numberOfBoards) <= this.page + 3;
+    if (side == 'right') {
+      return (numberOfBoards) <= this.page + 3 || this.clickedRight;
     } else {
-      return this.page <= 0
+      return this.page <= 0 || this.clickedLeft
     }
   }
 
-  slideLeft() {
+  slideRight() {
     this.clickedLeft = true
     setTimeout(() => {
       this.clickedLeft = false
@@ -59,7 +59,7 @@ export class ActiveBoardsComponent implements OnInit {
     }, 900)
   }
 
-  slideRight() {
+  slideLeft() {
     this.clickedRight = true
     setTimeout(() => {
       this.clickedRight = false
