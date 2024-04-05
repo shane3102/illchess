@@ -1,0 +1,90 @@
+@import "../chess-board-style.scss";
+
+$performed-moves-panel-width: 2.5 * $chess-square-size;
+$panel-width: 4 * $chess-square-size;
+
+.additional-info {
+    width: $panel-width;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 1vw 0 1vw;
+}
+
+.performed-moves-wrapper {
+    width: $performed-moves-panel-width;
+    height: calc(3 * $chess-square-size - 2vh);
+    border-left: 0.25vh solid rgb(150, 75, 0);
+    border-right: 0.25vh solid rgb(150, 75, 0);
+    background-color: #F3E5AB;
+    margin: 0 1vw 0 1vw;
+    overflow: auto;
+}
+
+.performed-moves {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 1vh;
+}
+
+.performed-move {
+    width: 0.75*$chess-square-size;
+    height: 2vh;
+    border-radius: 2vh;
+    padding: 0.5vh 0 0.5vh 0;
+    margin: 0.25vh;
+    text-align: center;
+    font-size: 1.75vh;
+}
+
+.performed-move-black {
+    background-color: black;
+    color: white;
+}
+
+.performed-move-white {
+    background-color: white;
+    color: black;
+}
+
+.player-panel {
+    width: $panel-width;
+    background-color: rgb(150, 75, 0);
+}
+
+.player-panel-black {
+    border-radius: 0  0 calc(($panel-width - $performed-moves-panel-width)/4) calc(($panel-width - $performed-moves-panel-width)/4);
+}
+
+.player-panel-white {
+    border-radius: calc(($panel-width - $performed-moves-panel-width)/4) calc(($panel-width - $performed-moves-panel-width)/4) 0  0;
+}
+
+.username-and-captured-pieces-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.username-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc($panel-width / 2);
+    font-size: calc($panel-width / 15);
+}
+
+::-webkit-scrollbar {
+    width: 1vh;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F3E5AB;
+    border: 0.25vh solid rgb(150, 75, 0);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(150, 75, 0);
+}

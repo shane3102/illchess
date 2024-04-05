@@ -1,4 +1,37 @@
-<ng-container *ngIf="boardAdditionalInfoView$ | async as boardAdditionalInfoView">
-    {{boardAdditionalInfoView | json}}
-</ng-container>
-XDDDD
+<div *ngIf="boardAdditionalInfoView$ | async as boardAdditionalInfoView" class="additional-info">
+    <div class="player-panel player-panel-black">
+        <div class="username-and-captured-pieces-wrapper">
+            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.blackPlayer ? {'color': 'green'} : {}">
+                <div>
+                    {{boardAdditionalInfoView.blackPlayer}}
+                </div>
+            </div>
+            <div>
+                <app-captured-pieces [color]="PieceColor.WHITE"
+                    [capturedPieces]="boardAdditionalInfoView.capturedWhitePieces"></app-captured-pieces>
+            </div>
+        </div>
+    </div>
+    <div class="performed-moves-wrapper">
+        <div class="performed-moves">
+            <ng-container *ngFor="let move of boardAdditionalInfoView.performedMoves; let isOdd = odd;">
+                <div class="performed-move" [ngClass]="{'performed-move-black': isOdd, 'performed-move-white': !isOdd}">
+                    {{move}}
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="player-panel player-panel-white">
+        <div class="username-and-captured-pieces-wrapper">
+            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.whitePlayer ? {'color': 'green'} : {}">
+                <div>
+                    {{boardAdditionalInfoView.whitePlayer}}
+                </div>
+            </div>
+            <div>
+                <app-captured-pieces [color]="PieceColor.BLACK"
+                    [capturedPieces]="boardAdditionalInfoView.capturedBlackPieces"></app-captured-pieces>
+            </div>
+        </div>
+    </div>
+</div>

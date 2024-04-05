@@ -32,7 +32,7 @@ export class JoinOrInitializeGameComponent implements OnInit {
 
     this.store.select(initializedBoardIdSelector).subscribe(
       (dto: RefreshBoardDto) => {
-        this.router.navigateByUrl(`/board/${dto.boardId}/${this.username}`)
+        this.router.navigateByUrl(`/game/${dto.boardId}/${this.username}`)
       }
     )
   }

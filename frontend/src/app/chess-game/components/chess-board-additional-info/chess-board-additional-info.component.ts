@@ -7,6 +7,7 @@ import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../s
 import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
 import { Observable } from 'rxjs';
 import { boardAdditionalInfoSelector } from '../../state/board-additional-info/board-additional-info.selectors';
+import { PieceColor } from '../../model/PieceInfo';
 
 @Component({
   selector: 'app-chess-board-additional-info',
@@ -14,6 +15,8 @@ import { boardAdditionalInfoSelector } from '../../state/board-additional-info/b
   styleUrls: ['./chess-board-additional-info.component.scss']
 })
 export class ChessBoardAdditionalInfoComponent implements OnInit {
+
+  PieceColor = PieceColor
 
   @Input() boardId: string;
   @Input() username: string;

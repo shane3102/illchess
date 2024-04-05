@@ -3,11 +3,7 @@ import { Piece, PieceColor, PieceInfo } from "./PieceInfo"
 export interface BoardView {
     boardId: string
     piecesLocations: PiecesLocations
-    currentPlayerColor: PieceColor
-    gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE'
     victoriousPlayerColor?: PieceColor,
-    whitePlayer: string,
-    blackPlayer: string,
     lastPerformedMove?: MoveView
 }
 

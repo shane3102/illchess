@@ -1,0 +1,38 @@
+@import '../chess-board-additional-info/chess-board-additional-info.component.scss';
+
+$captured-pieces-width: calc($panel-width / 2);
+
+.captured-pieces-wrapper{
+    width: $captured-pieces-width;
+    height: 10vh;
+}
+
+.captured-pieces {
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+    padding-left: calc($captured-pieces-width / 8);
+    padding-right: calc($captured-pieces-width / 8);
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    transition: all 0.5s;
+}
+
+.captured-pieces:hover {
+    padding: 0vh;
+}
+
+.captured-piece {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2vh;
+    width: calc($captured-pieces-width / 8) + calc(2  * $captured-pieces-width / 256);
+    font-size: 2vh;
+    transition: all 0.5s;
+}
+
+.captured-pieces:hover .captured-piece {
+    width: calc($captured-pieces-width / 8);
+    padding: calc($captured-pieces-width / 8 / 4);
+}
