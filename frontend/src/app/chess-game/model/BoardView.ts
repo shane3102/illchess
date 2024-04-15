@@ -3,7 +3,6 @@ import { Piece, PieceColor, PieceInfo } from "./PieceInfo"
 export interface BoardView {
     boardId: string
     piecesLocations: PiecesLocations
-    victoriousPlayerColor?: PieceColor,
     lastPerformedMove?: MoveView
 }
 

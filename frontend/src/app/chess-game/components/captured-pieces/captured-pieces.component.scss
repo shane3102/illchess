@@ -2,7 +2,7 @@
 
 $captured-pieces-width: calc($panel-width / 2);
 
-.captured-pieces-wrapper{
+.captured-pieces-wrapper {
     width: $captured-pieces-width;
     height: 10vh;
 }
@@ -18,7 +18,7 @@ $captured-pieces-width: calc($panel-width / 2);
     transition: all 0.5s;
 }
 
-.captured-pieces:hover {
+.captured-pieces-wrapper:hover .captured-pieces {
     padding: 0vh;
 }
 
@@ -32,7 +32,8 @@ $captured-pieces-width: calc($panel-width / 2);
     transition: all 0.5s;
 }
 
-.captured-pieces:hover .captured-piece {
+.captured-pieces-wrapper:hover .captured-piece {
+    font-size: 3vh;
     width: calc($captured-pieces-width / 8);
     padding: calc($captured-pieces-width / 8 / 4);
 }

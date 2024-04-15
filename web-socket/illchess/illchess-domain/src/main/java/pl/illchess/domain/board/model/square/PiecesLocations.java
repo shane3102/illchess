@@ -35,9 +35,25 @@ public record PiecesLocations(
     public Move movePiece(MovePiece command, Piece movedPiece, Move lastPerformedMove) {
         Square movedPieceStartSquare = command.startSquare();
 
-        Piece capturedPiece = findPieceOnSquare(command.targetSquare()).orElse(null);
+        IsEnPassant isEnPassant = new IsEnPassant(false);
+        Piece capturedPiece = null;
 
-        IsEnPassant isEnPassant = removePieceIfEnPassantMove(command, movedPiece, lastPerformedMove);
+        if (movedPiece instanceof Pawn pawn) {
+            Square square = pawn.getSquareOfPieceCapturedEnPassant(command.targetSquare(), lastPerformedMove);
+            if (square != null) {
+                Optional<Piece> foundPiece = findPieceOnSquare(square);
+
+                if (foundPiece.isPresent() && foundPiece.get() instanceof Pawn) {
+                    isEnPassant = new IsEnPassant(true);
+                    capturedPiece = foundPiece.get();
+                    locations.removeIf(piece ->
+                        Objects.equals(piece.square(), square)
+                    );
+                }
+            }
+        }
+
+        capturedPiece = capturedPiece != null ? capturedPiece : findPieceOnSquare(command.targetSquare()).orElse(null);
         IsCastling isCastling = moveRookIfCastlingMove(movedPiece, command);
         PromotionInfo promotionInfo = isPromotion(movedPiece, command);
 
@@ -129,17 +145,6 @@ public record PiecesLocations(
         movedPiece.setSquare(command.targetSquare());
 
         locations.add(movedPiece);
-    }
-
-    private IsEnPassant removePieceIfEnPassantMove(MovePiece command, Piece movedPiece, Move lastPerformedMove) {
-        if (movedPiece instanceof Pawn pawn) {
-            Square square = pawn.getSquareOfPieceCapturedEnPassant(command.targetSquare(), lastPerformedMove);
-            if (square != null) {
-                boolean wasPawnRemoved = locations.removeIf(piece -> Objects.equals(piece.square(), square));
-                return new IsEnPassant(wasPawnRemoved);
-            }
-        }
-        return new IsEnPassant(false);
     }
 
     private IsCastling moveRookIfCastlingMove(Piece movedPiece, MovePiece command) {

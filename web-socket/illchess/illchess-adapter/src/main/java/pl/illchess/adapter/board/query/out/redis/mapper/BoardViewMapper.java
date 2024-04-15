@@ -1,6 +1,5 @@
 package pl.illchess.adapter.board.query.out.redis.mapper;
 
-import io.micrometer.observation.Observation;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
@@ -23,7 +22,6 @@ public class BoardViewMapper {
             return new BoardView(
                 entity.boardId(),
                 toPiecesLocations(entity.piecesLocations()),
-                entity.boardState().victoriousPlayerColor(),
                 toLastPerformedMove(entity)
             );
         }
