@@ -87,6 +87,7 @@ public class BoardManager implements
 
         CheckLegalMoves command = cmd.toCommand();
         Set<Square> legalMoves = board.legalMoves(command);
+        saveBoard.saveBoard(board);
         log.info(
             "At board with id = {} piece of color = {} is allowed to move from square = {} to squares = {}",
             cmd.boardId(),
@@ -159,8 +160,9 @@ public class BoardManager implements
         Board board = loadBoard.loadBoard(command.boardId())
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         GameState stateOfBoard = board.establishBoardState();
+        saveBoard.saveBoard(board);
         if (stateOfBoard != CONTINUE) {
-            saveBoard.saveBoard(board);
+
             eventPublisher.publishDomainEvent(new GameFinished(board.boardId()));
         }
         log.info("Successfully checked state on board = {}. State is {}", cmd.boardId(), stateOfBoard);

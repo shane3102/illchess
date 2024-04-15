@@ -32,29 +32,21 @@ public record PiecesLocations(
     Set<Piece> locations
 ) {
 
-    public Move movePiece(MovePiece command, Move lastPerformedMove) {
-        Square movedPieceStartSquare = command.movedPiece().square();
-
-        if (!isPieceOnLocation(command)) {
-            throw new PieceNotPresentOnGivenSquare(
-                command.boardId(),
-                command.movedPiece(),
-                command.movedPiece().square()
-            );
-        }
+    public Move movePiece(MovePiece command, Piece movedPiece, Move lastPerformedMove) {
+        Square movedPieceStartSquare = command.startSquare();
 
         Piece capturedPiece = findPieceOnSquare(command.targetSquare()).orElse(null);
 
-        IsEnPassant isEnPassant = removePieceIfEnPassantMove(command, lastPerformedMove);
-        IsCastling isCastling = moveRookIfCastlingMove(command);
-        PromotionInfo promotionInfo = isPromotion(command);
+        IsEnPassant isEnPassant = removePieceIfEnPassantMove(command, movedPiece, lastPerformedMove);
+        IsCastling isCastling = moveRookIfCastlingMove(movedPiece, command);
+        PromotionInfo promotionInfo = isPromotion(movedPiece, command);
 
-        movePieceMechanic(command, promotionInfo);
+        movePieceMechanic(command, movedPiece, promotionInfo);
 
         return new Move(
             movedPieceStartSquare,
             command.targetSquare(),
-            command.movedPiece(),
+            movedPiece,
             capturedPiece,
             isEnPassant,
             isCastling,
@@ -114,20 +106,18 @@ public record PiecesLocations(
             .collect(Collectors.toSet());
     }
 
-    private boolean isPieceOnLocation(MovePiece command) {
-        return Objects.equals(findPieceOnSquare(command.movedPiece().square()).orElse(null), command.movedPiece());
-    }
+    private void movePieceMechanic(MovePiece command, Piece movedPiece, PromotionInfo promotionInfo) {
 
-    private void movePieceMechanic(MovePiece command, PromotionInfo promotionInfo) {
+        Square movedPieceSquare = movedPiece.square();
+
         locations.removeIf(
-            piece -> Objects.equals(piece.square(), command.movedPiece().square()) ||
+            piece -> Objects.equals(piece.square(), movedPieceSquare) ||
                 Objects.equals(piece.square(), command.targetSquare())
         );
 
-        Piece movedPiece = command.movedPiece();
 
         if (promotionInfo != null) {
-            if (!(command.movedPiece() instanceof Pawn pawn)) {
+            if (!(movedPiece instanceof Pawn pawn)) {
                 throw new PromotedPieceNotPawnException();
             }
             if (command.pawnPromotedToPieceType() == null) {
@@ -141,8 +131,8 @@ public record PiecesLocations(
         locations.add(movedPiece);
     }
 
-    private IsEnPassant removePieceIfEnPassantMove(MovePiece command, Move lastPerformedMove) {
-        if (command.movedPiece() instanceof Pawn pawn) {
+    private IsEnPassant removePieceIfEnPassantMove(MovePiece command, Piece movedPiece, Move lastPerformedMove) {
+        if (movedPiece instanceof Pawn pawn) {
             Square square = pawn.getSquareOfPieceCapturedEnPassant(command.targetSquare(), lastPerformedMove);
             if (square != null) {
                 boolean wasPawnRemoved = locations.removeIf(piece -> Objects.equals(piece.square(), square));
@@ -152,31 +142,32 @@ public record PiecesLocations(
         return new IsEnPassant(false);
     }
 
-    private IsCastling moveRookIfCastlingMove(MovePiece command) {
-        IsCastling isCastling = moveRookIfCastlingMoveByCorner(command, Square.G1, Square.E1, Square.H1, Square.F1);
+    private IsCastling moveRookIfCastlingMove(Piece movedPiece, MovePiece command) {
+        IsCastling isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.G1, Square.E1, Square.H1, Square.F1);
         if (isCastling.value()) {
             return isCastling;
         }
-        isCastling = moveRookIfCastlingMoveByCorner(command, Square.C1, Square.E1, Square.A1, Square.D1);
+        isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C1, Square.E1, Square.A1, Square.D1);
         if (isCastling.value()) {
             return isCastling;
         }
-        isCastling = moveRookIfCastlingMoveByCorner(command, Square.G8, Square.E8, Square.H8, Square.F8);
+        isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.G8, Square.E8, Square.H8, Square.F8);
         if (isCastling.value()) {
             return isCastling;
         }
-        isCastling = moveRookIfCastlingMoveByCorner(command, Square.C8, Square.E8, Square.A8, Square.D8);
+        isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C8, Square.E8, Square.A8, Square.D8);
         return isCastling;
     }
 
     private IsCastling moveRookIfCastlingMoveByCorner(
         MovePiece command,
+        Piece movedPiece,
         Square targetSquare,
         Square kingSquare,
         Square expectedRookSquare,
         Square rookSquareAfterEnPassant
     ) {
-        if (command.movedPiece() instanceof King king && command.targetSquare().equals(targetSquare) && king.square().equals(kingSquare)) {
+        if (movedPiece instanceof King king && command.targetSquare().equals(targetSquare) && king.square().equals(kingSquare)) {
             Rook foundRook = locations.stream()
                 .filter(it -> it.square().equals(expectedRookSquare))
                 .filter(it -> it instanceof Rook)
@@ -190,10 +181,10 @@ public record PiecesLocations(
         return IsCastling.nope();
     }
 
-    private PromotionInfo isPromotion(MovePiece command) {
-        if (command.targetSquare().getRank().getNumber() == 8 && command.movedPiece() instanceof Pawn && Objects.equals(command.movedPiece().color(), WHITE)) {
+    private PromotionInfo isPromotion(Piece movedPiece, MovePiece command) {
+        if (command.targetSquare().getRank().getNumber() == 8 && movedPiece instanceof Pawn && Objects.equals(movedPiece.color(), WHITE)) {
             return new PromotionInfo(command.pawnPromotedToPieceType());
-        } else if (command.targetSquare().getRank().getNumber() == 1 && command.movedPiece() instanceof Pawn && Objects.equals(command.movedPiece().color(), BLACK)) {
+        } else if (command.targetSquare().getRank().getNumber() == 1 && movedPiece instanceof Pawn && Objects.equals(movedPiece.color(), BLACK)) {
             return new PromotionInfo(command.pawnPromotedToPieceType());
         }
         return null;

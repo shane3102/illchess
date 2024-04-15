@@ -18,6 +18,7 @@ import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -79,7 +80,8 @@ public class BoardMapper {
                     piece -> PieceType.getPieceByPieceType(
                         new PieceType(piece.pieceType()),
                         PieceColor.valueOf(piece.pieceColor()),
-                        Square.valueOf(piece.square())
+                        Square.valueOf(piece.square()),
+                        piece.cachedReachableSquares() == null ? Set.of() : piece.cachedReachableSquares().stream().map(Square::valueOf).collect(Collectors.toSet())
                     )
                 )
                 .collect(Collectors.toSet())
@@ -99,7 +101,8 @@ public class BoardMapper {
                     PieceType.getPieceByPieceType(
                         new PieceType(moveEntity.movedPiece().pieceType()),
                         PieceColor.valueOf(moveEntity.movedPiece().pieceColor()),
-                        Square.valueOf(moveEntity.targetSquare())
+                        Square.valueOf(moveEntity.targetSquare()),
+                        Set.of()
                     ),
                     moveEntity.capturedPiece() == null
                         ?
@@ -108,7 +111,8 @@ public class BoardMapper {
                         PieceType.getPieceByPieceType(
                             new PieceType(moveEntity.capturedPiece().pieceType()),
                             PieceColor.valueOf(moveEntity.capturedPiece().pieceColor()),
-                            Square.valueOf(moveEntity.targetSquare())
+                            Square.valueOf(moveEntity.targetSquare()),
+                            Set.of()
                         ),
                     new IsEnPassant(moveEntity.isEnPassant()),
                     new IsCastling(moveEntity.isCastling()),
@@ -128,7 +132,8 @@ public class BoardMapper {
                 piece -> new BoardEntity.PieceEntity(
                     piece.square().toString(),
                     piece.color().toString(),
-                    piece.typeName().text()
+                    piece.typeName().text(),
+                    piece.cachedReachableSquares() == null ? Set.of() : piece.cachedReachableSquares().stream().map(Enum::name).collect(Collectors.toSet())
                 )
             )
             .toList();
@@ -144,14 +149,16 @@ public class BoardMapper {
                     new BoardEntity.PieceEntity(
                         move.movedPiece().square().toString(),
                         move.movedPiece().color().toString(),
-                        move.movedPiece().typeName().text()
+                        move.movedPiece().typeName().text(),
+                        Set.of()
                     ),
                     move.capturedPiece() == null ?
                         null :
                         new BoardEntity.PieceEntity(
                             move.capturedPiece().square().toString(),
                             move.capturedPiece().color().toString(),
-                            move.capturedPiece().typeName().text()
+                            move.capturedPiece().typeName().text(),
+                            Set.of()
                         ),
                     move.isEnPassant().value(),
                     move.isCastling().value(),

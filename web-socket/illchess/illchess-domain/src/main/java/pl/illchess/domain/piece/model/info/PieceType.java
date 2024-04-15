@@ -11,6 +11,7 @@ import pl.illchess.domain.piece.model.type.Queen;
 import pl.illchess.domain.piece.model.type.Rook;
 
 import java.util.Map;
+import java.util.Set;
 
 public record PieceType(String text) {
 
@@ -22,14 +23,14 @@ public record PieceType(String text) {
             new PieceType("PAWN"), 1
     );
 
-    public static Piece getPieceByPieceType(PieceType type, PieceColor color, Square currentSquare) {
+    public static Piece getPieceByPieceType(PieceType type, PieceColor color, Square currentSquare, Set<Square> cachedReachableSquares) {
         return switch (type.text()) {
-            case "KING" -> new King(color, currentSquare);
-            case "QUEEN" -> new Queen(color, currentSquare);
-            case "ROOK" -> new Rook(color, currentSquare);
-            case "BISHOP" -> new Bishop(color, currentSquare);
-            case "KNIGHT" -> new Knight(color, currentSquare);
-            case "PAWN" -> new Pawn(color, currentSquare);
+            case "KING" -> new King(color, currentSquare, cachedReachableSquares);
+            case "QUEEN" -> new Queen(color, currentSquare, cachedReachableSquares);
+            case "ROOK" -> new Rook(color, currentSquare, cachedReachableSquares);
+            case "BISHOP" -> new Bishop(color, currentSquare, cachedReachableSquares);
+            case "KNIGHT" -> new Knight(color, currentSquare, cachedReachableSquares);
+            case "PAWN" -> new Pawn(color, currentSquare, cachedReachableSquares);
             default -> throw new PieceTypeNotRecognisedException(type);
         };
     }

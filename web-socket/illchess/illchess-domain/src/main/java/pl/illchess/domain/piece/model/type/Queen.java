@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 public final class Queen implements PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
+    private Set<Square> cachedReachableSquares;
 
     public Queen(
         PieceColor color,
@@ -26,6 +27,13 @@ public final class Queen implements PieceCapableOfPinning {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public Queen(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -55,6 +63,16 @@ public final class Queen implements PieceCapableOfPinning {
     @Override
     public void setSquare(Square square) {
         this.square = square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override

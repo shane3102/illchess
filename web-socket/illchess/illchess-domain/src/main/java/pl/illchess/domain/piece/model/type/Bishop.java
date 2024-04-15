@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 public final class Bishop implements PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
+    private Set<Square> cachedReachableSquares;
 
     public Bishop(
         PieceColor color,
@@ -26,6 +27,13 @@ public final class Bishop implements PieceCapableOfPinning {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public Bishop(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -60,6 +68,16 @@ public final class Bishop implements PieceCapableOfPinning {
 
     public Square square() {
         return square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
