@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 public final class Knight implements Piece {
     private final PieceColor color;
     private Square square;
+    private Set<Square>  cachedReachableSquares;
 
     public Knight(
             PieceColor color,
@@ -25,6 +26,13 @@ public final class Knight implements Piece {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public Knight(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -47,6 +55,16 @@ public final class Knight implements Piece {
 
     public Square square() {
         return square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override

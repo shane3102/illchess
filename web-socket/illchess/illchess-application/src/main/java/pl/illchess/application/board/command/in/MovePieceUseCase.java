@@ -23,15 +23,13 @@ public interface MovePieceUseCase {
         String username
     ) {
         public MovePiece toCommand() {
-            PieceType pieceType = new PieceType(this.pieceType);
-            PieceColor pieceColor = PieceColor.valueOf(this.pieceColor);
             Square startSquare = Square.valueOf(this.startSquare);
             Square targetSquare = Square.valueOf(this.targetSquare);
             PieceType promotionPieceType = pawnPromotedToPieceType == null ? null : new PieceType(this.pawnPromotedToPieceType);
 
             return new MovePiece(
                 new BoardId(boardId),
-                PieceType.getPieceByPieceType(pieceType, pieceColor, startSquare),
+                startSquare,
                 targetSquare,
                 promotionPieceType,
                 new Username(username)

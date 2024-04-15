@@ -8,7 +8,7 @@ import pl.illchess.domain.piece.model.info.PieceType;
 
 public record MovePiece(
         BoardId boardId,
-        Piece movedPiece,
+        Square startSquare,
         Square targetSquare,
         PieceType pawnPromotedToPieceType,
         Username username

@@ -23,6 +23,7 @@ import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 public final class King implements Piece {
     private final PieceColor color;
     private Square square;
+    private Set<Square> cachedReachableSquares;
 
     public King(
         PieceColor color,
@@ -30,6 +31,13 @@ public final class King implements Piece {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public King(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -181,6 +189,16 @@ public final class King implements Piece {
 
     public Square square() {
         return square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     public void setSquare(Square square) {

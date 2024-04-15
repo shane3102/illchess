@@ -2,6 +2,7 @@ package pl.illchess.adapter.board.command.out.redis.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public record BoardEntity(
@@ -14,7 +15,8 @@ public record BoardEntity(
     public record PieceEntity(
         String square,
         String pieceColor,
-        String pieceType
+        String pieceType,
+        Set<String> cachedReachableSquares
     ) implements Serializable {
     }
 

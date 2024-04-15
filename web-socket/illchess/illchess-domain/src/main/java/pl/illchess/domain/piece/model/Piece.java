@@ -20,10 +20,17 @@ public interface Piece {
 
     Square square();
 
+    Set<Square> cachedReachableSquares();
+
     default Set<Square> possibleMoves(
         PiecesLocations piecesLocations,
         MoveHistory moveHistory
     ) {
+        if (cachedReachableSquares() != null && !cachedReachableSquares().isEmpty()) {
+            System.out.println("UZYWAM ZACACHOWANYCH DOSTĘPNYCH PÓL");
+            return cachedReachableSquares();
+        }
+
         Move lastPerformedMove = moveHistory.peekLastMove();
 
         Set<Square> reachableSquares = standardLegalMoves(piecesLocations, lastPerformedMove);
@@ -50,11 +57,15 @@ public interface Piece {
             .map(Piece::square)
             .collect(Collectors.toSet());
 
-        return reachableSquares.stream()
+        Set<Square> result = reachableSquares.stream()
             .filter(square -> availableSquaresAsPinnedPiece.isEmpty() || availableSquaresAsPinnedPiece.contains(square))
             .filter(square -> kingDefendingSquareMoves.isEmpty() || kingDefendingSquareMoves.contains(square))
             .filter(square -> alliedOccupiedSquares.isEmpty() || !alliedOccupiedSquares.contains(square))
             .collect(Collectors.toSet());
+
+        setCachedReachableSquares(result);
+
+        return result;
     }
 
     Set<Square> standardLegalMoves(
@@ -74,6 +85,12 @@ public interface Piece {
         return possibleAttackedSquares.stream().anyMatch(square -> isAttackingSquare(square, piecesLocations, lastPerformedMove));
     }
 
+    default void resetCachedReachableSquares() {
+        setCachedReachableSquares(Set.of());
+    }
+
     void setSquare(Square square);
+
+    void setCachedReachableSquares(Set<Square> squares);
 
 }

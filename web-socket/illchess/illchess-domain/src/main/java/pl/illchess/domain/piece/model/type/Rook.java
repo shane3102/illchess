@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 public final class Rook implements PieceCapableOfPinning {
     private final PieceColor color;
     private Square square;
+    private Set<Square> cachedReachableSquares;
 
     public Rook(
         PieceColor color,
@@ -26,6 +27,13 @@ public final class Rook implements PieceCapableOfPinning {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public Rook(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -50,6 +58,16 @@ public final class Rook implements PieceCapableOfPinning {
 
     public Square square() {
         return square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override

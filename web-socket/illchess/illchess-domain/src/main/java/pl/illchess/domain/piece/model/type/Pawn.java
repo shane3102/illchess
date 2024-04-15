@@ -21,6 +21,7 @@ public final class Pawn implements Piece {
 
     private final PieceColor color;
     private Square square;
+    private Set<Square>  cachedReachableSquares;
 
     public Pawn(
         PieceColor color,
@@ -28,6 +29,13 @@ public final class Pawn implements Piece {
     ) {
         this.color = color;
         this.square = square;
+        this.cachedReachableSquares = Set.of();
+    }
+
+    public Pawn(PieceColor color, Square square, Set<Square> cachedReachableSquares) {
+        this.color = color;
+        this.square = square;
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -57,6 +65,16 @@ public final class Pawn implements Piece {
     @Override
     public void setSquare(Square square) {
         this.square = square;
+    }
+
+    @Override
+    public Set<Square> cachedReachableSquares() {
+        return cachedReachableSquares;
+    }
+
+    @Override
+    public void setCachedReachableSquares(Set<Square> cachedReachableSquares) {
+        this.cachedReachableSquares = cachedReachableSquares;
     }
 
     @Override
@@ -93,7 +111,7 @@ public final class Pawn implements Piece {
     }
 
     public Piece promotePawn(PieceType pawnPromotedToPieceType) {
-        Piece pieceByPieceType = PieceType.getPieceByPieceType(pawnPromotedToPieceType, color, square);
+        Piece pieceByPieceType = PieceType.getPieceByPieceType(pawnPromotedToPieceType, color, square, Set.of());
         if (SUPPORTED_PROMOTION_TYPES.stream().noneMatch(supportedType -> supportedType.equals(pieceByPieceType.getClass()))) {
             throw new PromotedPieceTargetTypeNotSupported(pieceByPieceType.getClass(), SUPPORTED_PROMOTION_TYPES);
         }

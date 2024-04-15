@@ -46,10 +46,10 @@ public record Board(
     }
 
     public void movePiece(MovePiece command) {
-        Piece movedPiece = command.movedPiece();
+        Piece movedPiece = piecesLocations().findPieceOnSquare(command.startSquare())
+            .orElseThrow(() -> new PieceNotPresentOnGivenSquare(command.boardId(), command.startSquare()));
         boardState().checkIfAllowedToMove(boardId, movedPiece, command.username());
 
-        // TODO cache it (somehow)
         Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory);
 
         if (!possibleMoves.contains(command.targetSquare())) {
@@ -61,7 +61,8 @@ public record Board(
             );
         }
 
-        Move performedMove = piecesLocations().movePiece(command, moveHistory().peekLastMove());
+        Move performedMove = piecesLocations().movePiece(command, movedPiece, moveHistory().peekLastMove());
+        resetCachedMovesOfPieces();
         moveHistory().addMoveToHistory(performedMove);
         boardState().invertCurrentPlayerColor();
     }
@@ -77,7 +78,6 @@ public record Board(
                 movedPiece.square()
             );
         }
-        // TODO cache it (somehow)
         return movedPiece.possibleMoves(piecesLocations, moveHistory);
     }
 
@@ -116,6 +116,10 @@ public record Board(
 
     public void assignSecondPlayer(Username username) {
         boardState.setBlackPlayer(new Player(username, PieceColor.BLACK));
+    }
+
+    public void resetCachedMovesOfPieces() {
+        piecesLocations.locations().forEach(Piece::resetCachedReachableSquares);
     }
 
     public static Board generateNewBoard(JoinOrInitializeNewGame joinOrInitializeNewGame) {
