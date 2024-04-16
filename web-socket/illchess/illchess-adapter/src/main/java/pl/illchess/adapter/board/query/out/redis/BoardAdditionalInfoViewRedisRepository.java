@@ -20,7 +20,7 @@ public class BoardAdditionalInfoViewRedisRepository implements BoardAdditionalIn
     private final RedisTemplate<String, BoardEntity> template;
 
     @Override
-    public Optional<BoardAdditionalInfoView> findById(UUID boardId) {
+    public Optional<BoardAdditionalInfoView> findBoardById(UUID boardId) {
         BoardEntity boardEntity = (BoardEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
         BoardAdditionalInfoView resultView = BoardViewMapper.toAdditionalInfoView(boardEntity);
         return Optional.ofNullable(resultView);

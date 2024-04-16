@@ -27,7 +27,6 @@ public interface Piece {
         MoveHistory moveHistory
     ) {
         if (cachedReachableSquares() != null && !cachedReachableSquares().isEmpty()) {
-            System.out.println("UZYWAM ZACACHOWANYCH DOSTĘPNYCH PÓL");
             return cachedReachableSquares();
         }
 

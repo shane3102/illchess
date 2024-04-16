@@ -29,7 +29,7 @@ public class BoardQueryController implements BoardQueryApi {
 
     @Override
     public ResponseEntity<BoardAdditionalInfoView> refreshBoardInfoView(UUID boardId) {
-        BoardAdditionalInfoView responseView = boardAdditionalInfoViewQueryPort.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        BoardAdditionalInfoView responseView = boardAdditionalInfoViewQueryPort.findBoardById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
         return ResponseEntity.ok(responseView);
     }
 

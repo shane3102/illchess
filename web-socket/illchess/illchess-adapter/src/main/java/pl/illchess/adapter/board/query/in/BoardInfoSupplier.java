@@ -50,7 +50,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
             "Update event of board with id = {} was catched, sending update of chess board additional info view",
             event.boardId()
         );
-        BoardAdditionalInfoView boardAdditionalInfoView = boardAdditionalInfoViewQueryPort.findById(event.boardId().uuid())
+        BoardAdditionalInfoView boardAdditionalInfoView = boardAdditionalInfoViewQueryPort.findBoardById(event.boardId().uuid())
             .orElseThrow(() -> new BoardNotFoundException(event.boardId()));
         messagingTemplate.convertAndSend(
             "/chess-topic/additional-info/%s".formatted(event.boardId().uuid()),

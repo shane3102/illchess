@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BoardAdditionalInfoViewQueryPort {
-    Optional<BoardAdditionalInfoView> findById(UUID boardId);
+    Optional<BoardAdditionalInfoView> findBoardById(UUID boardId);
 }
