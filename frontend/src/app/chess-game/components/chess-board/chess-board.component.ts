@@ -13,6 +13,7 @@ import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketSer
 import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, movePiece, refreshBoard } from '../../state/board/board.actions';
 import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
+import { gameStateSelector, victoriousPlayerColorSelector } from '../../state/board-additional-info/board-additional-info.selectors';
 
 @Component({
   selector: 'app-chess-board',
@@ -25,9 +26,11 @@ export class ChessBoardComponent implements OnInit {
   @Input() username: string
 
   boardView$: Observable<BoardView> = this.store.select(boardSelector);
-  illegalMoveResponse: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
-  draggedPieceInfo: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
-  legalMoves: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
+  illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
+  draggedPieceInfo$: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
+  legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
+  victoriousPlayerColor$: Observable<string | null | undefined> = this.store.select(victoriousPlayerColorSelector)
+  gameState$: Observable<'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | null | undefined> = this.store.select(gameStateSelector)
 
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']

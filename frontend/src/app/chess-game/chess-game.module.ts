@@ -28,6 +28,7 @@ import { boardAdditionalInfoReducer } from './state/board-additional-info/board-
 import { ChessBoardAdditionalInfoComponent } from './components/chess-board-additional-info/chess-board-additional-info.component';
 import { ChessGameComponent } from './components/chess-game/chess-game.component';
 import { CapturedPiecesComponent } from './components/captured-pieces/captured-pieces.component';
+import { KingBoardInfoAfterGameFinishedComponent } from './components/king-board-info-after-game-finished/king-board-info-after-game-finished.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { CapturedPiecesComponent } from './components/captured-pieces/captured-p
     ActiveBoardsComponent,
     ChessBoardAdditionalInfoComponent,
     ChessGameComponent,
-    CapturedPiecesComponent
+    CapturedPiecesComponent,
+    KingBoardInfoAfterGameFinishedComponent
   ],
   imports: [
     SharedModule,

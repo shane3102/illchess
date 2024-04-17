@@ -7,6 +7,7 @@ import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 import { MoveView } from '../../model/BoardView';
+import { IconDefinition, faCrown, faHashtag, faEquals } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-chess-square',
@@ -23,6 +24,8 @@ export class ChessSquareComponent implements OnInit {
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
   @Input() username: string
   @Input() lastPerformedMove: MoveView | undefined
+  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | null | undefined
+  @Input() victoriousPlayerColor: string | null | undefined
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
@@ -31,6 +34,10 @@ export class ChessSquareComponent implements OnInit {
   isDraggedOver: boolean = false;
   illegalMove: boolean = false;
   displayPiecePromotingComponent: boolean = false;
+
+  crownIcon = faCrown
+  hashtag = faHashtag
+  equals = faEquals
 
   constructor() { }
 
@@ -105,10 +112,12 @@ export class ChessSquareComponent implements OnInit {
 
   isLastPerformedMove(): boolean {
 
-    let currentSquare: string = this.squareInfo.file+this.squareInfo.rank
+    let currentSquare: string = this.squareInfo.file + this.squareInfo.rank
 
     return currentSquare == this.lastPerformedMove?.startSquare || currentSquare == this.lastPerformedMove?.targetSquare
   }
+
+  
 
   private fileToNumber(): number {
     switch (this.squareInfo.file) {

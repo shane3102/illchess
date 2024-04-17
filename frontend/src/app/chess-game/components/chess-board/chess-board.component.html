@@ -12,12 +12,14 @@
                     this.boardView?.piecesLocations![file+rank] : 
                     undefined : 
                     undefined" 
-                    [illegalMoveResponse]="illegalMoveResponse"
-                    [draggedPieceInfo]="draggedPieceInfo | async" 
+                    [illegalMoveResponse]="illegalMoveResponse$"
+                    [draggedPieceInfo]="draggedPieceInfo$ | async" 
                     [squareInfo]="{file: file, rank: rank}"
-                    [legalMoves]="legalMoves | async" 
+                    [legalMoves]="legalMoves$ | async" 
                     [username]="username"
-                    [lastPerformedMove]="boardView?.lastPerformedMove">
+                    [lastPerformedMove]="boardView?.lastPerformedMove"
+                    [gameState]="gameState$ | async"
+                    [victoriousPlayerColor]="victoriousPlayerColor$ | async">
                 </app-chess-square>
             </div>
         </div>
