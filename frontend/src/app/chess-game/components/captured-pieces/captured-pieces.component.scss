@@ -4,7 +4,7 @@ $captured-pieces-width: calc($panel-width / 2);
 
 .captured-pieces-wrapper {
     width: $captured-pieces-width;
-    height: 10vh;
+    height: $chess-square-size;
 }
 
 .captured-pieces {
@@ -13,8 +13,8 @@ $captured-pieces-width: calc($panel-width / 2);
     flex-wrap: wrap;
     padding-left: calc($captured-pieces-width / 8);
     padding-right: calc($captured-pieces-width / 8);
-    padding-top: 2vh;
-    padding-bottom: 2vh;
+    padding-top: calc($chess-square-size / 5);
+    padding-bottom: calc($chess-square-size / 5);
     transition: all 0.5s;
 }
 
@@ -26,9 +26,9 @@ $captured-pieces-width: calc($panel-width / 2);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 2vh;
+    height: calc($chess-square-size / 5);
     width: calc($captured-pieces-width / 8) + calc(2  * $captured-pieces-width / 256);
-    font-size: 2vh;
+    font-size: calc($chess-square-size / 5);
     transition: all 0.5s;
 }
 

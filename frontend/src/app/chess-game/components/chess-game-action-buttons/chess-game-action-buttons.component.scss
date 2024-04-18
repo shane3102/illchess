@@ -1,0 +1,8 @@
+@import '../chess-board-additional-info/chess-board-additional-info.component.scss';
+
+.content {
+    height: calc($chess-square-size / 2 * 3 + 1vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
