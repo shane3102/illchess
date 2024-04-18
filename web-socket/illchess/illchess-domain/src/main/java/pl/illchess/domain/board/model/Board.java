@@ -3,6 +3,7 @@ package pl.illchess.domain.board.model;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
@@ -116,6 +117,10 @@ public record Board(
 
     public void assignSecondPlayer(Username username) {
         boardState.setBlackPlayer(new Player(username, PieceColor.BLACK));
+    }
+
+    public void resign(Resign command) {
+        boardState.resign(command);
     }
 
     public void resetCachedMovesOfPieces() {

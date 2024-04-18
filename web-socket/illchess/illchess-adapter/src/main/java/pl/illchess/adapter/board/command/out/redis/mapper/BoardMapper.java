@@ -42,8 +42,8 @@ public class BoardMapper {
     private static BoardEntity.BoardStateEntity toBoardStateEntity(BoardState boardState) {
         return new BoardEntity.BoardStateEntity(
             boardState.currentPlayerColor().color().toString(),
-            boardState.player1() == null ? null : new BoardEntity.PlayerEntity(boardState.player1().username().text(), boardState.player1().color().toString()),
-            boardState.player2() == null ? null : new BoardEntity.PlayerEntity(boardState.player2().username().text(), boardState.player2().color().toString()),
+            boardState.whitePlayer() == null ? null : new BoardEntity.PlayerEntity(boardState.whitePlayer().username().text(), boardState.whitePlayer().color().toString()),
+            boardState.blackPlayer() == null ? null : new BoardEntity.PlayerEntity(boardState.blackPlayer().username().text(), boardState.blackPlayer().color().toString()),
             boardState.gameState().toString(),
             boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString()
         );

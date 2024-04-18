@@ -9,11 +9,13 @@ import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequ
 import pl.illchess.adapter.board.command.in.websocket.dto.InitializedBoardResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.LegalMovesResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.MovePieceRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.ResignGameRequest;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase.CheckIsCheckmateOrStaleMateCmd;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
+import pl.illchess.application.board.command.in.ResignGameUseCase;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.square.Square;
@@ -30,6 +32,7 @@ public class BoardCommandController implements BoardCommandApi {
     private final CheckLegalityMoveUseCase checkLegalityMoveUseCase;
     private final JoinOrInitializeNewGameUseCase joinOrInitializeNewGameUseCase;
     private final CheckIfCheckmateOrStalemateUseCase checkIfCheckmateOrStalemateUseCase;
+    private final ResignGameUseCase resignGameUseCase;
 
     @Override
     @EventListener(BoardPiecesLocationsUpdated.class)
@@ -59,5 +62,11 @@ public class BoardCommandController implements BoardCommandApi {
     ) {
         Set<Square> response = checkLegalityMoveUseCase.checkLegalityOfMove(request.toCmd());
         return ResponseEntity.ok(new LegalMovesResponse(response));
+    }
+
+    @Override
+    public ResponseEntity<Void> resignGame(ResignGameRequest request) {
+        resignGameUseCase.resignGame(request.toCmd());
+        return new ResponseEntity<>(OK);
     }
 }

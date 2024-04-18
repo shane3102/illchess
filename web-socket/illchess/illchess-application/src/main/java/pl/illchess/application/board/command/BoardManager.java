@@ -6,6 +6,7 @@ import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCa
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
+import pl.illchess.application.board.command.in.ResignGameUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
@@ -14,8 +15,10 @@ import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
+import pl.illchess.domain.board.event.BoardStateUpdated;
 import pl.illchess.domain.board.event.GameFinished;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
 import pl.illchess.domain.board.model.Board;
@@ -33,7 +36,8 @@ public class BoardManager implements
     TakeBackMoveUseCase,
     JoinOrInitializeNewGameUseCase,
     CheckIfCheckmateOrStalemateUseCase,
-    CheckLegalityMoveUseCase {
+    CheckLegalityMoveUseCase,
+    ResignGameUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
@@ -162,10 +166,20 @@ public class BoardManager implements
         GameState stateOfBoard = board.establishBoardState();
         saveBoard.saveBoard(board);
         if (stateOfBoard != CONTINUE) {
-
             eventPublisher.publishDomainEvent(new GameFinished(board.boardId()));
         }
         log.info("Successfully checked state on board = {}. State is {}", cmd.boardId(), stateOfBoard);
     }
 
+    @Override
+    public void resignGame(ResignGameCmd cmd) {
+        log.info("User {} is resigning game on board with id {}", cmd.username(), cmd.boardId());
+        Resign command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.resign(command);
+        saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        log.info("User {} successfully resigned game on board with id {}", cmd.username(), cmd.boardId());
+    }
 }

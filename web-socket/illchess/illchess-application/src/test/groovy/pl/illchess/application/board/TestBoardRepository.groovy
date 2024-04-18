@@ -18,7 +18,7 @@ class TestBoardRepository implements LoadBoard, SaveBoard {
     Optional<Board> loadBoardWithoutPlayer() {
         return repo.values()
             .stream()
-            .filter {it.boardState().player2() == null}
+            .filter {it.boardState().blackPlayer() == null}
             .findFirst()
     }
 

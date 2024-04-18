@@ -1,5 +1,7 @@
 package pl.illchess.domain.board.model.state;
 
+import pl.illchess.domain.board.command.Resign;
+import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.state.player.Player;
@@ -9,6 +11,10 @@ import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
 
 import java.util.Objects;
+
+import static pl.illchess.domain.board.model.state.GameState.RESIGNED;
+import static pl.illchess.domain.piece.model.info.PieceColor.BLACK;
+import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public class BoardState {
     private final CurrentPlayerColor currentPlayerColor;
@@ -70,6 +76,18 @@ public class BoardState {
         currentPlayerColor.invert();
     }
 
+    public void resign(Resign command) {
+        if (Objects.equals(command.username(), blackPlayer.username())) {
+            this.victoriousPlayerColor = WHITE;
+        } else if (Objects.equals(command.username(), whitePlayer.username())) {
+            this.victoriousPlayerColor = BLACK;
+        } else {
+            throw new InvalidUserResigningGameException(command.username());
+        }
+
+        this.gameState = RESIGNED;
+    }
+
     public CurrentPlayerColor currentPlayerColor() {
         return currentPlayerColor;
     }
@@ -82,11 +100,11 @@ public class BoardState {
         return victoriousPlayerColor;
     }
 
-    public Player player1() {
+    public Player whitePlayer() {
         return whitePlayer;
     }
 
-    public Player player2() {
+    public Player blackPlayer() {
         return blackPlayer;
     }
 
@@ -113,8 +131,8 @@ public class BoardState {
         String movingColor = fenString.value().split(" ")[1];
 
         return new BoardState(
-            new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : PieceColor.WHITE),
-            new Player(username, PieceColor.WHITE),
+            new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : WHITE),
+            new Player(username, WHITE),
             null,
             GameState.CONTINUE,
             null
@@ -124,4 +142,6 @@ public class BoardState {
     public void setBlackPlayer(Player player) {
         this.blackPlayer = player;
     }
+
+
 }

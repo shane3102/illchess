@@ -10,6 +10,7 @@ import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequ
 import pl.illchess.adapter.board.command.in.websocket.dto.InitializedBoardResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.LegalMovesResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.MovePieceRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.ResignGameRequest;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 
 @RequestMapping("/api/board")
@@ -28,5 +29,9 @@ public interface BoardCommandApi {
     @ResponseBody
     @PutMapping(value = "/legal-moves", produces = "application/json")
     ResponseEntity<LegalMovesResponse> checkLegalityOfMove(@RequestBody CheckLegalMovesRequest request);
+
+    @ResponseBody
+    @PutMapping(value = "/resign", produces = "application/json")
+    ResponseEntity<Void> resignGame(@RequestBody ResignGameRequest request);
 
 }

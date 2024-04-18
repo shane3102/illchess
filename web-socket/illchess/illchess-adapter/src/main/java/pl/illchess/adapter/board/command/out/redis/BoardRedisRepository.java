@@ -38,7 +38,7 @@ public class BoardRedisRepository implements SaveBoard, LoadBoard {
             .stream()
             .map(board -> (BoardEntity) board)
             .map(BoardMapper::toDomain)
-            .filter(board -> board.boardState().player2() == null)
+            .filter(board -> board.boardState().blackPlayer() == null)
             .findFirst();
     }
 
