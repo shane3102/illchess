@@ -1,5 +1,7 @@
 <div class="content">
-    <app-chess-game-button info="Poddaj gre" [icon]="flag" (click)="resignGame()"></app-chess-game-button>
-    <app-chess-game-button info="Zaproponuj remis" [icon]="handshake"></app-chess-game-button>
-    <app-chess-game-button info="Poproś o cofnięcie ruchu" [icon]="back"></app-chess-game-button>
+    <ng-container *ngIf="color == PieceColor.WHITE ? (whitePlayer == username): (blackPlayer == username)">    
+        <app-chess-game-button info="Poddaj gre" [icon]="flag" (click)="resignGame()"></app-chess-game-button>
+        <app-chess-game-button info="Zaproponuj remis" [icon]="handshake"></app-chess-game-button>
+        <app-chess-game-button info="Poproś o cofnięcie ruchu" [icon]="back"></app-chess-game-button>
+    </ng-container>
 </div>

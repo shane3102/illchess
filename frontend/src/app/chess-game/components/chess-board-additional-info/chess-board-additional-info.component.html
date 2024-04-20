@@ -1,6 +1,12 @@
 <div *ngIf="boardAdditionalInfoView$ | async as boardAdditionalInfoView" class="additional-info">
     <div class="player-panel player-panel-black">
-        <app-chess-game-action-buttons [boardId]="boardId" [username]="username"></app-chess-game-action-buttons>
+        <app-chess-game-action-buttons 
+            [boardId]="boardId" 
+            [username]="username" 
+            [whitePlayer]="boardAdditionalInfoView.whitePlayer"
+            [blackPlayer]="boardAdditionalInfoView.blackPlayer"
+            [color]="PieceColor.BLACK"
+            ></app-chess-game-action-buttons>
         <div class="horizontal-line"></div>
         <div class="username-and-captured-pieces-wrapper">
             <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.blackPlayer ? {'color': 'green'} : {}">
@@ -32,6 +38,12 @@
             <app-captured-pieces [color]="PieceColor.BLACK" [capturedPieces]="boardAdditionalInfoView.capturedBlackPieces"></app-captured-pieces>
         </div>
         <div class="horizontal-line"></div>
-        <app-chess-game-action-buttons [boardId]="boardId" [username]="username"></app-chess-game-action-buttons>
+        <app-chess-game-action-buttons 
+            [boardId]="boardId" 
+            [username]="username"
+            [whitePlayer]="boardAdditionalInfoView.whitePlayer"
+            [blackPlayer]="boardAdditionalInfoView.blackPlayer"
+            [color]="PieceColor.WHITE"
+            ></app-chess-game-action-buttons>
     </div>
 </div>

@@ -1,11 +1,11 @@
-$chess-square-size: 10vh;
+$chess-square-size: 6vw;
 
 .piece {
-    font-size: 8vh;
+    font-size: calc($chess-square-size * 8 / 10);
 }
 
 .piece:hover {
-    font-size: 9vh;
+    font-size: calc($chess-square-size* 9 / 10);
 }
 
 

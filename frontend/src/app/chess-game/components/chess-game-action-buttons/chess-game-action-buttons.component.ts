@@ -4,6 +4,7 @@ import { ChessGameState } from '../../state/chess-game.state';
 import { Store } from '@ngrx/store';
 import { resignGame } from '../../state/board-additional-info/board-additional-info.actions';
 import { ResignGameRequest } from '../../model/ResignGameRequest';
+import { PieceColor } from '../../model/PieceInfo';
 
 @Component({
   selector: 'app-chess-game-action-buttons',
@@ -14,10 +15,15 @@ export class ChessGameActionButtonsComponent {
 
   @Input() boardId: string
   @Input() username: string;
+  @Input() whitePlayer: string
+  @Input() blackPlayer: string
+  @Input() color: PieceColor
 
   handshake = faHandshake
   flag = faFlag
   back = faAngleDoubleLeft
+
+  PieceColor = PieceColor
 
   constructor(private store: Store<ChessGameState>) {
   }
