@@ -3,7 +3,7 @@ export interface BoardAdditionalInfoView {
     currentPlayerColor: string,
     whitePlayer: string,
     blackPlayer: string,
-    gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE'
+    gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW'
     victoriousPlayerColor?: string,
     capturedWhitePieces: string[],
     capturedBlackPieces: string[],

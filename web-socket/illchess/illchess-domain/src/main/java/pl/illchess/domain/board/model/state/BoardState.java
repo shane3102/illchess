@@ -1,6 +1,7 @@
 package pl.illchess.domain.board.model.state;
 
 import pl.illchess.domain.board.command.Resign;
+import pl.illchess.domain.board.exception.GameIsNotContinuableException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
@@ -12,6 +13,7 @@ import pl.illchess.domain.piece.model.info.PieceColor;
 
 import java.util.Objects;
 
+import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.domain.board.model.state.GameState.RESIGNED;
 import static pl.illchess.domain.piece.model.info.PieceColor.BLACK;
 import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
@@ -45,6 +47,10 @@ public class BoardState {
     }
 
     public void checkIfAllowedToMove(BoardId boardId, Piece movedPiece, Username usernamePerformingMove) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
+
         if (!Objects.equals(movedPiece.color(), currentPlayerColor().color())) {
             throw new PieceColorIncorrectException(
                 boardId,
@@ -134,7 +140,7 @@ public class BoardState {
             new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : WHITE),
             new Player(username, WHITE),
             null,
-            GameState.CONTINUE,
+            CONTINUE,
             null
         );
     }

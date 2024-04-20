@@ -1,12 +1,12 @@
 import { createAction, props } from "@ngrx/store";
-import { MovePieceRequest } from "../../model/MovePieceRequest"
-import { BoardView, Square } from "../../model/BoardView";
+import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
+import { BoardView } from "../../model/BoardView";
+import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
 import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { InitializeBoardRequest } from "../../model/InitializeBoardRequest";
-import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
-import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
-import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
 import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
+import { MovePieceRequest } from "../../model/MovePieceRequest";
+import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 
 export const movePiece = createAction(

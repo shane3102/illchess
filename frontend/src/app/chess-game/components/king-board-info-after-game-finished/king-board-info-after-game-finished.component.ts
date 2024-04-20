@@ -11,7 +11,7 @@ import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons'
 export class KingBoardInfoAfterGameFinishedComponent {
 
   @Input() piece: PieceInfo | undefined;
-  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | null | undefined
+  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
   @Input() victoriousPlayerColor: string | null | undefined
 
   crownIcon = faCrown
@@ -22,7 +22,7 @@ export class KingBoardInfoAfterGameFinishedComponent {
 
   getShowedIcon(): IconDefinition | undefined {
     if (this.piece?.type == Piece.KING) {
-      if (this.gameState == 'CHECKMATE') {
+      if (this.gameState == 'CHECKMATE' || this.gameState == 'RESIGNED') {
         if (this.piece?.color == this.victoriousPlayerColor) {
           return this.crownIcon;
         } else {

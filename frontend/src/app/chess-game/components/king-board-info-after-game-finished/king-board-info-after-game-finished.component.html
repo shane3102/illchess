@@ -1,5 +1,5 @@
 <div class="icon-wrapper">
-    <div *ngIf="(this.gameState == 'CHECKMATE' || this.gameState == 'STALEMATE') && this.piece?.type == Piece.KING" class="icon"
+    <div *ngIf="(this.gameState == 'CHECKMATE' || this.gameState == 'STALEMATE' || this.gameState == 'RESIGNED') && this.piece?.type == Piece.KING" class="icon"
         [ngStyle]="isGameWon() ? {'background-color': 'yellow'} : {'background-color': 'lightgray'}">
         <div>
             <fa-icon [icon]="getShowedIcon()!"></fa-icon>

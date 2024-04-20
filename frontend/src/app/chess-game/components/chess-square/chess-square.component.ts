@@ -24,7 +24,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
   @Input() username: string
   @Input() lastPerformedMove: MoveView | undefined
-  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | null | undefined
+  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
   @Input() victoriousPlayerColor: string | null | undefined
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();

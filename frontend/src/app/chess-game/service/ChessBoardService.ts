@@ -9,6 +9,7 @@ import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
 import { BoardView } from "../model/BoardView";
 import { ActiveBoardsView } from "../model/ActiveBoardsView";
 import { BoardAdditionalInfoView } from "../model/BoardAdditionalInfoView";
+import { ResignGameRequest } from "../model/ResignGameRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -42,6 +43,10 @@ export class ChessBoardService {
 
     async refreshBoardAdditionalInfo(boardId: string): Promise<BoardAdditionalInfoView> {
         return firstValueFrom(this.httpService.get<BoardAdditionalInfoView>(`${this.PATH}/refresh/info/${boardId}`))
+    }
+
+    async resignGame(resignGame: ResignGameRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/resign`, resignGame))
     }
 
 }

@@ -4,7 +4,8 @@ import { from, map, switchMap } from "rxjs";
 import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
 import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 import { ChessBoardService } from "../../service/ChessBoardService";
-import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from "./board-additional-info.actions";
+import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard, resignGame } from "./board-additional-info.actions";
+import { ResignGameRequest } from "../../model/ResignGameRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -26,5 +27,17 @@ export class BoardAdditionalInfoEffects {
                     )
             )
         )
+    )
+
+    resignGame$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(resignGame),
+            switchMap(
+                (dto: ResignGameRequest) => from(this.chessBoardService.resignGame(dto))
+            )
+        ),
+        {
+            dispatch:  false
+        }
     )
 }
