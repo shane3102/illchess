@@ -5,6 +5,7 @@ import pl.illchess.domain.board.exception.GameIsNotContinuableException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
+import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.Piece;
@@ -138,7 +139,7 @@ public class BoardState {
 
         return new BoardState(
             new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : WHITE),
-            new Player(username, WHITE),
+            new Player(username, new IsProposingDraw(false)),
             null,
             CONTINUE,
             null

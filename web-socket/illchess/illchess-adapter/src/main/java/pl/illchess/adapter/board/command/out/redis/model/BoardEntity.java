@@ -43,7 +43,7 @@ public record BoardEntity(
 
     public record PlayerEntity(
         String username,
-        String color
+        boolean isProposingDraw
     ) implements Serializable {
 
     }

@@ -14,11 +14,11 @@ import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.FenString;
 import pl.illchess.domain.board.model.state.GameState;
+import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
-import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Objects;
@@ -116,7 +116,7 @@ public record Board(
     }
 
     public void assignSecondPlayer(Username username) {
-        boardState.setBlackPlayer(new Player(username, PieceColor.BLACK));
+        boardState.setBlackPlayer(new Player(username, new IsProposingDraw(false)));
     }
 
     public void resign(Resign command) {

@@ -10,8 +10,6 @@ export const initialState: BoardAdditionalInfoState = {
     boardAdditionalInfoView: {
         boardId:'',
         currentPlayerColor: '',
-        whitePlayer: '',
-        blackPlayer: '',
         gameState: 'CONTINUE',
         capturedWhitePieces: [],
         capturedBlackPieces: [],

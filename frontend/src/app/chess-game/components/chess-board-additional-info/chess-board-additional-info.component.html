@@ -9,9 +9,9 @@
             ></app-chess-game-action-buttons>
         <div class="horizontal-line"></div>
         <div class="username-and-captured-pieces-wrapper">
-            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.blackPlayer ? {'color': 'green'} : {}">
+            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.blackPlayer?.username ? {'color': 'green'} : {}">
                 <div>
-                    {{boardAdditionalInfoView.blackPlayer}}
+                    {{boardAdditionalInfoView.blackPlayer?.username}}
                 </div>
             </div>
             <div class="vertical-line"></div>
@@ -29,9 +29,9 @@
     </div>
     <div class="player-panel player-panel-white">
         <div class="username-and-captured-pieces-wrapper">
-            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.whitePlayer ? {'color': 'green'} : {}">
+            <div class="username-wrapper" [ngStyle]="username == boardAdditionalInfoView.whitePlayer?.username ? {'color': 'green'} : {}">
                 <div>
-                    {{boardAdditionalInfoView.whitePlayer}}
+                    {{boardAdditionalInfoView.whitePlayer?.username}}
                 </div>
             </div>
             <div class="vertical-line"></div>

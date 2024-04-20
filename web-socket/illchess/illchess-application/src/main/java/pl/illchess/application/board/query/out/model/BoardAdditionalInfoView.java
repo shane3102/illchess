@@ -6,8 +6,8 @@ import java.util.UUID;
 public record BoardAdditionalInfoView(
     UUID boardId,
     String currentPlayerColor,
-    String whitePlayer,
-    String blackPlayer,
+    PlayerView whitePlayer,
+    PlayerView blackPlayer,
     String gameState,
     String victoriousPlayerColor,
     List<String> capturedWhitePieces,

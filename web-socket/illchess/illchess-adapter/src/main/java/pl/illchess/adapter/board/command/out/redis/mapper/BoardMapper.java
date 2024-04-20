@@ -12,6 +12,7 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.GameState;
+import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
@@ -42,11 +43,15 @@ public class BoardMapper {
     private static BoardEntity.BoardStateEntity toBoardStateEntity(BoardState boardState) {
         return new BoardEntity.BoardStateEntity(
             boardState.currentPlayerColor().color().toString(),
-            boardState.whitePlayer() == null ? null : new BoardEntity.PlayerEntity(boardState.whitePlayer().username().text(), boardState.whitePlayer().color().toString()),
-            boardState.blackPlayer() == null ? null : new BoardEntity.PlayerEntity(boardState.blackPlayer().username().text(), boardState.blackPlayer().color().toString()),
+            mapToPlayer(boardState.whitePlayer()),
+            mapToPlayer(boardState.blackPlayer()),
             boardState.gameState().toString(),
             boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString()
         );
+    }
+
+    private static BoardEntity.PlayerEntity mapToPlayer(Player player) {
+        return player == null ? null : new BoardEntity.PlayerEntity(player.username().text(), player.isProposingDraw().value());
     }
 
     public static Board toDomain(BoardEntity entity) {
@@ -67,10 +72,14 @@ public class BoardMapper {
         return BoardState.of(
             PieceColor.valueOf(boardState.currentPlayerColor()),
             GameState.valueOf(boardState.gameState()),
-            boardState.player1() == null ? null : new Player(new Username(boardState.player1().username()), PieceColor.valueOf(boardState.player1().color())),
-            boardState.player2() == null ? null : new Player(new Username(boardState.player2().username()), PieceColor.valueOf(boardState.player2().color())),
+            mapToPlayer(boardState.player1()),
+            mapToPlayer(boardState.player2()),
             boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor())
         );
+    }
+
+    private static Player mapToPlayer(BoardEntity.PlayerEntity player) {
+        return player == null ? null : new Player(new Username(player.username()), new IsProposingDraw(player.isProposingDraw()));
     }
 
     private static PiecesLocations toPiecesLocations(List<BoardEntity.PieceEntity> piecesLocationsInEntity) {

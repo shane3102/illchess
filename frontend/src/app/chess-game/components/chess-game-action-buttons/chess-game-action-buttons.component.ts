@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { resignGame } from '../../state/board-additional-info/board-additional-info.actions';
 import { ResignGameRequest } from '../../model/ResignGameRequest';
 import { PieceColor } from '../../model/PieceInfo';
+import { PlayerView } from '../../model/BoardAdditionalInfoView';
 
 @Component({
   selector: 'app-chess-game-action-buttons',
@@ -15,8 +16,8 @@ export class ChessGameActionButtonsComponent {
 
   @Input() boardId: string
   @Input() username: string;
-  @Input() whitePlayer: string
-  @Input() blackPlayer: string
+  @Input() whitePlayer: PlayerView | undefined
+  @Input() blackPlayer: PlayerView | undefined
   @Input() color: PieceColor
 
   handshake = faHandshake

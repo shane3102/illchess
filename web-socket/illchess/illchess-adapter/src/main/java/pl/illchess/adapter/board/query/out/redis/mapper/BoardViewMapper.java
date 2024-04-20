@@ -5,6 +5,7 @@ import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
 import pl.illchess.application.board.query.out.model.MoveView;
 import pl.illchess.application.board.query.out.model.PieceView;
+import pl.illchess.application.board.query.out.model.PlayerView;
 import pl.illchess.domain.piece.model.info.PieceType;
 
 import java.util.List;
@@ -37,20 +38,20 @@ public class BoardViewMapper {
             return new BoardAdditionalInfoView(
                 entity.boardId(),
                 entity.boardState().currentPlayerColor(),
-                entity.boardState().player1().username(),
-                entity.boardState().player2() == null ? null : entity.boardState().player2().username(),
+                new PlayerView(entity.boardState().player1().username(), entity.boardState().player1().isProposingDraw()),
+                entity.boardState().player2() == null ? null : new PlayerView(entity.boardState().player2().username(), entity.boardState().player2().isProposingDraw()),
                 entity.boardState().gameState(),
                 entity.boardState().victoriousPlayerColor(),
                 capturedPiecesStreamSupplier.get()
-                        .filter(move-> "WHITE".equals(move.capturedPiece().pieceColor()))
-                        .map(move -> move.capturedPiece().pieceType())
-                        .sorted(PieceType::pieceTypeComparator)
-                        .toList(),
+                    .filter(move -> "WHITE".equals(move.capturedPiece().pieceColor()))
+                    .map(move -> move.capturedPiece().pieceType())
+                    .sorted(PieceType::pieceTypeComparator)
+                    .toList(),
                 capturedPiecesStreamSupplier.get()
-                        .filter(move-> "BLACK".equals(move.capturedPiece().pieceColor()))
-                        .map(move -> move.capturedPiece().pieceType())
-                        .sorted(PieceType::pieceTypeComparator)
-                        .toList(),
+                    .filter(move -> "BLACK".equals(move.capturedPiece().pieceColor()))
+                    .map(move -> move.capturedPiece().pieceType())
+                    .sorted(PieceType::pieceTypeComparator)
+                    .toList(),
                 toPerformedMoves(entity.moveStackData())
             );
         }
