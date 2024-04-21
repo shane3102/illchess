@@ -1,8 +1,11 @@
 package pl.illchess.domain.board.model;
 
+import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.command.ProposeDraw;
+import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
@@ -121,6 +124,18 @@ public record Board(
 
     public void resign(Resign command) {
         boardState.resign(command);
+    }
+
+    public void proposeDraw(ProposeDraw command) {
+        boardState.proposeDraw(command);
+    }
+
+    public void acceptDraw(AcceptDraw command) {
+        boardState.acceptDrawOffer(command);
+    }
+
+    public void rejectDraw(RejectDraw command) {
+        boardState.rejectDrawOffer(command);
     }
 
     public void resetCachedMovesOfPieces() {

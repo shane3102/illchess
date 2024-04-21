@@ -1,7 +1,12 @@
 package pl.illchess.domain.board.model.state;
 
+import pl.illchess.domain.board.command.AcceptDraw;
+import pl.illchess.domain.board.command.ProposeDraw;
+import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.Resign;
+import pl.illchess.domain.board.exception.GameCanNotBeAcceptedOrRejectedAsDrawnException;
 import pl.illchess.domain.board.exception.GameIsNotContinuableException;
+import pl.illchess.domain.board.exception.InvalidUserProposingDrawException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
@@ -15,6 +20,7 @@ import pl.illchess.domain.piece.model.info.PieceColor;
 import java.util.Objects;
 
 import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
+import static pl.illchess.domain.board.model.state.GameState.DRAW;
 import static pl.illchess.domain.board.model.state.GameState.RESIGNED;
 import static pl.illchess.domain.piece.model.info.PieceColor.BLACK;
 import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
@@ -95,6 +101,38 @@ public class BoardState {
         this.gameState = RESIGNED;
     }
 
+    public void proposeDraw(ProposeDraw command) {
+        if (Objects.equals(command.username(), blackPlayer.username())) {
+            blackPlayer.proposeDraw(command);
+        } else if (Objects.equals(command.username(), whitePlayer.username())) {
+            whitePlayer.proposeDraw(command);
+        } else {
+            throw new InvalidUserProposingDrawException(command.username());
+        }
+    }
+
+    public void acceptDrawOffer(AcceptDraw command) {
+        boolean isWhiteProposingDraw = Objects.equals(command.username(), blackPlayer.username()) && whitePlayer.isProposingDraw().value();
+        boolean isBlackProposingDraw = Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingDraw().value();
+        if (isBlackProposingDraw || isWhiteProposingDraw) {
+            blackPlayer.resetProposingDraw();
+            whitePlayer.resetProposingDraw();
+            gameState = DRAW;
+        } else {
+            throw new GameCanNotBeAcceptedOrRejectedAsDrawnException(command.boardId());
+        }
+    }
+
+    public void rejectDrawOffer(RejectDraw command) {
+        if (Objects.equals(command.username(), blackPlayer.username()) && blackPlayer.isProposingDraw().value()) {
+            whitePlayer.resetProposingDraw();
+        } else if (Objects.equals(command.username(), whitePlayer.username()) && whitePlayer.isProposingDraw().value()) {
+            blackPlayer.resetProposingDraw();
+        } else {
+            throw new GameCanNotBeAcceptedOrRejectedAsDrawnException(command.boardId());
+        }
+    }
+
     public CurrentPlayerColor currentPlayerColor() {
         return currentPlayerColor;
     }
@@ -149,6 +187,5 @@ public class BoardState {
     public void setBlackPlayer(Player player) {
         this.blackPlayer = player;
     }
-
 
 }
