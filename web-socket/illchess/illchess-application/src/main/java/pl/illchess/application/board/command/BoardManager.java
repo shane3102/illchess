@@ -2,19 +2,25 @@ package pl.illchess.application.board.command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.illchess.application.board.command.in.AcceptDrawUseCase;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
+import pl.illchess.application.board.command.in.ProposeDrawUseCase;
+import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
+import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.command.ProposeDraw;
+import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
@@ -37,7 +43,10 @@ public class BoardManager implements
     JoinOrInitializeNewGameUseCase,
     CheckIfCheckmateOrStalemateUseCase,
     CheckLegalityMoveUseCase,
-    ResignGameUseCase {
+    ResignGameUseCase,
+    ProposeDrawUseCase,
+    RejectDrawUseCase,
+    AcceptDrawUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
@@ -181,5 +190,41 @@ public class BoardManager implements
         saveBoard.saveBoard(board);
         eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
         log.info("User {} successfully resigned game on board with id {}", cmd.username(), cmd.boardId());
+    }
+
+    @Override
+    public void proposeDraw(ProposeDrawCmd cmd) {
+        log.info("User {} is proposing draw on board with id = {}", cmd.username(), cmd.boardId());
+        ProposeDraw command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.proposeDraw(command);
+        saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        log.info("User {} successfully proposed draw on board with id = {}", cmd.username(), cmd.boardId());
+    }
+
+    @Override
+    public void rejectDraw(RejectDrawCmd cmd) {
+        log.info("User {} is rejecting draw offer on board with id = {}", cmd.username(), cmd.boardId());
+        RejectDraw command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.rejectDraw(command);
+        saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        log.info("User {} successfully rejected draw offer on board with id = {}", cmd.username(), cmd.boardId());
+    }
+
+    @Override
+    public void acceptDraw(AcceptDrawCmd cmd) {
+        log.info("User {} is accepting draw offer on board with id = {}", cmd.username(), cmd.boardId());
+        AcceptDraw command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.acceptDraw(command);
+        saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        log.info("User {} successfully accepted draw offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 }

@@ -11,6 +11,7 @@ import pl.illchess.application.board.query.out.BoardViewQueryPort;
 import pl.illchess.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
+import pl.illchess.domain.board.event.BoardAdditionalInfoUpdated;
 import pl.illchess.domain.board.event.BoardUpdated;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
 
@@ -45,7 +46,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     }
 
     @Override
-    public BoardAdditionalInfoView updateBoardAdditionalInfoView(BoardUpdated event) {
+    public BoardAdditionalInfoView updateBoardAdditionalInfoView(BoardAdditionalInfoUpdated event) {
         log.info(
             "Update event of board with id = {} was catched, sending update of chess board additional info view",
             event.boardId()
