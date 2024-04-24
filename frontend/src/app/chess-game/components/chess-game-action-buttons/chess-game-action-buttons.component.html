@@ -4,4 +4,12 @@
         <app-chess-game-button info="Zaproponuj remis" [icon]="handshake"></app-chess-game-button>
         <app-chess-game-button info="Poproś o cofnięcie ruchu" [icon]="back"></app-chess-game-button>
     </ng-container>
+    <ng-container *ngIf="color == PieceColor.BLACK ? (whitePlayer?.username == username): (blackPlayer?.username  == username)">
+        <div>
+            <app-chess-game-offer-from-oponent info="Przeciwnik zaproponował remis"></app-chess-game-offer-from-oponent>
+        </div>
+        <div>
+            <app-chess-game-offer-from-oponent info="Przeciwnik poprosił o cofnięcie ruchu"></app-chess-game-offer-from-oponent>
+        </div>
+    </ng-container>
 </div>

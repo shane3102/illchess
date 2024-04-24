@@ -31,6 +31,7 @@ import { CapturedPiecesComponent } from './components/captured-pieces/captured-p
 import { KingBoardInfoAfterGameFinishedComponent } from './components/king-board-info-after-game-finished/king-board-info-after-game-finished.component';
 import { ChessGameButtonComponent } from './components/chess-game-button/chess-game-button.component';
 import { ChessGameActionButtonsComponent } from './components/chess-game-action-buttons/chess-game-action-buttons.component';
+import { ChessGameOfferFromOponentComponent } from './components/chess-game-offer-from-oponent/chess-game-offer-from-oponent.component';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { ChessGameActionButtonsComponent } from './components/chess-game-action-
     CapturedPiecesComponent,
     KingBoardInfoAfterGameFinishedComponent,
     ChessGameButtonComponent,
-    ChessGameActionButtonsComponent
+    ChessGameActionButtonsComponent,
+    ChessGameOfferFromOponentComponent
   ],
   imports: [
     SharedModule,

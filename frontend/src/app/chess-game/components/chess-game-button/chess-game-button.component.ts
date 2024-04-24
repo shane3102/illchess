@@ -9,4 +9,5 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 export class ChessGameButtonComponent {
   @Input() info: string
   @Input() icon: IconDefinition
+  @Input() backgroundColor?: string
 }

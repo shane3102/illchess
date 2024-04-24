@@ -1,7 +1,6 @@
 @import '../chess-board-additional-info/chess-board-additional-info.component.scss';
 
 .chess-game-button-wrapper {
-    width: $panel-width;
     height: calc($chess-square-size / 2);
     display: flex;
     justify-content: center;
@@ -9,7 +8,7 @@
 }
 
 .chess-game-button {
-    width: calc($panel-width * 0.8  - 2vw);
+    width: 71%;
     height: calc($chess-square-size / 3);
     display: flex;
     justify-content: space-between;
@@ -24,7 +23,7 @@
 }
 
 .chess-game-button:active {
-    width: calc($panel-width * 0.75 - 2vw);
+    width: 68%;
     height: calc($chess-square-size * 0.3);
     font-size: calc($chess-square-size / 5 - 0.05 * $chess-square-size / 4);
 }

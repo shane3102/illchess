@@ -1,0 +1,32 @@
+@import '../chess-board-additional-info/chess-board-additional-info.component.scss';
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel {
+    width: 80%;
+    background-color: #F3E5AB;
+}
+
+.info-wrapper {
+    height: calc($chess-square-size / 6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.info {
+    font-size: calc($chess-square-size / 7);
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option {
+    width: 50%;
+}

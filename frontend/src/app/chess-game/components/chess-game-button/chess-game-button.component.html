@@ -1,5 +1,5 @@
 <div class="chess-game-button-wrapper">
-    <div class="chess-game-button">
+    <div class="chess-game-button" [ngStyle]="backgroundColor ? {'backgroundColor' : backgroundColor} : {}">
         <div>
             <b>{{info}}</b>
         </div>
