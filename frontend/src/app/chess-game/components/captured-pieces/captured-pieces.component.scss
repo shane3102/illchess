@@ -33,7 +33,7 @@ $captured-pieces-width: calc($panel-width / 2);
 }
 
 .captured-pieces-wrapper:hover .captured-piece {
-    font-size: 3vh;
+    font-size: calc($chess-square-size / 3.5);
     width: calc($captured-pieces-width / 8);
     padding: calc($captured-pieces-width / 8 / 4);
 }

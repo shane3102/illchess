@@ -1,14 +1,17 @@
-import { Injectable } from "@angular/core";
-import { InitializeBoardRequest } from "../model/InitializeBoardRequest";
-import { MovePieceRequest } from "../model/MovePieceRequest";
 import { HttpClient } from "@angular/common/http";
-import { BoardLegalMovesResponse } from "../model/BoardLegalMovesResponse";
-import { CheckLegalMovesRequest } from "../model/CheckLegalMovesRequest";
+import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
-import { BoardView } from "../model/BoardView";
+import { AcceptDrawRequest } from "../model/AcceptDrawRequest";
 import { ActiveBoardsView } from "../model/ActiveBoardsView";
 import { BoardAdditionalInfoView } from "../model/BoardAdditionalInfoView";
+import { BoardLegalMovesResponse } from "../model/BoardLegalMovesResponse";
+import { BoardView } from "../model/BoardView";
+import { CheckLegalMovesRequest } from "../model/CheckLegalMovesRequest";
+import { InitializeBoardRequest } from "../model/InitializeBoardRequest";
+import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
+import { MovePieceRequest } from "../model/MovePieceRequest";
+import { ProposeDrawRequest } from "../model/ProposeDrawRequest";
+import { RejectDrawRequest } from "../model/RejectDrawRequest";
 import { ResignGameRequest } from "../model/ResignGameRequest";
 
 @Injectable({
@@ -47,6 +50,18 @@ export class ChessBoardService {
 
     async resignGame(resignGame: ResignGameRequest): Promise<void> {
         return firstValueFrom(this.httpService.put<void>(`${this.PATH}/resign`, resignGame))
+    }
+
+    async proposeDraw(proposeDraw: ProposeDrawRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/propose-draw`, proposeDraw));
+    }
+
+    async rejectDraw(rejectDraw: RejectDrawRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/reject-draw`, rejectDraw));
+    }
+
+    async acceptDraw(acceptDraw: AcceptDrawRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/accept-draw`, acceptDraw));
     }
 
 }
