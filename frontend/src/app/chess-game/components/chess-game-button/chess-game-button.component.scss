@@ -28,6 +28,11 @@
     font-size: calc($chess-square-size / 5 - 0.05 * $chess-square-size / 4);
 }
 
-.chess-game-button:hover{
+.chess-game-button:hover {
     color: black;
+}
+
+.chess-game-button-disabled {
+    background-color: darkslategray;
+    color: white !important;
 }

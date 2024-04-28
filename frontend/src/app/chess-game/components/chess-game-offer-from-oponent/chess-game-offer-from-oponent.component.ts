@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { faCheck, faCircle, faXRay } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -9,8 +9,18 @@ import { faCheck, faCircle, faXRay } from '@fortawesome/free-solid-svg-icons';
 export class ChessGameOfferFromOponentComponent {
 
   @Input() info: string
+  @Output() accept: EventEmitter<void> = new EventEmitter()
+  @Output() decline: EventEmitter<void> = new EventEmitter()
 
   check = faCheck
   x = faCircle
+
+  acceptOffer() {
+    this.accept.next()
+  }
+
+  declineOffer() {
+    this.decline.next()
+  }
 
 }

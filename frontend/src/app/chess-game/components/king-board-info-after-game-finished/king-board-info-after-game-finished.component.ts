@@ -28,7 +28,7 @@ export class KingBoardInfoAfterGameFinishedComponent {
         } else {
           return this.hashtag;
         }
-      } else if (this.gameState == 'STALEMATE') {
+      } else if (this.gameState == 'STALEMATE' || this.gameState == 'DRAW') {
         return this.equals;
       }
     }

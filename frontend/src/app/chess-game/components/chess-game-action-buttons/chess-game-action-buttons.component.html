@@ -1,14 +1,30 @@
 <div class="content">
     <ng-container *ngIf="color == PieceColor.WHITE ? (whitePlayer?.username == username): (blackPlayer?.username  == username)">    
-        <app-chess-game-button info="Poddaj gre" [icon]="flag" (click)="resignGame()"></app-chess-game-button>
-        <app-chess-game-button info="Zaproponuj remis" [icon]="handshake"></app-chess-game-button>
-        <app-chess-game-button info="Poproś o cofnięcie ruchu" [icon]="back"></app-chess-game-button>
+        <app-chess-game-button 
+            info="Poddaj gre" 
+            [icon]="flag" 
+            (click)="resignGame()"></app-chess-game-button>
+        <app-chess-game-button 
+            info="Zaproponuj remis" 
+            [icon]="handshake" 
+            (click)="proposeDraw()"></app-chess-game-button>
+        <app-chess-game-button 
+            info="Poproś o cofnięcie ruchu" 
+            [icon]="back"
+            [disabled]="true"></app-chess-game-button>
     </ng-container>
-    <ng-container *ngIf="color == PieceColor.BLACK ? (whitePlayer?.username == username): (blackPlayer?.username  == username)">
-        <div>
-            <app-chess-game-offer-from-oponent info="Przeciwnik zaproponował remis"></app-chess-game-offer-from-oponent>
+    <ng-container *ngIf="color == PieceColor.BLACK ? (whitePlayer?.username == username) : (blackPlayer?.username  == username)">
+        <div *ngIf="color == PieceColor.BLACK 
+            ? (whitePlayer?.username == username && blackPlayer?.isProposingDraw) 
+            : (blackPlayer?.username  == username && whitePlayer?.isProposingDraw)">
+            <app-chess-game-offer-from-oponent 
+                info="Przeciwnik zaproponował remis"
+                (accept)="acceptDraw()"
+                (decline)="rejectDraw()">
+            </app-chess-game-offer-from-oponent>
         </div>
-        <div>
+        <!-- TODO implement -->
+        <div *ngIf="false">
             <app-chess-game-offer-from-oponent info="Przeciwnik poprosił o cofnięcie ruchu"></app-chess-game-offer-from-oponent>
         </div>
     </ng-container>

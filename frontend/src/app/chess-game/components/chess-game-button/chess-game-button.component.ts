@@ -10,4 +10,5 @@ export class ChessGameButtonComponent {
   @Input() info: string
   @Input() icon: IconDefinition
   @Input() backgroundColor?: string
+  @Input() disabled: boolean
 }
