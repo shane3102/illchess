@@ -7,7 +7,10 @@
         <app-chess-game-button 
             info="Zaproponuj remis" 
             [icon]="handshake" 
-            (click)="proposeDraw()"></app-chess-game-button>
+            (click)="proposeDraw()"
+            [disabled]="color == PieceColor.BLACK 
+            ? (whitePlayer?.username != username && blackPlayer?.isProposingDraw)! 
+            : (blackPlayer?.username  != username && whitePlayer?.isProposingDraw)!"></app-chess-game-button>
         <app-chess-game-button 
             info="Poproś o cofnięcie ruchu" 
             [icon]="back"

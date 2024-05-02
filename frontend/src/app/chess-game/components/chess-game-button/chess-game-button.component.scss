@@ -36,3 +36,9 @@
     background-color: darkslategray;
     color: white !important;
 }
+
+.chess-game-button-disabled:active {
+    width: 71%;
+    height: calc($chess-square-size / 3);
+    font-size: calc($chess-square-size / 5);
+}

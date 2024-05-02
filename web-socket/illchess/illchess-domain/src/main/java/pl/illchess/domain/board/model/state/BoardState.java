@@ -90,6 +90,9 @@ public class BoardState {
     }
 
     public void resign(Resign command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
         if (Objects.equals(command.username(), blackPlayer.username())) {
             this.victoriousPlayerColor = WHITE;
         } else if (Objects.equals(command.username(), whitePlayer.username())) {
@@ -102,6 +105,9 @@ public class BoardState {
     }
 
     public void proposeDraw(ProposeDraw command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
         if (Objects.equals(command.username(), blackPlayer.username())) {
             blackPlayer.proposeDraw(command);
         } else if (Objects.equals(command.username(), whitePlayer.username())) {
@@ -112,6 +118,9 @@ public class BoardState {
     }
 
     public void acceptDrawOffer(AcceptDraw command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
         boolean isWhiteProposingDraw = Objects.equals(command.username(), blackPlayer.username()) && whitePlayer.isProposingDraw().value();
         boolean isBlackProposingDraw = Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingDraw().value();
         if (isBlackProposingDraw || isWhiteProposingDraw) {
@@ -124,9 +133,12 @@ public class BoardState {
     }
 
     public void rejectDrawOffer(RejectDraw command) {
-        if (Objects.equals(command.username(), blackPlayer.username()) && blackPlayer.isProposingDraw().value()) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
+        if (Objects.equals(command.username(), blackPlayer.username()) && whitePlayer.isProposingDraw().value()) {
             whitePlayer.resetProposingDraw();
-        } else if (Objects.equals(command.username(), whitePlayer.username()) && whitePlayer.isProposingDraw().value()) {
+        } else if (Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingDraw().value()) {
             blackPlayer.resetProposingDraw();
         } else {
             throw new GameCanNotBeAcceptedOrRejectedAsDrawnException(command.boardId());
