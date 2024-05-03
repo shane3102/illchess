@@ -1,5 +1,6 @@
 package pl.illchess.websocket.server.config.redis;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -14,11 +15,17 @@ import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 @EnableRedisRepositories
 public class RedisConfig {
 
+    @Value("${redis.hostname}")
+    private String redisHost;
+
+    @Value("${redis.port}")
+    private int redisPort;
+
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName("localhost");
-        configuration.setPort(6379);
+        configuration.setHostName(redisHost);
+        configuration.setPort(redisPort);
         return new JedisConnectionFactory(configuration);
     }
 
