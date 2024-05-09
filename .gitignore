@@ -33,3 +33,37 @@ build/
 .vscode/
 /test-accounts.db
 /accounts.db
+
+#Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+.flattened-pom.xml
+
+# Eclipse
+.settings/
+bin/
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+
+# Plugin directory
+/.quarkus/cli/plugins/

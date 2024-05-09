@@ -1,0 +1,6 @@
+quarkus:
+  http:
+    port: 2137
+  package:
+    jar:
+      type: uber-jar
