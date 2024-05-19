@@ -1,12 +1,16 @@
 package pl.illchess.domain.board.model.square;
 
 import pl.illchess.domain.board.command.MovePiece;
+import pl.illchess.domain.board.exception.BoardFenPositionCouldNotBeEstablishedException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.model.history.IsCastling;
 import pl.illchess.domain.board.model.history.IsEnPassant;
-import pl.illchess.domain.board.model.history.PromotionInfo;
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.board.model.history.PromotionInfo;
+import pl.illchess.domain.board.model.square.info.SquareFile;
+import pl.illchess.domain.board.model.square.info.SquareRank;
 import pl.illchess.domain.board.model.state.FenString;
+import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
 import pl.illchess.domain.piece.exception.PromotedPieceNotPawnException;
 import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
 import pl.illchess.domain.piece.model.Piece;
@@ -19,7 +23,11 @@ import pl.illchess.domain.piece.model.type.Pawn;
 import pl.illchess.domain.piece.model.type.Queen;
 import pl.illchess.domain.piece.model.type.Rook;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -236,4 +244,62 @@ public record PiecesLocations(
         return new PiecesLocations(resultPosition);
     }
 
+    public String establishFenPosition() {
+
+        List<SquareRank> ranks = Arrays.stream(SquareRank.values()).collect(Collectors.toList());
+        Collections.reverse(ranks);
+
+        return ranks.stream()
+            .map(rank -> {
+
+                StringBuilder result = new StringBuilder();
+
+                Map<SquareFile, Piece> piecesOnRankByFile = locations.stream()
+                    .filter(piece -> piece.square().rank.equals(rank))
+                    .collect(Collectors.toMap(
+                        piece -> piece.square().file,
+                        piece -> piece
+                    ));
+
+                int betweenPieces = 0;
+                for (SquareFile file : SquareFile.values()) {
+                    if (piecesOnRankByFile.get(file) != null) {
+                        if (betweenPieces > 0) {
+                            result.append(betweenPieces);
+                        }
+                        betweenPieces = 0;
+                        result.append(getFenPieceCharacter(piecesOnRankByFile.get(file)));
+                    } else {
+                        betweenPieces++;
+                    }
+                }
+                if (betweenPieces > 0) {
+                    result.append(betweenPieces);
+                }
+
+                return result.toString();
+            })
+            .reduce((acc, val) -> {
+                acc += '/';
+                acc += val;
+                return acc;
+            })
+            .orElseThrow(BoardFenPositionCouldNotBeEstablishedException::new);
+    }
+
+    private String getFenPieceCharacter(Piece piece) {
+        if (piece instanceof Pawn) {
+            return piece.color() == WHITE ? "P" : "p";
+        } else if (piece instanceof Bishop) {
+            return piece.color() == WHITE ? "B" : "b";
+        } else if (piece instanceof Rook) {
+            return piece.color() == WHITE ? "R" : "r";
+        } else if (piece instanceof Knight) {
+            return piece.color() == WHITE ? "N" : "n";
+        } else if (piece instanceof Queen) {
+            return piece.color() == WHITE ? "Q" : "q";
+        } else if (piece instanceof King) {
+            return piece.color() == WHITE ? "K" : "k";
+        } else throw new PieceTypeNotRecognisedException(piece.getClass());
+    }
 }

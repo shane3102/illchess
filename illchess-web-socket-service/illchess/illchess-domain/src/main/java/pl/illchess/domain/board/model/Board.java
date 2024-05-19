@@ -22,11 +22,14 @@ import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public record Board(
     BoardId boardId,
@@ -140,6 +143,24 @@ public record Board(
 
     public void resetCachedMovesOfPieces() {
         piecesLocations.locations().forEach(Piece::resetCachedReachableSquares);
+    }
+
+    public FenBoardString establishFenBoardString() {
+        String position = piecesLocations().establishFenPosition();
+        String currentPlayerColor = boardState.currentPlayerColor().color() == WHITE ? "w" : "b";
+        String castlingAvailability = moveHistory.castlingAvailabilityFen();
+        String enPassantPossibleSquare = moveHistory.isEnPassantPossibleFen();
+        String halfMoveClock = moveHistory.halfMoveClockFen();
+        String fullMoveCount = moveHistory.fullMoveCountFen();
+
+        return new FenBoardString(
+                position,
+                currentPlayerColor,
+                castlingAvailability,
+                enPassantPossibleSquare,
+                halfMoveClock,
+                fullMoveCount
+        );
     }
 
     public static Board generateNewBoard(JoinOrInitializeNewGame joinOrInitializeNewGame) {
