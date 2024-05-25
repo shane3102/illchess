@@ -1,11 +1,11 @@
 package pl.illchess.stockfish.domain.board.domain
 
 data class FenBoardPosition(
-    val fullString: String,
-    val position: String = fullString.split(" ")[0],
-    val color: String = fullString.split(" ")[1],
-    val castlingPossible: String = fullString.split(" ")[2],
-    val possibleEnPassantMove: String = fullString.split(" ")[3],
-    val halfMovesCount: String = fullString.split(" ")[4],
-    val movesCount: String = fullString.split(" ")[5],
+    val value: String,
+    val position: String = value.split(" ")[0],
+    val color: String = value.split(" ")[1],
+    val castlingPossible: String = value.split(" ")[2],
+    val possibleEnPassantMove: String = value.split(" ")[3],
+    val halfMovesCount: String = value.split(" ")[4],
+    val movesCount: String = value.split(" ")[5],
 )

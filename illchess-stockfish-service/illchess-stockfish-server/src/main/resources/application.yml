@@ -4,3 +4,5 @@ quarkus:
   package:
     jar:
       type: uber-jar
+game-service:
+  url: "http://localhost:8080"
