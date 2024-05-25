@@ -15,6 +15,8 @@
     </modules>
 
     <properties>
+        <jackson.module.kotlin.version>2.9.8</jackson.module.kotlin.version>
+        <ok.http.version>4.12.0</ok.http.version>
         <logback.version>1.4.14</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
         <compiler-plugin.version>3.12.1</compiler-plugin.version>
