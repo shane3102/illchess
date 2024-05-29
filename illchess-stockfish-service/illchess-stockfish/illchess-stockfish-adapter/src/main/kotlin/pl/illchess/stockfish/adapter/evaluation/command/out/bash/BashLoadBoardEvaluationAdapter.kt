@@ -1,13 +1,19 @@
-package pl.illchess.stockfish.adapter.evaluation.command.out
+package pl.illchess.stockfish.adapter.evaluation.command.out.bash
 
 import jakarta.enterprise.context.ApplicationScoped
+import pl.illchess.stockfish.adapter.evaluation.command.out.bash.util.StockfishConnector
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
 
+
 @ApplicationScoped
-class InMemoryLoadBoardEvaluation : LoadBoardEvaluation {
+class BashLoadBoardEvaluationAdapter : LoadBoardEvaluation {
+
     override fun loadBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
-        return Evaluation(Math.random())
+        val stockfishConnector = StockfishConnector()
+        stockfishConnector.startEngine()
+        return stockfishConnector.getEvaluation(fenPosition)
     }
+
 }
