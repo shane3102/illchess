@@ -1,6 +1,7 @@
 package pl.illchess.stockfish.adapter.evaluation.command.out.bash.util
 
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
+import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
 import pl.illchess.stockfish.domain.evaluation.exception.EvaluationByEngineCouldNotBeEstablished
 import java.io.BufferedReader
@@ -14,6 +15,7 @@ class StockfishConnector {
     private var engineProcess: Process? = null
     private var processReader: BufferedReader? = null
     private var processWriter: OutputStreamWriter? = null
+
     fun startEngine(): Boolean {
         try {
             val isWindows = System.getProperty("os.name")
@@ -21,7 +23,7 @@ class StockfishConnector {
             engineProcess = if (isWindows) {
                 Runtime.getRuntime().exec(arrayOf("stockfish"))
             } else {
-                Runtime.getRuntime().exec(arrayOf("cd usr", "cd games", "stockfish"))
+                Runtime.getRuntime().exec(arrayOf("usr/games/stockfish"))
             }
             processReader = BufferedReader(InputStreamReader(engineProcess!!.inputStream))
             processWriter = OutputStreamWriter(engineProcess!!.outputStream)
@@ -40,15 +42,20 @@ class StockfishConnector {
         }
     }
 
-    @Throws(IOException::class, InterruptedException::class)
+    fun getBestMoveAndContinuation(fenPosition: FenBoardPosition): BestMoveAndContinuation {
+        sendCommand("position fen ${fenPosition.value}")
+        sendCommand("go depth 15")
+        return getBestMoveAndContinuation()
+    }
+
     fun getEvaluation(fenPosition: FenBoardPosition): Evaluation {
         sendCommand("position fen ${fenPosition.value}")
         sendCommand("eval")
-        return evaluation
+        return getEvaluation()
     }
 
-    private val evaluation: Evaluation
-        get() = processReader!!.lines()
+    private fun getEvaluation(): Evaluation {
+        return processReader!!.lines()
             .filter { line: String -> line.contains("Final evaluation") }
             .map { line: String ->
                 line.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
@@ -63,7 +70,25 @@ class StockfishConnector {
             .flatMap { obj: Stream<String> -> obj.findFirst() }
             .map { obj: String -> if (obj == "none") Evaluation(0.0) else Evaluation(obj.toDouble()) }
             .orElseThrow { EvaluationByEngineCouldNotBeEstablished() }
+    }
 
+    private fun getBestMoveAndContinuation(): BestMoveAndContinuation {
+        val bestMoveAndContinuation = processReader!!.lines()
+            .filter { it.contains("bestmove") || it.contains("info depth 15") }
+            .limit(2)
+            .toList()
+
+        val bestMove: String = bestMoveAndContinuation.filter { it.contains("bestmove") }[0]
+            .split(" ")[1]
+
+        val continuation = bestMoveAndContinuation
+            .filter { line: String -> line.contains("info depth 15") }[0]
+            .split("pv")[2]
+            .split(" ")
+            .filter { it != "" }
+
+        return BestMoveAndContinuation(bestMove, continuation)
+    }
 
     fun stopEngine() {
         try {
