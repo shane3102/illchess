@@ -21,3 +21,10 @@ services:
     environment:
       - REDIS_HOSTNAME=6379
       - REDIS_HOSTNAME=gamedb
+  chess-stockfish-service:
+    container_name: illchess-stockfish-service
+    image: illchess-stockfish-service
+    ports:
+      - 2137:2137
+    environment:
+      - GAME-SERVICE_URL=http://illchess-web-socket-service:8080
