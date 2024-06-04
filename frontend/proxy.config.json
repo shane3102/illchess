@@ -10,5 +10,11 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
+  },
+  "/api/stockfish/*": {
+    "target": "http://localhost:2137",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
   }
 }

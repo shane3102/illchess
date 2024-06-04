@@ -1,7 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { ChessGameState } from "../chess-game.state";
 import { BoardAdditionalInfoState } from "./board-additional-info.reducers";
-import { state } from "@angular/animations";
 
 export const selectBoard = (state: ChessGameState) => state.boardAdditionalInfoState;
 
@@ -28,4 +27,14 @@ export const isWhiteProposingDraw = createSelector(
 export const isBlackProposingDraw = createSelector(
     selectBoard,
     (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView.blackPlayer?.isProposingDraw 
+)
+
+export const evaluation = createSelector(
+    selectBoard,
+    (state: BoardAdditionalInfoState) => state.evaluation
+)
+
+export const bestMoveAndContinuation = createSelector(
+    selectBoard,
+    (state: BoardAdditionalInfoState) => state.bestMoveAndContinuation
 )
