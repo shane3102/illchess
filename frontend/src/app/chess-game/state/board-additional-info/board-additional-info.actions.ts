@@ -5,6 +5,8 @@ import { ProposeDrawRequest } from "../../model/ProposeDrawRequest";
 import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 import { RejectDrawRequest } from "../../model/RejectDrawRequest";
 import { ResignGameRequest } from "../../model/ResignGameRequest";
+import { EvaluationResponse } from "../../model/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
 
 export const refreshAdditionalInfoOfBoard = createAction(
     'Manual refresh of board additional info',
@@ -34,4 +36,24 @@ export const rejectDraw = createAction(
 export const acceptDraw = createAction(
     'Accept draw',
     props<AcceptDrawRequest>()
+)
+
+export const establishEvaluation = createAction(
+    'Establish board evaluation of engine',
+    props<{boardId: string}>()
+)
+
+export const evaluationLoaded = createAction(
+    'Evaluation of board loaded',
+    props<EvaluationResponse>()
+)
+
+export const establishBestMoveAndContinuation = createAction(
+    'Establish best move and following continuation',
+    props<{boardId: string}>()
+)
+
+export const bestMoveAndContinuationLoaded = createAction(
+    'Best move and continuation of board loaded',
+    props<BestMoveAndContinuationResponse>()
 )

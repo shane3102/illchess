@@ -1,9 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
 import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
-import { boardAdditionalInfoLoaded } from "./board-additional-info.actions";
+import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, evaluationLoaded } from "./board-additional-info.actions";
+import { EvaluationResponse } from "../../model/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
+import { state } from "@angular/animations";
 
 export interface BoardAdditionalInfoState {
-    boardAdditionalInfoView: BoardAdditionalInfoView;
+    boardAdditionalInfoView: BoardAdditionalInfoView,
+    evaluation: EvaluationResponse,
+    bestMoveAndContinuation: BestMoveAndContinuationResponse
 }
 
 export const initialState: BoardAdditionalInfoState = {
@@ -14,6 +19,13 @@ export const initialState: BoardAdditionalInfoState = {
         capturedWhitePieces: [],
         capturedBlackPieces: [],
         performedMoves: []
+    },
+    evaluation: {
+        result: 0
+    },
+    bestMoveAndContinuation: {
+        bestMove: "",
+        continuation: []
     }
 }
 
@@ -27,6 +39,26 @@ export const boardAdditionalInfoReducer = createReducer(
             {
                 ...state,
                 boardAdditionalInfoView: view
+            }
+        )
+    ),
+
+    on(
+        evaluationLoaded,
+        (state: BoardAdditionalInfoState, response: EvaluationResponse) => (
+            {
+                ...state,
+                evaluation: response
+            }
+        )
+    ),
+
+    on(
+        bestMoveAndContinuationLoaded,
+        (state: BoardAdditionalInfoState, response: BestMoveAndContinuationResponse) => (
+            {
+                ...state,
+                bestMoveAndContinuation: response
             }
         )
     )
