@@ -1,0 +1,23 @@
+@import "../chess-board-style.scss";
+
+#evaluation-bar {
+    height: 8 * $chess-square-size - 2* (0.02 * $chess-square-size);
+    width: 0.30 * $chess-square-size;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    border: 0.03 * $chess-square-size solid rgb(150, 75, 0)
+}
+
+#evaluation-bar-black-part {
+    width: 0.30 * $chess-square-size;
+    background-color: black;
+    transition: height 1s;
+}
+
+#evaluation-value {
+    position: relative;
+    text-align: center;
+    transition: all 1s;
+}

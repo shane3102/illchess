@@ -1,0 +1,11 @@
+<div id="evaluation-bar" *ngIf="boardEvaluation$ | async as boardEvaluation">
+    <div id="evaluation-bar-black-part"
+        [ngStyle]="{'height': (50 - ((boardEvaluation.result> 10 ? 10 : boardEvaluation.result)/10)* 50)+'%'}">
+        <div 
+            id="evaluation-value"
+            style="font-size: 0.7vw;" 
+            [ngStyle]="boardEvaluation.result>0 ? {'top': '100%', 'color': 'black'} : {'top': 'calc(100% - 0.7vw)', 'color': 'white'}">
+            {{boardEvaluation.result}}
+        </div>
+    </div>
+</div>
