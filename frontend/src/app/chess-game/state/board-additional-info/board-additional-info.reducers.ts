@@ -1,9 +1,8 @@
 import { createReducer, on } from "@ngrx/store";
-import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
-import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, evaluationLoaded } from "./board-additional-info.actions";
-import { EvaluationResponse } from "../../model/EvaluationResponse";
 import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
-import { state } from "@angular/animations";
+import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
+import { EvaluationResponse } from "../../model/EvaluationResponse";
+import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, evaluationLoaded } from "./board-additional-info.actions";
 
 export interface BoardAdditionalInfoState {
     boardAdditionalInfoView: BoardAdditionalInfoView,
