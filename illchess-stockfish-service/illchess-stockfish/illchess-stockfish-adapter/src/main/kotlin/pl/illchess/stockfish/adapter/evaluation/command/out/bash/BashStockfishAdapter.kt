@@ -15,13 +15,17 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation {
     override fun loadBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
         val stockfishConnector = StockfishConnector()
         stockfishConnector.startEngine()
-        return stockfishConnector.getEvaluation(fenPosition)
+        val result = stockfishConnector.getEvaluation(fenPosition)
+        stockfishConnector.stopEngine()
+        return result
     }
 
     override fun loadBestMoveAndContinuation(fenPosition: FenBoardPosition): BestMoveAndContinuation? {
         val stockfishConnector = StockfishConnector()
         stockfishConnector.startEngine()
-        return stockfishConnector.getBestMoveAndContinuation(fenPosition)
+        val result = stockfishConnector.getBestMoveAndContinuation(fenPosition)
+        stockfishConnector.stopEngine()
+        return result
     }
 
 }

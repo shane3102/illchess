@@ -1,17 +1,27 @@
 @import "../chess-board-style.scss";
 
+$default-width: 0.30 * $chess-square-size;
+$chess-moves-width: 0.7 * $chess-square-size;
+
+#chess-engine-info-wrapper {
+    width: $chess-square-size;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 #evaluation-bar {
-    height: 8 * $chess-square-size - 2* (0.02 * $chess-square-size);
-    width: 0.30 * $chess-square-size;
+    height: 8 * $chess-square-size - 2* (0.03 * $chess-square-size);
+    width: $default-width;
     background-color: white;
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-end;
     border: 0.03 * $chess-square-size solid rgb(150, 75, 0)
 }
 
 #evaluation-bar-black-part {
-    width: 0.30 * $chess-square-size;
+    width: $default-width;
     background-color: black;
     transition: height 1s;
 }
@@ -20,4 +30,55 @@
     position: relative;
     text-align: center;
     transition: all 1s;
+}
+
+#best-moves {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 8 * $chess-square-size;
+    width: $chess-moves-width;
+}
+
+.best-move-wrapper {
+    transition: all 1s;
+    transform: scaleY(0);
+    transition: transform 1s;
+    transform-origin: top;
+    height: $chess-square-size;
+    width: $chess-moves-width;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+#best-moves:hover .best-move-wrapper {
+    transform: scaleY(1);
+}
+
+.best-move-wrapper-first {
+    transform: scaleY(1);
+}
+
+.best-move {
+    padding: 10%;
+    background-color: #F3E5AB;
+    border: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    border-radius: calc($chess-square-size/6);
+    width: calc($chess-moves-width/2);
+    text-align: center;
+    font-size: calc($chess-moves-width/5);
+    animation: show-best-move 2s;
+}
+
+@keyframes show-best-move {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
