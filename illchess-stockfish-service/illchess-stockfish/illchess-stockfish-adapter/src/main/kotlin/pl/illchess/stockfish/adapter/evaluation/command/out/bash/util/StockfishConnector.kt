@@ -18,13 +18,7 @@ class StockfishConnector {
 
     fun startEngine(): Boolean {
         try {
-            val isWindows = System.getProperty("os.name")
-                .lowercase(Locale.getDefault()).startsWith("windows")
-            engineProcess = if (isWindows) {
-                Runtime.getRuntime().exec(arrayOf("stockfish"))
-            } else {
-                Runtime.getRuntime().exec(arrayOf("usr/games/stockfish"))
-            }
+            engineProcess = Runtime.getRuntime().exec(arrayOf("stockfish"))
             processReader = BufferedReader(InputStreamReader(engineProcess!!.inputStream))
             processWriter = OutputStreamWriter(engineProcess!!.outputStream)
         } catch (e: Exception) {

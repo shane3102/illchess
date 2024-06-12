@@ -4,5 +4,9 @@ quarkus:
   package:
     jar:
       type: uber-jar
-game-service:
-  url: "http://localhost:8080"
+urls:
+  game-service: "http://localhost:8080"
+  stockfish-api: "https://stockfish.online/api/s/v2.php"
+# POSSIBLE VALUES: ENGINE, API
+working:
+  mode: ENGINE

@@ -16,7 +16,7 @@ class OkHttpLoadBoardAdapter(
     private val objectMapper: ObjectMapper = jacksonObjectMapper()
 ) : LoadBoard {
 
-    @field:ConfigProperty(name = "game-service.url")
+    @field:ConfigProperty(name = "urls.game-service")
     lateinit var gameServiceUrl: String
 
     override fun loadBoard(boardId: BoardId): FenBoardPosition? {
