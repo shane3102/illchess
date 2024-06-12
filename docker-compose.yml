@@ -27,4 +27,4 @@ services:
     ports:
       - 2137:2137
     environment:
-      - GAME-SERVICE_URL=http://illchess-web-socket-service:8080
+      - URLS_GAME-SERVICE=http://illchess-web-socket-service:8080
