@@ -16,9 +16,9 @@ class StockfishConnector {
     private var processReader: BufferedReader? = null
     private var processWriter: OutputStreamWriter? = null
 
-    fun startEngine(): Boolean {
+    fun startEngine(path: String): Boolean {
         try {
-            engineProcess = Runtime.getRuntime().exec(arrayOf("stockfish"))
+            engineProcess = Runtime.getRuntime().exec(arrayOf(path))
             processReader = BufferedReader(InputStreamReader(engineProcess!!.inputStream))
             processWriter = OutputStreamWriter(engineProcess!!.outputStream)
         } catch (e: Exception) {
