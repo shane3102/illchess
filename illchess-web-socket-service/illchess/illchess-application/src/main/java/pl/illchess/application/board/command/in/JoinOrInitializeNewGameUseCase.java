@@ -2,7 +2,7 @@ package pl.illchess.application.board.command.in;
 
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.model.BoardId;
-import pl.illchess.domain.board.model.state.FenString;
+import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.state.player.Username;
 
 public interface JoinOrInitializeNewGameUseCase {
@@ -15,7 +15,7 @@ public interface JoinOrInitializeNewGameUseCase {
     ) {
 
         public JoinOrInitializeNewGame toCommand() {
-            return new JoinOrInitializeNewGame(new Username(username), new FenString(fenString));
+            return new JoinOrInitializeNewGame(new Username(username), FenBoardString.fromString(fenString));
         }
     }
 }
