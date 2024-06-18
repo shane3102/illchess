@@ -15,14 +15,12 @@ import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
-import pl.illchess.domain.board.model.state.FenString;
 import pl.illchess.domain.board.model.state.GameState;
 import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
-import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Objects;
@@ -40,7 +38,7 @@ public record Board(
 
     public Board(
         BoardId boardId,
-        FenString fenString,
+        FenBoardString fenString,
         MoveHistory moveHistory,
         Username username
     ) {
@@ -68,7 +66,9 @@ public record Board(
             );
         }
 
-        Move performedMove = piecesLocations().movePiece(command, movedPiece, moveHistory().peekLastMove());
+        FenBoardString fenBoardString = establishFenBoardString();
+
+        Move performedMove = piecesLocations().movePiece(command, movedPiece, moveHistory().peekLastMove(), fenBoardString);
         resetCachedMovesOfPieces();
         moveHistory().addMoveToHistory(performedMove);
         boardState().invertCurrentPlayerColor();

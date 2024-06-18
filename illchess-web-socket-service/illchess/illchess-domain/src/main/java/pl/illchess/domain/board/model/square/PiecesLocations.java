@@ -3,13 +3,12 @@ package pl.illchess.domain.board.model.square;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.exception.BoardFenPositionCouldNotBeEstablishedException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
+import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.history.IsCastling;
-import pl.illchess.domain.board.model.history.IsEnPassant;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.PromotionInfo;
 import pl.illchess.domain.board.model.square.info.SquareFile;
 import pl.illchess.domain.board.model.square.info.SquareRank;
-import pl.illchess.domain.board.model.state.FenString;
 import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
 import pl.illchess.domain.piece.exception.PromotedPieceNotPawnException;
 import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
@@ -40,10 +39,14 @@ public record PiecesLocations(
     Set<Piece> locations
 ) {
 
-    public Move movePiece(MovePiece command, Piece movedPiece, Move lastPerformedMove) {
+    public Move movePiece(
+        MovePiece command,
+        Piece movedPiece,
+        Move lastPerformedMove,
+        FenBoardString fenStringBeforeMove
+    ) {
         Square movedPieceStartSquare = command.startSquare();
 
-        IsEnPassant isEnPassant = new IsEnPassant(false);
         Piece capturedPiece = null;
 
         if (movedPiece instanceof Pawn pawn) {
@@ -52,7 +55,6 @@ public record PiecesLocations(
                 Optional<Piece> foundPiece = findPieceOnSquare(square);
 
                 if (foundPiece.isPresent() && foundPiece.get() instanceof Pawn) {
-                    isEnPassant = new IsEnPassant(true);
                     capturedPiece = foundPiece.get();
                     locations.removeIf(piece ->
                         Objects.equals(piece.square(), square)
@@ -62,7 +64,7 @@ public record PiecesLocations(
         }
 
         capturedPiece = capturedPiece != null ? capturedPiece : findPieceOnSquare(command.targetSquare()).orElse(null);
-        IsCastling isCastling = moveRookIfCastlingMove(movedPiece, command);
+        moveRookIfCastlingMove(movedPiece, command);
         PromotionInfo promotionInfo = isPromotion(movedPiece, command);
 
         movePieceMechanic(command, movedPiece, promotionInfo);
@@ -72,9 +74,7 @@ public record PiecesLocations(
             command.targetSquare(),
             movedPiece,
             capturedPiece,
-            isEnPassant,
-            isCastling,
-            promotionInfo
+            fenStringBeforeMove
         );
     }
 
@@ -139,7 +139,6 @@ public record PiecesLocations(
                 Objects.equals(piece.square(), command.targetSquare())
         );
 
-
         if (promotionInfo != null) {
             if (!(movedPiece instanceof Pawn pawn)) {
                 throw new PromotedPieceNotPawnException();
@@ -155,21 +154,20 @@ public record PiecesLocations(
         locations.add(movedPiece);
     }
 
-    private IsCastling moveRookIfCastlingMove(Piece movedPiece, MovePiece command) {
+    private void moveRookIfCastlingMove(Piece movedPiece, MovePiece command) {
         IsCastling isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.G1, Square.E1, Square.H1, Square.F1);
         if (isCastling.value()) {
-            return isCastling;
+            return;
         }
         isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C1, Square.E1, Square.A1, Square.D1);
         if (isCastling.value()) {
-            return isCastling;
+            return;
         }
         isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.G8, Square.E8, Square.H8, Square.F8);
         if (isCastling.value()) {
-            return isCastling;
+            return;
         }
         isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C8, Square.E8, Square.A8, Square.D8);
-        return isCastling;
     }
 
     private IsCastling moveRookIfCastlingMoveByCorner(
@@ -203,12 +201,12 @@ public record PiecesLocations(
         return null;
     }
 
-    public static PiecesLocations fromFENString(FenString fenPosition) {
+    public static PiecesLocations fromFENString(FenBoardString fenPosition) {
 
         Set<Piece> resultPosition = new HashSet<>();
 
         char[] files = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
-        String[] rankLines = fenPosition.value().split(" ")[0].split("/");
+        String[] rankLines = fenPosition.position().split("/");
 
         for (int i = 0; i < rankLines.length; i++) {
             int currentRank = 8 - i;

@@ -3,9 +3,7 @@ package pl.illchess.adapter.board.command.out.redis.mapper;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.domain.board.model.Board;
 import pl.illchess.domain.board.model.BoardId;
-import pl.illchess.domain.board.model.history.IsCastling;
-import pl.illchess.domain.board.model.history.IsEnPassant;
-import pl.illchess.domain.board.model.history.PromotionInfo;
+import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
@@ -123,9 +121,7 @@ public class BoardMapper {
                             Square.valueOf(moveEntity.targetSquare()),
                             Set.of()
                         ),
-                    new IsEnPassant(moveEntity.isEnPassant()),
-                    new IsCastling(moveEntity.isCastling()),
-                    moveEntity.promotionPieceType() == null ? null : new PromotionInfo(new PieceType(moveEntity.promotionPieceType()))
+                    FenBoardString.fromString(moveEntity.fenString())
                 );
 
                 moveStack.push(move);
@@ -169,9 +165,7 @@ public class BoardMapper {
                             move.capturedPiece().typeName().text(),
                             Set.of()
                         ),
-                    move.isEnPassant().value(),
-                    move.isCastling().value(),
-                    move.promotionInfo() == null ? null : move.promotionInfo().targetPieceType().text()
+                    move.fenBoardString().fullString()
                 )
             )
             .toList();

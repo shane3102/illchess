@@ -10,6 +10,7 @@ import pl.illchess.domain.board.exception.InvalidUserProposingDrawException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
+import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
@@ -182,10 +183,10 @@ public class BoardState {
     }
 
     public static BoardState fromFenStringAndByUsername(
-        FenString fenString,
+        FenBoardString fenString,
         Username username
     ) {
-        String movingColor = fenString.value().split(" ")[1];
+        String movingColor = fenString.activeColor();
 
         return new BoardState(
             new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : WHITE),
