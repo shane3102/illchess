@@ -5,8 +5,10 @@ import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
+import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.Resign;
+import pl.illchess.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
@@ -16,7 +18,6 @@ import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.GameState;
-import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
@@ -122,7 +123,7 @@ public record Board(
     }
 
     public void assignSecondPlayer(Username username) {
-        boardState.setBlackPlayer(new Player(username, new IsProposingDraw(false)));
+        boardState.setBlackPlayer(new Player(username));
     }
 
     public void resign(Resign command) {
@@ -131,6 +132,13 @@ public record Board(
 
     public void proposeDraw(ProposeDraw command) {
         boardState.proposeDraw(command);
+    }
+
+    public void proposeTakingBackMove(ProposeTakingBackMove command) {
+        if (moveHistory.peekLastMove() == null) {
+            throw new NoMovesPerformedException(boardId);
+        }
+        boardState.proposeTakingBackMove(command);
     }
 
     public void acceptDraw(AcceptDraw command) {
@@ -154,12 +162,12 @@ public record Board(
         String fullMoveCount = moveHistory.fullMoveCountFen();
 
         return new FenBoardString(
-                position,
-                currentPlayerColor,
-                castlingAvailability,
-                enPassantPossibleSquare,
-                halfMoveClock,
-                fullMoveCount
+            position,
+            currentPlayerColor,
+            castlingAvailability,
+            enPassantPossibleSquare,
+            halfMoveClock,
+            fullMoveCount
         );
     }
 

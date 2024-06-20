@@ -41,7 +41,8 @@ public record BoardEntity(
 
     public record PlayerEntity(
         String username,
-        boolean isProposingDraw
+        boolean isProposingDraw,
+        boolean isProposingTakingBackMove
     ) implements Serializable {
 
     }

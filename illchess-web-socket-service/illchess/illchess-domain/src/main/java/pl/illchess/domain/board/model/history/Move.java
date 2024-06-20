@@ -9,6 +9,6 @@ public record Move(
     Square targetSquare,
     Piece movedPiece,
     Piece capturedPiece,
-    FenBoardString fenBoardString
+    FenBoardString fenBoardStringBeforeMove
 ) {
 }

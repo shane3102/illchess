@@ -11,6 +11,7 @@ import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.GameState;
 import pl.illchess.domain.board.model.state.player.IsProposingDraw;
+import pl.illchess.domain.board.model.state.player.IsProposingTakingBackMove;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
@@ -49,7 +50,7 @@ public class BoardMapper {
     }
 
     private static BoardEntity.PlayerEntity mapToPlayer(Player player) {
-        return player == null ? null : new BoardEntity.PlayerEntity(player.username().text(), player.isProposingDraw().value());
+        return player == null ? null : new BoardEntity.PlayerEntity(player.username().text(), player.isProposingDraw().value(), player.isProposingTakingBackMove().value());
     }
 
     public static Board toDomain(BoardEntity entity) {
@@ -77,7 +78,14 @@ public class BoardMapper {
     }
 
     private static Player mapToPlayer(BoardEntity.PlayerEntity player) {
-        return player == null ? null : new Player(new Username(player.username()), new IsProposingDraw(player.isProposingDraw()));
+        return player == null
+            ? null
+            :
+            new Player(
+                new Username(player.username()),
+                new IsProposingDraw(player.isProposingDraw()),
+                new IsProposingTakingBackMove(player.isProposingTakingBackMove())
+            );
     }
 
     private static PiecesLocations toPiecesLocations(List<BoardEntity.PieceEntity> piecesLocationsInEntity) {
@@ -165,7 +173,7 @@ public class BoardMapper {
                             move.capturedPiece().typeName().text(),
                             Set.of()
                         ),
-                    move.fenBoardString().fullString()
+                    move.fenBoardStringBeforeMove().fullString()
                 )
             )
             .toList();
