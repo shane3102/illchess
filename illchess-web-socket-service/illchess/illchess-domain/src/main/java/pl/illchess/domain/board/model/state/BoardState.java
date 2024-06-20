@@ -2,16 +2,17 @@ package pl.illchess.domain.board.model.state;
 
 import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.ProposeDraw;
+import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.GameCanNotBeAcceptedOrRejectedAsDrawnException;
 import pl.illchess.domain.board.exception.GameIsNotContinuableException;
+import pl.illchess.domain.board.exception.InvalidUserIsProposingTakingBackMoveException;
 import pl.illchess.domain.board.exception.InvalidUserProposingDrawException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
-import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.Player;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.Piece;
@@ -146,6 +147,19 @@ public class BoardState {
         }
     }
 
+    public void proposeTakingBackMove(ProposeTakingBackMove command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
+        if (Objects.equals(command.username(), blackPlayer.username())) {
+            blackPlayer.proposeTakeBackMove(command);
+        } else if (Objects.equals(command.username(), whitePlayer.username())) {
+            whitePlayer.proposeTakeBackMove(command);
+        } else {
+            throw new InvalidUserIsProposingTakingBackMoveException(command.username());
+        }
+    }
+
     public CurrentPlayerColor currentPlayerColor() {
         return currentPlayerColor;
     }
@@ -190,7 +204,7 @@ public class BoardState {
 
         return new BoardState(
             new CurrentPlayerColor(movingColor.equals("b") ? PieceColor.BLACK : WHITE),
-            new Player(username, new IsProposingDraw(false)),
+            new Player(username),
             null,
             CONTINUE,
             null
