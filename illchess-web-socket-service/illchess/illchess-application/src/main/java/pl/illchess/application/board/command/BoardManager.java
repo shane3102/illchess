@@ -3,6 +3,7 @@ package pl.illchess.application.board.command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.illchess.application.board.command.in.AcceptDrawUseCase;
+import pl.illchess.application.board.command.in.AcceptTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase;
@@ -18,6 +19,7 @@ import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.board.command.AcceptDraw;
+import pl.illchess.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.EstablishFenStringOfBoard;
@@ -26,7 +28,7 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
-import pl.illchess.domain.board.command.RejectTakingBackLastMove;
+import pl.illchess.domain.board.command.RejectTakingBackMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
@@ -56,6 +58,7 @@ public class BoardManager implements
     AcceptDrawUseCase,
     ProposeTakeBackMoveUseCase,
     RejectTakingBackLastMoveUseCase,
+    AcceptTakingBackLastMoveUseCase,
     EstablishFenStringOfBoardUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
@@ -267,7 +270,7 @@ public class BoardManager implements
     @Override
     public void rejectTakingBackLastMove(RejectTakingBackMoveCmd cmd) {
         log.info("User {} is rejecting taking back last move on board with id = {}", cmd.username(), cmd.boardId());
-        RejectTakingBackLastMove command = cmd.toCommand();
+        RejectTakingBackMove command = cmd.toCommand();
         Board board = loadBoard.loadBoard(command.boardId())
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.rejectTakingBackLastMove(command);
@@ -275,4 +278,14 @@ public class BoardManager implements
         log.info("User {} successfully rejected taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
+    @Override
+    public void acceptTakingBackLastMove(AcceptTakingBackMoveCmd cmd) {
+        log.info("User {} is accepting offer of taking back last move on board with id = {}", cmd.username(), cmd.boardId());
+        AcceptTakingBackMove command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.acceptTakingBackLastMove(command);
+        saveBoard.saveBoard(board);
+        log.info("User {} successfully accepted taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
+    }
 }
