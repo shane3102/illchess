@@ -11,6 +11,7 @@ import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.ProposeDrawUseCase;
 import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase;
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
+import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
 import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
@@ -25,6 +26,7 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
+import pl.illchess.domain.board.command.RejectTakingBackLastMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
@@ -53,6 +55,7 @@ public class BoardManager implements
     RejectDrawUseCase,
     AcceptDrawUseCase,
     ProposeTakeBackMoveUseCase,
+    RejectTakingBackLastMoveUseCase,
     EstablishFenStringOfBoardUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
@@ -257,6 +260,19 @@ public class BoardManager implements
         Board board = loadBoard.loadBoard(command.boardId())
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.proposeTakingBackMove(command);
+        saveBoard.saveBoard(board);
         log.info("User {} successfully proposed taking back move on board with id = {}", cmd.username(), cmd.boardId());
     }
+
+    @Override
+    public void rejectTakingBackLastMove(RejectTakingBackMoveCmd cmd) {
+        log.info("User {} is rejecting taking back last move on board with id = {}", cmd.username(), cmd.boardId());
+        RejectTakingBackLastMove command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId())
+            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        board.rejectTakingBackLastMove(command);
+        saveBoard.saveBoard(board);
+        log.info("User {} successfully rejected taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
+    }
+
 }

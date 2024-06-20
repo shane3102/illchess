@@ -7,6 +7,7 @@ import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
+import pl.illchess.domain.board.command.RejectTakingBackLastMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
@@ -134,6 +135,14 @@ public record Board(
         boardState.proposeDraw(command);
     }
 
+    public void acceptDraw(AcceptDraw command) {
+        boardState.acceptDrawOffer(command);
+    }
+
+    public void rejectDraw(RejectDraw command) {
+        boardState.rejectDrawOffer(command);
+    }
+
     public void proposeTakingBackMove(ProposeTakingBackMove command) {
         if (moveHistory.peekLastMove() == null) {
             throw new NoMovesPerformedException(boardId);
@@ -141,12 +150,11 @@ public record Board(
         boardState.proposeTakingBackMove(command);
     }
 
-    public void acceptDraw(AcceptDraw command) {
-        boardState.acceptDrawOffer(command);
-    }
-
-    public void rejectDraw(RejectDraw command) {
-        boardState.rejectDrawOffer(command);
+    public void rejectTakingBackLastMove(RejectTakingBackLastMove command) {
+        if (moveHistory.peekLastMove() == null) {
+            throw new NoMovesPerformedException(boardId);
+        }
+        boardState.rejectTakingBackLastMoveOffer(command);
     }
 
     public void resetCachedMovesOfPieces() {
