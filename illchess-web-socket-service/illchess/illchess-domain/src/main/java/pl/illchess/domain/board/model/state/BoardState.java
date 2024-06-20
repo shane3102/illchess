@@ -2,10 +2,11 @@ package pl.illchess.domain.board.model.state;
 
 import java.util.Objects;
 import pl.illchess.domain.board.command.AcceptDraw;
+import pl.illchess.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
-import pl.illchess.domain.board.command.RejectTakingBackLastMove;
+import pl.illchess.domain.board.command.RejectTakingBackMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.GameCanNotBeAcceptedOrRejectedAsDrawnException;
 import pl.illchess.domain.board.exception.GameIsNotContinuableException;
@@ -160,7 +161,7 @@ public class BoardState {
         }
     }
 
-    public void rejectTakingBackLastMoveOffer(RejectTakingBackLastMove command) {
+    public void rejectTakingBackLastMoveOffer(RejectTakingBackMove command) {
         if (gameState != CONTINUE) {
             throw new GameIsNotContinuableException(gameState);
         }
@@ -168,6 +169,20 @@ public class BoardState {
             whitePlayer.resetProposingTakingBackMove();
         } else if (Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingTakingBackMove().value()) {
             blackPlayer.resetProposingTakingBackMove();
+        } else {
+            throw new UserProposingDrawCouldNotBeEstablished(command.boardId());
+        }
+    }
+
+    public void acceptTakingBackLastMoveOffer(AcceptTakingBackMove command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
+        boolean isWhiteProposingTakingBackLastMove = Objects.equals(command.username(), blackPlayer.username()) && whitePlayer.isProposingTakingBackMove().value();
+        boolean isBlackProposingTakingBackLastMove = Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingTakingBackMove().value();
+        if (isBlackProposingTakingBackLastMove || isWhiteProposingTakingBackLastMove) {
+            blackPlayer.resetProposingTakingBackMove();
+            whitePlayer.resetProposingTakingBackMove();
         } else {
             throw new UserProposingDrawCouldNotBeEstablished(command.boardId());
         }

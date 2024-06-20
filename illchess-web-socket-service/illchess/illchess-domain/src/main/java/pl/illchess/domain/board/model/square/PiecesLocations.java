@@ -201,8 +201,19 @@ public record PiecesLocations(
         return null;
     }
 
+    public void applyPositionByFenString(FenBoardString fenBoardString) {
+        locations.removeIf(it -> true);
+        locations.addAll(getPositionByFenString(fenBoardString));
+    }
+
     public static PiecesLocations fromFENString(FenBoardString fenPosition) {
 
+        Set<Piece> resultPosition = getPositionByFenString(fenPosition);
+
+        return new PiecesLocations(resultPosition);
+    }
+
+    private static Set<Piece> getPositionByFenString(FenBoardString fenPosition) {
         Set<Piece> resultPosition = new HashSet<>();
 
         char[] files = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
@@ -238,8 +249,7 @@ public record PiecesLocations(
                 }
             }
         }
-
-        return new PiecesLocations(resultPosition);
+        return resultPosition;
     }
 
     public String establishFenPosition() {

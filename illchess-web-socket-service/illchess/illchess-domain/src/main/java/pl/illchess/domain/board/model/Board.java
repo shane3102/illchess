@@ -1,13 +1,17 @@
 package pl.illchess.domain.board.model;
 
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import pl.illchess.domain.board.command.AcceptDraw;
+import pl.illchess.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.domain.board.command.CheckLegalMoves;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
-import pl.illchess.domain.board.command.RejectTakingBackLastMove;
+import pl.illchess.domain.board.command.RejectTakingBackMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
@@ -24,11 +28,6 @@ import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.type.King;
-
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-
 import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public record Board(
@@ -150,11 +149,17 @@ public record Board(
         boardState.proposeTakingBackMove(command);
     }
 
-    public void rejectTakingBackLastMove(RejectTakingBackLastMove command) {
+    public void rejectTakingBackLastMove(RejectTakingBackMove command) {
         if (moveHistory.peekLastMove() == null) {
             throw new NoMovesPerformedException(boardId);
         }
         boardState.rejectTakingBackLastMoveOffer(command);
+    }
+
+    public void acceptTakingBackLastMove(AcceptTakingBackMove command) {
+        boardState.acceptTakingBackLastMoveOffer(command);
+        Move moveTakenBack = moveHistory.takeBackLastMove();
+        piecesLocations.applyPositionByFenString(moveTakenBack.fenBoardStringBeforeMove());
     }
 
     public void resetCachedMovesOfPieces() {
