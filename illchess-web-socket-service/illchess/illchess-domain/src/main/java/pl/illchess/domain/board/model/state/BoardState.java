@@ -1,9 +1,11 @@
 package pl.illchess.domain.board.model.state;
 
+import java.util.Objects;
 import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
+import pl.illchess.domain.board.command.RejectTakingBackLastMove;
 import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.exception.GameCanNotBeAcceptedOrRejectedAsDrawnException;
 import pl.illchess.domain.board.exception.GameIsNotContinuableException;
@@ -11,6 +13,7 @@ import pl.illchess.domain.board.exception.InvalidUserIsProposingTakingBackMoveEx
 import pl.illchess.domain.board.exception.InvalidUserProposingDrawException;
 import pl.illchess.domain.board.exception.InvalidUserResigningGameException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
+import pl.illchess.domain.board.exception.UserProposingDrawCouldNotBeEstablished;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.state.player.Player;
@@ -18,9 +21,6 @@ import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
-
-import java.util.Objects;
-
 import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.domain.board.model.state.GameState.DRAW;
 import static pl.illchess.domain.board.model.state.GameState.RESIGNED;
@@ -157,6 +157,19 @@ public class BoardState {
             whitePlayer.proposeTakeBackMove(command);
         } else {
             throw new InvalidUserIsProposingTakingBackMoveException(command.username());
+        }
+    }
+
+    public void rejectTakingBackLastMoveOffer(RejectTakingBackLastMove command) {
+        if (gameState != CONTINUE) {
+            throw new GameIsNotContinuableException(gameState);
+        }
+        if (Objects.equals(command.username(), blackPlayer.username()) && whitePlayer.isProposingTakingBackMove().value()) {
+            whitePlayer.resetProposingTakingBackMove();
+        } else if (Objects.equals(command.username(), whitePlayer.username()) && blackPlayer.isProposingTakingBackMove().value()) {
+            blackPlayer.resetProposingTakingBackMove();
+        } else {
+            throw new UserProposingDrawCouldNotBeEstablished(command.boardId());
         }
     }
 
