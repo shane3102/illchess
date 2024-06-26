@@ -14,7 +14,6 @@ import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase;
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
-import pl.illchess.application.board.command.in.TakeBackMoveUseCase;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
@@ -48,7 +47,6 @@ import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
 
 public class BoardManager implements
     MovePieceUseCase,
-    TakeBackMoveUseCase,
     JoinOrInitializeNewGameUseCase,
     CheckIfCheckmateOrStalemateUseCase,
     CheckLegalityMoveUseCase,
@@ -122,27 +120,6 @@ public class BoardManager implements
             legalMoves
         );
         return legalMoves;
-    }
-
-    @Override
-    public void takeBackMove(TakeBackMoveCmd cmd) {
-        log.info(
-            "At board with id = {} last performed move is being taken back",
-            cmd.boardId()
-        );
-        BoardId boardId = new BoardId(cmd.boardId());
-        Board board = loadBoard.loadBoard(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
-
-        board.takeBackMove();
-
-        saveBoard.saveBoard(board);
-
-        log.info(
-            "At board with id = {} last performed move was successfully taken back",
-            cmd.boardId()
-        );
-
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
     }
 
     @Override

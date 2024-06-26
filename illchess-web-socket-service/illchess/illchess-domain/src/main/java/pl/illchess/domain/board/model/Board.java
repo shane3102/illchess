@@ -89,11 +89,6 @@ public record Board(
         return movedPiece.possibleMoves(piecesLocations, moveHistory);
     }
 
-    public void takeBackMove() {
-        Move moveTakenBack = moveHistory().takeBackLastMove();
-        piecesLocations.takeBackMove(moveTakenBack);
-    }
-
     public GameState establishBoardState() {
         King king = (King) piecesLocations.getPieceByTypeAndColor(King.class, boardState().currentPlayerColor().color())
             .orElseThrow(KingNotFoundOnBoardException::new);

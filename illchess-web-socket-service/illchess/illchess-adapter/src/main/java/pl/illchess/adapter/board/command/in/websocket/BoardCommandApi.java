@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.illchess.adapter.board.command.in.websocket.dto.AcceptDrawRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.AcceptTakingBackMoveRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.BoardFenStringResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.CheckLegalMovesRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequest;
@@ -15,7 +16,9 @@ import pl.illchess.adapter.board.command.in.websocket.dto.InitializedBoardRespon
 import pl.illchess.adapter.board.command.in.websocket.dto.LegalMovesResponse;
 import pl.illchess.adapter.board.command.in.websocket.dto.MovePieceRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.ProposeDrawRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.ProposeTakingBackMoveRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.RejectDrawRequest;
+import pl.illchess.adapter.board.command.in.websocket.dto.RejectTakingBackMoveRequest;
 import pl.illchess.adapter.board.command.in.websocket.dto.ResignGameRequest;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 
@@ -57,5 +60,17 @@ public interface BoardCommandApi {
     @ResponseBody
     @GetMapping(value = "/fen/{boardId}", produces = "application/json")
     ResponseEntity<BoardFenStringResponse> establishFenString(@PathVariable UUID boardId);
+
+    @ResponseBody
+    @PutMapping(value = "/propose-take-back-move", produces = "application/json")
+    ResponseEntity<Void> proposeTakingBackMove(@RequestBody ProposeTakingBackMoveRequest request);
+
+    @ResponseBody
+    @PutMapping(value = "/accept-take-back-move", produces = "application/json")
+    ResponseEntity<Void> acceptTakingBackMove(@RequestBody AcceptTakingBackMoveRequest request);
+
+    @ResponseBody
+    @PutMapping(value = "/reject-take-back-move", produces = "application/json")
+    ResponseEntity<Void> rejectTakingBackMove(@RequestBody RejectTakingBackMoveRequest request);
 
 }

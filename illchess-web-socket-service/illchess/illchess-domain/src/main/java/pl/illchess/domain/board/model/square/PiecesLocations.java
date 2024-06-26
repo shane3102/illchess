@@ -78,23 +78,6 @@ public record PiecesLocations(
         );
     }
 
-    public void takeBackMove(Move moveTakenBack) {
-
-        locations.removeIf(
-            piece -> Objects.equals(piece.square(), moveTakenBack.startSquare()) ||
-                Objects.equals(piece.square(), moveTakenBack.targetSquare())
-        );
-
-        moveTakenBack.movedPiece().setSquare(moveTakenBack.startSquare());
-        locations.add(moveTakenBack.movedPiece());
-
-        if (moveTakenBack.capturedPiece() != null) {
-            // TODO co z en passant/roszadą ???
-            moveTakenBack.capturedPiece().setSquare(moveTakenBack.targetSquare());
-            locations.add(moveTakenBack.capturedPiece());
-        }
-    }
-
     public Optional<Piece> getPieceByTypeAndColor(Class<? extends Piece> pieceType, PieceColor pieceColor) {
         return locations.stream()
             .filter(piece ->
