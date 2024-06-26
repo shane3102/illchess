@@ -1,26 +1,23 @@
-package pl.illchess.adapter.board.command.in.websocket;
+package pl.illchess.adapter.board.command.in.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import pl.illchess.adapter.board.command.in.websocket.dto.AcceptDrawRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.AcceptTakingBackMoveRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.BoardFenStringResponse;
-import pl.illchess.adapter.board.command.in.websocket.dto.CheckLegalMovesRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.InitializeNewBoardRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.InitializedBoardResponse;
-import pl.illchess.adapter.board.command.in.websocket.dto.LegalMovesResponse;
-import pl.illchess.adapter.board.command.in.websocket.dto.MovePieceRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.ProposeDrawRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.ProposeTakingBackMoveRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.RejectDrawRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.RejectTakingBackMoveRequest;
-import pl.illchess.adapter.board.command.in.websocket.dto.ResignGameRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.AcceptDrawRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.AcceptTakingBackMoveRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.BoardFenStringResponse;
+import pl.illchess.adapter.board.command.in.rest.dto.CheckLegalMovesRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.InitializeNewBoardRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.InitializedBoardResponse;
+import pl.illchess.adapter.board.command.in.rest.dto.LegalMovesResponse;
+import pl.illchess.adapter.board.command.in.rest.dto.MovePieceRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.ProposeDrawRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.ProposeTakingBackMoveRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.RejectDrawRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.RejectTakingBackMoveRequest;
+import pl.illchess.adapter.board.command.in.rest.dto.ResignGameRequest;
 import pl.illchess.application.board.command.in.AcceptDrawUseCase;
 import pl.illchess.application.board.command.in.AcceptTakingBackLastMoveUseCase;
-import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
-import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase.CheckIsCheckmateOrStaleMateCmd;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase;
 import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd;
@@ -31,7 +28,6 @@ import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase;
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
-import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.square.Square;
@@ -48,7 +44,6 @@ public class BoardCommandController implements BoardCommandApi {
     private final MovePieceUseCase movePieceUseCase;
     private final CheckLegalityMoveUseCase checkLegalityMoveUseCase;
     private final JoinOrInitializeNewGameUseCase joinOrInitializeNewGameUseCase;
-    private final CheckIfCheckmateOrStalemateUseCase checkIfCheckmateOrStalemateUseCase;
     private final ResignGameUseCase resignGameUseCase;
     private final ProposeDrawUseCase proposeDrawUseCase;
     private final RejectDrawUseCase rejectDrawUseCase;
@@ -57,13 +52,6 @@ public class BoardCommandController implements BoardCommandApi {
     private final ProposeTakeBackMoveUseCase proposeTakeBackMoveUseCase;
     private final AcceptTakingBackLastMoveUseCase acceptTakingBackLastMoveUseCase;
     private final RejectTakingBackLastMoveUseCase rejectTakingBackLastMoveUseCase;
-
-    @Override
-    @EventListener(BoardPiecesLocationsUpdated.class)
-    public void checkGameState(BoardPiecesLocationsUpdated boardUpdated) {
-        CheckIsCheckmateOrStaleMateCmd cmd = new CheckIsCheckmateOrStaleMateCmd(boardUpdated.boardId().uuid());
-        checkIfCheckmateOrStalemateUseCase.checkIfCheckmateOrStalemate(cmd);
-    }
 
     @Override
     public ResponseEntity<InitializedBoardResponse> initializeNewBoard(InitializeNewBoardRequest initializeNewBoardRequest) {

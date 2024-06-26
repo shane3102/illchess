@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.query.in;
+package pl.illchess.adapter.board.query.in.websocket;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

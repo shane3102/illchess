@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.query.in;
+package pl.illchess.adapter.board.query.in.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

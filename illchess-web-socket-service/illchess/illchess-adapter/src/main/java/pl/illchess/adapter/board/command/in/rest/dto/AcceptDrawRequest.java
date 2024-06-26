@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.command.in.websocket.dto;
+package pl.illchess.adapter.board.command.in.rest.dto;
 
 import pl.illchess.application.board.command.in.AcceptDrawUseCase;
 
