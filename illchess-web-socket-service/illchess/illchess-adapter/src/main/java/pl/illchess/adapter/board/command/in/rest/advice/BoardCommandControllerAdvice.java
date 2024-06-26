@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.command.in.websocket.advice;
+package pl.illchess.adapter.board.command.in.rest.advice;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
-import pl.illchess.adapter.board.command.in.websocket.dto.IllegalMoveResponse;
+import pl.illchess.adapter.board.command.in.rest.dto.IllegalMoveResponse;
 import pl.illchess.application.board.command.BoardManager;
 import pl.illchess.application.commons.command.out.PublishEvent;
 import pl.illchess.domain.board.exception.IllegalMoveException;

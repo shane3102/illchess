@@ -1,4 +1,4 @@
-package pl.illchess.adapter.board.query.in;
+package pl.illchess.adapter.board.query.in.websocket;
 
 import org.springframework.context.event.EventListener;
 import pl.illchess.application.board.query.out.model.ActiveBoardsView;
