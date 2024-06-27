@@ -1,4 +1,8 @@
 package pl.illchess.application.board.query.out.model;
 
-public record PlayerView(String username, boolean isProposingDraw) {
+public record PlayerView(
+    String username,
+    boolean isProposingDraw,
+    boolean isProposingTakingBackMove
+) {
 }

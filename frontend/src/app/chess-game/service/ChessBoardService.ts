@@ -13,6 +13,9 @@ import { MovePieceRequest } from "../model/MovePieceRequest";
 import { ProposeDrawRequest } from "../model/ProposeDrawRequest";
 import { RejectDrawRequest } from "../model/RejectDrawRequest";
 import { ResignGameRequest } from "../model/ResignGameRequest";
+import { ProposeTakingBackMoveRequest } from "../model/ProposeTakingBackMoveRequest";
+import { RejectTakingBackMoveRequest } from "../model/RejectTakingBackMoveRequest";
+import { AcceptTakingBackMoveRequest } from "../model/AcceptTakingBackMoveRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -62,6 +65,18 @@ export class ChessBoardService {
 
     async acceptDraw(acceptDraw: AcceptDrawRequest): Promise<void> {
         return firstValueFrom(this.httpService.put<void>(`${this.PATH}/accept-draw`, acceptDraw));
+    }
+
+    async proposeTakingBackMove(proposeTakingBackMove: ProposeTakingBackMoveRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/propose-take-back-move`, proposeTakingBackMove))
+    }
+
+    async rejectTakingBackMove(rejectTakingBackMove: RejectTakingBackMoveRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/reject-take-back-move`, rejectTakingBackMove))
+    }
+
+    async acceptTakingBackMove(acceptTakingBackMove: AcceptTakingBackMoveRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/accept-take-back-move`, acceptTakingBackMove))
     }
 
 }
