@@ -12,5 +12,7 @@ export interface BoardAdditionalInfoView {
 
 export interface PlayerView {
     username: string,
-    isProposingDraw: boolean
+    isProposingDraw: boolean,
+    isProposingTakingBackMove: boolean
+
 } 

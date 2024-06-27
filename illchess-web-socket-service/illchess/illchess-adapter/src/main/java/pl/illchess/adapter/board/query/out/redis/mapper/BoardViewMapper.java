@@ -38,8 +38,18 @@ public class BoardViewMapper {
             return new BoardAdditionalInfoView(
                 entity.boardId(),
                 entity.boardState().currentPlayerColor(),
-                new PlayerView(entity.boardState().player1().username(), entity.boardState().player1().isProposingDraw()),
-                entity.boardState().player2() == null ? null : new PlayerView(entity.boardState().player2().username(), entity.boardState().player2().isProposingDraw()),
+                new PlayerView(
+                    entity.boardState().player1().username(),
+                    entity.boardState().player1().isProposingDraw(),
+                    entity.boardState().player1().isProposingTakingBackMove()
+                ),
+                entity.boardState().player2() == null
+                    ? null
+                    : new PlayerView(
+                        entity.boardState().player2().username(),
+                        entity.boardState().player2().isProposingDraw(),
+                        entity.boardState().player2().isProposingTakingBackMove()
+                    ),
                 entity.boardState().gameState(),
                 entity.boardState().victoriousPlayerColor(),
                 capturedPiecesStreamSupplier.get()

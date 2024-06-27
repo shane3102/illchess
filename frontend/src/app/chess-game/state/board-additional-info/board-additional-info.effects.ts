@@ -8,10 +8,13 @@ import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
 import { RejectDrawRequest } from "../../model/RejectDrawRequest";
 import { ResignGameRequest } from "../../model/ResignGameRequest";
 import { ChessBoardService } from "../../service/ChessBoardService";
-import { acceptDraw, bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded, proposeDraw, refreshAdditionalInfoOfBoard, rejectDraw, resignGame } from "./board-additional-info.actions";
+import { acceptDraw, acceptTakingBackMove, bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded, proposeDraw, proposeTakingBackMove, refreshAdditionalInfoOfBoard, rejectDraw, rejectTakingBackMove, resignGame } from "./board-additional-info.actions";
 import { ChessBoardStockfishService } from "../../service/ChessBoardStockfishService";
 import { EvaluationResponse } from "../../model/EvaluationResponse";
 import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
+import { ProposeTakingBackMoveRequest } from "../../model/ProposeTakingBackMoveRequest";
+import { RejectTakingBackMoveRequest } from "../../model/RejectTakingBackMoveRequest";
+import { AcceptTakingBackMoveRequest } from "../../model/AcceptTakingBackMoveRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -77,6 +80,42 @@ export class BoardAdditionalInfoEffects {
             ofType(acceptDraw),
             switchMap(
                 (dto: AcceptDrawRequest) => from(this.chessBoardService.acceptDraw(dto))
+            )
+        ),
+        {
+            dispatch: false
+        }
+    )
+
+    proposeTakingBackMove$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(proposeTakingBackMove),
+            switchMap(
+                (dto: ProposeTakingBackMoveRequest) => from(this.chessBoardService.proposeTakingBackMove(dto))
+            )
+        ),
+        {
+            dispatch: false
+        }
+    )
+
+    rejectTakingBackMove$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(rejectTakingBackMove),
+            switchMap(
+                (dto: RejectTakingBackMoveRequest) => from(this.chessBoardService.rejectTakingBackMove(dto))
+            )
+        ),
+        {
+            dispatch: false
+        }
+    )
+
+    acceptTakingBackMove$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(acceptTakingBackMove),
+            switchMap(
+                (dto: AcceptTakingBackMoveRequest) => from(this.chessBoardService.acceptTakingBackMove(dto))
             )
         ),
         {

@@ -7,6 +7,9 @@ import { RejectDrawRequest } from "../../model/RejectDrawRequest";
 import { ResignGameRequest } from "../../model/ResignGameRequest";
 import { EvaluationResponse } from "../../model/EvaluationResponse";
 import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
+import { ProposeTakingBackMoveRequest } from "../../model/ProposeTakingBackMoveRequest";
+import { RejectTakingBackMoveRequest } from "../../model/RejectTakingBackMoveRequest";
+import { AcceptTakingBackMoveRequest } from "../../model/AcceptTakingBackMoveRequest";
 
 export const refreshAdditionalInfoOfBoard = createAction(
     'Manual refresh of board additional info',
@@ -36,6 +39,21 @@ export const rejectDraw = createAction(
 export const acceptDraw = createAction(
     'Accept draw',
     props<AcceptDrawRequest>()
+)
+
+export const proposeTakingBackMove = createAction(
+    'Propose taking back move',
+    props<ProposeTakingBackMoveRequest>()
+)
+
+export const rejectTakingBackMove = createAction(
+    'Reject taking back move',
+    props<RejectTakingBackMoveRequest>()
+)
+
+export const acceptTakingBackMove = createAction(
+    'Accept taking back move',
+    props<AcceptTakingBackMoveRequest>()
 )
 
 export const establishEvaluation = createAction(
