@@ -10,11 +10,14 @@
             (click)="proposeDraw()"
             [disabled]="color == PieceColor.BLACK 
             ? (whitePlayer?.username != username && blackPlayer?.isProposingDraw)! 
-            : (blackPlayer?.username  != username && whitePlayer?.isProposingDraw)!"></app-chess-game-button>
+            : (blackPlayer?.username != username && whitePlayer?.isProposingDraw)!"></app-chess-game-button>
         <app-chess-game-button 
             info="Poproś o cofnięcie ruchu" 
             [icon]="back"
-            [disabled]="true"></app-chess-game-button>
+            (click)="proposeTakeBackMove()"
+            [disabled]="performedMoves.length == 0 || color == PieceColor.BLACK 
+            ? (whitePlayer?.username != username && blackPlayer?.isProposingTakingBackMove)! 
+            : (blackPlayer?.username != username && whitePlayer?.isProposingTakingBackMove)!"></app-chess-game-button>
     </ng-container>
     <ng-container *ngIf="color == PieceColor.BLACK ? (whitePlayer?.username == username) : (blackPlayer?.username  == username)">
         <div *ngIf="color == PieceColor.BLACK 
@@ -26,9 +29,14 @@
                 (decline)="rejectDraw()">
             </app-chess-game-offer-from-oponent>
         </div>
-        <!-- TODO implement -->
-        <div *ngIf="false">
-            <app-chess-game-offer-from-oponent info="Przeciwnik poprosił o cofnięcie ruchu"></app-chess-game-offer-from-oponent>
+        <div *ngIf="color == PieceColor.BLACK 
+        ? (whitePlayer?.username == username && blackPlayer?.isProposingTakingBackMove) 
+        : (blackPlayer?.username  == username && whitePlayer?.isProposingTakingBackMove)">
+            <app-chess-game-offer-from-oponent 
+                info="Przeciwnik poprosił o cofnięcie ruchu"
+                (accept)="acceptTakingBackMove()"
+                (decline)="rejectTakingBackMove()"
+            ></app-chess-game-offer-from-oponent>
         </div>
     </ng-container>
 </div>
