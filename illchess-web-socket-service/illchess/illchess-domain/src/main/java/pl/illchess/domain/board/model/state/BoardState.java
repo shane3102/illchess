@@ -129,6 +129,8 @@ public class BoardState {
         if (isBlackProposingDraw || isWhiteProposingDraw) {
             blackPlayer.resetProposingDraw();
             whitePlayer.resetProposingDraw();
+            blackPlayer.resetProposingTakingBackMove();
+            whitePlayer.resetProposingTakingBackMove();
             gameState = DRAW;
         } else {
             throw new GameCanNotBeAcceptedOrRejectedAsDrawnException(command.boardId());
@@ -183,6 +185,9 @@ public class BoardState {
         if (isBlackProposingTakingBackLastMove || isWhiteProposingTakingBackLastMove) {
             blackPlayer.resetProposingTakingBackMove();
             whitePlayer.resetProposingTakingBackMove();
+            blackPlayer.resetProposingDraw();
+            whitePlayer.resetProposingDraw();
+            invertCurrentPlayerColor();
         } else {
             throw new UserProposingDrawCouldNotBeEstablished(command.boardId());
         }

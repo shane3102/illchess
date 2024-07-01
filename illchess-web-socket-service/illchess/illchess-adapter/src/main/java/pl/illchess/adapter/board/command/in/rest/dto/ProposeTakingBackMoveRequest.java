@@ -1,6 +1,6 @@
 package pl.illchess.adapter.board.command.in.rest.dto;
 
-import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase.ProposeTakingBackMoveCmd;
+import pl.illchess.application.board.command.in.ProposeTakingBackLastMoveUseCase.ProposeTakingBackMoveCmd;
 
 import java.util.UUID;
 

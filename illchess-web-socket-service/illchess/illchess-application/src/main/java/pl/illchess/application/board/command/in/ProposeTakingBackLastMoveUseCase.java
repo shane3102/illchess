@@ -6,7 +6,7 @@ import pl.illchess.domain.board.model.state.player.Username;
 
 import java.util.UUID;
 
-public interface ProposeTakeBackMoveUseCase {
+public interface ProposeTakingBackLastMoveUseCase {
 
     void proposeTakingBackMove(ProposeTakingBackMoveCmd cmd);
 
