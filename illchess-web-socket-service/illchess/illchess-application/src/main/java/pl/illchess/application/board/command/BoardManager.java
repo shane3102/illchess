@@ -10,7 +10,7 @@ import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.ProposeDrawUseCase;
-import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase;
+import pl.illchess.application.board.command.in.ProposeTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
@@ -54,7 +54,7 @@ public class BoardManager implements
     ProposeDrawUseCase,
     RejectDrawUseCase,
     AcceptDrawUseCase,
-    ProposeTakeBackMoveUseCase,
+    ProposeTakingBackLastMoveUseCase,
     RejectTakingBackLastMoveUseCase,
     AcceptTakingBackLastMoveUseCase,
     EstablishFenStringOfBoardUseCase {
@@ -241,6 +241,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.proposeTakingBackMove(command);
         saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
         log.info("User {} successfully proposed taking back move on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -252,6 +253,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.rejectTakingBackLastMove(command);
         saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
         log.info("User {} successfully rejected taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -263,6 +265,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.acceptTakingBackLastMove(command);
         saveBoard.saveBoard(board);
+        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
         log.info("User {} successfully accepted taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 }

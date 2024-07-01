@@ -24,7 +24,7 @@ import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
 import pl.illchess.application.board.command.in.ProposeDrawUseCase;
-import pl.illchess.application.board.command.in.ProposeTakeBackMoveUseCase;
+import pl.illchess.application.board.command.in.ProposeTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
@@ -49,7 +49,7 @@ public class BoardCommandController implements BoardCommandApi {
     private final RejectDrawUseCase rejectDrawUseCase;
     private final AcceptDrawUseCase acceptDrawUseCase;
     private final EstablishFenStringOfBoardUseCase establishFenStringOfBoardUseCase;
-    private final ProposeTakeBackMoveUseCase proposeTakeBackMoveUseCase;
+    private final ProposeTakingBackLastMoveUseCase proposeTakingBackLastMoveUseCase;
     private final AcceptTakingBackLastMoveUseCase acceptTakingBackLastMoveUseCase;
     private final RejectTakingBackLastMoveUseCase rejectTakingBackLastMoveUseCase;
 
@@ -120,7 +120,7 @@ public class BoardCommandController implements BoardCommandApi {
 
     @Override
     public ResponseEntity<Void> proposeTakingBackMove(ProposeTakingBackMoveRequest request) {
-        proposeTakeBackMoveUseCase.proposeTakingBackMove(request.toCmd());
+        proposeTakingBackLastMoveUseCase.proposeTakingBackMove(request.toCmd());
         return new ResponseEntity<>(OK);
     }
 
