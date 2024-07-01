@@ -14,5 +14,4 @@ export interface PlayerView {
     username: string,
     isProposingDraw: boolean,
     isProposingTakingBackMove: boolean
-
 } 
