@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { BestMoveAndContinuationResponse } from '../../model/BestMoveAndContinuationResponse';
 import { BoardAdditionalInfoView } from '../../model/BoardAdditionalInfoView';
 import { EvaluationResponse } from '../../model/EvaluationResponse';
@@ -16,6 +16,8 @@ import { ChessGameState } from '../../state/chess-game.state';
 export class ChessEngineInfoComponent implements OnInit {
 
   @Input() boardId: string;
+  @Input() username: string;
+  @Input() boardAdditionalInfoView: BoardAdditionalInfoView | undefined | null;
 
   store = inject(Store<ChessGameState>)
 
@@ -24,12 +26,16 @@ export class ChessEngineInfoComponent implements OnInit {
   bestMoveAndContinuation$: Observable<BestMoveAndContinuationResponse> = this.store.select(bestMoveAndContinuation)
 
   ngOnInit(): void {
-    this.store.dispatch(establishEvaluation({ boardId: this.boardId }))
-    this.store.dispatch(establishBestMoveAndContinuation({ boardId: this.boardId }))
     this.boardAdditionalInfoView$.subscribe(
-      () => {
-        this.store.dispatch(establishEvaluation({ boardId: this.boardId }))
-        this.store.dispatch(establishBestMoveAndContinuation({ boardId: this.boardId }))
+      boardAdditionalInfoView => {
+        if (
+          boardAdditionalInfoView?.whitePlayer?.username != this.username &&
+          boardAdditionalInfoView?.blackPlayer?.username != this.username &&
+          boardAdditionalInfoView.boardId
+        ) {
+          this.store.dispatch(establishEvaluation({ boardId: this.boardId }))
+          this.store.dispatch(establishBestMoveAndContinuation({ boardId: this.boardId }))
+        }
       }
     )
   }

@@ -1,20 +1,21 @@
 <div id="chess-engine-info-wrapper">
-    <div id="evaluation-bar" *ngIf="boardEvaluation$ | async as boardEvaluation">
-        <div id="evaluation-bar-black-part"
-            [ngStyle]="{'height': (50 - ((boardEvaluation.result> 10 ? 10 : boardEvaluation.result)/10)* 50)+'%'}">
-            <div 
-                id="evaluation-value"
-                style="font-size: 0.7vw;" 
-                [ngStyle]="boardEvaluation.result>0 ? {'top': '100%', 'color': 'black'} : {'top': 'calc(100% - 0.7vw)', 'color': 'white'}">
-                {{boardEvaluation.result}}
+    <ng-container *ngIf="boardAdditionalInfoView?.whitePlayer?.username != username && boardAdditionalInfoView?.blackPlayer?.username != username">
+        <div id="evaluation-bar" *ngIf="boardEvaluation$ | async as boardEvaluation">
+            <div id="evaluation-bar-black-part"
+                [ngStyle]="{'height': (50 - ((boardEvaluation.result> 10 ? 10 : boardEvaluation.result)/10)* 50)+'%'}">
+                <div id="evaluation-value" style="font-size: 0.7vw;"
+                    [ngStyle]="boardEvaluation.result>0 ? {'top': '100%', 'color': 'black'} : {'top': 'calc(100% - 0.7vw)', 'color': 'white'}">
+                    {{boardEvaluation.result}}
+                </div>
             </div>
         </div>
-    </div>
-    <div id="best-moves" *ngIf="bestMoveAndContinuation$ | async as bestMoveAndContinuation">
-        <div *ngFor="let bestMove of bestMoveAndContinuation.continuation; let i = index" class="best-move-wrapper" [ngClass]="i==0? 'best-move-wrapper-first' : ''">
-            <div class="best-move">
-                <b>{{bestMove}}</b>
+        <div id="best-moves" *ngIf="bestMoveAndContinuation$ | async as bestMoveAndContinuation">
+            <div *ngFor="let bestMove of bestMoveAndContinuation.continuation; let i = index" class="best-move-wrapper"
+                [ngClass]="i==0? 'best-move-wrapper-first' : ''">
+                <div class="best-move">
+                    <b>{{bestMove}}</b>
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </div>

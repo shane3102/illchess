@@ -3,9 +3,9 @@
         <app-chess-board [boardId]="boardId" [username]="username"></app-chess-board>
     </div>
     <div>
-        <app-chess-engine-info [boardId]="boardId"></app-chess-engine-info>
+        <app-chess-engine-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-engine-info>
     </div>
     <div>
-        <app-chess-board-additional-info [boardId]="boardId" [username]="username"></app-chess-board-additional-info>
+        <app-chess-board-additional-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-board-additional-info>
     </div>
 </div>
