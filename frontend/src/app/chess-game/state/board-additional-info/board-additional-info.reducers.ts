@@ -2,12 +2,12 @@ import { createReducer, on } from "@ngrx/store";
 import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
 import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
 import { EvaluationResponse } from "../../model/EvaluationResponse";
-import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, evaluationLoaded } from "./board-additional-info.actions";
+import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded } from "./board-additional-info.actions";
 
 export interface BoardAdditionalInfoState {
     boardAdditionalInfoView: BoardAdditionalInfoView,
     evaluation: EvaluationResponse,
-    bestMoveAndContinuation: BestMoveAndContinuationResponse
+    bestMoveAndContinuation: BestMoveAndContinuationResponse 
 }
 
 export const initialState: BoardAdditionalInfoState = {
@@ -58,6 +58,19 @@ export const boardAdditionalInfoReducer = createReducer(
             {
                 ...state,
                 bestMoveAndContinuation: response
+            }
+        )
+    ),
+
+    on(
+        establishBestMoveAndContinuation,
+        (state: BoardAdditionalInfoState) => (
+            {
+                ...state,
+                bestMoveAndContinuation: {
+                    bestMove: "",
+                    continuation: []
+                }
             }
         )
     )

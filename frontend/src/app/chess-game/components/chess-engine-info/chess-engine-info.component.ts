@@ -19,6 +19,8 @@ export class ChessEngineInfoComponent implements OnInit {
   @Input() username: string;
   @Input() boardAdditionalInfoView: BoardAdditionalInfoView | undefined | null;
 
+  showBestMoves: boolean = false
+
   store = inject(Store<ChessGameState>)
 
   boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)

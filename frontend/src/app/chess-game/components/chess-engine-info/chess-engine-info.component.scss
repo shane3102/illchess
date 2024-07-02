@@ -1,17 +1,19 @@
 @import "../chess-board-style.scss";
+@import "../chess-board-additional-info/chess-board-additional-info.component.scss";
 
 $default-width: 0.30 * $chess-square-size;
-$chess-moves-width: 0.7 * $chess-square-size;
+$chess-moves-width: 0.8 * $chess-square-size;
+$show-best-moves-button-width: 0.3 * $chess-square-size;
 
 #chess-engine-info-wrapper {
-    width: $chess-square-size;
+    width: 1.5*$chess-square-size;
     display: flex;
-    justify-content: space-around;
+    justify-content: left;
     align-items: center;
 }
 
 #evaluation-bar {
-    height: 8 * $chess-square-size - 2* (0.03 * $chess-square-size);
+    height: 7.95 * $chess-square-size;
     width: $default-width;
     background-color: white;
     display: flex;
@@ -37,13 +39,29 @@ $chess-moves-width: 0.7 * $chess-square-size;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 8 * $chess-square-size;
+    height: 7.95 * $chess-square-size;
     width: $chess-moves-width;
+    background-color: #F3E5AB;
+    border-radius: 0 $default-width $default-width 0;
+    border-top: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    border-bottom: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    border-right: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    transform-origin: left;
+    transition: 0.5s transform;
 }
+
+.best-moves-active {
+    transform: scaleX(1);
+}
+
+.best-moves-inactive {
+    transform: scaleX(0);
+    display: none;
+}
+
 
 .best-move-wrapper {
     transition: all 1s;
-    transform: scaleY(0);
     transition: transform 1s;
     transform-origin: top;
     height: $chess-square-size;
@@ -52,14 +70,7 @@ $chess-moves-width: 0.7 * $chess-square-size;
     justify-content: center;
     align-items: center;
     user-select: none;
-}
-
-#best-moves:hover .best-move-wrapper {
-    transform: scaleY(1);
-}
-
-.best-move-wrapper-first {
-    transform: scaleY(1);
+    animation: show-best-move 2s;
 }
 
 .best-move {
@@ -71,6 +82,34 @@ $chess-moves-width: 0.7 * $chess-square-size;
     text-align: center;
     font-size: calc($chess-moves-width/5);
     animation: show-best-move 2s;
+}
+
+.show-best-moves-button {
+    width: $show-best-moves-button-width;
+    height: 2 * $chess-square-size;
+    background-color: rgb(150, 75, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    user-select: none;
+    border-radius: 0 $show-best-moves-button-width $show-best-moves-button-width 0;
+    transition: 0.5s transform;
+}
+
+.show-best-moves-button-active {
+    transform: translate(0, 0);
+}
+
+.show-best-moves-button-inactive {
+    transform: translate(-$chess-moves-width - 0.04 * $chess-square-size, 0);
+}
+
+.show-best-moves-text {
+    transform: rotate(90deg);
+    overflow: visible;
+    text-wrap: nowrap;
+    font-size: calc($chess-moves-width/4);
 }
 
 @keyframes show-best-move {
