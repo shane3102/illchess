@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { ChessGameState } from '../../state/chess-game.state';
+import { BoardAdditionalInfoView } from '../../model/BoardAdditionalInfoView';
+import { Observable } from 'rxjs';
+import { boardAdditionalInfoSelector } from '../../state/board-additional-info/board-additional-info.selectors';
 
 @Component({
   selector: 'app-chess-game',
@@ -11,7 +16,10 @@ export class ChessGameComponent implements OnInit {
   boardId: string
   username: string
 
-  constructor(private route: ActivatedRoute) { }
+  private store = inject(Store<ChessGameState>)
+  private route = inject(ActivatedRoute)
+
+  boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
 
   ngOnInit(): void {
     this.route.params.subscribe(

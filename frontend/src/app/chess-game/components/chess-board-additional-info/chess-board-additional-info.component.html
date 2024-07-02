@@ -1,4 +1,4 @@
-<div *ngIf="boardAdditionalInfoView$ | async as boardAdditionalInfoView" class="additional-info">
+<div *ngIf="boardAdditionalInfoView" class="additional-info">
     <div class="player-panel player-panel-black">
         <app-chess-game-action-buttons 
             [boardId]="boardId" 

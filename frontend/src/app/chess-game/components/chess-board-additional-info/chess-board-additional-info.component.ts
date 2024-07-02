@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../state/chess-game.state';
-import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
 import { BoardAdditionalInfoView } from '../../model/BoardAdditionalInfoView';
-import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../state/board-additional-info/board-additional-info.actions';
-import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
-import { Observable } from 'rxjs';
-import { boardAdditionalInfoSelector } from '../../state/board-additional-info/board-additional-info.selectors';
 import { PieceColor } from '../../model/PieceInfo';
+import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
+import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
+import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../state/board-additional-info/board-additional-info.actions';
+import { ChessGameState } from '../../state/chess-game.state';
 
 @Component({
   selector: 'app-chess-board-additional-info',
@@ -20,8 +18,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit {
 
   @Input() boardId: string;
   @Input() username: string;
-
-  boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
+  @Input() boardAdditionalInfoView: BoardAdditionalInfoView | undefined | null
 
   constructor(
     private store: Store<ChessGameState>,
