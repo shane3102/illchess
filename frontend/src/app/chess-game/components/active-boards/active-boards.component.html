@@ -17,7 +17,7 @@
             first as isFirst;
             let i = index">
             <div *ngIf="isFirst && page == 0" class="empty-boards"></div>
-            <app-chess-board-mini [boardId]="boardId"></app-chess-board-mini>
+            <app-chess-board-mini (click)="spectateBoard(boardId)" [boardId]="boardId"></app-chess-board-mini>
         </div>
     </div>
     <div class="caret-wrapper caret-wrapper-right">
