@@ -14,7 +14,7 @@
             <div *ngFor="let bestMove of bestMoveAndContinuation.continuation; let i = index"
                 class="best-move-wrapper">
                 <div class="performed-move performed-move-black"
-                    [ngClass]="boardAdditionalInfoView?.currentPlayerColor=='WHITE' ? (i%2==0 ? 'performed-move-black' : 'performed-move-white') : (i%2==0 ? 'performed-move-white' : 'performed-move-black') ">
+                    [ngClass]="boardAdditionalInfoView?.currentPlayerColor=='WHITE' ? (i%2==0 ? 'performed-move-white' : 'performed-move-black') : (i%2==0 ? 'performed-move-black' : 'performed-move-white') ">
                     <b>{{bestMove}}</b>
                 </div>
             </div>

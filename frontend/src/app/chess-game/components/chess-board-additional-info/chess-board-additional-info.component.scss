@@ -68,6 +68,18 @@ $panel-width: 4 * $chess-square-size;
     border-radius: calc(($panel-width - $performed-moves-panel-width)/4) calc(($panel-width - $performed-moves-panel-width)/4) 0  0;
 }
 
+.player-panel-fading-black {
+    background: linear-gradient(white, rgb(150,75,0));
+    height: calc($chess-square-size/2);
+    width: $panel-width
+}
+
+.player-panel-fading-white {
+    background: linear-gradient(rgb(150,75,0), white);
+    height: calc($chess-square-size/2);
+    width: $panel-width
+}
+
 .username-and-captured-pieces-wrapper {
     display: flex;
     justify-content: space-between;
