@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
 import { Store } from '@ngrx/store';
 import { ChessGameState } from '../../state/chess-game.state';
@@ -7,6 +7,7 @@ import { activeBoardsRefreshed, refreshActiveBoards } from '../../state/active-b
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../state/active-boards/active-boards.selectors';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-active-boards',
@@ -14,6 +15,10 @@ import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./active-boards.component.scss']
 })
 export class ActiveBoardsComponent implements OnInit {
+
+  router = inject(Router)
+  store = inject(Store<ChessGameState>)
+  chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
   caretRight = faCaretRight
   caretLeft = faCaretLeft
@@ -25,12 +30,6 @@ export class ActiveBoardsComponent implements OnInit {
 
   activeBoardsView$: Observable<ActiveBoardsView> = this.store.select(selectActiveBoards)
 
-  constructor(
-    private store: Store<ChessGameState>,
-    private chessBoardWebSocketService: ChessBoardWebsocketService
-  ) {
-
-  }
 
   ngOnInit(): void {
     this.store.dispatch(refreshActiveBoards({}))
@@ -41,6 +40,13 @@ export class ActiveBoardsComponent implements OnInit {
         this.store.dispatch(activeBoardsRefreshed(activeBoardsView))
       }
     )
+  }
+
+  spectateBoard(boardId: string) {
+    let randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
+    let username: string = randomNames[Math.floor(Math.random() * randomNames.length)] + Math.floor(100 * Math.random())
+
+    this.router.navigateByUrl(`/game/${boardId}/${username}`)
   }
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {

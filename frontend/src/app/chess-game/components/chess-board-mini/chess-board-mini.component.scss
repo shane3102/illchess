@@ -7,6 +7,11 @@ $board-wrapper-size: 28vw;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: $chess-square-size;
+}
+
+.board-wrapper:hover {
+    background: radial-gradient(rgb(150,75,0,0.625), white);
 }
 
 .board {
