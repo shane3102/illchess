@@ -1,6 +1,7 @@
 package pl.illchess.adapter.board.command.out.redis.mapper;
 
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.adapter.board.command.out.redis.model.BoardEntity.PreMoveEntity;
 import pl.illchess.domain.board.model.Board;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
@@ -13,10 +14,12 @@ import pl.illchess.domain.board.model.state.GameState;
 import pl.illchess.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.domain.board.model.state.player.IsProposingTakingBackMove;
 import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.PreMove;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -50,7 +53,22 @@ public class BoardMapper {
     }
 
     private static BoardEntity.PlayerEntity mapToPlayer(Player player) {
-        return player == null ? null : new BoardEntity.PlayerEntity(player.username().text(), player.isProposingDraw().value(), player.isProposingTakingBackMove().value());
+        return player == null
+            ? null
+            : new BoardEntity.PlayerEntity(
+                player.username().text(),
+                player.isProposingDraw().value(),
+                player.isProposingTakingBackMove().value(),
+                player.preMoves().stream().map(
+                    it -> new PreMoveEntity(
+                        it.startSquare().name(),
+                        it.targetSquare().name(),
+                        it.pawnPromotedToPieceType().toString(),
+                        toPiecesLocationsEntity(it.piecesLocationsAfterPreMove())
+                    )
+                )
+                .toList()
+        );
     }
 
     public static Board toDomain(BoardEntity entity) {
@@ -84,7 +102,19 @@ public class BoardMapper {
             new Player(
                 new Username(player.username()),
                 new IsProposingDraw(player.isProposingDraw()),
-                new IsProposingTakingBackMove(player.isProposingTakingBackMove())
+                new IsProposingTakingBackMove(player.isProposingTakingBackMove()),
+                new LinkedList<>(
+                    player.preMoves()
+                        .stream()
+                        .map(
+                            it -> new PreMove(
+                                Square.valueOf(it.startSquare()),
+                                Square.valueOf(it.targetSquare()),
+                                new PieceType(it.pawnPromotedToPieceType()),
+                                toPiecesLocations(it.piecesLocationsAfterPreMove())
+                            )
+                        ).toList()
+                )
             );
     }
 

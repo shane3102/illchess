@@ -42,7 +42,17 @@ public record BoardEntity(
     public record PlayerEntity(
         String username,
         boolean isProposingDraw,
-        boolean isProposingTakingBackMove
+        boolean isProposingTakingBackMove,
+        List<PreMoveEntity> preMoves
+    ) implements Serializable {
+
+    }
+
+    public record PreMoveEntity(
+        String startSquare,
+        String targetSquare,
+        String pawnPromotedToPieceType,
+        List<PieceEntity> piecesLocationsAfterPreMove
     ) implements Serializable {
 
     }
