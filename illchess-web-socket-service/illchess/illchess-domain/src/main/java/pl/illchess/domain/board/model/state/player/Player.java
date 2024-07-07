@@ -5,23 +5,35 @@ import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.exception.UserIsAlreadyProposingDrawException;
 import pl.illchess.domain.board.exception.UserIsAlreadyProposingTakingBackMoveException;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 
 public final class Player {
     private final Username username;
     private IsProposingDraw isProposingDraw;
     private IsProposingTakingBackMove isProposingTakingBackMove;
+    private Queue<PreMove> preMoves;
 
     public Player(Username username) {
         this.username = username;
         this.isProposingDraw = new IsProposingDraw(false);
         this.isProposingTakingBackMove = new IsProposingTakingBackMove(false);
+        preMoves = new LinkedList<>();
     }
 
-    public Player(Username username, IsProposingDraw isProposingDraw, IsProposingTakingBackMove isProposingTakingBackMove) {
+    public Player(
+        Username username,
+        IsProposingDraw isProposingDraw,
+        IsProposingTakingBackMove isProposingTakingBackMove,
+        Queue<PreMove> preMoves
+    ) {
         this.username = username;
         this.isProposingDraw = isProposingDraw;
         this.isProposingTakingBackMove = isProposingTakingBackMove;
+        this.preMoves = preMoves;
     }
 
     public Username username() {
@@ -30,6 +42,10 @@ public final class Player {
 
     public IsProposingDraw isProposingDraw() {
         return isProposingDraw;
+    }
+
+    public Queue<PreMove> preMoves() {
+        return preMoves;
     }
 
     public void proposeDraw(ProposeDraw command) {
