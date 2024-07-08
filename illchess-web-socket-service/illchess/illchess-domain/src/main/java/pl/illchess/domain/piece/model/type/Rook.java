@@ -147,4 +147,8 @@ public final class Rook implements PieceCapableOfPinning {
             .collect(Collectors.toSet());
     }
 
+    @Override
+    public Piece clonePiece() {
+        return new Rook(color(), square());
+    }
 }

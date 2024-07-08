@@ -39,11 +39,13 @@ import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.GameState;
+import pl.illchess.domain.commons.model.MoveType;
 
 import java.util.Optional;
 import java.util.Set;
 
 import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
+import static pl.illchess.domain.commons.model.MoveType.MOVE;
 
 public class BoardManager implements
     MovePieceUseCase,
@@ -86,16 +88,19 @@ public class BoardManager implements
         Board board = loadBoard.loadBoard(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
 
         MovePiece command = cmd.toCommand();
-        board.movePiece(command);
+        MoveType performedMoveType = board.movePieceOrAddPreMove(command);
 
         saveBoard.saveBoard(board);
 
         log.info(
-            "Move at board with id = {} was successfully performed",
+            "{} at board with id = {} was successfully performed",
+            performedMoveType == MOVE ? "Move" : "Pre-move",
             cmd.boardId()
         );
 
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
+        if (performedMoveType == MOVE) {
+            eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
+        }
     }
 
     @Override

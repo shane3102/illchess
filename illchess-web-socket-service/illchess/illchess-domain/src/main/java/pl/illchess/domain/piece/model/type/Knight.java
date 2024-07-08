@@ -138,5 +138,8 @@ public final class Knight implements Piece {
                 .collect(Collectors.toSet());
     }
 
-
+    @Override
+    public Piece clonePiece() {
+        return new Knight(color(), square());
+    }
 }

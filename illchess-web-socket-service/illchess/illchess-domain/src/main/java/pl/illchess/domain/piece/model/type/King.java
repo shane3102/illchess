@@ -53,6 +53,15 @@ public final class King implements Piece {
     }
 
     @Override
+    public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
+        return Stream.concat(
+                standardLegalMoves(piecesLocations, moveHistory.peekLastMove()).stream(),
+                getCastlingSquares(piecesLocations, moveHistory).stream()
+            )
+            .collect(Collectors.toSet());
+    }
+
+    @Override
     public Set<Square> possibleMoves(PiecesLocations piecesLocations, MoveHistory moveHistory) {
         Move lastPerformedMove = moveHistory.peekLastMove();
 
@@ -211,24 +220,7 @@ public final class King implements Piece {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (King) obj;
-        return Objects.equals(this.color, that.color) &&
-            Objects.equals(this.square, that.square);
+    public Piece clonePiece() {
+        return new King(color, square);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(color, square);
-    }
-
-    @Override
-    public String toString() {
-        return "King[" +
-            "color=" + color + ", " +
-            "square=" + square + ']';
-    }
-
 }

@@ -1,8 +1,8 @@
 package pl.illchess.domain.board.model.state;
 
-import java.util.Objects;
 import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.AcceptTakingBackMove;
+import pl.illchess.domain.board.command.MovePiece;
 import pl.illchess.domain.board.command.ProposeDraw;
 import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
@@ -17,11 +17,18 @@ import pl.illchess.domain.board.exception.PieceColorIncorrectException;
 import pl.illchess.domain.board.exception.UserProposingDrawCouldNotBeEstablished;
 import pl.illchess.domain.board.model.BoardId;
 import pl.illchess.domain.board.model.FenBoardString;
+import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.PreMove;
 import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.domain.piece.model.info.PieceColor;
+
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Optional;
+
 import static pl.illchess.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.domain.board.model.state.GameState.DRAW;
 import static pl.illchess.domain.board.model.state.GameState.RESIGNED;
@@ -86,6 +93,16 @@ public class BoardState {
 //                movedPiece.color()
 //            );
 //        }
+    }
+
+    public boolean isPreMove(MovePiece command) {
+        Player currentPlayer = currentPlayer();
+        if (!Objects.equals(whitePlayer.username(), command.username()) && !Objects.equals(blackPlayer == null ? null : blackPlayer.username(), command.username())) {
+            return false;
+            // TODO uncomment when security on point
+//            throw new InvalidUserPerformedMoveException(command.boardId(), command.startSquare(), command.username(), currentPlayer.username());
+        }
+        return !Objects.equals(currentPlayer == null ? null : currentPlayer.username(), command.username());
     }
 
     public void invertCurrentPlayerColor() {
@@ -191,6 +208,41 @@ public class BoardState {
         } else {
             throw new UserProposingDrawCouldNotBeEstablished(command.boardId());
         }
+    }
+
+    public Optional<PiecesLocations> getLastLocationsOnPreviousPreMove(Username preMovingUsername) {
+        return getLastLocationOnPreviousPreMoveByPlayer(
+            Objects.equals(whitePlayer.username(), preMovingUsername)
+                ? whitePlayer
+                : blackPlayer
+        );
+    }
+
+    private Optional<PiecesLocations> getLastLocationOnPreviousPreMoveByPlayer(Player player) {
+        LinkedList<PreMove> preMoves = player.preMoves();
+        if (preMoves.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(preMoves.getLast().piecesLocationsAfterPreMove());
+        }
+    }
+
+    public Player currentPlayer() {
+        return currentPlayerColor.color().equals(WHITE) ? whitePlayer : blackPlayer;
+    }
+
+    public Player inactivePlayer() {
+        return currentPlayerColor.color().equals(BLACK) ? whitePlayer : blackPlayer;
+    }
+
+    public Optional<Player> getPlayerByUsername(Username username) {
+        return Objects.equals(whitePlayer.username(), username)
+            ? Optional.of(whitePlayer)
+            : (
+            Objects.equals(blackPlayer.username(), username)
+                ? Optional.of(blackPlayer)
+                : Optional.empty()
+        );
     }
 
     public CurrentPlayerColor currentPlayerColor() {

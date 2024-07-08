@@ -1,8 +1,5 @@
 package pl.illchess.domain.board.model;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.domain.board.command.CheckLegalMoves;
@@ -13,6 +10,7 @@ import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.command.RejectDraw;
 import pl.illchess.domain.board.command.RejectTakingBackMove;
 import pl.illchess.domain.board.command.Resign;
+import pl.illchess.domain.board.exception.InvalidUserPerformedMoveException;
 import pl.illchess.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
@@ -24,10 +22,21 @@ import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.board.model.state.BoardState;
 import pl.illchess.domain.board.model.state.GameState;
 import pl.illchess.domain.board.model.state.player.Player;
+import pl.illchess.domain.board.model.state.player.PreMove;
 import pl.illchess.domain.board.model.state.player.Username;
+import pl.illchess.domain.commons.model.MoveType;
 import pl.illchess.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.domain.piece.model.Piece;
 import pl.illchess.domain.piece.model.type.King;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static pl.illchess.domain.commons.model.MoveType.MOVE;
+import static pl.illchess.domain.commons.model.MoveType.PRE_MOVE;
 import static pl.illchess.domain.piece.model.info.PieceColor.WHITE;
 
 public record Board(
@@ -51,7 +60,17 @@ public record Board(
         );
     }
 
-    public void movePiece(MovePiece command) {
+    public MoveType movePieceOrAddPreMove(MovePiece command) {
+        if (boardState.isPreMove(command)) {
+            addPreMove(command);
+            return PRE_MOVE;
+        } else {
+            movePiece(command);
+            return MOVE;
+        }
+    }
+
+    private void movePiece(MovePiece command) {
         Piece movedPiece = piecesLocations().findPieceOnSquare(command.startSquare())
             .orElseThrow(() -> new PieceNotPresentOnGivenSquare(command.boardId(), command.startSquare()));
         boardState().checkIfAllowedToMove(boardId, movedPiece, command.username());
@@ -73,6 +92,61 @@ public record Board(
         resetCachedMovesOfPieces();
         moveHistory().addMoveToHistory(performedMove);
         boardState().invertCurrentPlayerColor();
+
+        refreshPreMovesOfPlayers();
+    }
+
+    private void refreshPreMovesOfPlayers() {
+        Player currentPlayer = boardState().currentPlayer();
+        if (currentPlayer != null && !currentPlayer.preMoves().isEmpty()) {
+            PreMove preMove = currentPlayer.preMoves().removeFirst();
+            MovePiece scheduledPreMoveCommand = preMove.toCommand(boardId, boardState.currentPlayer().username());
+            try {
+                movePieceOrAddPreMove(scheduledPreMoveCommand);
+            } catch (PieceCantMoveToGivenSquareException ignored) {
+
+            }
+            return;
+        }
+        Player inactivePlayer = boardState.inactivePlayer();
+        if (inactivePlayer != null && !inactivePlayer.preMoves().isEmpty()) {
+            List<MovePiece> movePiecePreMoveCommands = inactivePlayer.preMoves().stream()
+                .map(preMove -> preMove.toCommand(boardId, inactivePlayer.username()))
+                .toList();
+            inactivePlayer.preMoves().clear();
+            movePiecePreMoveCommands.forEach(this::movePieceOrAddPreMove);
+        }
+    }
+
+    private void addPreMove(MovePiece command) {
+        Optional<PiecesLocations> lastLocationsOnPreviousPreMove = boardState().getLastLocationsOnPreviousPreMove(command.username());
+        PiecesLocations clonedBoardBeforePreMove = lastLocationsOnPreviousPreMove.orElse(piecesLocations()).cloneBoard();
+
+        Piece movedPiece = clonedBoardBeforePreMove.findPieceOnSquare(command.startSquare())
+            .orElseThrow(() -> new PieceNotPresentOnGivenSquare(command.boardId(), command.startSquare()));
+
+        Player ownerOfPiece = movedPiece.color() == WHITE ? boardState.whitePlayer() : boardState.blackPlayer();
+        if (!Objects.equals(ownerOfPiece.username(), command.username())) {
+            throw new InvalidUserPerformedMoveException(boardId, command.startSquare(), command.username(), ownerOfPiece.username());
+        }
+
+        Set<Square> possibleMovesOnPreMove = movedPiece.possibleMovesOnPreMove(clonedBoardBeforePreMove, moveHistory());
+
+        if (!possibleMovesOnPreMove.contains(command.targetSquare())) {
+            throw new PieceCantMoveToGivenSquareException(
+                movedPiece,
+                command.targetSquare(),
+                possibleMovesOnPreMove,
+                command.boardId()
+            );
+        }
+        PreMove preMove = clonedBoardBeforePreMove.movePieceOnPreMove(command, movedPiece);
+        Player preMovingPlayer = boardState.getPlayerByUsername(command.username())
+            .orElseThrow(
+                () -> new InvalidUserPerformedMoveException(command.boardId(), command.startSquare(), command.username(), boardState.currentPlayer().username())
+            );
+        preMovingPlayer.preMoves().addLast(preMove);
+
     }
 
     public Set<Square> legalMoves(CheckLegalMoves command) {

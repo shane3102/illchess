@@ -24,4 +24,21 @@ public class InvalidUserPerformedMoveException extends IllegalMoveException {
             highlightSquare
         );
     }
+
+    public InvalidUserPerformedMoveException(
+        BoardId boardId,
+        Square highlightSquare,
+        Username usernameOfUserPerformingMove,
+        Username usernameOfUserWhichCanPerformMove
+    ) {
+        super(
+            "User %s is not authorized to perform move on board with id = %s. Only user with username = %s is authorized to do that".formatted(
+                usernameOfUserPerformingMove.text(),
+                boardId,
+                usernameOfUserWhichCanPerformMove
+            ),
+            boardId,
+            highlightSquare
+        );
+    }
 }

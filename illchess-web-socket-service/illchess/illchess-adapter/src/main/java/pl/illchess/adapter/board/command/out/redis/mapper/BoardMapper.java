@@ -19,6 +19,7 @@ import pl.illchess.domain.board.model.state.player.Username;
 import pl.illchess.domain.piece.model.info.PieceColor;
 import pl.illchess.domain.piece.model.info.PieceType;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -63,7 +64,7 @@ public class BoardMapper {
                     it -> new PreMoveEntity(
                         it.startSquare().name(),
                         it.targetSquare().name(),
-                        it.pawnPromotedToPieceType().toString(),
+                        it.pawnPromotedToPieceType() == null ? null : it.pawnPromotedToPieceType().toString(),
                         toPiecesLocationsEntity(it.piecesLocationsAfterPreMove())
                     )
                 )
@@ -104,7 +105,7 @@ public class BoardMapper {
                 new IsProposingDraw(player.isProposingDraw()),
                 new IsProposingTakingBackMove(player.isProposingTakingBackMove()),
                 new LinkedList<>(
-                    player.preMoves()
+                    player.preMoves() == null ? new ArrayList<>() : player.preMoves()
                         .stream()
                         .map(
                             it -> new PreMove(
