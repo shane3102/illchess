@@ -67,6 +67,13 @@ public interface Piece {
         return result;
     }
 
+    default Set<Square> possibleMovesOnPreMove(
+        PiecesLocations piecesLocations,
+        MoveHistory moveHistory
+    ) {
+        return standardLegalMoves(piecesLocations, moveHistory.peekLastMove());
+    }
+
     Set<Square> standardLegalMoves(
         PiecesLocations piecesLocations,
         Move lastPerformedMove
@@ -91,5 +98,7 @@ public interface Piece {
     void setSquare(Square square);
 
     void setCachedReachableSquares(Set<Square> squares);
+
+    Piece clonePiece();
 
 }

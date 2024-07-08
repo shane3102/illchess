@@ -1,6 +1,7 @@
 package pl.illchess.domain.piece.model.type;
 
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
@@ -21,7 +22,7 @@ public final class Pawn implements Piece {
 
     private final PieceColor color;
     private Square square;
-    private Set<Square>  cachedReachableSquares;
+    private Set<Square> cachedReachableSquares;
 
     public Pawn(
         PieceColor color,
@@ -36,6 +37,15 @@ public final class Pawn implements Piece {
         this.color = color;
         this.square = square;
         this.cachedReachableSquares = cachedReachableSquares;
+    }
+
+    @Override
+    public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
+        return Stream.concat(
+                standardLegalMoves(piecesLocations, moveHistory.peekLastMove()).stream(),
+                getStandardPawnCaptureSquares().stream()
+            )
+            .collect(Collectors.toSet());
     }
 
     @Override
@@ -180,6 +190,14 @@ public final class Pawn implements Piece {
         return Set.of();
     }
 
+    private Set<Square> getStandardPawnCaptureSquares() {
+        return Stream.concat(
+                square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(square).stream(),
+                square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(square).stream()
+            )
+            .collect(Collectors.toSet());
+    }
+
     private boolean isEnPassantPossible(
         Move lastPerformedMove
     ) {
@@ -206,4 +224,8 @@ public final class Pawn implements Piece {
             : comparedSquare.isLower(square);
     }
 
+    @Override
+    public Piece clonePiece() {
+        return new Pawn(color(), square());
+    }
 }

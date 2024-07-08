@@ -168,4 +168,8 @@ public final class Queen implements PieceCapableOfPinning {
             .collect(Collectors.toSet());
     }
 
+    @Override
+    public Piece clonePiece() {
+        return new Queen(color(), square());
+    }
 }

@@ -5,17 +5,14 @@ import pl.illchess.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.domain.board.exception.UserIsAlreadyProposingDrawException;
 import pl.illchess.domain.board.exception.UserIsAlreadyProposingTakingBackMoveException;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 
 public final class Player {
     private final Username username;
     private IsProposingDraw isProposingDraw;
     private IsProposingTakingBackMove isProposingTakingBackMove;
-    private Queue<PreMove> preMoves;
+    private final LinkedList<PreMove> preMoves;
 
     public Player(Username username) {
         this.username = username;
@@ -28,7 +25,7 @@ public final class Player {
         Username username,
         IsProposingDraw isProposingDraw,
         IsProposingTakingBackMove isProposingTakingBackMove,
-        Queue<PreMove> preMoves
+        LinkedList<PreMove> preMoves
     ) {
         this.username = username;
         this.isProposingDraw = isProposingDraw;
@@ -44,7 +41,7 @@ public final class Player {
         return isProposingDraw;
     }
 
-    public Queue<PreMove> preMoves() {
+    public LinkedList<PreMove> preMoves() {
         return preMoves;
     }
 

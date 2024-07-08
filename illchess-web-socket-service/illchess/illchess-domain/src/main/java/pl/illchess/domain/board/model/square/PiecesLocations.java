@@ -9,6 +9,7 @@ import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.PromotionInfo;
 import pl.illchess.domain.board.model.square.info.SquareFile;
 import pl.illchess.domain.board.model.square.info.SquareRank;
+import pl.illchess.domain.board.model.state.player.PreMove;
 import pl.illchess.domain.piece.exception.PieceTypeNotRecognisedException;
 import pl.illchess.domain.piece.exception.PromotedPieceNotPawnException;
 import pl.illchess.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
@@ -75,6 +76,20 @@ public record PiecesLocations(
             movedPiece,
             capturedPiece,
             fenStringBeforeMove
+        );
+    }
+
+    public PreMove movePieceOnPreMove(
+        MovePiece command,
+        Piece movedPiece
+    ) {
+        PromotionInfo promotionInfo = isPromotion(movedPiece, command);
+        movePieceMechanic(command, movedPiece, promotionInfo);
+        return new PreMove(
+            command.startSquare(),
+            command.targetSquare(),
+            command.pawnPromotedToPieceType(),
+            this
         );
     }
 
@@ -150,7 +165,7 @@ public record PiecesLocations(
         if (isCastling.value()) {
             return;
         }
-        isCastling = moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C8, Square.E8, Square.A8, Square.D8);
+        moveRookIfCastlingMoveByCorner(command, movedPiece, Square.C8, Square.E8, Square.A8, Square.D8);
     }
 
     private IsCastling moveRookIfCastlingMoveByCorner(
@@ -276,6 +291,10 @@ public record PiecesLocations(
                 return acc;
             })
             .orElseThrow(BoardFenPositionCouldNotBeEstablishedException::new);
+    }
+
+    public PiecesLocations cloneBoard() {
+        return new PiecesLocations(locations.stream().map(Piece::clonePiece).collect(Collectors.toSet()));
     }
 
     private String getFenPieceCharacter(Piece piece) {

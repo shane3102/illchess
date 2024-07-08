@@ -143,4 +143,8 @@ public final class Bishop implements PieceCapableOfPinning {
             .collect(Collectors.toSet());
     }
 
+    @Override
+    public Piece clonePiece() {
+        return new Bishop(color, square);
+    }
 }
