@@ -1,9 +1,12 @@
-import { Piece, PieceColor, PieceInfo } from "./PieceInfo"
+import { PieceInfo } from "./PieceInfo"
 
 export interface BoardView {
     boardId: string
     piecesLocations: PiecesLocations
-    lastPerformedMove?: MoveView
+    lastPerformedMove?: MoveView,
+    preMoves?: MoveView[]
+    whiteUsername?: string,
+    blackUsername?: string
 }
 
 interface PiecesLocations {

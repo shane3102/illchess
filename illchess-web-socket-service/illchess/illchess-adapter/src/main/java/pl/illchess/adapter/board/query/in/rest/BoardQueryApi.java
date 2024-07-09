@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.illchess.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
+import pl.illchess.application.board.query.out.model.BoardWithPreMovesView;
 
 import java.util.UUID;
 
@@ -15,6 +16,9 @@ public interface BoardQueryApi {
 
     @GetMapping("/refresh/{boardId}")
     ResponseEntity<BoardView> refreshBoardView(@PathVariable UUID boardId);
+
+    @GetMapping("/refresh/pre-moves/{boardId}/{username}")
+    ResponseEntity<BoardWithPreMovesView> refreshBoardWithPreMovesView(@PathVariable UUID boardId, @PathVariable String username);
 
     @GetMapping("/refresh/info/{boardId}")
     ResponseEntity<BoardAdditionalInfoView> refreshBoardInfoView(@PathVariable UUID boardId);

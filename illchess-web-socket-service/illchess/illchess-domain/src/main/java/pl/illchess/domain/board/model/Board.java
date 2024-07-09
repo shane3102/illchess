@@ -104,7 +104,7 @@ public record Board(
             try {
                 movePieceOrAddPreMove(scheduledPreMoveCommand);
             } catch (PieceCantMoveToGivenSquareException ignored) {
-
+                currentPlayer.preMoves().clear();
             }
             return;
         }

@@ -6,7 +6,9 @@ import java.util.UUID;
 public record BoardView(
         UUID boardId,
         Map<String, PieceView> piecesLocations,
-        MoveView lastPerformedMove
+        MoveView lastPerformedMove,
+        String whiteUsername,
+        String blackUsername
 ) {
 
 }
