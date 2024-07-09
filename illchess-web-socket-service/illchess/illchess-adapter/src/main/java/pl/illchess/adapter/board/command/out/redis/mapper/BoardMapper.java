@@ -90,8 +90,8 @@ public class BoardMapper {
         return BoardState.of(
             PieceColor.valueOf(boardState.currentPlayerColor()),
             GameState.valueOf(boardState.gameState()),
-            mapToPlayer(boardState.player1()),
-            mapToPlayer(boardState.player2()),
+            mapToPlayer(boardState.whitePlayer()),
+            mapToPlayer(boardState.blackPlayer()),
             boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor())
         );
     }

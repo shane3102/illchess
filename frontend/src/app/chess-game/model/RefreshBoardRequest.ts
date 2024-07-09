@@ -1,3 +1,4 @@
 export interface RefreshBoardDto {
-    boardId: string
+    boardId: string,
+    username?: string
 }

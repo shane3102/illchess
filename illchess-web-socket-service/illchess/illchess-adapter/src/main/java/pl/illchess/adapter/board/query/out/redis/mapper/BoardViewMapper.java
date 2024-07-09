@@ -3,6 +3,7 @@ package pl.illchess.adapter.board.query.out.redis.mapper;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
+import pl.illchess.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.application.board.query.out.model.MoveView;
 import pl.illchess.application.board.query.out.model.PieceView;
 import pl.illchess.application.board.query.out.model.PlayerView;
@@ -16,6 +17,21 @@ import java.util.stream.Stream;
 
 public class BoardViewMapper {
 
+    public static BoardWithPreMovesView toViewAsPreMove(BoardEntity entity, List<BoardEntity.PreMoveEntity> userPreMoves, List<BoardEntity.PieceEntity> pieces) {
+        if (entity == null) {
+            return null;
+        } else {
+            return new BoardWithPreMovesView(
+                entity.boardId(),
+                toPiecesLocations(pieces),
+                toLastPerformedMove(entity),
+                userPreMoves.stream().map(preMoveEntity -> new MoveView(preMoveEntity.startSquare(), preMoveEntity.targetSquare())).toList(),
+                entity.boardState().whitePlayer().username(),
+                entity.boardState().blackPlayer() == null ? null : entity.boardState().blackPlayer().username()
+            );
+        }
+    }
+
     public static BoardView toView(BoardEntity entity) {
         if (entity == null) {
             return null;
@@ -23,7 +39,9 @@ public class BoardViewMapper {
             return new BoardView(
                 entity.boardId(),
                 toPiecesLocations(entity.piecesLocations()),
-                toLastPerformedMove(entity)
+                toLastPerformedMove(entity),
+                entity.boardState().whitePlayer().username(),
+                entity.boardState().blackPlayer() == null ? null : entity.boardState().blackPlayer().username()
             );
         }
     }
@@ -39,17 +57,17 @@ public class BoardViewMapper {
                 entity.boardId(),
                 entity.boardState().currentPlayerColor(),
                 new PlayerView(
-                    entity.boardState().player1().username(),
-                    entity.boardState().player1().isProposingDraw(),
-                    entity.boardState().player1().isProposingTakingBackMove()
+                    entity.boardState().whitePlayer().username(),
+                    entity.boardState().whitePlayer().isProposingDraw(),
+                    entity.boardState().whitePlayer().isProposingTakingBackMove()
                 ),
-                entity.boardState().player2() == null
+                entity.boardState().blackPlayer() == null
                     ? null
                     : new PlayerView(
-                        entity.boardState().player2().username(),
-                        entity.boardState().player2().isProposingDraw(),
-                        entity.boardState().player2().isProposingTakingBackMove()
-                    ),
+                    entity.boardState().blackPlayer().username(),
+                    entity.boardState().blackPlayer().isProposingDraw(),
+                    entity.boardState().blackPlayer().isProposingTakingBackMove()
+                ),
                 entity.boardState().gameState(),
                 entity.boardState().victoriousPlayerColor(),
                 capturedPiecesStreamSupplier.get()

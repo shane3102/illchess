@@ -18,6 +18,7 @@
                     [legalMoves]="legalMoves$ | async" 
                     [username]="username"
                     [lastPerformedMove]="boardView?.lastPerformedMove"
+                    [preMoves]="boardView?.preMoves"
                     [gameState]="gameState$ | async"
                     [victoriousPlayerColor]="victoriousPlayerColor$ | async">
                 </app-chess-square>

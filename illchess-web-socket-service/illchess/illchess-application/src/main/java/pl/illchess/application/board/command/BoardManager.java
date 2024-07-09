@@ -32,6 +32,7 @@ import pl.illchess.domain.board.command.Resign;
 import pl.illchess.domain.board.event.BoardInitialized;
 import pl.illchess.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.domain.board.event.BoardStateUpdated;
+import pl.illchess.domain.board.event.BoardWithPreMovesOfUsernameUpdated;
 import pl.illchess.domain.board.event.GameFinished;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
 import pl.illchess.domain.board.model.Board;
@@ -100,6 +101,12 @@ public class BoardManager implements
 
         if (performedMoveType == MOVE) {
             eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
+        }
+        if (!board.boardState().whitePlayer().preMoves().isEmpty()) {
+            eventPublisher.publishDomainEvent(new BoardWithPreMovesOfUsernameUpdated(boardId, board.boardState().whitePlayer().username()));
+        }
+        if (board.boardState().blackPlayer() != null && !board.boardState().blackPlayer().preMoves().isEmpty()) {
+            eventPublisher.publishDomainEvent(new BoardWithPreMovesOfUsernameUpdated(boardId, board.boardState().blackPlayer().username()));
         }
     }
 

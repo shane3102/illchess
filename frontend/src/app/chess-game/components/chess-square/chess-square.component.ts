@@ -24,6 +24,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
   @Input() username: string
   @Input() lastPerformedMove: MoveView | undefined
+  @Input() preMoves: MoveView[] | undefined
   @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
   @Input() victoriousPlayerColor: string | null | undefined
 
@@ -117,7 +118,11 @@ export class ChessSquareComponent implements OnInit {
     return currentSquare == this.lastPerformedMove?.startSquare || currentSquare == this.lastPerformedMove?.targetSquare
   }
 
-  
+  isPreMoveSquare(): boolean {
+    let currentSquare: string = this.squareInfo.file + this.squareInfo.rank
+
+    return this.preMoves?.find(preMove => preMove.startSquare == currentSquare || preMove.targetSquare == currentSquare) != undefined
+  }
 
   private fileToNumber(): number {
     switch (this.squareInfo.file) {

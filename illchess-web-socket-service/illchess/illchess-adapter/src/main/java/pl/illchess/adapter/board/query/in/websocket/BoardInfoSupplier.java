@@ -7,13 +7,17 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.illchess.application.board.query.out.ActiveBoardsQueryPort;
 import pl.illchess.application.board.query.out.BoardAdditionalInfoViewQueryPort;
+import pl.illchess.application.board.query.out.BoardViewPreMoveByUserQueryPort;
 import pl.illchess.application.board.query.out.BoardViewQueryPort;
 import pl.illchess.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.application.board.query.out.model.BoardView;
+import pl.illchess.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.domain.board.event.BoardAdditionalInfoUpdated;
 import pl.illchess.domain.board.event.BoardUpdated;
+import pl.illchess.domain.board.event.BoardWithPreMovesUpdated;
 import pl.illchess.domain.board.exception.BoardNotFoundException;
+import pl.illchess.domain.board.exception.BoardWithPreMovesDoesNotExistException;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +26,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     private static final Logger log = LoggerFactory.getLogger(BoardInfoSupplier.class);
 
     private final BoardViewQueryPort boardViewQueryPort;
+    private final BoardViewPreMoveByUserQueryPort boardViewPreMoveByUserQueryPort;
     private final ActiveBoardsQueryPort activeBoardsQueryPort;
     private final BoardAdditionalInfoViewQueryPort boardAdditionalInfoViewQueryPort;
     private final SimpMessagingTemplate messagingTemplate;
@@ -62,6 +67,28 @@ public class BoardInfoSupplier implements BoardViewSupplier {
             event.boardId()
         );
         return boardAdditionalInfoView;
+    }
+
+    @Override
+    public BoardWithPreMovesView updateBoardWithPreMovesView(BoardWithPreMovesUpdated event) {
+        log.info(
+            "Update event of board with id = {} and pre-moves performed by username {} was cached, sending update of chess board view with pre-moves",
+            event.boardId(), event.username()
+        );
+        BoardWithPreMovesView boardWithPreMovesView = boardViewPreMoveByUserQueryPort.findByIdAndUsername(
+                event.boardId().uuid(),
+                event.username().text()
+            )
+            .orElseThrow(() -> new BoardWithPreMovesDoesNotExistException(event.boardId(), event.username()));
+        messagingTemplate.convertAndSend(
+            "/chess-topic/%s/%s".formatted(event.boardId().uuid(), event.username().text()),
+            boardWithPreMovesView
+        );
+        log.info(
+            "Update event of board with id = {} and pre-moves performed by username {} was successfully send",
+            event.boardId(), event.username()
+        );
+        return boardWithPreMovesView;
     }
 
     @Override

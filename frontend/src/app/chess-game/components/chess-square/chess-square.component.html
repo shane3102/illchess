@@ -7,7 +7,7 @@
 
     <div 
         class="chess-square-highlight" 
-            [ngStyle]="isDraggedOver ? {'background-color': 'green'} : isLastPerformedMove() ? {'background-color': 'yellow'}: {}">
+            [ngStyle]="isDraggedOver ? {'background-color': 'green'} : isPreMoveSquare() ? {'background-color': 'black'}  : isLastPerformedMove() ? {'background-color': 'yellow'} : {}">
     </div>
     
     <div *ngIf="displayPiecePromotingComponent">

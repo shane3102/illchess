@@ -43,6 +43,10 @@ export class ChessBoardService {
         return firstValueFrom(this.httpService.get<BoardView>(`${this.PATH}/refresh/${boardId}`))
     }
 
+    async refreshBoardWithPremoves(boardId: string, username: string): Promise<BoardView> {
+        return firstValueFrom(this.httpService.get<BoardView>(`${this.PATH}/refresh/pre-moves/${boardId}/${username}`))
+    }
+
     async refreshActiveBoards(): Promise<ActiveBoardsView> {
         return firstValueFrom(this.httpService.get<ActiveBoardsView>(`${this.PATH}/active`))
     }

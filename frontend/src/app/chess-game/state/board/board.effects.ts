@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard } from "./board.actions";
-import { catchError, from, map, of, switchMap } from "rxjs";
+import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves } from "./board.actions";
+import { Observable, catchError, from, map, of, switchMap } from "rxjs";
 import { ChessBoardService } from "../../service/ChessBoardService";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
@@ -40,7 +40,7 @@ export class BoardEffects {
             switchMap(
                 (movePieceRequest) => from(this.chessBoardService.movePiece(movePieceRequest))
                     .pipe(
-                        map(() => draggedPieceReleased({})),
+                        switchMap(() => of(draggedPieceReleased({}), refreshBoardWithPreMoves({ boardId: movePieceRequest.boardId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
                             let body: IllegalMoveResponse = response.error;
                             return of(illegalMove(body))
@@ -69,6 +69,20 @@ export class BoardEffects {
                 (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoard(dto.boardId))
                     .pipe(
                         map((response: BoardView) => boardLoaded(response))
+                    )
+            )
+        )
+    )
+
+    refreshBoardWithPremovesOfUsername$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(refreshBoardWithPreMoves),
+            switchMap(
+                (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoardWithPremoves(dto.boardId, dto.username!))
+                    .pipe(
+                        map(
+                            ((response: BoardView) => boardLoaded(response))
+                        )
                     )
             )
         )

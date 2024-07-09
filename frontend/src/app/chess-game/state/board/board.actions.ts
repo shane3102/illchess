@@ -59,3 +59,8 @@ export const refreshBoard = createAction(
     props<RefreshBoardDto>()
 )
 
+export const refreshBoardWithPreMoves = createAction(
+    'Manual refresh of board with premoves',
+    props<RefreshBoardDto>()
+)
+
