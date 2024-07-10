@@ -16,11 +16,11 @@ import java.util.Set;
 public record PieceType(String text) {
 
     private static final Map<PieceType, Integer> valueOfPieces = Map.of(
-            new PieceType("QUEEN"), 9,
-            new PieceType("ROOK"), 5,
-            new PieceType("BISHOP"), 3,
-            new PieceType("KNIGHT"), 3,
-            new PieceType("PAWN"), 1
+        new PieceType("QUEEN"), 9,
+        new PieceType("ROOK"), 5,
+        new PieceType("BISHOP"), 3,
+        new PieceType("KNIGHT"), 3,
+        new PieceType("PAWN"), 1
     );
 
     public static Piece getPieceByPieceType(PieceType type, PieceColor color, Square currentSquare, Set<Square> cachedReachableSquares) {

@@ -64,7 +64,7 @@ public class BoardMapper {
                     it -> new PreMoveEntity(
                         it.startSquare().name(),
                         it.targetSquare().name(),
-                        it.pawnPromotedToPieceType() == null ? null : it.pawnPromotedToPieceType().toString(),
+                        it.pawnPromotedToPieceType() == null ? null : it.pawnPromotedToPieceType().text(),
                         toPiecesLocationsEntity(it.piecesLocationsAfterPreMove())
                     )
                 )
