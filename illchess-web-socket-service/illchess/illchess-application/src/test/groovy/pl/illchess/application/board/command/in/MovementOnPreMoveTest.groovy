@@ -87,4 +87,6 @@ class MovementOnPreMoveTest extends BoardSpecification {
         [of("E8", "D7"), of("D7", "E7"), of("E7", "D8"), of("D8", "C8"), of("C8", "D8"), of("D8", "D7"), of("D7", "D8"), of("D8", "C8"), of("C8", "D8")]                 | _
         [of("G2", "H3"), of("H3", "G4"), of("G4", "G5"), of("H4", "H5"), of("F4", "F5"), of("H5", "H6"), of("G3", "G4"), of("H6", "G7"), of("G5", "H6"), of("F5", "F6")] | _
     }
+
+    // TODO add test with capturing piece which is scheduled to move
 }
