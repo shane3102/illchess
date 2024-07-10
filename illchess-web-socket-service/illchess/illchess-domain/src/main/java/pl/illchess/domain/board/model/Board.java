@@ -150,17 +150,24 @@ public record Board(
     }
 
     public Set<Square> legalMoves(CheckLegalMoves command) {
-        Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
-            .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
-        if (!Objects.equals(movedPiece.color(), boardState().currentPlayerColor().color())) {
-            throw new PieceColorIncorrectException(
-                boardId,
-                movedPiece.color(),
-                boardState().currentPlayerColor().color(),
-                movedPiece.square()
-            );
+        Optional<Player> playerByUsername = boardState.getPlayerByUsername(command.username());
+        if (playerByUsername.isPresent() && !playerByUsername.get().preMoves().isEmpty()) {
+            Piece movedPiece = playerByUsername.get().preMoves().getLast().piecesLocationsAfterPreMove().findPieceOnSquare(command.square())
+                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
+            return movedPiece.possibleMoves(piecesLocations, moveHistory);
+        } else {
+            Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
+                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
+            if (!Objects.equals(movedPiece.color(), boardState().currentPlayerColor().color())) {
+                throw new PieceColorIncorrectException(
+                    boardId,
+                    movedPiece.color(),
+                    boardState().currentPlayerColor().color(),
+                    movedPiece.square()
+                );
+            }
+            return movedPiece.possibleMoves(piecesLocations, moveHistory);
         }
-        return movedPiece.possibleMoves(piecesLocations, moveHistory);
     }
 
     public GameState establishBoardState() {
