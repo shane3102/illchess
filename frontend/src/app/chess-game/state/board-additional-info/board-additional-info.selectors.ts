@@ -19,6 +19,11 @@ export const gameStateSelector = createSelector(
     (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView?.gameState
 )
 
+export const currentPlayerColorSelector = createSelector(
+    selectBoard,
+    (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView?.currentPlayerColor
+)
+
 export const isWhiteProposingDraw = createSelector(
     selectBoard,
     (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView.whitePlayer?.isProposingDraw 

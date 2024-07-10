@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 import { BoardView } from '../../model/BoardView';
 import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
@@ -10,10 +9,10 @@ import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
+import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../state/board-additional-info/board-additional-info.selectors';
 import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../state/board/board.actions';
 import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
-import { gameStateSelector, victoriousPlayerColorSelector } from '../../state/board-additional-info/board-additional-info.selectors';
 
 @Component({
   selector: 'app-chess-board',
@@ -31,6 +30,7 @@ export class ChessBoardComponent implements OnInit {
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
   victoriousPlayerColor$: Observable<string | null | undefined> = this.store.select(victoriousPlayerColorSelector)
   gameState$: Observable<'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
+  currentPlayerColor$: Observable<string | null | undefined> = this.store.select(currentPlayerColorSelector)
 
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']

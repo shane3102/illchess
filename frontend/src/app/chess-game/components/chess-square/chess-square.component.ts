@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Piece, PieceInfo } from '../../model/PieceInfo';
-import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
-import { SquareInfo } from '../../model/SquareInfo';
+import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
-import { IllegalMoveResponse } from '../../model/IllegalMoveView';
-import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
 import { MoveView } from '../../model/BoardView';
-import { IconDefinition, faCrown, faHashtag, faEquals } from '@fortawesome/free-solid-svg-icons'
+import { IllegalMoveResponse } from '../../model/IllegalMoveView';
+import { MovePieceRequest } from '../../model/MovePieceRequest';
+import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
+import { Piece, PieceInfo } from '../../model/PieceInfo';
+import { SquareInfo } from '../../model/SquareInfo';
 
 @Component({
   selector: 'app-chess-square',
@@ -27,6 +27,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() preMoves: MoveView[] | undefined
   @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
   @Input() victoriousPlayerColor: string | null | undefined
+  @Input() currentPlayerColor: string | null | undefined
 
   @Output() pieceDraggedInfoEmitter: EventEmitter<PieceDraggedInfo> = new EventEmitter();
   @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
@@ -76,7 +77,11 @@ export class ChessSquareComponent implements OnInit {
   pieceDropped() {
     this.isDraggedOver = false
     if (this.draggedPieceInfo) {
-      if ((this.squareInfo.rank == 8 || this.squareInfo.rank == 1) && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN && this.isSquareLegalMove()) {
+      if (
+        (this.squareInfo.rank == 8 || this.squareInfo.rank == 1)
+        && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN
+        && (this.preMoves?.length != 0 || this.draggedPieceInfo.pieceInfo.color != this.currentPlayerColor || this.isSquareLegalMove())
+      ) {
         this.displayPiecePromotingComponent = true;
       } else {
         let moveRequest: MovePieceRequest = {
