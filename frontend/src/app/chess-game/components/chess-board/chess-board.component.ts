@@ -76,7 +76,7 @@ export class ChessBoardComponent implements OnInit {
       'boardId': this.boardId,
       'startSquare': pieceDraggedInfo.squareInfo.file + pieceDraggedInfo.squareInfo.rank,
       'pieceColor': pieceDraggedInfo.pieceInfo.color,
-      'pieceType': pieceDraggedInfo.pieceInfo.type
+      'username': this.username
     }
     this.store.dispatch(checkLegalMoves(request))
   }

@@ -4,5 +4,5 @@ export interface CheckLegalMovesRequest{
     boardId: string,
     startSquare: string,
     pieceColor: PieceColor,
-    pieceType: Piece
+    username: string
 }
