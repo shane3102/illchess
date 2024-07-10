@@ -103,7 +103,7 @@ public record Board(
             MovePiece scheduledPreMoveCommand = preMove.toCommand(boardId, boardState.currentPlayer().username());
             try {
                 movePieceOrAddPreMove(scheduledPreMoveCommand);
-            } catch (PieceCantMoveToGivenSquareException ignored) {
+            } catch (PieceCantMoveToGivenSquareException | PieceColorIncorrectException ignored) {
                 currentPlayer.preMoves().clear();
             }
             return;
