@@ -126,6 +126,13 @@ public class SquaresConnectedContents {
 
     }
 
+    public Set<Square> getFullRay() {
+        if (root == null) {
+            return Collections.emptySet();
+        }
+        return root.getAllConnected();
+    }
+
     public SquaresInRay getAttackRayOnGivenSquare(
         Square checkRayPieceCapableSquare,
         Square givenPieceSquare,

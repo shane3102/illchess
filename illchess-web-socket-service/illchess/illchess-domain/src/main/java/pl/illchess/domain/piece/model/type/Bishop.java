@@ -1,6 +1,7 @@
 package pl.illchess.domain.piece.model.type;
 
 import pl.illchess.domain.board.model.history.Move;
+import pl.illchess.domain.board.model.history.MoveHistory;
 import pl.illchess.domain.board.model.square.PiecesLocations;
 import pl.illchess.domain.board.model.square.Square;
 import pl.illchess.domain.piece.model.Piece;
@@ -34,6 +35,16 @@ public final class Bishop implements PieceCapableOfPinning {
         this.color = color;
         this.square = square;
         this.cachedReachableSquares = cachedReachableSquares;
+    }
+
+    @Override
+    public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
+        return Stream.of(
+                square.getSquareDiagonal1().getContainedSquares().getFullRay(),
+                square.getSquareDiagonal2().getContainedSquares().getFullRay()
+            )
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
     @Override
