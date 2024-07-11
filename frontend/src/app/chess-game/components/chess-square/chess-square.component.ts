@@ -6,7 +6,7 @@ import { MoveView } from '../../model/BoardView';
 import { IllegalMoveResponse } from '../../model/IllegalMoveView';
 import { MovePieceRequest } from '../../model/MovePieceRequest';
 import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
-import { Piece, PieceInfo } from '../../model/PieceInfo';
+import { Piece, PieceColor, PieceInfo } from '../../model/PieceInfo';
 import { SquareInfo } from '../../model/SquareInfo';
 
 @Component({
@@ -78,7 +78,10 @@ export class ChessSquareComponent implements OnInit {
     this.isDraggedOver = false
     if (this.draggedPieceInfo) {
       if (
-        (this.squareInfo.rank == 8 || this.squareInfo.rank == 1)
+        (
+          this.squareInfo.rank == 8 && this.draggedPieceInfo.pieceInfo.color == PieceColor.WHITE && this.draggedPieceInfo.squareInfo.rank == 7 || 
+          this.squareInfo.rank == 1 && this.draggedPieceInfo.pieceInfo.color == PieceColor.BLACK && this.draggedPieceInfo.squareInfo.rank == 2
+        )
         && this.draggedPieceInfo.pieceInfo.type == Piece.PAWN
         && (this.preMoves?.length != 0 || this.draggedPieceInfo.pieceInfo.color != this.currentPlayerColor || this.isSquareLegalMove())
       ) {
