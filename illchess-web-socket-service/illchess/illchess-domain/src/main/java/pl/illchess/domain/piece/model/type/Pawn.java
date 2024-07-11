@@ -43,7 +43,7 @@ public final class Pawn implements Piece {
     public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
         return Stream.concat(
                 standardLegalMoves(piecesLocations, moveHistory.peekLastMove()).stream(),
-                getStandardPawnCaptureSquares().stream()
+                getStandardPawnCaptureSquares().stream().filter(this::filterByPawnColor)
             )
             .collect(Collectors.toSet());
     }

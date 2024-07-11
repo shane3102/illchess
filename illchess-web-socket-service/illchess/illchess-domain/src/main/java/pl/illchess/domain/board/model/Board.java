@@ -154,7 +154,13 @@ public record Board(
         if (playerByUsername.isPresent() && !playerByUsername.get().preMoves().isEmpty()) {
             Piece movedPiece = playerByUsername.get().preMoves().getLast().piecesLocationsAfterPreMove().findPieceOnSquare(command.square())
                 .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
-            return movedPiece.possibleMoves(piecesLocations, moveHistory);
+            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
+        } else if (playerByUsername.isPresent() && !Objects.equals(boardState.currentPlayer(), playerByUsername.get())) {
+            System.out.println(playerByUsername.get());
+            System.out.println(boardState.currentPlayer());
+            Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
+                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
+            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
         } else {
             Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
                 .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
