@@ -1,6 +1,9 @@
 package pl.illchess.application.board.command.in
 
+
 import pl.illchess.application.board.BoardSpecification
+
+import java.util.stream.Stream
 
 import static org.spockframework.util.Pair.of
 import static pl.illchess.domain.piece.model.info.PieceColor.BLACK
@@ -88,5 +91,86 @@ class MovementOnPreMoveTest extends BoardSpecification {
         [of("G2", "H3"), of("H3", "G4"), of("G4", "G5"), of("H4", "H5"), of("F4", "F5"), of("H5", "H6"), of("G3", "G4"), of("H6", "G7"), of("G5", "H6"), of("F5", "F6")] | _
     }
 
-    // TODO add test with capturing piece which is scheduled to move
+    def "pre-moves interrupted by enemy move"() {
+        given:
+        def username1 = "player1"
+        def username2 = "player2"
+        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username1, startPosition)
+        )
+        joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username2, startPosition)
+        )
+
+        when:
+        Stream.concat(preMovesPerformed.stream(), preMovesIgnored.stream()).forEach {
+            movePieceUseCase.movePiece(
+                    new MovePieceUseCase.MovePieceCmd(
+                            boardId.uuid(),
+                            it.first(),
+                            it.second(),
+                            // TODO to remove (?)
+                            null,
+                            null,
+                            null,
+                            WHITE == preMovingPlayer ? username1 : username2
+                    )
+            )
+        }
+
+        movesFollowingPreMoves.forEach {
+            movePieceUseCase.movePiece(
+                    new MovePieceUseCase.MovePieceCmd(
+                            boardId.uuid(),
+                            it.first(),
+                            it.second(),
+                            // TODO to remove (?)
+                            null,
+                            null,
+                            null,
+                            WHITE == preMovingPlayer ? username2 : username1
+                    )
+            )
+        }
+
+        then:
+        def fenBoardString = establishFenStringOfBoardUseCase.establishCurrentFenBoardString(new EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd(boardId.uuid()))
+
+        fenBoardString.position() == expectedEndingPosition.split(" ")[0]
+        fenBoardString.activeColor() == expectedEndingPosition.split(" ")[1]
+
+        def board = loadBoard.loadBoard(boardId).orElseThrow(AssertionError::new)
+        preMovesPerformed.every {
+            board.moveHistory().moveStack().any(movePerformed -> {
+                movePerformed.startSquare().toString() == it.first()
+                movePerformed.targetSquare().toString() == it.second()
+            })
+        }
+        !preMovesIgnored.any {
+            board.moveHistory().moveStack().any(movePerformed -> {
+                movePerformed.startSquare().toString() == it.first()
+                movePerformed.targetSquare().toString() == it.second()
+            })
+        }
+        movesFollowingPreMoves.every {
+            board.moveHistory().moveStack().any(movePerformed -> {
+                movePerformed.startSquare().toString() == it.first()
+                movePerformed.targetSquare().toString() == it.second()
+            })
+        }
+
+        where:
+        startPosition                                      | expectedEndingPosition                            | preMovingPlayer
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w"    | "rnbqkb1r/pppPpppp/5n2/8/8/8/PPPP1PPP/RNBQKBNR b" | BLACK
+        "5b1r/p1p4p/B4p2/1r4nk/3P2n1/8/PP1N1PPP/RNBQK2R w" | "5b1r/prp4p/5p2/6nk/3P2n1/8/PP1N1PPP/RNBQK2R w"   | WHITE
+        __
+        preMovesPerformed                                | preMovesIgnored
+        [of("G8", "F6"), of("F6", "G8"), of("G8", "F6")] | [of("B7", "B5"), of("A7", "A5")]
+        [of("A6", "B7")]                                 | [of("B7", "F3")]
+        __
+        movesFollowingPreMoves                                           | _
+        [of("E2", "E4"), of("E4", "E5"), of("E5", "E6"), of("E6", "D7")] | _
+        [of("B5", "B7")]                                                 | _
+
+    }
 }

@@ -10,8 +10,9 @@ class KingMovementTest extends BoardSpecification {
 
     def "check king movement in simple situation"() {
         given:
+        def username = "player1"
         def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
-                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
@@ -20,7 +21,8 @@ class KingMovementTest extends BoardSpecification {
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),
                 kingStartSquare.toString(),
-                pieceColor.toString()
+                pieceColor.toString(),
+                username
         )
         when:
         def loadedLegalMovesOfKing = checkLegalityMoveUseCase.checkLegalityOfMove(cmd)
@@ -62,8 +64,9 @@ class KingMovementTest extends BoardSpecification {
 
     def "check if king can 'hide' behind piece"() {
         given:
+        def username = "player1"
         def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
-                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
@@ -72,7 +75,8 @@ class KingMovementTest extends BoardSpecification {
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),
                 kingStartSquare.toString(),
-                pieceColor.toString()
+                pieceColor.toString(),
+                username
         )
         when:
         def loadedLegalMovesOfKing = checkLegalityMoveUseCase.checkLegalityOfMove(cmd)
@@ -91,8 +95,9 @@ class KingMovementTest extends BoardSpecification {
 
     def "check if can castle"() {
         given:
+        def username = "player1"
         def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
-                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
+                new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
@@ -101,7 +106,8 @@ class KingMovementTest extends BoardSpecification {
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
                 boardId.uuid(),
                 E1.toString(),
-                pieceColor.toString()
+                pieceColor.toString(),
+                username
         )
         when:
         def loadedLegalMovesOfKing = checkLegalityMoveUseCase.checkLegalityOfMove(cmd)
