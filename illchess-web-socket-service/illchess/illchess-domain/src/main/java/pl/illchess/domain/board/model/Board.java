@@ -14,6 +14,7 @@ import pl.illchess.domain.board.exception.InvalidUserPerformedMoveException;
 import pl.illchess.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.domain.board.exception.PieceColorIncorrectException;
+import pl.illchess.domain.board.exception.PieceIsAlreadyOnSquareUserTriesToPlaceItOnException;
 import pl.illchess.domain.board.exception.PieceNotPresentOnGivenSquare;
 import pl.illchess.domain.board.model.history.Move;
 import pl.illchess.domain.board.model.history.MoveHistory;
@@ -73,6 +74,11 @@ public record Board(
     private void movePiece(MovePiece command) {
         Piece movedPiece = piecesLocations().findPieceOnSquare(command.startSquare())
             .orElseThrow(() -> new PieceNotPresentOnGivenSquare(command.boardId(), command.startSquare()));
+
+        if (Objects.equals(movedPiece.square(), command.targetSquare())) {
+            throw new PieceIsAlreadyOnSquareUserTriesToPlaceItOnException(movedPiece, command.targetSquare());
+        }
+
         boardState().checkIfAllowedToMove(boardId, movedPiece, command.username());
 
         Set<Square> possibleMoves = movedPiece.possibleMoves(piecesLocations, moveHistory);
