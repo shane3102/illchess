@@ -7,7 +7,7 @@ import pl.messaging.inbox.repository.SaveInboxMessage
 import java.util.UUID
 
 class InMemoryInboxMessageRepository(
-    private val repo: HashMap<UUID, InboxMessage>
+    private val repo: HashMap<UUID, InboxMessage> = HashMap()
 ) : LoadInboxMessages, SaveInboxMessage, DeleteInboxMessage {
 
     override fun loadLatestByTypeNonExpired(className: String, batchSize: Int): List<InboxMessage> {
