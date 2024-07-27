@@ -3,19 +3,17 @@ package pl.messaging.inbox.service
 import org.springframework.stereotype.Component
 import pl.messaging.inbox.annotation.InboxAwareComponent
 import pl.messaging.inbox.annotation.InboxListener
-import pl.messaging.inbox.model.InboxMessage
-import pl.messaging.inbox.model.TestInboxMessage1
-import pl.messaging.inbox.model.TestInboxMessage2
-import pl.messaging.inbox.model.TestInboxMessageFailing
+import pl.messaging.inbox.model.*
 
 @Component
 @InboxAwareComponent
 class TestInboxMessageService {
-    static  final def DEFAULT_EXECUTE_COUNT_BY_INBOX = new HashMap<>(
+    static final def DEFAULT_EXECUTE_COUNT_BY_INBOX = new HashMap<>(
             Map.of(
-                    TestInboxMessage1.class as Class<InboxMessage>, 0,
-                    TestInboxMessage2.class as Class<InboxMessage>, 0,
-                    TestInboxMessageFailing.class as Class<InboxMessage>, 0
+                    TestInboxMessageFixedRate.class as Class<InboxMessage>, 0,
+                    TestInboxMessageFixedDelay.class as Class<InboxMessage>, 0,
+                    TestInboxMessageFailing.class as Class<InboxMessage>, 0,
+                    TestInboxMessageCron.class as Class<InboxMessage>, 0
             )
     )
 
@@ -26,24 +24,36 @@ class TestInboxMessageService {
     }
 
     @InboxListener(
-            type = TestInboxMessage1,
+            type = TestInboxMessageFixedRate,
             retryCount = 2,
             batchSize = 10,
-            cron = "* * * * * *"
+            fixedRate = 100
     )
-    void testInboxMessage1(TestInboxMessage1 message) {
+    void testInboxMessageFixedRate(TestInboxMessageFixedRate message) {
         def count = executeCountByInbox.get(message.class)
         count = count + 1
         executeCountByInbox.put(message.class, count)
     }
 
     @InboxListener(
-            type = TestInboxMessage2,
+            type = TestInboxMessageFixedDelay,
+            retryCount = 2,
+            batchSize = 10,
+            fixedDelay = 100
+    )
+    void testInboxMessageFixedDelay(TestInboxMessageFixedDelay message) {
+        def count = executeCountByInbox.get(message.class)
+        count = count + 1
+        executeCountByInbox.put(message.class, count)
+    }
+
+    @InboxListener(
+            type = TestInboxMessageCron,
             retryCount = 2,
             batchSize = 10,
             cron = "* * * * * *"
     )
-    void testInboxMessage2(TestInboxMessage2 message) {
+    void testInboxMessageCron(TestInboxMessageCron message) {
         def count = executeCountByInbox.get(message.class)
         count = count + 1
         executeCountByInbox.put(message.class, count)
@@ -53,7 +63,7 @@ class TestInboxMessageService {
             type = TestInboxMessageFailing,
             retryCount = 3,
             batchSize = 10,
-            cron = "* * * * * *"
+            fixedRate = 100
     )
     void testInboxMessageFailing(TestInboxMessageFailing message) {
         throw new RuntimeException()
