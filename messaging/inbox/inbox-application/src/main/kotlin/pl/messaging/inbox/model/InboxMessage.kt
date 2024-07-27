@@ -5,7 +5,10 @@ import java.util.UUID
 
 abstract class InboxMessage(
     val id: UUID,
+    var retryCount: Int = 0,
     val occurredOn: OffsetDateTime = OffsetDateTime.now(),
 ) {
-    abstract fun className(): String
+    fun incrementCount() {
+        retryCount++
+    }
 }
