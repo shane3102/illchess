@@ -31,7 +31,6 @@ class BaseInboxCreator {
             }
 
             return BaseInbox(
-                inboxAnnotation.workingMode,
                 inboxAnnotation.retryCount,
                 inboxAnnotation.batchSize,
                 inboxAnnotation.cron,

@@ -31,9 +31,14 @@ class Inbox(
         saveInboxMessage.saveInboxMessage(inboxMessage)
     }
 
-    private fun loadAndPerformTasks(inboxClass: Class<out Any>, batchSize: Int, consumer: Consumer<InboxMessage>) {
+    private fun loadAndPerformTasks(
+        inboxClass: Class<out Any>,
+        batchSize: Int,
+        maxRetryCount: Int,
+        consumer: Consumer<InboxMessage>
+    ) {
         // TODO what if two inbox aware classes listen for same type of message?
-        loadInboxMessages.loadLatestByTypeNonExpired(inboxClass.toString(), batchSize)
+        loadInboxMessages.loadLatestByTypeNonExpired(inboxClass.toString(), batchSize, maxRetryCount)
             .forEach { performTask(it, consumer) }
     }
 
@@ -43,8 +48,8 @@ class Inbox(
             // TODO decide if add success flag or delete by property
             deleteInboxMessage.delete(inboxMessage.id)
         } catch (e: Exception) {
-            println(e)
-            // TODO increment try count
+            inboxMessage.incrementCount()
+            saveInboxMessage.saveInboxMessage(inboxMessage)
         }
     }
 
@@ -56,6 +61,7 @@ class Inbox(
                 loadAndPerformTasks(
                     it.type,
                     it.batchSize,
+                    it.retryCount,
                     it.performedJob
                 )
             }, it.cron))
