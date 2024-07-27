@@ -2,6 +2,7 @@ package pl.messaging.inbox.aggregator
 
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.scheduling.config.CronTask
 import org.springframework.scheduling.config.ScheduledTaskRegistrar
 import org.springframework.stereotype.Component
@@ -20,9 +21,11 @@ class Inbox(
     private val saveInboxMessage: SaveInboxMessage,
     private val deleteInboxMessage: DeleteInboxMessage,
     @Autowired
-    @InboxAwareComponent
-    private val inboxes: List<Any>
+    applicationContext: ApplicationContext
 ) {
+
+    private var inboxes: List<Any> = applicationContext.getBeansWithAnnotation(InboxAwareComponent::class.java)
+        .values.toList()
 
     fun saveMessage(inboxMessage: InboxMessage) {
         saveInboxMessage.saveInboxMessage(inboxMessage)
@@ -30,7 +33,7 @@ class Inbox(
 
     private fun loadAndPerformTasks(inboxClass: Class<out Any>, batchSize: Int, consumer: Consumer<InboxMessage>) {
         // TODO what if two inbox aware classes listen for same type of message?
-        loadInboxMessages.loadLatestByTypeNonExpired(inboxClass.name, batchSize)
+        loadInboxMessages.loadLatestByTypeNonExpired(inboxClass.toString(), batchSize)
             .forEach { performTask(it, consumer) }
     }
 
@@ -40,14 +43,23 @@ class Inbox(
             // TODO decide if add success flag or delete by property
             deleteInboxMessage.delete(inboxMessage.id)
         } catch (e: Exception) {
+            println(e)
             // TODO increment try count
         }
     }
 
     @PostConstruct
     fun startJobs() {
-        val inboxAwareClasses: List<Class<out Any>> = inboxes.stream().map { it::class.java }.toList()
-        val inboxList = BaseInboxCreator.extractBaseInboxes(inboxAwareClasses)
-        inboxList.forEach { taskRegistrar.scheduleCronTask(CronTask({loadAndPerformTasks(it.type, it.batchSize, it.performedJob)}, it.cron)) }
+        val inboxList = BaseInboxCreator.extractBaseInboxes(inboxes)
+        inboxList.forEach {
+            taskRegistrar.scheduleCronTask(CronTask({
+                loadAndPerformTasks(
+                    it.type,
+                    it.batchSize,
+                    it.performedJob
+                )
+            }, it.cron))
+        }
+        taskRegistrar.afterPropertiesSet()
     }
 }
