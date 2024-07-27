@@ -8,19 +8,20 @@ import java.util.function.Consumer
 class BaseInboxCreator {
     companion object {
 
-        fun extractBaseInboxes(inboxAwareClasses: List<Class<out Any>>): List<BaseInbox<InboxMessage>> {
+        fun extractBaseInboxes(inboxAwareClasses: List<Any>): List<BaseInbox<InboxMessage>> {
             return inboxAwareClasses.stream()
-                .map { inboxAwareClass ->
+                .map { inboxAwareBean ->
+                    val inboxAwareClass: Class<out Any> = inboxAwareBean::class.java
                     inboxAwareClass.declaredMethods.toList()
                         .stream()
                         .filter { method -> method.isAnnotationPresent(InboxListener::class.java) }
-                        .map { methodInbox -> toBaseInbox(methodInbox, inboxAwareClass) }
+                        .map { methodInbox -> toBaseInbox(methodInbox, inboxAwareBean) }
                 }
                 .flatMap { it }
                 .toList()
         }
 
-        private fun toBaseInbox(methodInbox: Method, clazz: Class<out Any>): BaseInbox<InboxMessage> {
+        private fun toBaseInbox(methodInbox: Method, clazz: Any): BaseInbox<InboxMessage> {
             val inboxAnnotation: InboxListener = methodInbox.annotations
                 .filterIsInstance<InboxListener>()
                 .first()

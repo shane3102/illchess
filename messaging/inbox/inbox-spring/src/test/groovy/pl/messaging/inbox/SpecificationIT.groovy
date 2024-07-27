@@ -8,9 +8,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.testcontainers.spock.Testcontainers
 import pl.messaging.inbox.aggregator.Inbox
 import pl.messaging.inbox.configuration.InboxConfiguration
+import pl.messaging.inbox.service.TestInboxMessageService
 import spock.lang.Specification
 
-@SpringBootTest(classes = [Inbox, InboxConfiguration] )
+@SpringBootTest(classes = [Inbox, InboxConfiguration, TestInboxMessageService] )
 @Testcontainers
 @EnableScheduling
 @ContextConfiguration
