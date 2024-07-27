@@ -3,8 +3,10 @@ package pl.messaging.inbox.model
 
 import java.time.OffsetDateTime
 
-class TestInboxMessage2 extends InboxMessage {
-    TestInboxMessage2() {
+class TestInboxMessageFixedRate extends InboxMessage {
+
+    TestInboxMessageFixedRate() {
         super(UUID.randomUUID(), 0, OffsetDateTime.now())
     }
+
 }

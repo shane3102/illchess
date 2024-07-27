@@ -2,10 +2,7 @@ package pl.messaging.inbox
 
 import org.springframework.beans.factory.annotation.Autowired
 import pl.messaging.inbox.aggregator.Inbox
-import pl.messaging.inbox.model.InboxMessage
-import pl.messaging.inbox.model.TestInboxMessage1
-import pl.messaging.inbox.model.TestInboxMessage2
-import pl.messaging.inbox.model.TestInboxMessageFailing
+import pl.messaging.inbox.model.*
 import pl.messaging.inbox.repository.LoadInboxMessages
 import pl.messaging.inbox.service.TestInboxMessageService
 
@@ -26,7 +23,7 @@ class InboxTest extends SpecificationIT {
 
         when:
         sentMessages.forEach { inbox.saveMessage(it) }
-        Thread.sleep(3000)
+        Thread.sleep(1500)
 
         then:
         testInboxMessageService.executeCountByInbox.entrySet().every { countByMessage ->
@@ -34,8 +31,11 @@ class InboxTest extends SpecificationIT {
         }
 
         where:
-        sentMessages                                                                                                                     | expectedCountByMessage
-        [new TestInboxMessage1(), new TestInboxMessage1(), new TestInboxMessage2(), new TestInboxMessageFailing()] as List<InboxMessage> | Map.of(TestInboxMessage1.class, 2, TestInboxMessage2.class, 1, TestInboxMessageFailing.class, 0)
+        sentMessages                                                                                                                                                                          | _
+        [new TestInboxMessageFixedRate(), new TestInboxMessageFixedRate(), new TestInboxMessageFixedDelay(), new TestInboxMessageFailing(), new TestInboxMessageCron()] as List<InboxMessage> | _
+        __
+        expectedCountByMessage                                                                                                                     | _
+        Map.of(TestInboxMessageFixedRate.class, 2, TestInboxMessageFixedDelay.class, 1, TestInboxMessageFailing.class, 0, TestInboxMessageCron, 1) | _
 
     }
 
@@ -46,13 +46,14 @@ class InboxTest extends SpecificationIT {
 
         when:
         inbox.saveMessage(new TestInboxMessageFailing(id))
-        Thread.sleep(3000)
+        Thread.sleep(200)
 
         then:
         def failingInboxMessages = loadInboxMessages.loadLatestByTypeNonExpired(TestInboxMessageFailing.class.toString(), 5, 5)
         with(failingInboxMessages) {
             with(it.find { it.id == id }) {
-                it.retryCount == 3
+                it.retryCount < 3
+                it.retryCount > 1
             }
         }
 
@@ -65,7 +66,7 @@ class InboxTest extends SpecificationIT {
 
         when:
         inbox.saveMessage(new TestInboxMessageFailing(id))
-        Thread.sleep(5000)
+        Thread.sleep(500)
 
         then:
         def failingInboxMessages = loadInboxMessages.loadLatestByTypeNonExpired(TestInboxMessageFailing.class.toString(), 5, 5)
