@@ -41,15 +41,8 @@ open class InboxConfiguration(
     }
 
     @Bean
-    @ConditionalOnMissingBean(LoadInboxMessages::class, SaveInboxMessage::class)
-    open fun loadInboxMessages(): LoadInboxMessages {
-        return inMemoryInboxMessageRepository
-    }
-
-    // TODO DeleteInboxMessage zarejestrować tylko w przypadku gdy wiadomości są usuwane
-    @Bean
     @ConditionalOnMissingBean(LoadInboxMessages::class, SaveInboxMessage::class, DeleteInboxMessage::class)
-    open fun saveInboxMessages(): SaveInboxMessage {
+    open fun inMemoryInboxMessageRepository(): InMemoryInboxMessageRepository {
         return inMemoryInboxMessageRepository
     }
 

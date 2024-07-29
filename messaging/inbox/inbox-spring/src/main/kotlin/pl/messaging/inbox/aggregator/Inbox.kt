@@ -40,7 +40,6 @@ class Inbox(
         maxRetryCount: Int,
         consumer: Consumer<InboxMessage>
     ) {
-        // TODO what if two inbox aware classes listen for same type of message?
         loadInboxMessages.loadLatestByTypeNonExpired(inboxClass.toString(), batchSize, maxRetryCount)
             .forEach { performTask(it, consumer) }
     }
@@ -48,7 +47,6 @@ class Inbox(
     private fun performTask(inboxMessage: InboxMessage, consumer: Consumer<InboxMessage>) {
         try {
             consumer.accept(inboxMessage)
-            // TODO decide if add success flag or delete by property
             deleteInboxMessage.delete(inboxMessage.id)
         } catch (e: Exception) {
             inboxMessage.incrementCount()
