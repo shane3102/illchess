@@ -1,6 +1,7 @@
 package pl.messaging.inbox.base
 
 import pl.messaging.inbox.annotation.InboxListener
+import pl.messaging.inbox.exception.TwoInboxesAreListeningOnTheSameInboxMessageException
 import pl.messaging.inbox.model.InboxMessage
 import java.lang.reflect.Method
 import java.util.function.Consumer
@@ -9,7 +10,7 @@ class BaseInboxCreator {
     companion object {
 
         fun extractBaseInboxes(inboxAwareClasses: List<Any>): List<BaseInbox<InboxMessage>> {
-            return inboxAwareClasses.stream()
+            val result = inboxAwareClasses.stream()
                 .map { inboxAwareBean ->
                     val inboxAwareClass: Class<out Any> = inboxAwareBean::class.java
                     inboxAwareClass.declaredMethods.toList()
@@ -19,6 +20,12 @@ class BaseInboxCreator {
                 }
                 .flatMap { it }
                 .toList()
+
+            result.forEach { checked ->
+                result.forEach { checkIfIsDuplicated(checked, it) }
+            }
+
+            return result
         }
 
         private fun toBaseInbox(methodInbox: Method, clazz: Any): BaseInbox<InboxMessage> {
@@ -40,6 +47,15 @@ class BaseInboxCreator {
                 inboxAnnotation.type.java,
                 consumer
             )
+        }
+
+        private fun checkIfIsDuplicated(
+            baseInbox1: BaseInbox<out InboxMessage>,
+            baseInbox2: BaseInbox<out InboxMessage>
+        ) {
+            if (baseInbox1 != baseInbox2 && baseInbox1.type == baseInbox2.type) {
+                throw TwoInboxesAreListeningOnTheSameInboxMessageException(baseInbox1.type)
+            }
         }
 
     }
