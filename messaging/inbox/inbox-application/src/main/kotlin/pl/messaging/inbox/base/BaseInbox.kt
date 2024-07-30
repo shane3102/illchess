@@ -10,6 +10,6 @@ class BaseInbox<T : InboxMessage>(
     val fixedDelay: Int?,
     val fixedRate: Int?,
     val initialDelay: Int?,
-    val type: Class<T>,
+    val type: Class<out T>,
     val performedJob: Consumer<T>
 )
