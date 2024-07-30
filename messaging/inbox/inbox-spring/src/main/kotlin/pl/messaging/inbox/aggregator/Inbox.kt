@@ -3,7 +3,11 @@ package pl.messaging.inbox.aggregator
 import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
-import org.springframework.scheduling.config.*
+import org.springframework.scheduling.config.CronTask
+import org.springframework.scheduling.config.FixedDelayTask
+import org.springframework.scheduling.config.FixedRateTask
+import org.springframework.scheduling.config.ScheduledTaskRegistrar
+import org.springframework.scheduling.config.Task
 import org.springframework.stereotype.Component
 import pl.messaging.inbox.annotation.InboxAwareComponent
 import pl.messaging.inbox.base.BaseInbox
@@ -58,7 +62,17 @@ class Inbox(
     fun startJobs() {
         val inboxList = BaseInboxCreator.extractBaseInboxes(inboxes)
         inboxList.forEach {
-            when (val task = createTaskByInfo(it)) {
+
+            val performedFunction = {
+                loadAndPerformTasks(
+                    it.type,
+                    it.batchSize,
+                    it.retryCount,
+                    it.performedJob
+                )
+            }
+
+            when (val task = createTaskByInfo(it, performedFunction)) {
                 is FixedRateTask -> {
                     taskRegistrar.scheduleFixedRateTask(task)
                 }
@@ -75,7 +89,10 @@ class Inbox(
         taskRegistrar.afterPropertiesSet()
     }
 
-    private fun createTaskByInfo(baseInbox: BaseInbox<InboxMessage>): Task {
+    private fun createTaskByInfo(
+        baseInbox: BaseInbox<InboxMessage>,
+        performedFunction: () -> Unit
+    ): Task {
         val rateAndDelay = baseInbox.fixedRate != null && baseInbox.fixedDelay != null
         val rateAndCron = baseInbox.fixedRate != null && baseInbox.cron != null
         val cronAndDelay = baseInbox.cron != null && baseInbox.fixedDelay != null
@@ -88,42 +105,21 @@ class Inbox(
         }
         if (baseInbox.fixedRate != null) {
             return FixedRateTask(
-                {
-                    loadAndPerformTasks(
-                        baseInbox.type,
-                        baseInbox.batchSize,
-                        baseInbox.retryCount,
-                        baseInbox.performedJob
-                    )
-                },
+                performedFunction,
                 Duration.ofMillis(baseInbox.fixedRate!!.toLong()),
                 Duration.ofMillis(if (baseInbox.initialDelay == null) 0L else baseInbox.initialDelay!!.toLong())
             )
         }
         if (baseInbox.fixedDelay != null) {
             return FixedDelayTask(
-                {
-                    loadAndPerformTasks(
-                        baseInbox.type,
-                        baseInbox.batchSize,
-                        baseInbox.retryCount,
-                        baseInbox.performedJob
-                    )
-                },
+                performedFunction,
                 Duration.ofMillis(baseInbox.fixedDelay!!.toLong()),
                 Duration.ofMillis(if (baseInbox.initialDelay == null) 0L else baseInbox.initialDelay!!.toLong())
             )
         }
         if (baseInbox.cron != null) {
             return CronTask(
-                {
-                    loadAndPerformTasks(
-                        baseInbox.type,
-                        baseInbox.batchSize,
-                        baseInbox.retryCount,
-                        baseInbox.performedJob
-                    )
-                },
+                performedFunction,
                 baseInbox.cron!!
             )
         }

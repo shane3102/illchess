@@ -11,6 +11,7 @@ class BaseInboxCreator {
 
         fun extractBaseInboxes(inboxAwareClasses: List<Any>): List<BaseInbox<InboxMessage>> {
             val result = inboxAwareClasses.stream()
+                .distinct()
                 .map { inboxAwareBean ->
                     val inboxAwareClass: Class<out Any> = inboxAwareBean::class.java
                     inboxAwareClass.declaredMethods.toList()
