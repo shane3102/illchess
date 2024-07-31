@@ -1,0 +1,3 @@
+#quarkus:
+#  scheduler:
+#    start-mode: forced
