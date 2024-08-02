@@ -24,7 +24,6 @@ class TestInboxMessageService {
     }
 
     @InboxListener(
-            type = TestInboxMessageFixedRate,
             retryCount = 2,
             batchSize = 10,
             fixedRate = 100
@@ -36,7 +35,6 @@ class TestInboxMessageService {
     }
 
     @InboxListener(
-            type = TestInboxMessageFixedDelay,
             retryCount = 2,
             batchSize = 10,
             fixedDelay = 100
@@ -48,7 +46,6 @@ class TestInboxMessageService {
     }
 
     @InboxListener(
-            type = TestInboxMessageCron,
             retryCount = 2,
             batchSize = 10,
             cron = "* * * * * *"
@@ -60,7 +57,6 @@ class TestInboxMessageService {
     }
 
     @InboxListener(
-            type = TestInboxMessageFailing,
             retryCount = 3,
             batchSize = 10,
             fixedRate = 100

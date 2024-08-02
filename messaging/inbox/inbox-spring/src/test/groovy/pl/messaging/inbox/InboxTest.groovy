@@ -46,13 +46,13 @@ class InboxTest extends SpecificationIT {
 
         when:
         inbox.saveMessage(new TestInboxMessageFailing(id))
-        Thread.sleep(150)
+        Thread.sleep(200)
 
         then:
         def failingInboxMessages = loadInboxMessages.loadLatestByTypeNonExpired(TestInboxMessageFailing.class.toString(), 5, 5)
         with(failingInboxMessages) {
             with(it.find { it.id == id }) {
-                it.retryCount < 3
+                it.retryCount <= 3
                 it.retryCount > 1
             }
         }

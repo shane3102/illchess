@@ -9,7 +9,9 @@
     <modules>
         <module>inbox-application</module>
         <module>inbox-spring</module>
+        <module>inbox-quarkus</module>
     </modules>
+    <name>Inbox</name>
 
     <properties>
         <kotlin.version>1.9.23</kotlin.version>
