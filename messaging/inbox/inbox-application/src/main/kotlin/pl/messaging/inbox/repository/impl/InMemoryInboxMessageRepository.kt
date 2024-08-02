@@ -4,7 +4,7 @@ import pl.messaging.inbox.model.InboxMessage
 import pl.messaging.inbox.repository.DeleteInboxMessage
 import pl.messaging.inbox.repository.LoadInboxMessages
 import pl.messaging.inbox.repository.SaveInboxMessage
-import java.util.*
+import java.util.UUID
 
 class InMemoryInboxMessageRepository(
     private val repo: HashMap<UUID, InboxMessage> = HashMap()

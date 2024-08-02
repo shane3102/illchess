@@ -1,6 +1,7 @@
 package pl.messaging.inbox.base
 
 import pl.messaging.inbox.annotation.InboxListener
+import pl.messaging.inbox.exception.InboxMethodShouldContainExactlyOneInboxMessageParameterException
 import pl.messaging.inbox.exception.TwoInboxesAreListeningOnTheSameInboxMessageException
 import pl.messaging.inbox.model.InboxMessage
 import java.lang.reflect.Method
@@ -34,6 +35,7 @@ class BaseInboxCreator {
                 .filterIsInstance<InboxListener>()
                 .first()
 
+            val classOfInboxMethod = obtainClassOfInboxMethod(methodInbox)
             val consumer: Consumer<InboxMessage> = Consumer { param: Any ->
                 methodInbox.invoke(clazz, param)
             }
@@ -45,7 +47,7 @@ class BaseInboxCreator {
                 if (inboxAnnotation.fixedDelay == -1) null else inboxAnnotation.fixedDelay,
                 if (inboxAnnotation.fixedRate == -1) null else inboxAnnotation.fixedRate,
                 if (inboxAnnotation.initialDelay == -1) null else inboxAnnotation.initialDelay,
-                inboxAnnotation.type.java,
+                classOfInboxMethod,
                 consumer
             )
         }
@@ -57,6 +59,14 @@ class BaseInboxCreator {
             if (baseInbox1 != baseInbox2 && baseInbox1.type == baseInbox2.type) {
                 throw TwoInboxesAreListeningOnTheSameInboxMessageException(baseInbox1.type)
             }
+        }
+
+        private fun obtainClassOfInboxMethod(inboxMethod: Method): Class<out InboxMessage> {
+            if (inboxMethod.parameters.size != 1) {
+                throw InboxMethodShouldContainExactlyOneInboxMessageParameterException()
+            }
+
+            return inboxMethod.parameterTypes[0] as Class<out InboxMessage>
         }
 
     }

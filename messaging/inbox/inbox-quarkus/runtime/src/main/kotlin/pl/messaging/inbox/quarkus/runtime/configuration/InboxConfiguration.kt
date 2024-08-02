@@ -13,6 +13,7 @@ class InboxConfiguration {
 
     @Produces
     @DefaultBean
+    @ApplicationScoped
     fun inMemoryInboxMessageRepository(): InMemoryInboxMessageRepository {
         return inMemoryInboxMessageRepository
     }
