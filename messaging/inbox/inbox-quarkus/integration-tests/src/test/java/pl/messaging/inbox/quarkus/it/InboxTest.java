@@ -42,7 +42,7 @@ public class InboxTest {
         // when
         sentMessages.forEach(inbox::saveMessage);
         try {
-            Thread.sleep(1500);
+            Thread.sleep(1100);
         } catch (Exception ignored) {
         }
 

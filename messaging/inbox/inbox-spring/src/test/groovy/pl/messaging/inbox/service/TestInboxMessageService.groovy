@@ -26,7 +26,7 @@ class TestInboxMessageService {
     @InboxListener(
             retryCount = 2,
             batchSize = 10,
-            fixedRate = 100
+            cron = "* * * * * *"
     )
     void testInboxMessageFixedRate(TestInboxMessageFixedRate message) {
         def count = executeCountByInbox.get(message.class)
@@ -37,7 +37,7 @@ class TestInboxMessageService {
     @InboxListener(
             retryCount = 2,
             batchSize = 10,
-            fixedDelay = 100
+            cron = "* * * * * *"
     )
     void testInboxMessageFixedDelay(TestInboxMessageFixedDelay message) {
         def count = executeCountByInbox.get(message.class)
@@ -59,7 +59,7 @@ class TestInboxMessageService {
     @InboxListener(
             retryCount = 3,
             batchSize = 10,
-            fixedRate = 100
+            cron = "* * * * * *"
     )
     void testInboxMessageFailing(TestInboxMessageFailing message) {
         throw new RuntimeException()

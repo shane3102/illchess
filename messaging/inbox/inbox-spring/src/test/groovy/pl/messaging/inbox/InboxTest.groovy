@@ -46,7 +46,7 @@ class InboxTest extends SpecificationIT {
 
         when:
         inbox.saveMessage(new TestInboxMessageFailing(id))
-        Thread.sleep(200)
+        Thread.sleep(2000)
 
         then:
         def failingInboxMessages = loadInboxMessages.loadLatestByTypeNonExpired(TestInboxMessageFailing.class.toString(), 5, 5)
@@ -66,7 +66,7 @@ class InboxTest extends SpecificationIT {
 
         when:
         inbox.saveMessage(new TestInboxMessageFailing(id))
-        Thread.sleep(500)
+        Thread.sleep(5000)
 
         then:
         def failingInboxMessages = loadInboxMessages.loadLatestByTypeNonExpired(TestInboxMessageFailing.class.toString(), 5, 5)

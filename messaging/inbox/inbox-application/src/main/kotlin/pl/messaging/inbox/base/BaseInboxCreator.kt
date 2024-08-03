@@ -43,10 +43,7 @@ class BaseInboxCreator {
             return BaseInbox(
                 inboxAnnotation.retryCount,
                 inboxAnnotation.batchSize,
-                if (inboxAnnotation.cron == "") null else inboxAnnotation.cron,
-                if (inboxAnnotation.fixedDelay == -1) null else inboxAnnotation.fixedDelay,
-                if (inboxAnnotation.fixedRate == -1) null else inboxAnnotation.fixedRate,
-                if (inboxAnnotation.initialDelay == -1) null else inboxAnnotation.initialDelay,
+                inboxAnnotation.cron,
                 classOfInboxMethod,
                 consumer
             )
