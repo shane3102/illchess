@@ -10,8 +10,6 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.inject.Default
 import jakarta.inject.Inject
 import pl.messaging.inbox.base.BaseInboxCreator
-import pl.messaging.inbox.exception.NoneOfSchedulingValuesWasProvidedException
-import pl.messaging.inbox.exception.OneOfSchedulingConfigShouldBeUsedException
 import pl.messaging.inbox.model.InboxMessage
 import pl.messaging.inbox.quarkus.runtime.annotation.InboxAwareComponent
 import pl.messaging.inbox.repository.DeleteInboxMessage
@@ -73,7 +71,6 @@ class Inbox {
         val inboxList = BaseInboxCreator.extractBaseInboxes(inboxes.map { it.get() }.map { unwrap(it) })
         inboxList
             .forEach {
-
                 val performedFunction = {
                     loadAndPerformTasks(
                         it.type,
@@ -82,32 +79,10 @@ class Inbox {
                         it.performedJob
                     )
                 }
-                val jobDefinition: JobDefinition = scheduler.newJob(it.type.name)
-
-                val rateAndDelay = it.fixedRate != null && it.fixedDelay != null
-                val rateAndCron = it.fixedRate != null && it.cron != null
-                val cronAndDelay = it.cron != null && it.fixedDelay != null
-                if (
-                    rateAndDelay ||
-                    rateAndCron ||
-                    cronAndDelay
-                ) {
-                    throw OneOfSchedulingConfigShouldBeUsedException()
-                }
-
-                if (it.fixedDelay != null) {
-                    jobDefinition.setInterval("PT%sS".format(it.fixedDelay))
-                } else if (it.fixedRate != null) {
-                    jobDefinition.setInterval("PT%sS".format(it.fixedRate))
-                } else if (it.cron != null) {
-                    jobDefinition.setCron(it.cron)
-                } else {
-                    throw NoneOfSchedulingValuesWasProvidedException()
-                }
-
-                jobDefinition.setTask { performedFunction.invoke() }
-                jobDefinition.schedule()
-
+                scheduler.newJob(it.type.name)
+                    .setCron(it.cron)
+                    .setTask { performedFunction.invoke() }
+                    .schedule();
             }
 
     }
