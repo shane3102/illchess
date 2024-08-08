@@ -32,7 +32,7 @@ class Inbox(
     }
 
     private fun loadAndPerformTasks(
-        inboxClass: Class<out Any>,
+        inboxClass: Class<out InboxMessage>,
         batchSize: Int,
         maxRetryCount: Int,
         consumer: Consumer<InboxMessage>

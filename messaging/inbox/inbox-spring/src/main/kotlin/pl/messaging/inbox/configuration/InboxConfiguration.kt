@@ -23,7 +23,7 @@ open class InboxConfiguration(
     private var inboxes: List<Any> = applicationContext.getBeansWithAnnotation(InboxAwareComponent::class.java)
         .values.toList()
 
-    val inMemoryInboxMessageRepository = InMemoryInboxMessageRepository()
+    private val inMemoryInboxMessageRepository = InMemoryInboxMessageRepository()
 
     @Bean
     open fun scheduledTaskRegistrar(taskScheduler: TaskScheduler): ScheduledTaskRegistrar {
