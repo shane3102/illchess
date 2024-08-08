@@ -4,7 +4,6 @@ import io.quarkus.arc.Arc
 import io.quarkus.arc.ClientProxy.unwrap
 import io.quarkus.arc.InstanceHandle
 import io.quarkus.scheduler.Scheduler
-import io.quarkus.scheduler.Scheduler.JobDefinition
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.inject.Default
