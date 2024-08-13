@@ -1,0 +1,6 @@
+quarkus:
+  http:
+    port: 420
+  package:
+    jar:
+      type: uber-jar
