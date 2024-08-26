@@ -1,6 +1,7 @@
 name: illchess
 services:
-  gamedb:
+  # Game/web-socket service
+  game-db:
     container_name: game-db
     image: redis:7.0.11-alpine
     ports:
@@ -16,11 +17,13 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      gamedb:
+      game-db:
         condition: service_healthy
     environment:
       - REDIS_HOSTNAME=6379
       - REDIS_HOSTNAME=gamedb
+
+  # Stockfish service
   chess-stockfish-service:
     container_name: illchess-stockfish-service
     image: illchess-stockfish-service
@@ -28,9 +31,23 @@ services:
       - 2137:2137
     environment:
       - URLS_GAME-SERVICE=http://illchess-web-socket-service:8080
+
+  # Player info service
   rabbit-mq:
     container_name: rabbit-mq
     image: rabbitmq:3-management
     ports:
       - 15672:15672
       - 5672:5672
+  player-info-db:
+    container_name: player-info-db
+    image: mysql
+    environment:
+      MYSQL_DATABASE: player_info_db
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - 3306:3306
+    expose:
+      - '3306'
