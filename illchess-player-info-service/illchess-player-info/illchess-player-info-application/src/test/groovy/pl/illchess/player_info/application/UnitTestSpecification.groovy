@@ -1,10 +1,12 @@
 package pl.illchess.player_info.application
 
+import pl.illchess.player_info.application.commons.command.out.PublishEvent
 import pl.illchess.player_info.application.game.command.GameManager
 import pl.illchess.player_info.application.game.command.out.LoadGame
 import pl.illchess.player_info.application.game.command.out.SaveGame
 import pl.illchess.player_info.application.test_impl.InMemoryGameRepository
 import pl.illchess.player_info.application.test_impl.InMemoryUserRepository
+import pl.illchess.player_info.application.test_impl.TestPublishEvent
 import pl.illchess.player_info.application.user.command.out.LoadUser
 import pl.illchess.player_info.application.user.command.out.SaveUser
 import spock.lang.Specification
@@ -20,10 +22,13 @@ class UnitTestSpecification extends Specification {
     protected SaveGame saveGame = inMemoryGameRepository
     protected LoadGame loadGame = inMemoryGameRepository
 
+    protected PublishEvent publishEvent = new TestPublishEvent()
+
     protected GameManager gameManager = new GameManager(
             saveGame,
             saveUser,
-            loadUser
+            loadUser,
+            publishEvent
     )
 
     String generateRandomString() {

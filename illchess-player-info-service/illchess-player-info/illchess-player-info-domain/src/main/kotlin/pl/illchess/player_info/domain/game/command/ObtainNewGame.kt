@@ -7,8 +7,8 @@ import pl.illchess.player_info.domain.user.model.User
 
 data class ObtainNewGame(
     val gameId: GameId,
-    val whitePlayer: User,
-    val blackPlayer: User,
+    val whiteUser: User,
+    val blackUser: User,
     val winningPieceColor: PieceColor,
     val performedMoves: List<PerformedMove>
 )

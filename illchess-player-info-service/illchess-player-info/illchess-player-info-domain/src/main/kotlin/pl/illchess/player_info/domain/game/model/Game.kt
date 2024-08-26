@@ -1,11 +1,27 @@
 package pl.illchess.player_info.domain.game.model
 
-import pl.illchess.player_info.domain.user.model.User
+import pl.illchess.player_info.domain.game.command.ObtainNewGame
 
 data class Game(
     val id: GameId,
-    val whitePlayer: User,
-    val blackPlayer: User,
+    val whiteUserGameInfo: UserGameInfo,
+    val blackUserGameInfo: UserGameInfo,
     val winningPieceColor: PieceColor,
     val performedMoves: List<PerformedMove>
-)
+) {
+
+    companion object {
+        fun generateNewGame(command: ObtainNewGame): Game {
+            val recalculateRankingWhite = command.whiteUser.recalculateRanking(command)
+            val recalculateRankingBlack = command.blackUser.recalculateRanking(command)
+
+            return Game(
+                command.gameId,
+                recalculateRankingWhite,
+                recalculateRankingBlack,
+                command.winningPieceColor,
+                command.performedMoves
+            )
+        }
+    }
+}

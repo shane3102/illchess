@@ -1,5 +1,12 @@
 package pl.illchess.player_info.domain.user.model
 
-import java.math.BigDecimal
+data class UserRankingPoints(var value: Int) {
+    operator fun plus(increment: UserRankingPoints): UserRankingPoints {
+        return UserRankingPoints(value + increment.value)
+    }
 
-class UserRankingPoints(var value: BigDecimal)
+    operator fun minus(decrement: UserRankingPoints): UserRankingPoints {
+        return UserRankingPoints(value - decrement.value)
+    }
+
+}
