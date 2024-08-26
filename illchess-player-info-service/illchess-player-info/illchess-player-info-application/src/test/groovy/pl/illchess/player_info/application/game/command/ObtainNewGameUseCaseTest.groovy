@@ -59,7 +59,7 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
 
         where:
         winningPieceColor | userWhiteStartingPoints | userBlackStartingPoints | performedMoves
-        "WHITE"           | 0.0                     | 0.0                     | []
+        "WHITE"           | 0                       | 0                       | []
 
     }
 }
