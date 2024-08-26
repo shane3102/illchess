@@ -28,3 +28,9 @@ services:
       - 2137:2137
     environment:
       - URLS_GAME-SERVICE=http://illchess-web-socket-service:8080
+  rabbit-mq:
+    container_name: rabbit-mq
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672

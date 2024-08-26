@@ -8,7 +8,7 @@ import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewG
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.messaging.quarkus.runtime.aggregator.InboxOutbox
 
-//@ApplicationScoped
+@ApplicationScoped
 class ObtainNewGameRabbitMqListener(
     private val inbox: InboxOutbox,
     private val obtainNewGameUseCase: ObtainNewGameUseCase
