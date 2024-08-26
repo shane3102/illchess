@@ -4,6 +4,15 @@ quarkus:
   package:
     jar:
       type: uber-jar
+  datasource:
+    jdbc:
+      driver: com.mysql.cj.jdbc.Driver
+      url: "jdbc:mysql://localhost:3306/player_info_db"
+    username: admin
+    password: admin
+  liquibase:
+    migrate-at-start: true
+    change-log: classpath:db/db.changelog-master.yaml
 mp:
   messaging:
     incoming:

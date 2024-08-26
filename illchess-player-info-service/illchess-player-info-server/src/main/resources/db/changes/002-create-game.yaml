@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - createTable:
+            tableName: game
+            remarks: Tabela zawierająca rozegrane partie użytkowników
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  remarks: Klucz główny
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: game_PK
+              - column:
+                  name: white_user_id
+                  type: UUID
+                  remarks: Klucz obcy wskazujący na białego gracza
+              - column:
+                  name: white_ranking_points_before_game
+                  type: int
+                  remarks: Ilość punktów białego gracza przed rozgrywką
+              - column:
+                  name: white_ranking_points_after_game
+                  type: int
+                  remarks: Ilość punktów białego gracza po rozgrywce
+              - column:
+                  name: white_ranking_points_change
+                  type: int
+                  remarks: Zmiana punktów białego gracza po rozgrywce
+              - column:
+                  name: black_user_id
+                  type: UUID
+                  remarks: Klucz obcy wskazujący na czarnego gracza
+              - column:
+                  name: black_ranking_points_before_game
+                  type: int
+                  remarks: Ilość punktów czarnego gracza przed rozgrywką
+              - column:
+                  name: black_ranking_points_after_game
+                  type: int
+                  remarks: Ilość punktów czarnego gracza po rozgrywce
+              - column:
+                  name: black_ranking_points_change
+                  type: int
+                  remarks: Zmiana punktów czarnego gracza po rozgrywce
+              - column:
+                  name: winning_piece_color
+                  type: TEXT
+                  remarks: Kolor wygranego gracza
+              - column:
+                  name: performed_moves
+                  type: json
+                  remarks: Ruchy odbyte w partii

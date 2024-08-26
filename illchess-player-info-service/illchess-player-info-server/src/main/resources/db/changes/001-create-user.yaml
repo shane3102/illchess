@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - createTable:
+            tableName: user
+            remarks: Tabela zawierająca użytkowników
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  remarks: Klucz główny
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_PK
+              - column:
+                  name: username
+                  type: TEXT
+                  remarks: Username użytkownika
+              - column:
+                  name: current_ranking_points
+                  type: int
+                  remarks: Obecna siła użytkownika jako punkty ELO
