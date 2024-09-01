@@ -1,6 +1,7 @@
 package pl.illchess.player_info.adapter.game.command.out.jpa_streamer.mapper
 
-import pl.illchess.player_info.adapter.game.command.out.jpa_streamer.entity.GameEntity
+import pl.illchess.player_info.adapter.shared_entities.GameEntity
+import pl.illchess.player_info.adapter.shared_entities.PerformedMoveEntity
 import pl.illchess.player_info.adapter.user.command.out.jpa_streamer.mapper.UserMapper
 import pl.illchess.player_info.domain.game.model.ChessSquare
 import pl.illchess.player_info.domain.game.model.Game
@@ -25,13 +26,13 @@ class GameMapper {
             game.blackUserGameInfo.rankingPointsChange.value,
             game.winningPieceColor.name,
             game.performedMoves.map {
-                GameEntity.PerformedMoveEntity(
+                PerformedMoveEntity(
                     it.startSquare.name,
                     it.endSquare.name,
                     it.stringValue.value,
                     it.color.name
                 )
-            }
+            }.toList()
         )
 
         fun toModel(gameEntity: GameEntity) = Game(

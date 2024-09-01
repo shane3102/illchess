@@ -29,6 +29,7 @@
         <groovy-all.version>4.0.16</groovy-all.version>
         <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
         <jpastreamer.version>3.0.3.Final</jpastreamer.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <dependencies>

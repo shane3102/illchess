@@ -1,6 +1,6 @@
 package pl.illchess.player_info.adapter.user.command.out.jpa_streamer.mapper
 
-import pl.illchess.player_info.adapter.user.command.out.jpa_streamer.entity.UserEntity
+import pl.illchess.player_info.adapter.shared_entities.UserEntity
 import pl.illchess.player_info.domain.user.model.User
 import pl.illchess.player_info.domain.user.model.UserId
 import pl.illchess.player_info.domain.user.model.UserRankingPoints
