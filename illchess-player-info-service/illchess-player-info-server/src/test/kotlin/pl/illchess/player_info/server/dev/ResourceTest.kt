@@ -1,4 +1,4 @@
-package pl.illchess.player_info.server
+package pl.illchess.player_info.server.dev
 
 import io.quarkus.test.junit.QuarkusTest
 import org.junit.jupiter.api.Assertions
