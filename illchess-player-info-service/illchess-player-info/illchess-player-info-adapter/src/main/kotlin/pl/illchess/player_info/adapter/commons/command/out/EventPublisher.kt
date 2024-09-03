@@ -8,7 +8,8 @@ import pl.illchess.player_info.domain.commons.event.DomainEvent
 @ApplicationScoped
 class EventPublisher(private val eventBus: EventBus) : PublishEvent {
 
-    override fun publish(event: DomainEvent) {
-        eventBus.publish(event::class.toString(), event)
+    override fun publish(destination: String, event: DomainEvent) {
+        eventBus.publish(destination, event)
     }
+
 }
