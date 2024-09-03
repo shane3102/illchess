@@ -24,7 +24,6 @@ class GameManager(
     private val publishEvent: PublishEvent
 ) : ObtainNewGameUseCase {
 
-
     override fun obtainNewGame(cmd: ObtainNewGameCmd) {
         try {
             log.info(
@@ -53,10 +52,10 @@ class GameManager(
                 """.trimIndent().replace(Regex("(\n*)\n"), "$1")
             )
 
-            publishEvent.publish(GameSavedEvent(game.id))
+            publishEvent.publish("game.saved", GameSavedEvent(game.id))
         } catch (d: DomainException) {
             log.error("Error while saving game with id ${cmd.id}")
-            publishEvent.publish(ErrorWhileSavingGameEvent(GameId(cmd.id)))
+            publishEvent.publish("game.error", ErrorWhileSavingGameEvent(GameId(cmd.id)))
             throw d
         }
     }

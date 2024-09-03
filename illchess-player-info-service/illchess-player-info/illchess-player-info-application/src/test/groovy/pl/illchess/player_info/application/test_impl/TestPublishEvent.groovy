@@ -6,7 +6,7 @@ import pl.illchess.player_info.domain.commons.event.DomainEvent
 
 class TestPublishEvent implements PublishEvent {
     @Override
-    void publish(@NotNull DomainEvent event) {
+    void publish(@NotNull String destination, @NotNull DomainEvent event) {
 
     }
 }
