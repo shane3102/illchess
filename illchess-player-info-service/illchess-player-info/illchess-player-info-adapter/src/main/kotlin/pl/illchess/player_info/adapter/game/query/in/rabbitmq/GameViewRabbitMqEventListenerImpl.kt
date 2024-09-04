@@ -1,6 +1,7 @@
 package pl.illchess.player_info.adapter.game.query.`in`.rabbitmq
 
 import io.quarkus.vertx.ConsumeEvent
+import io.smallrye.reactive.messaging.annotations.Broadcast
 import jakarta.enterprise.context.ApplicationScoped
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
@@ -16,8 +17,8 @@ import java.util.UUID
 @ApplicationScoped
 class GameViewRabbitMqEventListenerImpl(
     private val gameViewQueryPort: GameViewQueryPort,
-    @Channel("obtain-game-success") private val gameSavedEmitter: Emitter<GameView>,
-    @Channel("obtain-game-failure") private val gameSavingErrorEmitter: Emitter<UUID>
+    @Broadcast @Channel("obtain-game-success") private val gameSavedEmitter: Emitter<GameView>,
+    @Broadcast @Channel("obtain-game-failure") private val gameSavingErrorEmitter: Emitter<UUID>
 ) : GameViewRabbitMqEventListener {
 
     @ConsumeEvent("game.saved")

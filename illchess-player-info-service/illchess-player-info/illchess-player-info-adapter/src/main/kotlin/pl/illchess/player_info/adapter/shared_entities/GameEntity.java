@@ -5,17 +5,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.util.List;
-import java.util.UUID;
 
 
 @Data
@@ -26,11 +27,13 @@ import java.util.UUID;
 public class GameEntity extends PanacheEntityBase {
     @Id
     @Column(name = "id")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     public UUID id;
 
     // white
-    @PrimaryKeyJoinColumn(name = "white_user_id")
+    @JoinColumn(name = "white_user_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.MERGE)
     public UserEntity whiteUser;
     @Column(name = "white_ranking_points_before_game")
     public int whiteRankingPointsBeforeGame;
@@ -40,8 +43,9 @@ public class GameEntity extends PanacheEntityBase {
     public int whiteRankingPointsChange;
 
     // black
-    @PrimaryKeyJoinColumn(name = "black_user_id")
+    @JoinColumn(name = "black_user_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.MERGE)
     public UserEntity blackUser;
     @Column(name = "black_ranking_points_before_game")
     public int blackRankingPointsBeforeGame;
