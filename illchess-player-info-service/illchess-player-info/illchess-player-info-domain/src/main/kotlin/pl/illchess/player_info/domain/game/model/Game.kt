@@ -7,6 +7,7 @@ data class Game(
     val whiteUserGameInfo: UserGameInfo,
     val blackUserGameInfo: UserGameInfo,
     val winningPieceColor: PieceColor,
+    val endTime: EndTime,
     val performedMoves: List<PerformedMove>
 ) {
 
@@ -20,6 +21,7 @@ data class Game(
                 recalculateRankingWhite,
                 recalculateRankingBlack,
                 command.winningPieceColor,
+                command.endTime,
                 command.performedMoves
             )
         }

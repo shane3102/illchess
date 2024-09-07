@@ -1,14 +1,16 @@
 package pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto
 
+import java.time.LocalDateTime
+import java.util.UUID
 import pl.illchess.player_info.adapter.game.command.`in`.inbox.dto.ObtainNewGameInboxMessage
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
-import java.util.UUID
 
 data class ObtainNewGameRabbitMqMessage(
     val gameId: UUID,
     val whiteUsername: String,
     val blackUsername: String,
     val winningPieceColor: String,
+    val endTime: LocalDateTime,
     val performedMoves: List<PerformedMovesRabbitMqMessage>
 ) {
     data class PerformedMovesRabbitMqMessage(
@@ -24,6 +26,7 @@ data class ObtainNewGameRabbitMqMessage(
             whiteUsername,
             blackUsername,
             winningPieceColor,
+            endTime,
             performedMoves.map {
                 ObtainNewGameUseCase.PerformedMoveCmd(
                     it.startSquare,
@@ -41,6 +44,7 @@ data class ObtainNewGameRabbitMqMessage(
             whiteUsername,
             blackUsername,
             winningPieceColor,
+            endTime,
             performedMoves.map {
                 ObtainNewGameInboxMessage.PerformedMoveInboxMessage(
                     it.startSquare,

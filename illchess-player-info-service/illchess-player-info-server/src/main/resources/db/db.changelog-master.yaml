@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file: changes/002-create-game.yaml
       relativeToChangeLogFile: true
+  - include:
+      file: changes/003-add-end-time-to-game.yaml
+      relativeToChangeLogFile: true

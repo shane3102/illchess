@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - addColumn:
+            tableName: game
+            columns:
+              - column:
+                  name: end_time
+                  type: DATETIME
+                  remarks: Czas zakończenia rozgrywki
