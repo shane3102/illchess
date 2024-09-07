@@ -5,6 +5,8 @@ import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import io.smallrye.reactive.messaging.annotations.Merge
 import jakarta.inject.Inject
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
@@ -46,6 +48,7 @@ open class ObtainNewGameTest {
         val blackUserId = UUID.randomUUID()
         val winningPieceColor = "WHITE"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
+        val endTime = LocalDateTime.now()
 
         saveUser.save(User(UserId(whiteUserId), Username(whiteUsernameText), UserRankingPoints(0)))
         saveUser.save(User(UserId(blackUserId), Username(blackUsernameText), UserRankingPoints(0)))
@@ -57,6 +60,7 @@ open class ObtainNewGameTest {
                 whiteUsernameText,
                 blackUsernameText,
                 winningPieceColor,
+                endTime,
                 performedMoves
             )
         )
@@ -72,10 +76,11 @@ open class ObtainNewGameTest {
             .body()
             .`as`(GameView::class.java)
 
-        assertEquals(responseGameView.whiteUserGameInfo.username, whiteUsernameText)
-        assertEquals(responseGameView.blackUserGameInfo.username, blackUsernameText)
-        assertEquals(responseGameView.winningPieceColor, winningPieceColor)
-        assertEquals(responseGameView.performedMoves.size, performedMoves.size)
+        assertEquals(whiteUsernameText, responseGameView.whiteUserGameInfo.username)
+        assertEquals(blackUsernameText, responseGameView.blackUserGameInfo.username)
+        assertEquals(winningPieceColor, responseGameView.winningPieceColor)
+        assertEquals(performedMoves.size, responseGameView.performedMoves.size)
+        assertEquals(endTime.truncatedTo(ChronoUnit.MINUTES), responseGameView.endTime.truncatedTo(ChronoUnit.MINUTES))
 
     }
 }

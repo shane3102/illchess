@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
@@ -55,6 +56,8 @@ public class GameEntity extends PanacheEntityBase {
     public int blackRankingPointsChange;
 
     // rest
+    @Column(name = "end_time")
+    public LocalDateTime endTime;
     @Column(name = "winning_piece_color")
     public String winningPieceColor;
     @JdbcTypeCode(SqlTypes.JSON)
@@ -62,17 +65,18 @@ public class GameEntity extends PanacheEntityBase {
     public List<PerformedMoveEntity> performedMoves;
 
     public GameEntity(
-        UUID id,
-        UserEntity whiteUser,
-        int whiteRankingPointsBeforeGame,
-        int whiteRankingPointsAfterGame,
-        int whiteRankingPointsChange,
-        UserEntity blackUser,
-        int blackRankingPointsBeforeGame,
-        int blackRankingPointsAfterGame,
-        int blackRankingPointsChange,
-        String winningPieceColor,
-        List<PerformedMoveEntity> performedMoves
+            UUID id,
+            UserEntity whiteUser,
+            int whiteRankingPointsBeforeGame,
+            int whiteRankingPointsAfterGame,
+            int whiteRankingPointsChange,
+            UserEntity blackUser,
+            int blackRankingPointsBeforeGame,
+            int blackRankingPointsAfterGame,
+            int blackRankingPointsChange,
+            LocalDateTime endTime,
+            String winningPieceColor,
+            List<PerformedMoveEntity> performedMoves
     ) {
         this.id = id;
         this.whiteUser = whiteUser;
@@ -83,6 +87,7 @@ public class GameEntity extends PanacheEntityBase {
         this.blackRankingPointsBeforeGame = blackRankingPointsBeforeGame;
         this.blackRankingPointsAfterGame = blackRankingPointsAfterGame;
         this.blackRankingPointsChange = blackRankingPointsChange;
+        this.endTime = endTime;
         this.winningPieceColor = winningPieceColor;
         this.performedMoves = performedMoves;
     }

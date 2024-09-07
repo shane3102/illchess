@@ -1,15 +1,17 @@
 package pl.illchess.player_info.adapter.game.command.`in`.inbox.dto
 
-import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
-import pl.messaging.model.Message
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.UUID
+import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
+import pl.messaging.model.Message
 
 data class ObtainNewGameInboxMessage(
     val gameId: UUID,
     val whiteUsername: String,
     val blackUsername: String,
     val winningPieceColor: String,
+    val endTime: LocalDateTime,
     val performedMoves: List<PerformedMoveInboxMessage>
 ) : Message(UUID.randomUUID(), 0, OffsetDateTime.now()) {
 
@@ -26,6 +28,7 @@ data class ObtainNewGameInboxMessage(
             whiteUsername,
             blackUsername,
             winningPieceColor,
+            endTime,
             performedMoves.map {
                 ObtainNewGameUseCase.PerformedMoveCmd(
                     it.startSquare,

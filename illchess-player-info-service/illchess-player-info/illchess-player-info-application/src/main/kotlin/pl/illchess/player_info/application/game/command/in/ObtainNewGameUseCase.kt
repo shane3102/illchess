@@ -1,13 +1,15 @@
 package pl.illchess.player_info.application.game.command.`in`
 
+import java.time.LocalDateTime
+import java.util.UUID
 import pl.illchess.player_info.domain.game.command.ObtainNewGame
 import pl.illchess.player_info.domain.game.model.ChessSquare
+import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.GameId
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
 import pl.illchess.player_info.domain.user.model.User
-import java.util.UUID
 
 interface ObtainNewGameUseCase {
 
@@ -18,6 +20,7 @@ interface ObtainNewGameUseCase {
         val whiteUsername: String,
         val blackUsername: String,
         val winningPieceColor: String,
+        val endTime: LocalDateTime,
         val performedMoves: List<PerformedMoveCmd>
     ) {
         fun toCommand(whitePlayer: User, blackPlayer: User): ObtainNewGame {
@@ -26,6 +29,7 @@ interface ObtainNewGameUseCase {
                 whitePlayer,
                 blackPlayer,
                 PieceColor.valueOf(winningPieceColor),
+                EndTime(endTime),
                 performedMoves.map {
                     PerformedMove(
                         ChessSquare.of(it.startSquare),

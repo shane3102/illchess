@@ -1,5 +1,6 @@
 package pl.illchess.player_info.domain.game.command
 
+import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.GameId
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
@@ -10,5 +11,6 @@ data class ObtainNewGame(
     val whiteUser: User,
     val blackUser: User,
     val winningPieceColor: PieceColor,
+    val endTime: EndTime,
     val performedMoves: List<PerformedMove>
 )

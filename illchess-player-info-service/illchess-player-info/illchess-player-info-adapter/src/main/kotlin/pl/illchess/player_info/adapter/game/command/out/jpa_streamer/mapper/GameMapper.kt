@@ -4,6 +4,7 @@ import pl.illchess.player_info.adapter.shared_entities.GameEntity
 import pl.illchess.player_info.adapter.shared_entities.PerformedMoveEntity
 import pl.illchess.player_info.adapter.user.command.out.jpa_streamer.mapper.UserMapper
 import pl.illchess.player_info.domain.game.model.ChessSquare
+import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.Game
 import pl.illchess.player_info.domain.game.model.GameId
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
@@ -24,6 +25,7 @@ class GameMapper {
             game.blackUserGameInfo.rankingPointsBeforeGame.value,
             game.blackUserGameInfo.rankingPointsAfterGame.value,
             game.blackUserGameInfo.rankingPointsChange.value,
+            game.endTime.time,
             game.winningPieceColor.name,
             game.performedMoves.map {
                 PerformedMoveEntity(
@@ -50,12 +52,15 @@ class GameMapper {
                 UserRankingPoints(gameEntity.blackRankingPointsChange)
             ),
             PieceColor.of(gameEntity.winningPieceColor),
-            gameEntity.performedMoves.map { PerformedMove(
-                ChessSquare.of(it.startSquare),
-                ChessSquare.of(it.endSquare),
-                MoveAlgebraicNotation(it.stringValue),
-                PieceColor.of(it.color)
-            ) }
+            EndTime(gameEntity.endTime),
+            gameEntity.performedMoves.map {
+                PerformedMove(
+                    ChessSquare.of(it.startSquare),
+                    ChessSquare.of(it.endSquare),
+                    MoveAlgebraicNotation(it.stringValue),
+                    PieceColor.of(it.color)
+                )
+            }
         )
     }
 }

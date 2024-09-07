@@ -1,5 +1,6 @@
 package pl.illchess.player_info.application.game.query.out.model
 
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class GameView(
@@ -7,6 +8,7 @@ data class GameView(
     val whiteUserGameInfo: UserGameInfoView,
     val blackUserGameInfo: UserGameInfoView,
     val winningPieceColor: String,
+    val endTime: LocalDateTime,
     val performedMoves: List<PerformedMoveView>
 ) {
     data class UserGameInfoView(

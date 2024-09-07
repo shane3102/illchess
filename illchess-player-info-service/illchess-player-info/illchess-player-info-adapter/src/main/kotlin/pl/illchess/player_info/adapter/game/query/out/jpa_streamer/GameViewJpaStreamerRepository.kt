@@ -37,6 +37,7 @@ class GameViewJpaStreamerRepository(private val jpaStreamer: JPAStreamer) : Game
                         it.blackRankingPointsChange
                     ),
                     it.winningPieceColor,
+                    it.endTime,
                     it.performedMoves.map { moveEntity ->
                         GameView.PerformedMoveView(
                             moveEntity.startSquare,
