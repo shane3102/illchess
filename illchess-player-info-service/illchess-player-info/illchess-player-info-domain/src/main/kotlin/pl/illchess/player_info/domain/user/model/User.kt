@@ -1,5 +1,6 @@
 package pl.illchess.player_info.domain.user.model
 
+import java.util.UUID
 import pl.illchess.player_info.domain.game.command.ObtainNewGame
 import pl.illchess.player_info.domain.game.model.UserGameInfo
 
@@ -20,5 +21,13 @@ class User(
             rankingPointsChange
         )
 
+    }
+
+    companion object {
+        fun createUser(username: Username) = User(
+            UserId(UUID.randomUUID()),
+            username,
+            UserRankingPoints.defaultRanking()
+        )
     }
 }

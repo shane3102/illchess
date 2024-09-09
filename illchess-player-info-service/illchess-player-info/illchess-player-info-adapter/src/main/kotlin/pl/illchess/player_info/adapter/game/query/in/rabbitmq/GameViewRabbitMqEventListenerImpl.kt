@@ -3,6 +3,7 @@ package pl.illchess.player_info.adapter.game.query.`in`.rabbitmq
 import io.quarkus.vertx.ConsumeEvent
 import io.smallrye.reactive.messaging.annotations.Broadcast
 import jakarta.enterprise.context.ApplicationScoped
+import java.util.UUID
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.slf4j.Logger
@@ -12,7 +13,6 @@ import pl.illchess.player_info.application.game.query.out.model.GameView
 import pl.illchess.player_info.domain.game.event.ErrorWhileSavingGameEvent
 import pl.illchess.player_info.domain.game.event.GameSavedEvent
 import pl.illchess.player_info.domain.game.exception.GameNotFoundException
-import java.util.UUID
 
 @ApplicationScoped
 class GameViewRabbitMqEventListenerImpl(
@@ -39,6 +39,8 @@ class GameViewRabbitMqEventListenerImpl(
         log.error("Successfully sent info with id: $result of failing game which was saved")
         return result
     }
-}
 
-private val log: Logger = LoggerFactory.getLogger(GameViewRabbitMqEventListenerImpl::class.java)
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(GameViewRabbitMqEventListenerImpl::class.java)
+    }
+}

@@ -3,9 +3,9 @@ package pl.illchess.player_info.adapter.user.command.out.jpa_streamer.repository
 import com.speedment.jpastreamer.application.JPAStreamer
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase
 import jakarta.enterprise.context.ApplicationScoped
+import java.util.UUID
 import pl.illchess.player_info.adapter.shared_entities.UserEntity
 import pl.illchess.player_info.adapter.shared_entities.UserEntityMetaModel
-import java.util.UUID
 
 @ApplicationScoped
 class UserJpaStreamerRepository(
@@ -13,7 +13,7 @@ class UserJpaStreamerRepository(
 ) : PanacheRepositoryBase<UserEntity, UUID> {
     fun loadById(id: UUID): UserEntity? {
         return jpaStreamer.stream(UserEntity::class.java)
-            .filter(UserEntityMetaModel.id.equal(id))
+            .filter(UserEntityMetaModel.id.`in`(id))
             .findFirst()
             .orElse(null)
     }

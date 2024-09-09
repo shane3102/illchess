@@ -8,6 +8,8 @@ import pl.illchess.player_info.domain.user.model.UserId
 import pl.illchess.player_info.domain.user.model.UserRankingPoints
 import pl.illchess.player_info.domain.user.model.Username
 
+import java.time.LocalDateTime
+
 class ObtainNewGameUseCaseTest extends UnitTestSpecification {
 
     ObtainNewGameUseCase obtainNewGameUseCase = gameManager
@@ -36,6 +38,7 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
                 userWhiteUsername.text,
                 userBlackUsername.text,
                 winningPieceColor,
+                LocalDateTime.now(),
                 performedMoves
         )
 

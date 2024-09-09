@@ -47,6 +47,7 @@ class EvaluateBoardService(
         return result
     }
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(EvaluateBoardService::class.java)
+    }
 }
-
-private val log: Logger = LoggerFactory.getLogger(EvaluateBoardService::class.java)
