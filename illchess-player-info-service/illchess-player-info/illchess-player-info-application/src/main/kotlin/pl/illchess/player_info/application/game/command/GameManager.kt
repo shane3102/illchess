@@ -6,6 +6,7 @@ import pl.illchess.player_info.application.commons.command.out.PublishEvent
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase.ObtainNewGameCmd
 import pl.illchess.player_info.application.game.command.out.SaveGame
+import pl.illchess.player_info.application.user.command.out.CreateUser
 import pl.illchess.player_info.application.user.command.out.LoadUser
 import pl.illchess.player_info.application.user.command.out.SaveUser
 import pl.illchess.player_info.domain.commons.exception.DomainException
@@ -21,6 +22,7 @@ class GameManager(
     private val saveGame: SaveGame,
     private val saveUser: SaveUser,
     private val loadUser: LoadUser,
+    private val createUser: CreateUser,
     private val publishEvent: PublishEvent
 ) : ObtainNewGameUseCase {
 
@@ -34,9 +36,9 @@ class GameManager(
                 """.trimIndent().replace(Regex("(\n*)\n"), "$1")
             )
             val whiteUsername = Username(cmd.whiteUsername)
-            val whiteUser: User = loadUser.load(whiteUsername) ?: throw UserNotFoundException(whiteUsername)
+            val whiteUser: User = loadOrCreateAndLoadUser(whiteUsername)
             val blackUsername = Username(cmd.blackUsername)
-            val blackUser: User = loadUser.load(blackUsername) ?: throw UserNotFoundException(blackUsername)
+            val blackUser: User = loadOrCreateAndLoadUser(blackUsername)
             val command = cmd.toCommand(whiteUser, blackUser)
 
             val game = Game.generateNewGame(command)
@@ -59,6 +61,19 @@ class GameManager(
             throw d
         }
     }
-}
 
-private val log: Logger = LoggerFactory.getLogger(ObtainNewGameUseCase::class.java)
+    private fun loadOrCreateAndLoadUser(username: Username): User {
+        var user = loadUser.load(username)
+        if (user != null) {
+            return user
+        }
+        val createdUserId = createUser.create(username)
+        user = loadUser.load(createdUserId) ?: throw UserNotFoundException(createdUserId)
+        return user
+    }
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(ObtainNewGameUseCase::class.java)
+    }
+
+}

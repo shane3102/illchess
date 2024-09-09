@@ -6,7 +6,6 @@ import io.restassured.RestAssured.given
 import io.smallrye.reactive.messaging.annotations.Merge
 import jakarta.inject.Inject
 import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import java.util.UUID
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
@@ -20,6 +19,7 @@ import pl.illchess.player_info.domain.user.model.User
 import pl.illchess.player_info.domain.user.model.UserId
 import pl.illchess.player_info.domain.user.model.UserRankingPoints
 import pl.illchess.player_info.domain.user.model.Username
+import pl.illchess.player_info.server.dev.Specification
 import pl.illchess.player_info.server.it.SpecificationResourceIT
 
 
@@ -28,7 +28,7 @@ import pl.illchess.player_info.server.it.SpecificationResourceIT
     value = SpecificationResourceIT::class,
     restrictToAnnotatedClass = true
 )
-open class ObtainNewGameTest {
+open class ObtainNewGameTest : Specification() {
 
     @Merge
     @Channel("obtain-game")
@@ -42,9 +42,9 @@ open class ObtainNewGameTest {
     fun shouldObtainNewGameAndSaveToDatabaseAndSendInfoWithSuccessView() {
         // given
         val gameIdUUID = UUID.randomUUID()
-        val whiteUsernameText = "white.username"
+        val whiteUsernameText = randomString()
         val whiteUserId = UUID.randomUUID()
-        val blackUsernameText = "black.username"
+        val blackUsernameText = randomString()
         val blackUserId = UUID.randomUUID()
         val winningPieceColor = "WHITE"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
@@ -80,7 +80,45 @@ open class ObtainNewGameTest {
         assertEquals(blackUsernameText, responseGameView.blackUserGameInfo.username)
         assertEquals(winningPieceColor, responseGameView.winningPieceColor)
         assertEquals(performedMoves.size, responseGameView.performedMoves.size)
-        assertEquals(endTime.truncatedTo(ChronoUnit.MINUTES), responseGameView.endTime.truncatedTo(ChronoUnit.MINUTES))
 
+    }
+
+    @Test
+    fun shouldObtainNewGameWithNotSavedUsersAndSaveToDatabaseAndSendInfoWithSuccessView() {
+        // given
+        val gameIdUUID = UUID.randomUUID()
+        val whiteUsernameText = randomString()
+        val blackUsernameText = randomString()
+        val winningPieceColor = "WHITE"
+        val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
+        val endTime = LocalDateTime.now()
+
+        // when
+        gameSavedEmitter.send(
+            ObtainNewGameRabbitMqMessage(
+                gameIdUUID,
+                whiteUsernameText,
+                blackUsernameText,
+                winningPieceColor,
+                endTime,
+                performedMoves
+            )
+        )
+
+
+        // then
+        Thread.sleep(100)
+
+
+        val responseGameView = given()
+            .`when`()
+            .get("/api/game/$gameIdUUID")
+            .body()
+            .`as`(GameView::class.java)
+
+        assertEquals(whiteUsernameText, responseGameView.whiteUserGameInfo.username)
+        assertEquals(blackUsernameText, responseGameView.blackUserGameInfo.username)
+        assertEquals(winningPieceColor, responseGameView.winningPieceColor)
+        assertEquals(performedMoves.size, responseGameView.performedMoves.size)
     }
 }

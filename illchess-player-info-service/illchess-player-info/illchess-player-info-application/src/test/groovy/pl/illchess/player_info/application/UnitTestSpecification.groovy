@@ -7,6 +7,7 @@ import pl.illchess.player_info.application.game.command.out.SaveGame
 import pl.illchess.player_info.application.test_impl.InMemoryGameRepository
 import pl.illchess.player_info.application.test_impl.InMemoryUserRepository
 import pl.illchess.player_info.application.test_impl.TestPublishEvent
+import pl.illchess.player_info.application.user.command.out.CreateUser
 import pl.illchess.player_info.application.user.command.out.LoadUser
 import pl.illchess.player_info.application.user.command.out.SaveUser
 import spock.lang.Specification
@@ -18,6 +19,7 @@ class UnitTestSpecification extends Specification {
 
     protected LoadUser loadUser = inMemoryUserRepository
     protected SaveUser saveUser = inMemoryUserRepository
+    protected CreateUser createUser = inMemoryUserRepository
 
     protected SaveGame saveGame = inMemoryGameRepository
     protected LoadGame loadGame = inMemoryGameRepository
@@ -28,6 +30,7 @@ class UnitTestSpecification extends Specification {
             saveGame,
             saveUser,
             loadUser,
+            createUser,
             publishEvent
     )
 

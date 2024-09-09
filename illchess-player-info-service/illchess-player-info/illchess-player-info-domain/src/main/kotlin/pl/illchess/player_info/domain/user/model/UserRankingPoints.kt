@@ -9,4 +9,8 @@ data class UserRankingPoints(var value: Int) {
         return UserRankingPoints(value - decrement.value)
     }
 
+    companion object {
+        fun defaultRanking() = UserRankingPoints(800)
+    }
+
 }
