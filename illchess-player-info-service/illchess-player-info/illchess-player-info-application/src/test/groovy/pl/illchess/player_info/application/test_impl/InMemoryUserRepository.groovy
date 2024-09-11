@@ -5,6 +5,7 @@ import pl.illchess.player_info.application.user.command.out.CreateUser
 import pl.illchess.player_info.application.user.command.out.DeleteUser
 import pl.illchess.player_info.application.user.command.out.LoadUser
 import pl.illchess.player_info.application.user.command.out.SaveUser
+import pl.illchess.player_info.domain.user.command.CreateNewUser
 import pl.illchess.player_info.domain.user.model.User
 import pl.illchess.player_info.domain.user.model.UserId
 import pl.illchess.player_info.domain.user.model.Username
@@ -35,7 +36,7 @@ class InMemoryUserRepository implements LoadUser, SaveUser, DeleteUser, CreateUs
 
     @Override
     UserId create(@NotNull Username username) {
-        def user = User.@Companion.createUser(username)
+        def user = User.@Companion.createUser(new CreateNewUser(new UserId(UUID.randomUUID()), username))
         repo.put(user.id, user)
         user.id
     }

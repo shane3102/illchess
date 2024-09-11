@@ -2,9 +2,7 @@ package pl.illchess.player_info.server.dev.game
 
 import io.quarkus.test.common.QuarkusTestResource
 import io.quarkus.test.junit.QuarkusTest
-import io.restassured.RestAssured.given
 import io.smallrye.reactive.messaging.annotations.Merge
-import jakarta.inject.Inject
 import java.time.LocalDateTime
 import java.util.UUID
 import org.eclipse.microprofile.reactive.messaging.Channel
@@ -14,29 +12,19 @@ import org.junit.jupiter.api.Test
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage.PerformedMovesRabbitMqMessage
 import pl.illchess.player_info.application.game.query.out.model.GameView
-import pl.illchess.player_info.application.user.command.out.SaveUser
-import pl.illchess.player_info.domain.user.model.User
-import pl.illchess.player_info.domain.user.model.UserId
-import pl.illchess.player_info.domain.user.model.UserRankingPoints
-import pl.illchess.player_info.domain.user.model.Username
-import pl.illchess.player_info.server.dev.Specification
-import pl.illchess.player_info.server.it.SpecificationResourceIT
+import pl.illchess.player_info.server.dev.SpecificationResource
 
 
 @QuarkusTest
 @QuarkusTestResource(
-    value = SpecificationResourceIT::class,
+    value = SpecificationResource::class,
     restrictToAnnotatedClass = true
 )
-open class ObtainNewGameTest : Specification() {
+open class ObtainNewGameTest : ObtainNewGameSpecification() {
 
     @Merge
     @Channel("obtain-game")
     private lateinit var gameSavedEmitter: Emitter<ObtainNewGameRabbitMqMessage>
-
-    // TODO use use-case/api instead of out commands
-    @Inject
-    private lateinit var saveUser: SaveUser
 
     @Test
     fun shouldObtainNewGameAndSaveToDatabaseAndSendInfoWithSuccessView() {
@@ -50,8 +38,8 @@ open class ObtainNewGameTest : Specification() {
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
-        saveUser.save(User(UserId(whiteUserId), Username(whiteUsernameText), UserRankingPoints(0)))
-        saveUser.save(User(UserId(blackUserId), Username(blackUsernameText), UserRankingPoints(0)))
+        addUser(whiteUserId, whiteUsernameText).then().statusCode(200)
+        addUser(blackUserId, blackUsernameText).then().statusCode(200)
 
         // when
         gameSavedEmitter.send(
@@ -65,14 +53,10 @@ open class ObtainNewGameTest : Specification() {
             )
         )
 
-
         // then
-        Thread.sleep(100)
+        Thread.sleep(500)
 
-
-        val responseGameView = given()
-            .`when`()
-            .get("/api/game/$gameIdUUID")
+        val responseGameView = getGameViewById(gameIdUUID)
             .body()
             .`as`(GameView::class.java)
 
@@ -105,14 +89,10 @@ open class ObtainNewGameTest : Specification() {
             )
         )
 
-
         // then
         Thread.sleep(100)
 
-
-        val responseGameView = given()
-            .`when`()
-            .get("/api/game/$gameIdUUID")
+        val responseGameView = getGameViewById(gameIdUUID)
             .body()
             .`as`(GameView::class.java)
 
