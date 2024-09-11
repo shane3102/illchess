@@ -1,4 +1,4 @@
-package pl.illchess.player_info.server.it
+package pl.illchess.player_info.server.dev
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager
 import org.testcontainers.containers.MySQLContainer
@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 
 
 @Testcontainers
-open class SpecificationResourceIT : QuarkusTestResourceLifecycleManager {
+open class SpecificationResource : QuarkusTestResourceLifecycleManager {
 
     companion object {
 

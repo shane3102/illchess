@@ -8,6 +8,7 @@ import pl.illchess.player_info.application.user.command.out.CreateUser
 import pl.illchess.player_info.application.user.command.out.DeleteUser
 import pl.illchess.player_info.application.user.command.out.LoadUser
 import pl.illchess.player_info.application.user.command.out.SaveUser
+import pl.illchess.player_info.domain.user.command.CreateNewUser
 import pl.illchess.player_info.domain.user.model.User
 import pl.illchess.player_info.domain.user.model.UserId
 import pl.illchess.player_info.domain.user.model.Username
@@ -38,7 +39,9 @@ class JpaStreamerUserAdapter(
 
     @Transactional
     override fun create(username: Username): UserId {
-        val createdUser = User.createUser(username)
+        val createdUser = User.createUser(
+            CreateNewUser(username = username)
+        )
         repository.save(UserMapper.toEntity(createdUser))
         return createdUser.id
     }

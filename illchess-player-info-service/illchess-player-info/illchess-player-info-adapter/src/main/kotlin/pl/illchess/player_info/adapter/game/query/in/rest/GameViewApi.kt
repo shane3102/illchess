@@ -5,7 +5,7 @@ import jakarta.ws.rs.Path
 import pl.illchess.player_info.application.game.query.out.model.GameView
 import java.util.UUID
 
-@Path("/api/game")
+@Path("/api/player-info/game")
 interface GameViewApi {
 
     @GET
