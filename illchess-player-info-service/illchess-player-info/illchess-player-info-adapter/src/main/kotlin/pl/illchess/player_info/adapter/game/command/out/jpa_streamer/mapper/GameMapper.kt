@@ -7,6 +7,7 @@ import pl.illchess.player_info.domain.game.model.ChessSquare
 import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.Game
 import pl.illchess.player_info.domain.game.model.GameId
+import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
@@ -26,7 +27,7 @@ class GameMapper {
             game.blackUserGameInfo.rankingPointsAfterGame.value,
             game.blackUserGameInfo.rankingPointsChange.value,
             game.endTime.time,
-            game.winningPieceColor.name,
+            game.gameResult.name,
             game.performedMoves.map {
                 PerformedMoveEntity(
                     it.startSquare.name,
@@ -51,7 +52,7 @@ class GameMapper {
                 UserRankingPoints(gameEntity.blackRankingPointsAfterGame),
                 UserRankingPoints(gameEntity.blackRankingPointsChange)
             ),
-            PieceColor.of(gameEntity.winningPieceColor),
+            GameResult.of(gameEntity.winningPieceColor),
             EndTime(gameEntity.endTime),
             gameEntity.performedMoves.map {
                 PerformedMove(

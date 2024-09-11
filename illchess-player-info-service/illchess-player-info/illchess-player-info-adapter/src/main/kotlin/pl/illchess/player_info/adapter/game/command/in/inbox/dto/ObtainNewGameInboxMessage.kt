@@ -10,7 +10,7 @@ data class ObtainNewGameInboxMessage(
     val gameId: UUID,
     val whiteUsername: String,
     val blackUsername: String,
-    val winningPieceColor: String,
+    val gameResult: String,
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMoveInboxMessage>
 ) : Message(UUID.randomUUID(), 0, OffsetDateTime.now()) {
@@ -27,7 +27,7 @@ data class ObtainNewGameInboxMessage(
             gameId,
             whiteUsername,
             blackUsername,
-            winningPieceColor,
+            gameResult,
             endTime,
             performedMoves.map {
                 ObtainNewGameUseCase.PerformedMoveCmd(

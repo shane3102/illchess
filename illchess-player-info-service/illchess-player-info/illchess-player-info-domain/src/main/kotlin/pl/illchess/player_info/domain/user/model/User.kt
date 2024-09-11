@@ -1,7 +1,6 @@
 package pl.illchess.player_info.domain.user.model
 
 import java.util.UUID
-import pl.illchess.player_info.domain.game.command.ObtainNewGame
 import pl.illchess.player_info.domain.game.model.UserGameInfo
 import pl.illchess.player_info.domain.user.command.CreateNewUser
 
@@ -10,18 +9,8 @@ class User(
     val username: Username,
     val currentRanking: UserRankingPoints
 ) {
-    fun recalculateRanking(command: ObtainNewGame): UserGameInfo {
-        val previousRanking = currentRanking.copy()
-        currentRanking.value = (Math.random() * 1000).toInt()
-        val rankingPointsChange = currentRanking - previousRanking
-
-        return UserGameInfo(
-            this,
-            previousRanking,
-            currentRanking,
-            rankingPointsChange
-        )
-
+    fun applyNewRanking(userGameInfo: UserGameInfo) {
+        currentRanking.value = userGameInfo.rankingPointsAfterGame.value
     }
 
     companion object {

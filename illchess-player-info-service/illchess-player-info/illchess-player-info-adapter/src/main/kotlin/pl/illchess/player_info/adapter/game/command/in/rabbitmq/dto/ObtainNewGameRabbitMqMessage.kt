@@ -9,7 +9,7 @@ data class ObtainNewGameRabbitMqMessage(
     val gameId: UUID,
     val whiteUsername: String,
     val blackUsername: String,
-    val winningPieceColor: String,
+    val gameResult: String,
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMovesRabbitMqMessage>
 ) {
@@ -25,7 +25,7 @@ data class ObtainNewGameRabbitMqMessage(
             gameId,
             whiteUsername,
             blackUsername,
-            winningPieceColor,
+            gameResult,
             endTime,
             performedMoves.map {
                 ObtainNewGameUseCase.PerformedMoveCmd(
@@ -43,7 +43,7 @@ data class ObtainNewGameRabbitMqMessage(
             gameId,
             whiteUsername,
             blackUsername,
-            winningPieceColor,
+            gameResult,
             endTime,
             performedMoves.map {
                 ObtainNewGameInboxMessage.PerformedMoveInboxMessage(

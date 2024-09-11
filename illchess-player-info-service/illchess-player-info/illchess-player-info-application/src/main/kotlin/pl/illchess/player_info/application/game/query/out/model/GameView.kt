@@ -7,7 +7,7 @@ data class GameView(
     val id: UUID,
     val whiteUserGameInfo: UserGameInfoView,
     val blackUserGameInfo: UserGameInfoView,
-    val winningPieceColor: String,
+    val gameResult: String,
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMoveView>
 ) {
