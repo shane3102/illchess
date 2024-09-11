@@ -6,6 +6,7 @@ import pl.illchess.player_info.domain.game.command.ObtainNewGame
 import pl.illchess.player_info.domain.game.model.ChessSquare
 import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.GameId
+import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
@@ -19,7 +20,7 @@ interface ObtainNewGameUseCase {
         val id: UUID,
         val whiteUsername: String,
         val blackUsername: String,
-        val winningPieceColor: String,
+        val gameResult: String,
         val endTime: LocalDateTime,
         val performedMoves: List<PerformedMoveCmd>
     ) {
@@ -28,7 +29,7 @@ interface ObtainNewGameUseCase {
                 GameId(id),
                 whitePlayer,
                 blackPlayer,
-                PieceColor.valueOf(winningPieceColor),
+                GameResult.of(gameResult),
                 EndTime(endTime),
                 performedMoves.map {
                     PerformedMove(

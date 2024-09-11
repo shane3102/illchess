@@ -34,7 +34,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         val whiteUserId = UUID.randomUUID()
         val blackUsernameText = randomString()
         val blackUserId = UUID.randomUUID()
-        val winningPieceColor = "WHITE"
+        val gameResult = "WHITE_WON"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
@@ -47,7 +47,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
                 gameIdUUID,
                 whiteUsernameText,
                 blackUsernameText,
-                winningPieceColor,
+                gameResult,
                 endTime,
                 performedMoves
             )
@@ -62,7 +62,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
 
         assertEquals(whiteUsernameText, responseGameView.whiteUserGameInfo.username)
         assertEquals(blackUsernameText, responseGameView.blackUserGameInfo.username)
-        assertEquals(winningPieceColor, responseGameView.winningPieceColor)
+        assertEquals(gameResult, responseGameView.gameResult)
         assertEquals(performedMoves.size, responseGameView.performedMoves.size)
 
     }
@@ -73,7 +73,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         val gameIdUUID = UUID.randomUUID()
         val whiteUsernameText = randomString()
         val blackUsernameText = randomString()
-        val winningPieceColor = "WHITE"
+        val gameResult = "WHITE_WON"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
@@ -83,7 +83,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
                 gameIdUUID,
                 whiteUsernameText,
                 blackUsernameText,
-                winningPieceColor,
+                gameResult,
                 endTime,
                 performedMoves
             )
@@ -98,7 +98,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
 
         assertEquals(whiteUsernameText, responseGameView.whiteUserGameInfo.username)
         assertEquals(blackUsernameText, responseGameView.blackUserGameInfo.username)
-        assertEquals(winningPieceColor, responseGameView.winningPieceColor)
+        assertEquals(gameResult, responseGameView.gameResult)
         assertEquals(performedMoves.size, responseGameView.performedMoves.size)
     }
 }
