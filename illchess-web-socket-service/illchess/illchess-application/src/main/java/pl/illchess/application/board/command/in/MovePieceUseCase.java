@@ -17,8 +17,6 @@ public interface MovePieceUseCase {
         UUID boardId,
         String startSquare,
         String targetSquare,
-        String pieceColor,
-        String pieceType,
         String pawnPromotedToPieceType,
         String username
     ) {

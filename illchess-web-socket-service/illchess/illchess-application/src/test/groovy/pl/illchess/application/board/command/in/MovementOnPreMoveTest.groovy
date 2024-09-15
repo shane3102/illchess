@@ -29,9 +29,6 @@ class MovementOnPreMoveTest extends BoardSpecification {
                             boardId.uuid(),
                             it.first(),
                             it.second(),
-                            // TODO to remove (?)
-                            null,
-                            null,
                             null,
                             WHITE == preMovingPlayer ? username1 : username2
                     )
@@ -44,9 +41,6 @@ class MovementOnPreMoveTest extends BoardSpecification {
                             boardId.uuid(),
                             it.first(),
                             it.second(),
-                            // TODO to remove (?)
-                            null,
-                            null,
                             null,
                             WHITE == preMovingPlayer ? username2 : username1
                     )
@@ -109,9 +103,6 @@ class MovementOnPreMoveTest extends BoardSpecification {
                             boardId.uuid(),
                             it.first(),
                             it.second(),
-                            // TODO to remove (?)
-                            null,
-                            null,
                             null,
                             WHITE == preMovingPlayer ? username1 : username2
                     )
@@ -124,9 +115,6 @@ class MovementOnPreMoveTest extends BoardSpecification {
                             boardId.uuid(),
                             it.first(),
                             it.second(),
-                            // TODO to remove (?)
-                            null,
-                            null,
                             null,
                             WHITE == preMovingPlayer ? username2 : username1
                     )
