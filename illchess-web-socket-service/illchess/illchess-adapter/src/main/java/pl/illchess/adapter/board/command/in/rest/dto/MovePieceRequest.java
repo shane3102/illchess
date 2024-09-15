@@ -8,8 +8,6 @@ public record MovePieceRequest(
     UUID boardId,
     String startSquare,
     String targetSquare,
-    String pieceColor,
-    String pieceType,
     String pawnPromotedToPieceType,
     String username
 ) {
@@ -18,8 +16,6 @@ public record MovePieceRequest(
             boardId,
             startSquare,
             targetSquare,
-            pieceColor,
-            pieceType,
             pawnPromotedToPieceType,
             username
         );

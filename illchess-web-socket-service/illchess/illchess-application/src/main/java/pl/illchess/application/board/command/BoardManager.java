@@ -78,10 +78,8 @@ public class BoardManager implements
     public void movePiece(MovePieceCmd cmd) {
         log.info("");
         log.info(
-            "At board with id = {} piece of type = {} and color = {} is moved from square = {} to square = {}",
+            "At board with id = {} piece is moved from square = {} to square = {}",
             cmd.boardId(),
-            cmd.pieceType(),
-            cmd.pieceColor(),
             cmd.startSquare(),
             cmd.targetSquare()
         );
