@@ -98,7 +98,7 @@ public final class SquaresBidirectionalLinkedList {
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getConnectedContainingKingSquareRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())));
+        return getConnectedBySkipKingRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())), true);
     }
 
     public Set<Square> getAttackingRayOnGivenSquare(
@@ -106,49 +106,20 @@ public final class SquaresBidirectionalLinkedList {
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getConnectedNotContainingKingSquareRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())));
+        return getConnectedBySkipKingRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())), false);
     }
 
-    private Set<Square> getConnectedContainingKingSquareRememberVisited(
+    private Set<Square> getConnectedBySkipKingRememberVisited(
         Square givenSquare,
         PieceColor currentPieceColor,
         PiecesLocations locations,
-        Set<Square> visitedSquares
+        Set<Square> visitedSquares,
+        boolean skipKing
     ) {
         Set<Square> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(Square.valueOf(square.name()))).collect(Collectors.toSet());
 
-        Set<Square> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, true);
-        Set<Square> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, true);
-
-        if (leftNodeSquares != null && leftNodeSquares.contains(givenSquare)) {
-            return Stream.of(
-                    newVisitedSquares,
-                    leftNodeSquares
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-        } else if (rightNodeSquares != null && rightNodeSquares.contains(givenSquare)) {
-            return Stream.of(
-                    newVisitedSquares,
-                    rightNodeSquares
-                )
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-        } else {
-            return Collections.emptySet();
-        }
-    }
-
-    private Set<Square> getConnectedNotContainingKingSquareRememberVisited(
-        Square givenSquare,
-        PieceColor currentPieceColor,
-        PiecesLocations locations,
-        Set<Square> visitedSquares
-    ) {
-        Set<Square> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(Square.valueOf(square.name()))).collect(Collectors.toSet());
-
-        Set<Square> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, false);
-        Set<Square> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, false);
+        Set<Square> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, skipKing);
+        Set<Square> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, skipKing);
 
         if (leftNodeSquares != null && leftNodeSquares.contains(givenSquare)) {
             return Stream.of(
