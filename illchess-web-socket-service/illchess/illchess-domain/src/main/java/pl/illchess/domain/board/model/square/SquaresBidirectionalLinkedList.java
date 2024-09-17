@@ -6,6 +6,7 @@ import pl.illchess.domain.piece.model.type.King;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -44,25 +45,19 @@ public final class SquaresBidirectionalLinkedList {
         PiecesLocations piecesLocations,
         boolean occupiedStatus
     ) {
-        return Stream.of(
-                leftNode == null
-                    ||
-                    (occupiedStatus
-                        ? piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isEmpty()
-                        : piecesLocations.findPieceOnSquare(Square.valueOf(leftNode.square.name())).isPresent()
-                    )
-                    ? null :
-                    Square.valueOf(leftNode.square.name()),
-                rightNode == null
-                    || (occupiedStatus
-                    ? piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isEmpty()
-                    : piecesLocations.findPieceOnSquare(Square.valueOf(rightNode.square.name())).isPresent()
-                )
-                    ? null :
-                    Square.valueOf(rightNode.square.name())
-            )
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
+        Set<Square> result = new HashSet<>();
+
+        boolean doGetSquareOnLeftNode = doGetSquareByOccupiedStatus(leftNode, piecesLocations, occupiedStatus);
+        boolean doGetSquareOnRightNode = doGetSquareByOccupiedStatus(rightNode, piecesLocations, occupiedStatus);
+
+        if (doGetSquareOnLeftNode) {
+            result.add(Square.valueOf(leftNode.square.name()));
+        }
+        if (doGetSquareOnRightNode) {
+            result.add(Square.valueOf(rightNode.square.name()));
+        }
+
+        return result;
     }
 
     SquaresBidirectionalLinkedList getNodeBySquare(SimpleSquare square) {
@@ -275,6 +270,21 @@ public final class SquaresBidirectionalLinkedList {
             )
             .collect(Collectors.toSet());
 
+    }
+
+    private boolean doGetSquareByOccupiedStatus(
+        SquaresBidirectionalLinkedList node,
+        PiecesLocations piecesLocations,
+        boolean occupiedStatus
+    ) {
+        if (node == null) {
+            return false;
+        }
+        Optional<Piece> allegedPieceOnSquare = piecesLocations.findPieceOnSquare(Square.valueOf(node.square.name()));
+
+        return occupiedStatus
+            ? allegedPieceOnSquare.isPresent()
+            : allegedPieceOnSquare.isEmpty();
     }
 
 }
