@@ -1,12 +1,11 @@
 package pl.illchess.domain.board.model.square;
 
-import pl.illchess.domain.piece.model.info.PieceAttackingRay.SquaresInRay;
-import pl.illchess.domain.piece.model.info.PieceColor;
-
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import pl.illchess.domain.piece.model.info.PieceAttackingRay.SquaresInRay;
+import pl.illchess.domain.piece.model.info.PieceColor;
 
 // TODO operate on streams instead of collecting everything every five fucking minutes
 public class SquaresConnectedContents {
@@ -68,10 +67,7 @@ public class SquaresConnectedContents {
             return Collections.emptySet();
         }
 
-        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, true)
-            .stream()
-            .map(it -> Square.valueOf(it.name()))
-            .collect(Collectors.toSet());
+        return nodeBySquare.getClosestNeighboursByOccupiedStatus(piecesLocations, true);
     }
 
     public Set<Square> getConnectedUntilPieceEncountered(
@@ -91,7 +87,6 @@ public class SquaresConnectedContents {
         return nodeBySquare.getAllConnectedTillPieceEncountered(currentPieceColor, locations)
             .stream()
             .filter(it -> !Objects.equals(it.name(), checkedSquare.name()))
-            .map(it -> Square.valueOf(it.name()))
             .collect(Collectors.toSet());
     }
 
@@ -115,14 +110,11 @@ public class SquaresConnectedContents {
         }
 
         return nodeBySquare.getPinningRayBySquare(
-                pinningCapablePieceSquare,
-                kingPieceSquare,
-                currentPieceColor,
-                locations
-            )
-            .stream()
-            .map(it -> Square.valueOf(it.name()))
-            .collect(Collectors.toSet());
+            pinningCapablePieceSquare,
+            kingPieceSquare,
+            currentPieceColor,
+            locations
+        );
 
     }
 
@@ -158,7 +150,6 @@ public class SquaresConnectedContents {
 
         Set<Square> attackingRay = attackRayOnGivenSquare
             .stream()
-            .map(it -> Square.valueOf(it.name()))
             .filter(it -> !it.equals(checkRayPieceCapableSquare))
             .collect(Collectors.toSet());
 
