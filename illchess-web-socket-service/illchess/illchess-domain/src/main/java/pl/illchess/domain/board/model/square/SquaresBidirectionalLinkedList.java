@@ -67,14 +67,24 @@ public final class SquaresBidirectionalLinkedList {
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, Set.of(Square.valueOf(square.name())), true);
+        return getAllConnectedTillPieceEncounteredRememberVisited(
+            currentPieceColor,
+            locations,
+            Set.of(Square.valueOf(square.name())),
+            true
+        );
     }
 
     public Set<Square> getAllConnectedTillPieceEncountered(
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, Set.of(Square.valueOf(square.name())), false);
+        return getAllConnectedTillPieceEncounteredRememberVisited(
+            currentPieceColor,
+            locations,
+            Set.of(Square.valueOf(square.name())),
+            false
+        );
     }
 
     public Set<Square> getPinningRayBySquare(
@@ -97,7 +107,13 @@ public final class SquaresBidirectionalLinkedList {
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getConnectedBySkipKingRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())), true);
+        return getConnectedBySkipKingRememberVisited(
+            givenSquare,
+            currentPieceColor,
+            locations,
+            Set.of(Square.valueOf(square.name())),
+            true
+        );
     }
 
     public Set<Square> getAttackingRayOnGivenSquare(
@@ -105,7 +121,13 @@ public final class SquaresBidirectionalLinkedList {
         PieceColor currentPieceColor,
         PiecesLocations locations
     ) {
-        return getConnectedBySkipKingRememberVisited(givenSquare, currentPieceColor, locations, Set.of(Square.valueOf(square.name())), false);
+        return getConnectedBySkipKingRememberVisited(
+            givenSquare,
+            currentPieceColor,
+            locations,
+            Set.of(Square.valueOf(square.name())),
+            false
+        );
     }
 
     private Set<Square> getConnectedBySkipKingRememberVisited(
@@ -115,7 +137,11 @@ public final class SquaresBidirectionalLinkedList {
         Set<Square> visitedSquares,
         boolean skipKing
     ) {
-        Set<Square> newVisitedSquares = Stream.concat(visitedSquares.stream(), Stream.of(Square.valueOf(square.name()))).collect(Collectors.toSet());
+        Set<Square> newVisitedSquares = Stream.concat(
+                visitedSquares.stream(),
+                Stream.of(Square.valueOf(square.name()))
+            )
+            .collect(Collectors.toSet());
 
         Set<Square> leftNodeSquares = getNodeSquares(leftNode, currentPieceColor, locations, newVisitedSquares, skipKing);
         Set<Square> rightNodeSquares = getNodeSquares(rightNode, currentPieceColor, locations, newVisitedSquares, skipKing);
