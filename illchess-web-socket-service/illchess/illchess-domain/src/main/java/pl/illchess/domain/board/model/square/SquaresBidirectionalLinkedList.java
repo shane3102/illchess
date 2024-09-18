@@ -1,9 +1,5 @@
 package pl.illchess.domain.board.model.square;
 
-import pl.illchess.domain.piece.model.Piece;
-import pl.illchess.domain.piece.model.info.PieceColor;
-import pl.illchess.domain.piece.model.type.King;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,6 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import pl.illchess.domain.piece.model.Piece;
+import pl.illchess.domain.piece.model.info.PieceColor;
+import pl.illchess.domain.piece.model.type.King;
 
 // TODO operate on streams instead of collecting everything every five fucking minutes
 public final class SquaresBidirectionalLinkedList {
@@ -174,12 +173,8 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(Square.valueOf(examinedNode.square.name()))) {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
             Optional<Piece> pieceOnSquare = locations.findPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent()) {
-                if (skipKing && pieceOnSquare.get() instanceof King) {
-                    nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, true);
-                } else {
-                    nodeSquares = Set.of(Square.valueOf(examinedNode.square.name()));
-                }
+            if (pieceOnSquare.isPresent() && !(skipKing && pieceOnSquare.get() instanceof King)) {
+                nodeSquares = Set.of(Square.valueOf(examinedNode.square.name()));
             } else {
                 nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, skipKing);
             }
