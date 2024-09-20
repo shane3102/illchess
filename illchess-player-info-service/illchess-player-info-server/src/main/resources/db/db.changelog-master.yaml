@@ -8,3 +8,6 @@ databaseChangeLog:
   - include:
       file: changes/003-add-end-time-to-game.yaml
       relativeToChangeLogFile: true
+  - include:
+      file: changes/004-add-inbox-outbox-message.yaml
+      relativeToChangeLogFile: true

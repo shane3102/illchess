@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - createTable:
+            tableName: inbox_outbox_message
+            remarks: Tabela zawierająca użytkowników
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  remarks: Klucz główny
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: inbox_outbox_message_PK
+              - column:
+                  name: retry_count
+                  type: int
+                  remarks: Ilość ponownych prób wykonania operacji dla danej encji
+              - column:
+                  name: occurred_on
+                  type: DATETIME
+                  remarks: Moment dodania encji do bazy danych
+              - column:
+                  name: class_name
+                  type: TEXT
+                  remarks: Nazwa klasy odpowiadającej zapisanej encji
+              - column:
+                  name: content
+                  type: json
+                  remarks: Informacje zawarte w klasie potrzebne do wykonania operacji
