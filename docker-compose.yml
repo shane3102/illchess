@@ -21,7 +21,7 @@ services:
         condition: service_healthy
     environment:
       - REDIS_HOSTNAME=6379
-      - REDIS_HOSTNAME=gamedb
+      - REDIS_HOSTNAME=game-db
 
   # Stockfish service
   chess-stockfish-service:
