@@ -1,6 +1,5 @@
 package pl.illchess.player_info.server.dev.game
 
-import io.quarkus.test.common.QuarkusTestResource
 import io.quarkus.test.junit.QuarkusTest
 import io.smallrye.reactive.messaging.annotations.Merge
 import java.time.LocalDateTime
@@ -12,14 +11,9 @@ import org.junit.jupiter.api.Test
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage.PerformedMovesRabbitMqMessage
 import pl.illchess.player_info.application.game.query.out.model.GameView
-import pl.illchess.player_info.server.dev.SpecificationResource
 
 
 @QuarkusTest
-@QuarkusTestResource(
-    value = SpecificationResource::class,
-    restrictToAnnotatedClass = true
-)
 open class ObtainNewGameTest : ObtainNewGameSpecification() {
 
     @Merge
