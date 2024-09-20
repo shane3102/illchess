@@ -162,8 +162,6 @@ public record Board(
                 .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
             return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
         } else if (playerByUsername.isPresent() && !Objects.equals(boardState.currentPlayer(), playerByUsername.get())) {
-            System.out.println(playerByUsername.get());
-            System.out.println(boardState.currentPlayer());
             Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
                 .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
             return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
