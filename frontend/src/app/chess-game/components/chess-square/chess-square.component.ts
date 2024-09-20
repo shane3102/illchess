@@ -91,8 +91,6 @@ export class ChessSquareComponent implements OnInit {
           'boardId': this.boardId,
           'startSquare': this.draggedPieceInfo.squareInfo.file + this.draggedPieceInfo.squareInfo.rank,
           'targetSquare': this.squareInfo.file + this.squareInfo.rank,
-          'pieceColor': this.draggedPieceInfo.pieceInfo.color,
-          'pieceType': this.draggedPieceInfo.pieceInfo.type,
           'username': this.username
         }
         this.pieceDroppedInfoEmitter.emit(moveRequest)
