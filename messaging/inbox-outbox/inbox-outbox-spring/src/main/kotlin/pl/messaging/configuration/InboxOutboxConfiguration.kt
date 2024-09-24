@@ -37,6 +37,7 @@ open class InboxOutboxConfiguration(
     open fun taskScheduler(): TaskScheduler {
         val scheduler = ThreadPoolTaskScheduler()
         scheduler.poolSize = if (inboxes.isEmpty()) 1 else inboxes.size
+        scheduler.initialize()
         return scheduler
     }
 
