@@ -1,19 +1,21 @@
 package pl.illchess.adapter.board.query.out.redis.mapper;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.application.board.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.application.board.query.out.model.BoardGameFinishedView;
+import pl.illchess.application.board.query.out.model.BoardGameFinishedView.PerformedMovesGameFinishedView;
 import pl.illchess.application.board.query.out.model.BoardView;
 import pl.illchess.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.application.board.query.out.model.MoveView;
 import pl.illchess.application.board.query.out.model.PieceView;
 import pl.illchess.application.board.query.out.model.PlayerView;
 import pl.illchess.domain.piece.model.info.PieceType;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BoardViewMapper {
 
@@ -83,6 +85,36 @@ public class BoardViewMapper {
                 toPerformedMoves(entity.moveStackData())
             );
         }
+    }
+
+    public static BoardGameFinishedView toBoardWithFinishedGameView(BoardEntity entity) {
+        if (entity == null) {
+            return null;
+        } else {
+            return new BoardGameFinishedView(
+                entity.boardId(),
+                entity.boardState().whitePlayer().username(),
+                entity.boardState().blackPlayer().username(),
+                toGameResult(entity.boardState().victoriousPlayerColor()),
+                LocalDateTime.now(),
+                entity.moveStackData().stream().map(
+                    it -> new PerformedMovesGameFinishedView(
+                        it.startSquare(),
+                        it.targetSquare(),
+                        toPerformedMove(it),
+                        it.movedPiece().pieceColor()
+                    )
+                ).toList()
+            );
+        }
+    }
+
+    private static String toGameResult(String victoriousColor) {
+        return switch (victoriousColor) {
+            case "WHITE" -> "WHITE_WON";
+            case "BLACK" -> "BLACK_WON";
+            default -> "DRAW";
+        };
     }
 
     private static MoveView toLastPerformedMove(BoardEntity entity) {
