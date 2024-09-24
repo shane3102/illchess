@@ -52,6 +52,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>pl.illchess.messaging</groupId>
+            <artifactId>inbox-outbox-spring</artifactId>
+            <version>${inbox-outbox.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

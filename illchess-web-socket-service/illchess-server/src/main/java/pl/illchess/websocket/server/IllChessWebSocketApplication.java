@@ -2,7 +2,9 @@ package pl.illchess.websocket.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = "pl.illchess")
 public class IllChessWebSocketApplication {
 
