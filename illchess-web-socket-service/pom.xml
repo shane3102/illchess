@@ -26,6 +26,7 @@
         <inbox-outbox.version>1.0.0-SNAPSHOT</inbox-outbox.version>
         <spock.version>2.2-M3-groovy-4.0</spock.version>
         <groovy-all.version>4.0.16</groovy-all.version>
+        <awaitility-groovy.version>4.2.0</awaitility-groovy.version>
         <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
     </properties>
 
