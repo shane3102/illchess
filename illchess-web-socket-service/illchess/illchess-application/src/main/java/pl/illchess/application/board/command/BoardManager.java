@@ -188,7 +188,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.resign(command);
         saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        eventPublisher.publishDomainEvent(new GameFinished(command.boardId()));
         log.info("User {} successfully resigned game on board with id {}", cmd.username(), cmd.boardId());
     }
 
