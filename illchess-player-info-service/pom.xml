@@ -31,6 +31,7 @@
         <jpastreamer.version>3.0.3.Final</jpastreamer.version>
         <lombok.version>1.18.30</lombok.version>
         <jackson.module.kotlin.version>2.9.8</jackson.module.kotlin.version>
+        <awaitility.version>4.2.0</awaitility.version>
     </properties>
 
     <dependencies>
