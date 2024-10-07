@@ -10,6 +10,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.adapter.inbox_outbox.out.redis.model.InboxOutboxMessageEntity;
 
 @Configuration
 @EnableRedisRepositories
@@ -30,9 +31,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, BoardEntity> boardRedisTemplate() {
+    public RedisTemplate<String, BoardEntity> boardRedisTemplate(
+        JedisConnectionFactory connectionFactory
+    ) {
         RedisTemplate<String, BoardEntity> boardTemplate = new RedisTemplate<>();
-        boardTemplate.setConnectionFactory(connectionFactory());
+        boardTemplate.setConnectionFactory(connectionFactory);
 
         boardTemplate.setKeySerializer(new StringRedisSerializer());
         boardTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -43,6 +46,24 @@ public class RedisConfig {
         boardTemplate.afterPropertiesSet();
 
         return boardTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, InboxOutboxMessageEntity> inboxOutboxMessageRedisTemplate(
+        JedisConnectionFactory connectionFactory
+    ) {
+        RedisTemplate<String, InboxOutboxMessageEntity> inboxOutboxMessageTemplate = new RedisTemplate<>();
+        inboxOutboxMessageTemplate.setConnectionFactory(connectionFactory);
+
+        inboxOutboxMessageTemplate.setKeySerializer(new StringRedisSerializer());
+        inboxOutboxMessageTemplate.setHashKeySerializer(new StringRedisSerializer());
+
+        inboxOutboxMessageTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+
+        inboxOutboxMessageTemplate.setEnableTransactionSupport(true);
+        inboxOutboxMessageTemplate.afterPropertiesSet();
+
+        return inboxOutboxMessageTemplate;
     }
 
 }

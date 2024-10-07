@@ -25,7 +25,7 @@ public class ObtainBoardGameFinishedInboxListener {
     private final BoardGameFinishedQueryPort boardGameFinishedQueryPort;
 
     @InboxOutboxListener(
-        retryCount = 20,
+        retryCount = 10000,
         batchSize = 100,
         cron = "*/30 * * * * *"
     )
