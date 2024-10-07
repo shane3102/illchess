@@ -8,6 +8,11 @@ public class ObtainBoardGameFinishedInboxMessage extends Message {
 
     private final UUID gameId;
 
+    public ObtainBoardGameFinishedInboxMessage() {
+        super(UUID.randomUUID(), 0, OffsetDateTime.now());
+        gameId = null;
+    }
+
     public ObtainBoardGameFinishedInboxMessage(UUID gameId) {
         super(UUID.randomUUID(), 0, OffsetDateTime.now());
         this.gameId = gameId;
