@@ -22,6 +22,10 @@ services:
     environment:
       - REDIS_HOSTNAME=6379
       - REDIS_HOSTNAME=game-db
+      - SPRING_RABBITMQ_HOST=rabbit-mq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
 
   # Stockfish service
   chess-stockfish-service:
@@ -33,12 +37,6 @@ services:
       - URLS_GAME-SERVICE=http://illchess-web-socket-service:8080
 
   # Player info service
-  rabbit-mq:
-    container_name: rabbit-mq
-    image: rabbitmq:3-management
-    ports:
-      - 15672:15672
-      - 5672:5672
   player-info-db:
     container_name: player-info-db
     image: mysql
@@ -47,7 +45,35 @@ services:
       MYSQL_USER: 'admin'
       MYSQL_PASSWORD: 'admin'
       MYSQL_ROOT_PASSWORD: 'admin'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
     ports:
       - 3306:3306
     expose:
       - '3306'
+  chess-player-info-service:
+    container_name: illchess-player-info-service
+    image: illchess-player-info-service
+    ports:
+      - 420:420
+    depends_on:
+      player-info-db:
+        condition: service_healthy
+    environment:
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://player-info-db:3306/player_info_db
+      - QUARKUS_DATASOURCE_USERNAME=admin
+      - QUARKUS_DATASOURCE_PASSWORD=admin
+      - RABBITMQ-HOST=rabbit-mq
+      - RABBITMQ-PORT=5672
+      - RABBITMQ-USERNAME=guest
+      - RABBITMQ-PASSWORD=guest
+
+  # Shared
+  rabbit-mq:
+    container_name: rabbit-mq
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
