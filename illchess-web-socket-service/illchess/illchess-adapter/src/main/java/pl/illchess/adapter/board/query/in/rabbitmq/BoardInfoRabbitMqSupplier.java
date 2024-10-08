@@ -25,6 +25,7 @@ public class BoardInfoRabbitMqSupplier implements BoardViewRabbitMqSupplier {
     private final RabbitTemplate rabbitTemplate;
     private final BoardGameFinishedQueryPort boardGameFinishedQueryPort;
 
+    // TODO make connection to rabbitmq on startup
     @Override
     public BoardGameFinishedView gameFinishedSupplier(GameFinished gameFinished) {
         try {

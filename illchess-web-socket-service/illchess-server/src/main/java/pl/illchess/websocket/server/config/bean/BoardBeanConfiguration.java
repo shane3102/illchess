@@ -15,7 +15,7 @@ public class BoardBeanConfiguration {
 
     @Bean(value = OBTAIN_GAME_QUEUE)
     Queue obtainGameQueue() {
-        return new Queue(OBTAIN_GAME_QUEUE, false);
+        return new Queue(OBTAIN_GAME_QUEUE, true);
     }
 
     @Bean
