@@ -23,7 +23,7 @@ class InboxOutboxRepositoryImplementationTest : InboxOutboxRepositoryImplementat
 
     @Merge
     @Channel("obtain-game")
-    private lateinit var gameSavedEmitter: Emitter<ObtainNewGameRabbitMqMessage>
+    private lateinit var gameSavedEmitter: Emitter<ByteArray>
 
     @Test
     fun shouldBeSavedAsInboxOutboxEventOnFailing() {
@@ -40,16 +40,15 @@ class InboxOutboxRepositoryImplementationTest : InboxOutboxRepositoryImplementat
         val endTime = LocalDateTime.now()
 
         // when
-        gameSavedEmitter.send(
-            ObtainNewGameRabbitMqMessage(
-                gameIdUUID,
-                whiteUsernameText,
-                blackUsernameText,
-                gameResult,
-                endTime,
-                performedMoves
-            )
+        val message = ObtainNewGameRabbitMqMessage(
+            gameIdUUID,
+            whiteUsernameText,
+            blackUsernameText,
+            gameResult,
+            endTime,
+            performedMoves
         )
+        gameSavedEmitter.send(objectMapper.writeValueAsString(message).toByteArray())
         Thread.sleep(500)
 
         // then

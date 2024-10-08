@@ -21,7 +21,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
 
     @Merge
     @Channel("obtain-game")
-    private lateinit var gameSavedEmitter: Emitter<ObtainNewGameRabbitMqMessage>
+    private lateinit var gameSavedEmitter: Emitter<ByteArray>
 
     @Test
     fun shouldObtainNewGameAndSaveToDatabaseAndSendInfoWithSuccessView() {
@@ -39,16 +39,15 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         addUser(blackUserId, blackUsernameText).then().statusCode(200)
 
         // when
-        gameSavedEmitter.send(
-            ObtainNewGameRabbitMqMessage(
-                gameIdUUID,
-                whiteUsernameText,
-                blackUsernameText,
-                gameResult,
-                endTime,
-                performedMoves
-            )
+        val message = ObtainNewGameRabbitMqMessage(
+            gameIdUUID,
+            whiteUsernameText,
+            blackUsernameText,
+            gameResult,
+            endTime,
+            performedMoves
         )
+        gameSavedEmitter.send(objectMapper.writeValueAsString(message).toByteArray())
 
         // then
 
@@ -77,16 +76,15 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         val endTime = LocalDateTime.now()
 
         // when
-        gameSavedEmitter.send(
-            ObtainNewGameRabbitMqMessage(
-                gameIdUUID,
-                whiteUsernameText,
-                blackUsernameText,
-                gameResult,
-                endTime,
-                performedMoves
-            )
+        val message = ObtainNewGameRabbitMqMessage(
+            gameIdUUID,
+            whiteUsernameText,
+            blackUsernameText,
+            gameResult,
+            endTime,
+            performedMoves
         )
+        gameSavedEmitter.send(objectMapper.writeValueAsString(message).toByteArray())
 
         // then
 
