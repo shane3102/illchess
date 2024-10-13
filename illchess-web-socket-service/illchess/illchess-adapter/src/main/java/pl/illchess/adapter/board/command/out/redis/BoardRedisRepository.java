@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.adapter.board.command.out.redis.mapper.BoardMapper;
 import pl.illchess.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.application.board.command.out.DeleteBoard;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.domain.board.model.Board;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardRedisRepository implements SaveBoard, LoadBoard {
+public class BoardRedisRepository implements SaveBoard, LoadBoard, DeleteBoard {
 
     private static final String BOARD_HASH_KEY = "BOARD";
 
@@ -47,5 +48,10 @@ public class BoardRedisRepository implements SaveBoard, LoadBoard {
         BoardEntity savedEntity = BoardMapper.toEntity(savedBoard);
         template.opsForHash().put(BOARD_HASH_KEY, savedEntity.boardId().toString(), savedEntity);
         return savedBoard.boardId();
+    }
+
+    @Override
+    public void deleteBoard(BoardId boardId) {
+        template.opsForHash().delete(BOARD_HASH_KEY, boardId.uuid().toString());
     }
 }

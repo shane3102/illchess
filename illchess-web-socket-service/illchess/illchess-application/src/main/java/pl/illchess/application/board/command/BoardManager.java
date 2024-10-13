@@ -6,6 +6,7 @@ import pl.illchess.application.board.command.in.AcceptDrawUseCase;
 import pl.illchess.application.board.command.in.AcceptTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
 import pl.illchess.application.board.command.in.CheckLegalityMoveUseCase;
+import pl.illchess.application.board.command.in.DeleteBoardWithFinishedGameUseCase;
 import pl.illchess.application.board.command.in.EstablishFenStringOfBoardUseCase;
 import pl.illchess.application.board.command.in.JoinOrInitializeNewGameUseCase;
 import pl.illchess.application.board.command.in.MovePieceUseCase;
@@ -14,6 +15,7 @@ import pl.illchess.application.board.command.in.ProposeTakingBackLastMoveUseCase
 import pl.illchess.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.application.board.command.in.ResignGameUseCase;
+import pl.illchess.application.board.command.out.DeleteBoard;
 import pl.illchess.application.board.command.out.LoadBoard;
 import pl.illchess.application.board.command.out.SaveBoard;
 import pl.illchess.application.commons.command.out.PublishEvent;
@@ -21,6 +23,7 @@ import pl.illchess.domain.board.command.AcceptDraw;
 import pl.illchess.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.domain.board.command.CheckIsCheckmateOrStaleMate;
 import pl.illchess.domain.board.command.CheckLegalMoves;
+import pl.illchess.domain.board.command.DeleteBoardWithFinishedGame;
 import pl.illchess.domain.board.command.EstablishFenStringOfBoard;
 import pl.illchess.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.domain.board.command.MovePiece;
@@ -60,17 +63,20 @@ public class BoardManager implements
     ProposeTakingBackLastMoveUseCase,
     RejectTakingBackLastMoveUseCase,
     AcceptTakingBackLastMoveUseCase,
-    EstablishFenStringOfBoardUseCase {
+    EstablishFenStringOfBoardUseCase,
+    DeleteBoardWithFinishedGameUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
     private final LoadBoard loadBoard;
     private final SaveBoard saveBoard;
+    private final DeleteBoard deleteBoard;
     private final PublishEvent eventPublisher;
 
-    public BoardManager(LoadBoard loadBoard, SaveBoard saveBoard, PublishEvent eventPublisher) {
+    public BoardManager(LoadBoard loadBoard, SaveBoard saveBoard, DeleteBoard deleteBoard, PublishEvent eventPublisher) {
         this.loadBoard = loadBoard;
         this.saveBoard = saveBoard;
+        this.deleteBoard = deleteBoard;
         this.eventPublisher = eventPublisher;
     }
 
@@ -277,5 +283,13 @@ public class BoardManager implements
         saveBoard.saveBoard(board);
         eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
         log.info("User {} successfully accepted taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
+    }
+
+    @Override
+    public void deleteBoardWithFinishedGame(DeleteBoardWithFinishedGameCmd cmd) {
+        log.info("Deleting board with finished game with id = {}", cmd.boardId());
+        DeleteBoardWithFinishedGame command = cmd.toCommand();
+        deleteBoard.deleteBoard(command.boardId());
+        log.info("Successfully deleted board with finished game with id = {}", cmd.boardId());
     }
 }
