@@ -1,19 +1,19 @@
-package pl.illchess.adapter.board.query.in.inbox.dto;
+package pl.illchess.adapter.board.query.in.outbox.dto;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import pl.messaging.model.Message;
 
-public class ObtainBoardGameFinishedInboxMessage extends Message {
+public class ObtainBoardGameFinishedOutboxMessage extends Message {
 
     private final UUID gameId;
 
-    public ObtainBoardGameFinishedInboxMessage() {
+    public ObtainBoardGameFinishedOutboxMessage() {
         super(UUID.randomUUID(), 0, OffsetDateTime.now());
         gameId = null;
     }
 
-    public ObtainBoardGameFinishedInboxMessage(UUID gameId) {
+    public ObtainBoardGameFinishedOutboxMessage(UUID gameId) {
         super(UUID.randomUUID(), 0, OffsetDateTime.now());
         this.gameId = gameId;
     }
