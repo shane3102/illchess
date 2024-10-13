@@ -7,10 +7,10 @@ import pl.illchess.player_info.domain.user.command.CreateNewUser
 class User(
     val id: UserId,
     val username: Username,
-    val currentRanking: UserRankingPoints
+    var currentRanking: UserRankingPoints
 ) {
     fun applyNewRanking(userGameInfo: UserGameInfo) {
-        currentRanking.value = userGameInfo.rankingPointsAfterGame.value
+        currentRanking = userGameInfo.rankingPointsAfterGame
     }
 
     companion object {

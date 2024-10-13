@@ -3,6 +3,7 @@ package pl.illchess.player_info.application.game.command
 import pl.illchess.player_info.application.UnitTestSpecification
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase.PerformedMoveCmd
+import pl.illchess.player_info.domain.game.model.Game
 import pl.illchess.player_info.domain.game.model.GameId
 import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.PieceColor
@@ -74,6 +75,9 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
 
         userBlack != null
         checkPointChangeByResult(userBlack, userBlackStartingPoints, userWhiteStartingPoints, game.gameResult, BLACK)
+
+        game.whiteUserGameInfo.rankingPointsBeforeGame.value == userWhiteStartingPoints
+        game.blackUserGameInfo.rankingPointsBeforeGame.value == userBlackStartingPoints
 
         where:
         gameResult | userWhiteStartingPoints | userBlackStartingPoints | performedMoves

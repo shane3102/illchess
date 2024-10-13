@@ -19,7 +19,7 @@ data class UserRankingPoints(var value: Int) {
             user,
             this,
             newRankingPoints,
-            this - newRankingPoints
+            newRankingPoints - this
         )
     }
 
