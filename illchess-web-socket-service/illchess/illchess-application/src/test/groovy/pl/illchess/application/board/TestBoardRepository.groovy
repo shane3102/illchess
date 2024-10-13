@@ -1,11 +1,12 @@
 package pl.illchess.application.board
 
+import pl.illchess.application.board.command.out.DeleteBoard
 import pl.illchess.application.board.command.out.LoadBoard
 import pl.illchess.application.board.command.out.SaveBoard
 import pl.illchess.domain.board.model.Board
 import pl.illchess.domain.board.model.BoardId
 
-class TestBoardRepository implements LoadBoard, SaveBoard {
+class TestBoardRepository implements LoadBoard, SaveBoard, DeleteBoard {
 
     Map<BoardId, Board> repo = new HashMap<>()
 
@@ -27,5 +28,10 @@ class TestBoardRepository implements LoadBoard, SaveBoard {
         def boardId = savedBoard.boardId() == null ? new BoardId(UUID.randomUUID()) : savedBoard.boardId()
         repo.put(boardId, savedBoard)
         boardId
+    }
+
+    @Override
+    void deleteBoard(BoardId boardId) {
+        repo.remove(boardId)
     }
 }
