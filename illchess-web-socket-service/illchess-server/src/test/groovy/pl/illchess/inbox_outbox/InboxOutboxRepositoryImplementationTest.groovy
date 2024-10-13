@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus
 import pl.illchess.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
 import pl.illchess.adapter.board.command.in.rest.dto.InitializedBoardResponse
 import pl.illchess.adapter.board.command.in.rest.dto.ResignGameRequest
-import pl.illchess.adapter.board.query.in.inbox.dto.ObtainBoardGameFinishedInboxMessage
+import pl.illchess.adapter.board.query.in.outbox.dto.ObtainBoardGameFinishedOutboxMessage
 import pl.illchess.domain.commons.exception.DomainException
 
 import java.time.Duration
@@ -38,11 +38,11 @@ class InboxOutboxRepositoryImplementationTest extends InboxOutboxRepositoryImple
         then:
         Awaitility.await().pollInterval(Duration.ofSeconds(1)).atMost(5, TimeUnit.SECONDS)
                 .untilAsserted {
-                    List<ObtainBoardGameFinishedInboxMessage> inboxOutboxMessagesOfBoardFinished = loadMessages.loadLatestByTypeNonExpired(
-                            ObtainBoardGameFinishedInboxMessage.class.toString(),
+                    List<ObtainBoardGameFinishedOutboxMessage> inboxOutboxMessagesOfBoardFinished = loadMessages.loadLatestByTypeNonExpired(
+                            ObtainBoardGameFinishedOutboxMessage.class.toString(),
                             100,
                             100
-                    ).collect { it as ObtainBoardGameFinishedInboxMessage }
+                    ).collect { it as ObtainBoardGameFinishedOutboxMessage }
 
                     inboxOutboxMessagesOfBoardFinished.size() == 1
                     inboxOutboxMessagesOfBoardFinished[0].gameId() == initializedBoard.id()

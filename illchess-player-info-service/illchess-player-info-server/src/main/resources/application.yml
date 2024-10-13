@@ -25,12 +25,8 @@ mp:
     outgoing:
       obtain-game-success:
         connector: smallrye-rabbitmq
-        exchange:
-          name: obtain-game-success
       obtain-game-failure:
         connector: smallrye-rabbitmq
-        exchange:
-          name: obtain-game-failure
 
 rabbitmq-host: localhost
 rabbitmq-port: 5672
