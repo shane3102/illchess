@@ -1,0 +1,22 @@
+.header-button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 15vw;
+    height: 5vh;
+    margin: 2.5vh 1vw 2.5vh 1vw;
+    font-size: 1.5vw;
+    user-select: none;
+    background-color: #F3E5AB;
+    color: gray;
+    border-radius: 1vw;
+    -webkit-transition: color 250ms linear, border 250ms linear;
+    -ms-transition: color 250ms linear, border 250ms linear;
+    transition: color 250ms linear, border 250ms linear;
+    border: 0.5vh solid gray;
+}
+
+.header-button:hover {
+    color: green;
+    border: 0.5vh solid green;
+}

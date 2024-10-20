@@ -6,7 +6,7 @@ import { ActiveBoardsView } from '../../model/ActiveBoardsView';
 import { activeBoardsRefreshed, refreshActiveBoards } from '../../state/active-boards/active-boards.actions';
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../state/active-boards/active-boards.selectors';
-import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,6 +22,7 @@ export class ActiveBoardsComponent implements OnInit {
 
   caretRight = faCaretRight
   caretLeft = faCaretLeft
+  exclamationCircle = faExclamationCircle
 
   clickedLeft: boolean = false
   clickedRight: boolean = false

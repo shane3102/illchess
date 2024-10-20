@@ -1,18 +1,15 @@
 <div *ngIf="activeBoardsView$ | async as activeBoardsView" class="content">
     <div class="caret-wrapper caret-wrapper-left">
-        <fa-icon
-            [icon]="caretLeft"
+        <fa-icon [icon]="caretLeft"
             (click)="isDisabled('left', activeBoardsView.activeBoardsIds.length) ? null : slideLeft()"
             class="caret caret-left"
             [ngClass]="{'caret-disabled': isDisabled('left', activeBoardsView.activeBoardsIds.length)}">
         </fa-icon>
     </div>
-    <div
-        class="boards"
-        [ngClass]="{'boards-sliden-left' : clickedLeft}"
+    @if (activeBoardsView.activeBoardsIds.length != 0) {
+    <div class="boards" [ngClass]="{'boards-sliden-left' : clickedLeft}"
         [ngClass]="{'boards-sliden-right' : clickedRight}">
-        <div style="position: relative; display: flex; align-items: left; flex-wrap: nowrap;"
-            *ngFor="let boardId of activeBoardsView.activeBoardsIds |
+        <div style="position: relative; display: flex; align-items: left; flex-wrap: nowrap;" *ngFor="let boardId of activeBoardsView.activeBoardsIds |
             slice: getSliceFrom():page+6;
             first as isFirst;
             let i = index">
@@ -20,9 +17,20 @@
             <app-chess-board-mini (click)="spectateBoard(boardId)" [boardId]="boardId"></app-chess-board-mini>
         </div>
     </div>
+    } @else {
+    <div class="no-active-games">
+        <div>
+            <fa-icon [icon]="exclamationCircle"></fa-icon>
+        </div>
+        <div>&nbsp;BRAK AKTYWNYCH GIER&nbsp;</div>
+        <div>
+            <fa-icon [icon]="exclamationCircle"></fa-icon>
+        </div>
+    </div>
+    }
+
     <div class="caret-wrapper caret-wrapper-right">
-        <fa-icon
-            [icon]="caretRight"
+        <fa-icon [icon]="caretRight"
             (click)="isDisabled('right', activeBoardsView.activeBoardsIds.length) ?  null : slideRight()"
             class="caret caret-right"
             [ngClass]="{'caret-disabled': isDisabled('right', activeBoardsView.activeBoardsIds.length)}">
