@@ -1,3 +1,5 @@
-.piece {
-    font-size: 2.5vw;
+@import '../chess-board-style.scss';
+
+.piece-mini {
+    font-size: $chess-piece-size-mini;
 }

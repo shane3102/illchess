@@ -1,4 +1,6 @@
-@import "../chess-board-mini/chess-board-mini.component.scss";
+@import "../chess-board-style.scss";
+
+$slide-size: 4;
 
 .content {
     padding-top: 0.5vw;
@@ -7,7 +9,7 @@
     justify-content: left;
     align-items: center;
     overflow: hidden;
-    height: $board-wrapper-size;
+    height: $board-wrapper-size-mini;
 }
 
 .boards {
@@ -17,13 +19,13 @@
     flex-wrap: nowrap;
     margin-left: 8vw;
     margin-right: 8vw;
-    right: calc(3 * $board-wrapper-size)
+    right: calc($slide-size * $board-wrapper-size-mini)
 }
 
 .empty-boards {
-    width: calc(3 * $board-wrapper-size);
-    height: $board-wrapper-size;
-    left: calc(3 * $board-wrapper-size)
+    width: calc($slide-size * $board-wrapper-size-mini);
+    height: $board-wrapper-size-mini;
+    left: calc($slide-size * $board-wrapper-size-mini)
 }
 
 .boards-sliden-left {
@@ -32,11 +34,11 @@
 
 @keyframes slide-left {
     from {
-        right: calc(3 * $board-wrapper-size);
+        right: calc($slide-size * $board-wrapper-size-mini);
     }
 
     to {
-        right: 2 * calc(3 * $board-wrapper-size);
+        right: 2 * calc($slide-size * $board-wrapper-size-mini);
     }
 }
 
@@ -46,7 +48,7 @@
 
 @keyframes slide-right {
     from {
-        right: calc(3 * $board-wrapper-size);
+        right: calc($slide-size * $board-wrapper-size-mini);
     }
 
     to {
@@ -60,7 +62,7 @@
     font-size: 8vw;
     background-color: white;
     width: 8vw;
-    height: $board-wrapper-size;
+    height: $board-wrapper-size-mini;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -83,6 +85,9 @@
     color: #F3E5AB;
     background-color: white;
     padding: 0.5vw;
+    -webkit-transition: color 250ms linear;
+    -ms-transition: color 250ms linear;
+    transition: color 250ms linear;
 }
 
 .caret-left {

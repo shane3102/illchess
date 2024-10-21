@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 })
 export class ActiveBoardsComponent implements OnInit {
 
+  pageSize = 4 
+
   router = inject(Router)
   store = inject(Store<ChessGameState>)
   chessBoardWebSocketService = inject(ChessBoardWebsocketService)
@@ -52,7 +54,7 @@ export class ActiveBoardsComponent implements OnInit {
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {
     if (side == 'right') {
-      return (numberOfBoards) <= this.page + 3 || this.clickedRight;
+      return (numberOfBoards) <= this.page + this.pageSize || this.clickedRight;
     } else {
       return this.page <= 0 || this.clickedLeft
     }
@@ -62,7 +64,7 @@ export class ActiveBoardsComponent implements OnInit {
     this.clickedLeft = true
     setTimeout(() => {
       this.clickedLeft = false
-      this.page = this.page + 3
+      this.page = this.page + this.pageSize
     }, 900)
   }
 
@@ -70,12 +72,12 @@ export class ActiveBoardsComponent implements OnInit {
     this.clickedRight = true
     setTimeout(() => {
       this.clickedRight = false
-      this.page = this.page - 3
+      this.page = this.page - this.pageSize
     }, 900)
   }
 
   getSliceFrom() {
-    return Math.max(this.page-3, 0)
+    return Math.max(this.page-this.pageSize, 0)
   }
 
 }

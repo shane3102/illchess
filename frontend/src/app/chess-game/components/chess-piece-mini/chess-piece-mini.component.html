@@ -1,31 +1,31 @@
-<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type" class="piece">
+<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type" class="piece-mini">
     <div *ngSwitchCase="Piece.PAWN">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="pawnIcon"></fa-icon>
         </div>
     </div>
     <div *ngSwitchCase="Piece.KNIGHT">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="knightIcon"></fa-icon>
         </div>
     </div>
     <div *ngSwitchCase="Piece.BISHOP">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="bishopIcon"></fa-icon>
         </div>
     </div>
     <div *ngSwitchCase="Piece.ROOK">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="rookIcon"></fa-icon>
         </div>
     </div>
     <div *ngSwitchCase="Piece.QUEEN">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="queenIcon"></fa-icon>
         </div>
     </div>
     <div *ngSwitchCase="Piece.KING">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece">
+        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
             <fa-icon [icon]="kingIcon"></fa-icon>
         </div>
     </div>

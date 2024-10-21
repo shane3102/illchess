@@ -10,7 +10,7 @@
     <div class="boards" [ngClass]="{'boards-sliden-left' : clickedLeft}"
         [ngClass]="{'boards-sliden-right' : clickedRight}">
         <div style="position: relative; display: flex; align-items: left; flex-wrap: nowrap;" *ngFor="let boardId of activeBoardsView.activeBoardsIds |
-            slice: getSliceFrom():page+6;
+            slice: getSliceFrom():page+8;
             first as isFirst;
             let i = index">
             <div *ngIf="isFirst && page == 0" class="empty-boards"></div>

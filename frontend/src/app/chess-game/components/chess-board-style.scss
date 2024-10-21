@@ -19,3 +19,8 @@ $chess-square-size: 8.5vh;
     // bez tego poza pionkiem można poruszać polem - WTF!?
     transform: translateX(0);
 }
+
+// mini board
+$chess-piece-size-mini: 1.5vw;
+$chess-square-size-mini: 2vw;
+$board-wrapper-size-mini: 21vw;
