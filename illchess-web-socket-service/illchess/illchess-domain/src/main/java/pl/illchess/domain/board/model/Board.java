@@ -157,15 +157,8 @@ public record Board(
 
     public Set<Square> legalMoves(CheckLegalMoves command) {
         Optional<Player> playerByUsername = boardState.getPlayerByUsername(command.username());
-        if (playerByUsername.isPresent() && !playerByUsername.get().preMoves().isEmpty()) {
-            Piece movedPiece = playerByUsername.get().preMoves().getLast().piecesLocationsAfterPreMove().findPieceOnSquare(command.square())
-                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
-            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
-        } else if (playerByUsername.isPresent() && !Objects.equals(boardState.currentPlayer(), playerByUsername.get())) {
-            Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
-                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
-            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
-        } else {
+
+        if (playerByUsername.isEmpty() || playerByUsername.get().equals(boardState.currentPlayer())) {
             Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
                 .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
             if (!Objects.equals(movedPiece.color(), boardState().currentPlayerColor().color())) {
@@ -178,6 +171,19 @@ public record Board(
             }
             return movedPiece.possibleMoves(piecesLocations, moveHistory);
         }
+        if (!playerByUsername.get().preMoves().isEmpty()) {
+            Piece movedPiece = playerByUsername.get().preMoves().getLast().piecesLocationsAfterPreMove().findPieceOnSquare(command.square())
+                .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
+            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
+        }
+        Piece movedPiece = piecesLocations.findPieceOnSquare(command.square())
+            .orElseThrow(() -> new PieceNotPresentOnGivenSquare(boardId, command.square()));
+
+        if (movedPiece.color() != boardState.currentPlayerColor().color() && !Objects.equals(boardState.currentPlayer(), playerByUsername.get())) {
+            return movedPiece.possibleMovesOnPreMove(piecesLocations, moveHistory);
+        }
+
+        return Set.of();
     }
 
     public GameState establishBoardState() {
