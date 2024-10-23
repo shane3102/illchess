@@ -9,7 +9,7 @@ import pl.illchess.stockfish.adapter.board.command.`in`.rest.dto.BestMoveAndCont
 import pl.illchess.stockfish.adapter.board.command.`in`.rest.dto.EvaluationResponse
 import java.util.*
 
-@Path("/api/stockfish/board")
+@Path("/api/board")
 interface BoardCommandApi {
 
     @GET

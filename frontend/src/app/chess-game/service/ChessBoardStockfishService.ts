@@ -9,7 +9,7 @@ import { EvaluationResponse } from "../model/EvaluationResponse";
 })
 export class ChessBoardStockfishService {
 
-    readonly PATH: string = "/api/stockfish/board"
+    readonly PATH: string = "/stockfish/api/board"
 
     private http: HttpClient = inject(HttpClient)
 
