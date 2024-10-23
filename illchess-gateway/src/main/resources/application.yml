@@ -1,0 +1,21 @@
+server:
+  port: 1337
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - StripPrefix=1
+      routes:
+        - id: illchess-web-socket-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/game/**
+        - id: illchess-stockfish-service
+          uri: http://localhost:2137
+          predicates:
+            - Path=/stockfish/**
+        - id: illchess-player-info-service
+          uri: http://localhost:420
+          predicates:
+            - Path=/player-info/**

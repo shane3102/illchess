@@ -22,7 +22,7 @@ import { AcceptTakingBackMoveRequest } from "../model/AcceptTakingBackMoveReques
 })
 export class ChessBoardService {
 
-    readonly PATH: string = "/api/board"
+    readonly PATH: string = "/game/api/board"
 
     constructor(private httpService: HttpClient) {
     }
