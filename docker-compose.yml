@@ -70,6 +70,21 @@ services:
       - RABBITMQ-USERNAME=guest
       - RABBITMQ-PASSWORD=guest
 
+  # Api gateway
+  chess-api-gateway:
+    container_name: illchess-gateway
+    image: illchess-gateway
+    ports:
+      - 1337:1337
+    environment:
+      SPRING_CLOUD_GATEWAY_DEFAULT-FILTERS[0]: StripPrefix=1
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://illchess-web-socket-service:8080
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path=/game/**
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://illchess-stockfish-service:2137
+      SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path=/stockfish/**
+      SPRING_CLOUD_GATEWAY_ROUTES[2]_URI: http://illchess-player-info-service:420
+      SPRING_CLOUD_GATEWAY_ROUTES[2]_PREDICATES[0]: Path=/player-info/**
+
   # Shared
   rabbit-mq:
     container_name: rabbit-mq
