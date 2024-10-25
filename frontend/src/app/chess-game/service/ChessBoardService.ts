@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { AcceptDrawRequest } from "../model/AcceptDrawRequest";
+import { AcceptTakingBackMoveRequest } from "../model/AcceptTakingBackMoveRequest";
 import { ActiveBoardsView } from "../model/ActiveBoardsView";
 import { BoardAdditionalInfoView } from "../model/BoardAdditionalInfoView";
 import { BoardLegalMovesResponse } from "../model/BoardLegalMovesResponse";
@@ -11,18 +12,17 @@ import { InitializeBoardRequest } from "../model/InitializeBoardRequest";
 import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
 import { MovePieceRequest } from "../model/MovePieceRequest";
 import { ProposeDrawRequest } from "../model/ProposeDrawRequest";
-import { RejectDrawRequest } from "../model/RejectDrawRequest";
-import { ResignGameRequest } from "../model/ResignGameRequest";
 import { ProposeTakingBackMoveRequest } from "../model/ProposeTakingBackMoveRequest";
+import { RejectDrawRequest } from "../model/RejectDrawRequest";
 import { RejectTakingBackMoveRequest } from "../model/RejectTakingBackMoveRequest";
-import { AcceptTakingBackMoveRequest } from "../model/AcceptTakingBackMoveRequest";
+import { ResignGameRequest } from "../model/ResignGameRequest";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChessBoardService {
 
-    readonly PATH: string = "/game/api/board"
+    readonly PATH: string = `/gateway/game/api/board`
 
     constructor(private httpService: HttpClient) {
     }
