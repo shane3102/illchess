@@ -1,6 +1,6 @@
 name: illchess
 services:
-  # Game/web-socket service
+  # Game service
   game-db:
     container_name: game-db
     image: redis:7.0.11-alpine
@@ -11,9 +11,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  chess-web-socket-service:
-    container_name: illchess-web-socket-service
-    image: illchess-web-socket-service
+  chess-game-service:
+    container_name: illchess-game-service
+    image: illchess-game-service
+    build: ./illchess-game-service
     ports:
       - 8080:8080
     depends_on:
@@ -31,6 +32,7 @@ services:
   chess-stockfish-service:
     container_name: illchess-stockfish-service
     image: illchess-stockfish-service
+    build: ./illchess-stockfish-service
     ports:
       - 2137:2137
     environment:
@@ -56,6 +58,7 @@ services:
   chess-player-info-service:
     container_name: illchess-player-info-service
     image: illchess-player-info-service
+    build: ./illchess-player-info-service
     ports:
       - 420:420
     depends_on:
@@ -74,11 +77,12 @@ services:
   chess-api-gateway:
     container_name: illchess-gateway
     image: illchess-gateway
+    build: ./illchess-gateway
     ports:
       - 1337:1337
     environment:
       SPRING_CLOUD_GATEWAY_DEFAULT-FILTERS[0]: StripPrefix=1
-      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://illchess-web-socket-service:8080
+      SPRING_CLOUD_GATEWAY_ROUTES[0]_URI: http://illchess-game-service:8080
       SPRING_CLOUD_GATEWAY_ROUTES[0]_PREDICATES[0]: Path=/game/**
       SPRING_CLOUD_GATEWAY_ROUTES[1]_URI: http://illchess-stockfish-service:2137
       SPRING_CLOUD_GATEWAY_ROUTES[1]_PREDICATES[0]: Path=/stockfish/**
