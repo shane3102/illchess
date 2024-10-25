@@ -5,17 +5,17 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - StripPrefix=1
+        - StripPrefix=2
       routes:
         - id: illchess-web-socket-service
           uri: http://localhost:8080
           predicates:
-            - Path=/game/**
+            - Path=/gateway/game/**
         - id: illchess-stockfish-service
           uri: http://localhost:2137
           predicates:
-            - Path=/stockfish/**
+            - Path=/gateway/stockfish/**
         - id: illchess-player-info-service
           uri: http://localhost:420
           predicates:
-            - Path=/player-info/**
+            - Path=/gateway/player-info/**
