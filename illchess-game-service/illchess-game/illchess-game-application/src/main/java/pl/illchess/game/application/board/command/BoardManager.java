@@ -35,7 +35,7 @@ import pl.illchess.game.domain.board.command.Resign;
 import pl.illchess.game.domain.board.event.BoardInitialized;
 import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.game.domain.board.event.BoardStateUpdated;
-import pl.illchess.game.domain.board.event.BoardWithPreMovesOfUsernameUpdated;
+import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesOfUsernameUpdated;
 import pl.illchess.game.domain.board.event.GameFinished;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.board.model.Board;
