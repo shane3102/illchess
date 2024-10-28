@@ -33,6 +33,7 @@ import { ChessGameButtonComponent } from './components/chess-game-button/chess-g
 import { ChessGameActionButtonsComponent } from './components/chess-game-action-buttons/chess-game-action-buttons.component';
 import { ChessGameOfferFromOponentComponent } from './components/chess-game-offer-from-oponent/chess-game-offer-from-oponent.component';
 import { ChessEngineInfoComponent } from './components/chess-engine-info/chess-engine-info.component';
+import { GameFinishedPopupComponent } from './components/game-finished-popup/game-finished-popup.component';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { ChessEngineInfoComponent } from './components/chess-engine-info/chess-e
     ChessGameButtonComponent,
     ChessGameActionButtonsComponent,
     ChessGameOfferFromOponentComponent,
-    ChessEngineInfoComponent
+    ChessEngineInfoComponent,
+    GameFinishedPopupComponent
   ],
   imports: [
     SharedModule,

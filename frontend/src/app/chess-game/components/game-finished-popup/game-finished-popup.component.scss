@@ -1,0 +1,107 @@
+@import '../chess-board-style.scss';
+
+$content-height: 3 * $chess-square-size;
+$content-width: 5 * $chess-square-size;
+
+.content {
+    position: relative;
+    top: 2.5 * $chess-square-size;
+    left: 1.5 * $chess-square-size;
+    border-radius: calc($chess-square-size/2);
+    background-color: rgb(128,128,128, 0.75);
+    width: $content-width;
+    height: $content-height;
+    z-index: 2;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.user-icon {
+    font-size: $chess-square-size;
+}
+
+.text-info {
+    font-size: calc($chess-square-size / 4);
+    text-align: center;
+}
+
+.user-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.user-info-white {
+    color: white;
+    animation: slide-result-white 2s, show-username 2s;
+}
+
+.user-info-black {
+    animation: slide-result-black 2s, show-username 2s;
+}
+
+.point-change {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.point-change-gain {
+    color: green;
+}
+
+.point-change-loss {
+    color: red;
+}
+
+.result {
+    font-size: $chess-square-size;
+    color: rgb(150,75,0);
+    animation: show-result 2s;
+}
+
+@keyframes show-result {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-result-white {
+    from {
+        transform: translateX($chess-square-size);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slide-result-black {
+    from {
+        transform: translateX(-$chess-square-size);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes show-username {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

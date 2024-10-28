@@ -58,6 +58,7 @@ export class ChessBoardComponent implements OnInit {
         )
       }
     })
+    
     if (!this.isUsernamePlayerOnBoard) {
       this.chessBoardWebSocketService.subscribe(
         `/chess-topic/${this.boardId}`,
@@ -67,6 +68,13 @@ export class ChessBoardComponent implements OnInit {
         }
       )
     }
+
+    this.chessBoardWebSocketService.subscribe(
+      `/chess-topic/obtain-status/${this.boardId}`,
+      (response: any) => {
+        console.log(JSON.stringify(response))
+      } 
+    )
 
   }
 

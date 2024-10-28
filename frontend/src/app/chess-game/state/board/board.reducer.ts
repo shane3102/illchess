@@ -4,7 +4,7 @@ import { BoardView } from "../../model/BoardView";
 import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { PieceColor } from "../../model/PieceInfo";
-import { boardInitialized, boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, legalMovesChanged, movePiece } from "./board.actions";
+import { boardInitialized, boardLoaded, draggedPieceChanged, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
 
 
 export interface BoardState {
@@ -111,6 +111,17 @@ export const boardReducer = createReducer(
                     ...state.boardView,
                     "boardId": content.id
                 }
+            }
+        )
+    ),
+
+    // initializing new board - remove all data of previous board
+    on(
+        initializeBoard,
+        (state: BoardState) => (
+            {
+                ...state,
+                boardView: { boardId: '', piecesLocations: {}}
             }
         )
     )
