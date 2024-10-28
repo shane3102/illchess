@@ -11,13 +11,20 @@ import pl.illchess.game.application.board.query.out.BoardViewPreMoveByUserQueryP
 import pl.illchess.game.application.board.query.out.BoardViewQueryPort;
 import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
+import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
 import pl.illchess.game.domain.board.event.BoardUpdated;
-import pl.illchess.game.domain.board.event.BoardWithPreMovesUpdated;
+import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
+import pl.illchess.game.domain.board.event.delete.BoardDeleted;
+import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesUpdated;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.board.exception.BoardWithPreMovesDoesNotExistException;
+
+import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.ERROR;
+import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.SUCCESS;
 
 @Service
 @AllArgsConstructor
@@ -34,7 +41,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     @Override
     public BoardView updateBoardView(BoardUpdated event) {
         log.info(
-            "Update event of board with id = {} was catched, sending update of chess board view",
+            "Update event of board with id = {} was caught, sending update of chess board view",
             event.boardId()
         );
         BoardView boardView = boardViewQueryPort.findById(event.boardId().uuid())
@@ -53,7 +60,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     @Override
     public BoardAdditionalInfoView updateBoardAdditionalInfoView(BoardAdditionalInfoUpdated event) {
         log.info(
-            "Update event of board with id = {} was catched, sending update of chess board additional info view",
+            "Update event of board with id = {} was caught, sending update of chess board additional info view",
             event.boardId()
         );
         BoardAdditionalInfoView boardAdditionalInfoView = boardAdditionalInfoViewQueryPort.findBoardById(event.boardId().uuid())
@@ -103,4 +110,13 @@ public class BoardInfoSupplier implements BoardViewSupplier {
         return activeBoards;
     }
 
+    @Override
+    public BoardGameObtainedInfoView sendInfoOnGameObtained(BoardDeleteInfo boardDeleteInfo) {
+        BoardGameObtainedStatus status = boardDeleteInfo instanceof BoardDeleted ? SUCCESS : ERROR;
+        log.info("Sending info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
+        BoardGameObtainedInfoView result = new BoardGameObtainedInfoView(boardDeleteInfo.boardId().uuid(), status);
+        messagingTemplate.convertAndSend("/chess-topic/obtain-status/%s".formatted(boardDeleteInfo.boardId().uuid()), result);
+        log.info("Sent info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
+        return result;
+    }
 }

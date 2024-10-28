@@ -3,12 +3,16 @@ package pl.illchess.game.adapter.board.query.in.websocket;
 import org.springframework.context.event.EventListener;
 import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
+import pl.illchess.game.domain.board.event.delete.BoardDeleteError;
+import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
+import pl.illchess.game.domain.board.event.delete.BoardDeleted;
 import pl.illchess.game.domain.board.event.BoardInitialized;
 import pl.illchess.game.domain.board.event.BoardUpdated;
-import pl.illchess.game.domain.board.event.BoardWithPreMovesUpdated;
+import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesUpdated;
 import pl.illchess.game.domain.board.event.GameFinished;
 
 public interface BoardViewSupplier {
@@ -27,5 +31,11 @@ public interface BoardViewSupplier {
         GameFinished.class
     })
     ActiveBoardsView activeBoardsChanged(BoardUpdated event);
+
+    @EventListener({
+        BoardDeleted.class,
+        BoardDeleteError.class
+    })
+    BoardGameObtainedInfoView sendInfoOnGameObtained(BoardDeleteInfo boardDeleteInfo);
 
 }

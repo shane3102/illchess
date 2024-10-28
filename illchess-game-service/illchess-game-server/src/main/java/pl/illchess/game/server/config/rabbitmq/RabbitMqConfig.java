@@ -11,7 +11,8 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static pl.illchess.game.adapter.board.command.in.rabbitmq.BoardCommandRabbitMqListenerImpl.OBTAIN_GAME_SUCCESS_QUEUE;
+import static pl.illchess.game.adapter.board.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_FAILURE_QUEUE;
+import static pl.illchess.game.adapter.board.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_SUCCESS_QUEUE;
 import static pl.illchess.game.adapter.board.query.in.rabbitmq.BoardInfoRabbitMqSupplier.OBTAIN_GAME_QUEUE;
 
 @Configuration
@@ -30,12 +31,28 @@ public class RabbitMqConfig {
     @Bean
     TopicExchange obtainGameSuccessExchange() {
         // TODO move all properties related to rabbit to configuration (and further to .env file)
-        return new TopicExchange("obtain-game-success");
+        return new TopicExchange(OBTAIN_GAME_SUCCESS_QUEUE);
     }
 
     @Bean
     Binding bindingObtainGameSuccess() {
         return BindingBuilder.bind(obtainGameSuccessQueue()).to(obtainGameSuccessExchange()).with("#");
+    }
+
+    @Bean(value = OBTAIN_GAME_FAILURE_QUEUE)
+    Queue obtainGameFailureQueue() {
+        return new Queue(OBTAIN_GAME_FAILURE_QUEUE);
+    }
+
+    @Bean
+    TopicExchange obtainGameFailureExchange() {
+        // TODO move all properties related to rabbit to configuration (and further to .env file)
+        return new TopicExchange(OBTAIN_GAME_FAILURE_QUEUE);
+    }
+
+    @Bean
+    Binding bindingObtainGameFailure() {
+        return BindingBuilder.bind(obtainGameFailureQueue()).to(obtainGameFailureExchange()).with("#");
     }
 
     @Bean
