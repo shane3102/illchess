@@ -17,5 +17,5 @@ abstract class ObtainNewGameSpecification : Specification() {
 
     fun getGameViewById(gameIdUUID: UUID): Response = given()
         .`when`()
-        .get("/api/player-info/game/$gameIdUUID")
+        .get("/api/game/$gameIdUUID")
 }

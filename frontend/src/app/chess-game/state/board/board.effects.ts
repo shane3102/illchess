@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves } from "./board.actions";
+import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded } from "./board.actions";
 import { Observable, catchError, from, map, of, switchMap } from "rxjs";
 import { ChessBoardService } from "../../service/ChessBoardService";
 import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
@@ -9,6 +9,9 @@ import { IllegalMoveResponse } from "../../model/IllegalMoveView";
 import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
 import { BoardView } from "../../model/BoardView";
 import { RefreshBoardDto as RefreshBoardRequest } from "../../model/RefreshBoardRequest";
+import { PlayerInfoService } from "../../service/PlayerInfoService";
+import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
+import { GameFinishedView } from "../../model/GameFinishedView";
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +20,8 @@ export class BoardEffects {
 
     constructor(
         private actions$: Actions,
-        private chessBoardService: ChessBoardService
+        private chessBoardService: ChessBoardService,
+        private playerInfoService: PlayerInfoService
     ) { }
 
     initializeBoard$ = createEffect(
@@ -84,6 +88,20 @@ export class BoardEffects {
                             ((response: BoardView) => boardLoaded(response))
                         )
                     )
+            )
+        )
+    )
+
+    obtainFinishedGameView$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(gameFinished),
+            switchMap(
+                (dto: BoardGameObtainedInfoView) => from(this.playerInfoService.getFinishedGameById(dto.boardId))
+                .pipe(
+                    map(
+                        ((response: GameFinishedView) => gameFinishedLoaded(response))
+                    )
+                )
             )
         )
     )

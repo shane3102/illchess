@@ -10,9 +10,11 @@ import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
 import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
 import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../state/board-additional-info/board-additional-info.selectors';
-import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../state/board/board.actions';
-import { boardSelector, draggedPieceSelector, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
+import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../state/board/board.actions';
+import { boardGameObtainedInfoView, boardSelector, draggedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
 import { ChessGameState } from '../../state/chess-game.state';
+import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
+import { GameFinishedView } from '../../model/GameFinishedView';
 
 @Component({
   selector: 'app-chess-board',
@@ -31,6 +33,8 @@ export class ChessBoardComponent implements OnInit {
   victoriousPlayerColor$: Observable<string | null | undefined> = this.store.select(victoriousPlayerColorSelector)
   gameState$: Observable<'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
   currentPlayerColor$: Observable<string | null | undefined> = this.store.select(currentPlayerColorSelector)
+  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
+  gameFinishedView$: Observable<GameFinishedView | null | undefined> = this.store.select(gameFinishedView)
 
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -72,7 +76,8 @@ export class ChessBoardComponent implements OnInit {
     this.chessBoardWebSocketService.subscribe(
       `/chess-topic/obtain-status/${this.boardId}`,
       (response: any) => {
-        console.log(JSON.stringify(response))
+        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+        this.store.dispatch(gameFinished(boardGameObtainedInfoView))
       } 
     )
 
