@@ -12,9 +12,25 @@ $content-width: 5 * $chess-square-size;
     width: $content-width;
     height: $content-height;
     z-index: 2;
+    animation: show-username 500ms;
+}
+
+.content-obtain-successful {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    height: $content-height;
+    width: $content-width;
+}
+
+.content-obtain-unsuccessful {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    color: red;
+    text-align: center;
+    height: $content-height;
+    width: $content-width;
 }
 
 .user-icon {
@@ -60,6 +76,10 @@ $content-width: 5 * $chess-square-size;
     font-size: $chess-square-size;
     color: rgb(150,75,0);
     animation: show-result 2s;
+}
+
+.result-draw {
+    font-size: calc($chess-square-size/2);
 }
 
 @keyframes show-result {

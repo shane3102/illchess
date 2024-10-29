@@ -230,7 +230,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         board.acceptDraw(command);
         saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        eventPublisher.publishDomainEvent(new GameFinished(command.boardId()));
         log.info("User {} successfully accepted draw offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 

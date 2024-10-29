@@ -40,3 +40,17 @@ export const initializedBoardIdSelector = createSelector(
         return { "boardId": state.boardView.boardId } as RefreshBoardDto
     }
 )
+
+export const boardGameObtainedInfoView = createSelector(
+    selectBoard,
+    (state: BoardState) => {
+        return state.gameFinishedInfo.boardGameObtainedInfoView
+    }
+)
+
+export const gameFinishedView = createSelector(
+    selectBoard,
+    (state: BoardState) => {
+        return state.gameFinishedInfo.gameFinishedView
+    }
+)

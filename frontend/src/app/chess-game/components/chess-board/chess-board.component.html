@@ -1,7 +1,9 @@
 <div *ngIf="boardView$ | async as boardView">
-    <div style="position: absolute">
-        <app-game-finished-popup></app-game-finished-popup>
+    
+    <div style="position: absolute" *ngIf="boardGameObtainedInfoView$ | async as boardGameObtainedInfoView">
+        <app-game-finished-popup [boardGameObtainedInfoView]="boardGameObtainedInfoView" [gameFinishedView]="gameFinishedView$ | async"></app-game-finished-popup>
     </div>
+
     <div *ngFor="let rank of ranks">
         <div style="display: flex; justify-content: center;">
             <div *ngFor="let file of files">
@@ -29,4 +31,5 @@
             </div>
         </div>
     </div>
+
 </div>

@@ -110,7 +110,7 @@ public class BoardViewMapper {
     }
 
     private static String toGameResult(String victoriousColor) {
-        return switch (victoriousColor) {
+        return victoriousColor == null ? "DRAW" : switch (victoriousColor) {
             case "WHITE" -> "WHITE_WON";
             case "BLACK" -> "BLACK_WON";
             default -> "DRAW";

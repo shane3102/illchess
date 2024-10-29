@@ -8,6 +8,8 @@ import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
 import { MovePieceRequest } from "../../model/MovePieceRequest";
 import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
 import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
+import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
+import { GameFinishedView } from "../../model/GameFinishedView";
 
 export const movePiece = createAction(
     'Move piece',
@@ -62,5 +64,15 @@ export const refreshBoard = createAction(
 export const refreshBoardWithPreMoves = createAction(
     'Manual refresh of board with premoves',
     props<RefreshBoardDto>()
+)
+
+export const gameFinished = createAction(
+    'Game finished',
+    props<BoardGameObtainedInfoView>()
+)
+
+export const gameFinishedLoaded = createAction(
+    'Game finished view loaded', 
+    props<GameFinishedView>()
 )
 
