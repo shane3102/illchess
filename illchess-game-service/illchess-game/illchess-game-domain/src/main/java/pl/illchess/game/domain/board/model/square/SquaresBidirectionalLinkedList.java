@@ -199,7 +199,7 @@ public final class SquaresBidirectionalLinkedList {
         } else if (!newVisitedSquares.contains(Square.valueOf(examinedNode.square.name()))) {
             Square nextSquareValue = Square.valueOf(examinedNode.square.name());
             Optional<Piece> pieceOnSquare = locations.findPieceOnSquare(nextSquareValue);
-            if (pieceOnSquare.isPresent() && !(skipKing && pieceOnSquare.get() instanceof King)) {
+            if (pieceOnSquare.isPresent() && !(skipKing && pieceOnSquare.get() instanceof King && pieceOnSquare.get().color() != currentPieceColor)) {
                 nodeSquares = Set.of(Square.valueOf(examinedNode.square.name()));
             } else {
                 nodeSquares = examinedNode.getAllConnectedTillPieceEncounteredRememberVisited(currentPieceColor, locations, newVisitedSquares, skipKing);
