@@ -28,6 +28,7 @@ export class ActiveBoardsComponent implements OnInit {
 
   clickedLeft: boolean = false
   clickedRight: boolean = false
+  clickingDisabled: boolean = false
 
   page = 0
 
@@ -54,24 +55,28 @@ export class ActiveBoardsComponent implements OnInit {
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {
     if (side == 'right') {
-      return (numberOfBoards) <= this.page + this.pageSize || this.clickedRight;
+      return (numberOfBoards) <= this.page + this.pageSize || this.clickingDisabled;
     } else {
-      return this.page <= 0 || this.clickedLeft
+      return this.page <= 0 || this.clickingDisabled
     }
   }
 
   slideRight() {
+    this.clickingDisabled = true
     this.clickedLeft = true
     setTimeout(() => {
       this.clickedLeft = false
+      this.clickingDisabled = false
       this.page = this.page + this.pageSize
     }, 900)
   }
 
   slideLeft() {
+    this.clickingDisabled = true
     this.clickedRight = true
     setTimeout(() => {
       this.clickedRight = false
+      this.clickingDisabled = false
       this.page = this.page - this.pageSize
     }, 900)
   }
