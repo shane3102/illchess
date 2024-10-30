@@ -1,87 +1,35 @@
 <div class="content">
-    @if(boardGameObtainedInfoView.status == 'SUCCESS') {
+    @if((!boardGameObtainedInfoView) || (boardGameObtainedInfoView.status == 'SUCCESS' && !gameFinishedView)) {
+        <div class="content-obtain">
+            <app-spinner></app-spinner>
+        </div>
+    } @else {
+        @if(boardGameObtainedInfoView.status == 'SUCCESS' && gameFinishedView) {
+            <div class="content-obtain">
+                <div class="user-info user-info-white">
+                    <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.whiteUserGameInfo"></app-game-finished-popup-user-info>
+                </div>
 
-    @if(gameFinishedView) {
-    <div class="content-obtain-successful">
-        <div class="user-info user-info-white">
-            <div class="user-icon">
-                <fa-icon [icon]="user"></fa-icon>
-            </div>
-            <div class="text-info">
-                <div><b>{{gameFinishedView.whiteUserGameInfo.username}}</b></div>
-                <div class="point-change">
-                    <div>{{gameFinishedView.whiteUserGameInfo.rankingPointsAfterGame}}</div>
-                    &nbsp;(
-                    <div [ngClass]="{
-                        'point-change-loss': gameFinishedView.whiteUserGameInfo.rankingPointsChange < 0, 
-                        'point-change-gain': gameFinishedView.whiteUserGameInfo.rankingPointsChange > 0
-                        }">
-                        <fa-icon
-                            [icon]="
-                            gameFinishedView.whiteUserGameInfo.rankingPointsChange < 0 ? pointLoss : 
-                            (gameFinishedView.whiteUserGameInfo.rankingPointsChange > 0 ? pointGain : pointNotChange)"></fa-icon>
-                    </div>
-                    <div [ngClass]="{
-                        'point-change-loss': gameFinishedView.whiteUserGameInfo.rankingPointsChange < 0, 
-                        'point-change-gain': gameFinishedView.whiteUserGameInfo.rankingPointsChange > 0
-                        }">
-                        <b>{{gameFinishedView.whiteUserGameInfo.rankingPointsChange}}</b>
-                    </div>
-                    )
+                <div class="result" [ngClass]="{'result-draw': gameFinishedView.gameResult == 'DRAW'}">
+                    <b>
+                        {{gameFinishedView.gameResult == 'WHITE_WON' ? "1:0" :
+                        (gameFinishedView.gameResult == 'BLACK_WON' ?"0:1" : "0.5:0.5")}}
+                    </b>
+                </div>
+
+                <div class="user-info user-info-black">
+                    <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.blackUserGameInfo"></app-game-finished-popup-user-info>
                 </div>
             </div>
-        </div>
-
-        <div class="result" [ngClass]="{'result-draw': gameFinishedView.gameResult == 'DRAW'}">
-            <b>
-                {{gameFinishedView.gameResult == 'WHITE_WON' ? "1:0" :
-                (gameFinishedView.gameResult == 'BLACK_WON' ?"0:1" : "0.5:0.5")}}
-            </b>
-        </div>
-
-        <div class="user-info user-info-black">
-            <div class="user-icon">
-                <fa-icon [icon]="user"></fa-icon>
+        } @else {
+            <div class="content-obtain content-obtain-unsuccessful">
+                <p>
+                    <b>
+                        Zapisanie partii w bazie danych nie powiodło się.
+                        Aplikacja będzie podejmowała próbę zapisu partii w najbliższym czasie.
+                    </b>
+                </p>
             </div>
-            <div class="text-info">
-                <div><b>{{gameFinishedView.blackUserGameInfo.username}}</b></div>
-                <div class="point-change">
-                    <div>{{gameFinishedView.blackUserGameInfo.rankingPointsAfterGame}}</div>
-                    &nbsp;(
-                    <div [ngClass]="{
-                        'point-change-loss': gameFinishedView.blackUserGameInfo.rankingPointsChange < 0, 
-                        'point-change-gain': gameFinishedView.blackUserGameInfo.rankingPointsChange > 0
-                        }">
-                        <fa-icon
-                            [icon]="
-                            gameFinishedView.blackUserGameInfo.rankingPointsChange < 0 ? pointLoss : 
-                            (gameFinishedView.blackUserGameInfo.rankingPointsChange > 0 ? pointGain : pointNotChange)"></fa-icon>
-                    </div>
-                    <div [ngClass]="{
-                        'point-change-loss': gameFinishedView.blackUserGameInfo.rankingPointsChange < 0, 
-                        'point-change-gain': gameFinishedView.blackUserGameInfo.rankingPointsChange > 0
-                        }">
-                        <b>{{gameFinishedView.blackUserGameInfo.rankingPointsChange}}</b>
-                    </div>
-                    )
-                </div>
-            </div>
-        </div>
-    </div>
-    } @else {
-    <div class="content-obtain-successful">
-        <app-spinner></app-spinner>
-    </div>
-    }
-
-    } @else {
-    <div class="content-obtain-unsuccessful">
-        <p>
-            <b>
-                Zapisanie partii w bazie danych nie powiodło się.
-                Aplikacja będzie podejmowała próbę zapisu partii w najbliższym czasie.
-            </b>
-        </p>
-    </div>
+        }
     }
 </div>

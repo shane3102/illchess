@@ -1,0 +1,27 @@
+<div class="user-info">
+    <div class="user-icon">
+        <fa-icon [icon]="user"></fa-icon>
+    </div>
+    <div class="text-info">
+        <div><b>{{userGameInfoView.username}}</b></div>
+        <div class="point-change">
+            <div>{{userGameInfoView.rankingPointsAfterGame}}</div>
+            &nbsp;(
+            <div [ngClass]="{
+            'point-change-loss': userGameInfoView.rankingPointsChange < 0, 
+            'point-change-gain': userGameInfoView.rankingPointsChange > 0
+            }">
+                <fa-icon [icon]="
+                userGameInfoView.rankingPointsChange < 0 ? pointLoss : 
+                (userGameInfoView.rankingPointsChange > 0 ? pointGain : pointNotChange)"></fa-icon>
+            </div>
+            <div [ngClass]="{
+            'point-change-loss': userGameInfoView.rankingPointsChange < 0, 
+            'point-change-gain': userGameInfoView.rankingPointsChange > 0
+            }">
+                <b>{{userGameInfoView.rankingPointsChange}}</b>
+            </div>
+            )
+        </div>
+    </div>
+</div>

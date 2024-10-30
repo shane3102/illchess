@@ -10,8 +10,9 @@ import { GameFinishedView } from '../../model/GameFinishedView';
 })
 export class GameFinishedPopupComponent {
 
-  @Input() boardGameObtainedInfoView: BoardGameObtainedInfoView
+  @Input() boardGameObtainedInfoView: BoardGameObtainedInfoView | undefined | null
   @Input() gameFinishedView: GameFinishedView | undefined | null
+  @Input() gameState: 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW'
 
   user = faUser
   userWon = faUserPlus

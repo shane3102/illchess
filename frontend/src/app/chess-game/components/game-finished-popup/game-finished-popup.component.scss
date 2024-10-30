@@ -12,10 +12,10 @@ $content-width: 5 * $chess-square-size;
     width: $content-width;
     height: $content-height;
     z-index: 2;
-    animation: show-username 500ms;
+    animation: show-username 1s;
 }
 
-.content-obtain-successful {
+.content-obtain {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -24,29 +24,8 @@ $content-width: 5 * $chess-square-size;
 }
 
 .content-obtain-unsuccessful {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
     color: red;
-    text-align: center;
-    height: $content-height;
-    width: $content-width;
-}
-
-.user-icon {
-    font-size: $chess-square-size;
-}
-
-.text-info {
-    font-size: calc($chess-square-size / 4);
-    text-align: center;
-}
-
-.user-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    text-align: center;   
 }
 
 .user-info-white {
@@ -56,20 +35,6 @@ $content-width: 5 * $chess-square-size;
 
 .user-info-black {
     animation: slide-result-black 2s, show-username 2s;
-}
-
-.point-change {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.point-change-gain {
-    color: green;
-}
-
-.point-change-loss {
-    color: red;
 }
 
 .result {
