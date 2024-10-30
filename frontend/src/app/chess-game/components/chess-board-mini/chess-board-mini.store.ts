@@ -2,16 +2,18 @@ import { Injectable } from "@angular/core";
 import { ChessBoardService } from "../../service/ChessBoardService";
 import { ComponentStore } from "@ngrx/component-store";
 import { BoardView } from "../../model/BoardView";
-import { Observable, from, map, switchMap, tap } from "rxjs";
+import { Observable, from, map, switchMap } from "rxjs";
+import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
 
 @Injectable()
-export class ChessBoardMiniStore extends ComponentStore<BoardView> {
+export class ChessBoardMiniStore extends ComponentStore<ChessBoardMiniState> {
 
     constructor(private chessBoardService: ChessBoardService) {
-        super()
+        super({})
     }
 
-    boardView$ = this.select((state)=> state)
+    boardView$ = this.select((state)=> state.boardView)
+    boardGameObtainedInfoView$ = this.select((state)=> state.boardGameObtainedInfoView)
 
     refresh = this.effect(
         (boardId$: Observable<string>) => boardId$
@@ -19,10 +21,14 @@ export class ChessBoardMiniStore extends ComponentStore<BoardView> {
                 switchMap(
                     (boardId) => from(this.chessBoardService.refreshBoard(boardId))
                         .pipe(
-                            map((boardView: BoardView) => this.setState(boardView))
+                            map((boardView: BoardView) => this.patchState({boardView: boardView}))
                         )
                 )
             )
     )
+}
 
+interface ChessBoardMiniState {
+    boardView?: BoardView, 
+    boardGameObtainedInfoView?: BoardGameObtainedInfoView
 }

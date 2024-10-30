@@ -7,10 +7,13 @@
     justify-content: center;
     align-items: center;
     border-radius: $chess-square-size-mini;
+    -webkit-transition: background-color 250ms linear;
+    -ms-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
 }
 
 .board-wrapper:hover {
-    background: radial-gradient(rgb(150,75,0,0.625), white);
+    background-color: rgb(150, 75, 0, 0.25);
 }
 
 .board {
@@ -40,4 +43,28 @@
 
 .chess-piece-wrapper:active {
     background-color: transparent;
+}
+
+.board-wrapper-disappear {
+    animation: disappear-finished-board-opacity 1s infinite, disappear-finished-board-width 1s infinite;
+}
+
+@keyframes disappear-finished-board-opacity {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes disappear-finished-board-width {
+    from {
+        width: $board-wrapper-size-mini;
+    }
+
+    to {
+        width: 0
+    }
 }
