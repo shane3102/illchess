@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { SquareInfo } from '../../model/SquareInfo';
 import { ChessBoardMiniStore } from './chess-board-mini.store';
 import { Observable } from 'rxjs';
 import { BoardView } from '../../model/BoardView';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
+import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
 
 @Component({
   selector: 'app-chess-board-mini',
@@ -14,18 +15,15 @@ import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketSer
 export class ChessBoardMiniComponent implements OnInit {
 
   @Input() boardId: string
-
+  
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
-  boardView$: Observable<BoardView> = this.chessBoardMiniStore.boardView$
+  private chessBoardMiniStore = inject(ChessBoardMiniStore)
+  private chessBoardWebSocketService =  inject(ChessBoardWebsocketService)
 
-  constructor(
-    private chessBoardMiniStore: ChessBoardMiniStore,
-    private chessBoardWebSocketService: ChessBoardWebsocketService
-  ) {
-
-  }
+  boardView$: Observable<BoardView | undefined> = this.chessBoardMiniStore.boardView$
+  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = this.chessBoardMiniStore.boardGameObtainedInfoView$
 
   ngOnInit(): void {
     this.chessBoardMiniStore.refresh(this.boardId)
@@ -33,7 +31,14 @@ export class ChessBoardMiniComponent implements OnInit {
       `/chess-topic/${this.boardId}`,
       (response: any) => {
         let boardView: BoardView = JSON.parse(response)
-        this.chessBoardMiniStore.setState(boardView)
+        this.chessBoardMiniStore.patchState({ boardView: boardView })
+      }
+    )
+    this.chessBoardWebSocketService.subscribe(
+      `/chess-topic/obtain-status/${this.boardId}`,
+      (response: any) => {
+        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+        this.chessBoardMiniStore.patchState({ boardGameObtainedInfoView: boardGameObtainedInfoView })
       }
     )
   }
