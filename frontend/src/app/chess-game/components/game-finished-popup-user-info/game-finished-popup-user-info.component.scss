@@ -1,0 +1,31 @@
+@import '../chess-board-style.scss';
+
+.user-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.text-info {
+    font-size: calc($chess-square-size / 4);
+    text-align: center;
+}
+
+.user-icon {
+    font-size: $chess-square-size;
+}
+
+.point-change {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.point-change-gain {
+    color: green;
+}
+
+.point-change-loss {
+    color: red;
+}
