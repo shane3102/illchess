@@ -31,6 +31,10 @@
     }
 }
 
+.player-username {
+    font-size: $chess-square-size-mini;
+}
+
 .chess-square {
     position: relative;
     display: flex;
@@ -46,7 +50,7 @@
 }
 
 .board-wrapper-disappear {
-    animation: disappear-finished-board-opacity 1s infinite, disappear-finished-board-width 1s infinite;
+    animation: disappear-finished-board-opacity 1s, disappear-finished-board-width 1s;
 }
 
 @keyframes disappear-finished-board-opacity {

@@ -10,6 +10,7 @@ import pl.illchess.game.domain.board.model.history.MoveHistory;
 import pl.illchess.game.domain.board.model.square.PiecesLocations;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.BoardState;
+import pl.illchess.game.domain.board.model.state.GameStartTime;
 import pl.illchess.game.domain.board.model.state.GameState;
 import pl.illchess.game.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.game.domain.board.model.state.player.IsProposingTakingBackMove;
@@ -49,7 +50,8 @@ public class BoardMapper {
             mapToPlayer(boardState.whitePlayer()),
             mapToPlayer(boardState.blackPlayer()),
             boardState.gameState().toString(),
-            boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString()
+            boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString(),
+            boardState.gameStartTime().value()
         );
     }
 
@@ -92,7 +94,8 @@ public class BoardMapper {
             GameState.valueOf(boardState.gameState()),
             mapToPlayer(boardState.whitePlayer()),
             mapToPlayer(boardState.blackPlayer()),
-            boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor())
+            boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor()),
+            new GameStartTime(boardState.startTime())
         );
     }
 

@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 import { BoardView } from '../../model/BoardView';
 import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
 import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
+import { Store } from '@ngrx/store';
+import { ChessGameState } from '../../state/chess-game.state';
+import { removeFinishedBoardFromActiveBoard } from '../../state/active-boards/active-boards.actions';
 
 @Component({
   selector: 'app-chess-board-mini',
@@ -15,12 +18,15 @@ import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView
 export class ChessBoardMiniComponent implements OnInit {
 
   @Input() boardId: string
-  
+
+  isBoardFaded: boolean = false
+
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
   private chessBoardMiniStore = inject(ChessBoardMiniStore)
-  private chessBoardWebSocketService =  inject(ChessBoardWebsocketService)
+  private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
+  private store = inject(Store<ChessGameState>)
 
   boardView$: Observable<BoardView | undefined> = this.chessBoardMiniStore.boardView$
   boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = this.chessBoardMiniStore.boardGameObtainedInfoView$
@@ -41,10 +47,28 @@ export class ChessBoardMiniComponent implements OnInit {
         this.chessBoardMiniStore.patchState({ boardGameObtainedInfoView: boardGameObtainedInfoView })
       }
     )
+
+    this.boardGameObtainedInfoView$.subscribe(
+      boardGameObtainedInfoView => {
+        if (boardGameObtainedInfoView?.status == 'SUCCESS') {
+          this.fadeBoard()
+        }
+      }
+    )
   }
 
   public calculateSquareColor(squareInfo: SquareInfo) {
     return (squareInfo.rank + this.fileToNumber(squareInfo)) % 2 == 0 ? 'rgba(150, 75, 0)' : '#F3E5AB';
+  }
+
+  private fadeBoard() {
+    this.isBoardFaded = true
+    setTimeout(
+      () => {
+        this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: this.boardId }))
+      },
+      950
+    )
   }
 
   private fileToNumber(squareInfo: SquareInfo): number {

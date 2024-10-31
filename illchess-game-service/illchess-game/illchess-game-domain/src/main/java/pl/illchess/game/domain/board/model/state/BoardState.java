@@ -1,5 +1,8 @@
 package pl.illchess.game.domain.board.model.state;
 
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.Optional;
 import pl.illchess.game.domain.board.command.AcceptDraw;
 import pl.illchess.game.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.game.domain.board.command.MovePiece;
@@ -24,11 +27,6 @@ import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
-
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Optional;
-
 import static pl.illchess.game.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.game.domain.board.model.state.GameState.DRAW;
 import static pl.illchess.game.domain.board.model.state.GameState.RESIGNED;
@@ -39,19 +37,22 @@ public class BoardState {
     private Player blackPlayer;
     private GameState gameState;
     private PieceColor victoriousPlayerColor;
+    private final GameStartTime gameStartTime;
 
     private BoardState(
         CurrentPlayerColor currentPlayerColor,
         Player whitePlayer,
         Player blackPlayer,
         GameState gameState,
-        PieceColor victoriousPlayerColor
+        PieceColor victoriousPlayerColor,
+        GameStartTime gameStartTime
     ) {
         this.currentPlayerColor = currentPlayerColor;
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
         this.gameState = gameState;
         this.victoriousPlayerColor = victoriousPlayerColor;
+        this.gameStartTime = gameStartTime;
     }
 
     public void changeState(GameState gameState) {
@@ -263,19 +264,25 @@ public class BoardState {
         return blackPlayer;
     }
 
+    public GameStartTime gameStartTime() {
+        return gameStartTime;
+    }
+
     public static BoardState of(
         PieceColor currentPlayerColor,
         GameState gameState,
         Player player1,
         Player player2,
-        PieceColor victoriousPlayerColor
+        PieceColor victoriousPlayerColor,
+        GameStartTime gameStartTime
     ) {
         return new BoardState(
             new CurrentPlayerColor(currentPlayerColor),
             player1,
             player2,
             gameState,
-            victoriousPlayerColor
+            victoriousPlayerColor,
+            gameStartTime
         );
     }
 
@@ -290,7 +297,8 @@ public class BoardState {
             new Player(username),
             null,
             CONTINUE,
-            null
+            null,
+            GameStartTime.current()
         );
     }
 

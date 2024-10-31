@@ -1,5 +1,6 @@
 package pl.illchess.game.adapter.board.query.out.redis;
 
+import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ public class ActiveBoardsRedisRepository implements ActiveBoardsQueryPort {
                 .values()
                 .stream()
                 .map(board -> (BoardEntity) board)
+                .sorted(Comparator.comparing(b -> b.boardState().startTime()))
                 .map(BoardEntity::boardId)
                 .toList()
         );
