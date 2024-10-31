@@ -3,11 +3,12 @@ import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketSer
 import { Store } from '@ngrx/store';
 import { ChessGameState } from '../../state/chess-game.state';
 import { ActiveBoardsView } from '../../model/ActiveBoardsView';
-import { activeBoardsRefreshed, refreshActiveBoards } from '../../state/active-boards/active-boards.actions';
+import { activeBoardsRefreshed, newActiveBoardObtained, refreshActiveBoards } from '../../state/active-boards/active-boards.actions';
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../state/active-boards/active-boards.selectors';
 import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
+import { ActiveBoardNewView } from '../../model/ActiveBoardNewView';
 
 @Component({
   selector: 'app-active-boards',
@@ -34,14 +35,13 @@ export class ActiveBoardsComponent implements OnInit {
 
   activeBoardsView$: Observable<ActiveBoardsView> = this.store.select(selectActiveBoards)
 
-
   ngOnInit(): void {
     this.store.dispatch(refreshActiveBoards({}))
     this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/active-boards`,
+      `/chess-topic/new-active-board`,
       (response: any) => {
-        let activeBoardsView: ActiveBoardsView = JSON.parse(response)
-        this.store.dispatch(activeBoardsRefreshed(activeBoardsView))
+        let activeBoardNewView: ActiveBoardNewView = JSON.parse(response)
+        this.store.dispatch(newActiveBoardObtained(activeBoardNewView))
       }
     )
   }

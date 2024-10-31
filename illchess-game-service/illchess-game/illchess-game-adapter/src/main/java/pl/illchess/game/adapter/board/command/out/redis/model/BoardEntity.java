@@ -1,6 +1,7 @@
 package pl.illchess.game.adapter.board.command.out.redis.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +35,8 @@ public record BoardEntity(
         PlayerEntity whitePlayer,
         PlayerEntity blackPlayer,
         String gameState,
-        String victoriousPlayerColor
+        String victoriousPlayerColor,
+        LocalDateTime startTime
     ) implements Serializable {
 
     }

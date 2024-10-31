@@ -9,20 +9,20 @@ import pl.illchess.game.application.board.query.out.ActiveBoardsQueryPort;
 import pl.illchess.game.application.board.query.out.BoardAdditionalInfoViewQueryPort;
 import pl.illchess.game.application.board.query.out.BoardViewPreMoveByUserQueryPort;
 import pl.illchess.game.application.board.query.out.BoardViewQueryPort;
-import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
+import pl.illchess.game.application.board.query.out.model.ActiveBoardNewView;
 import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
+import pl.illchess.game.domain.board.event.BoardInitialized;
 import pl.illchess.game.domain.board.event.BoardUpdated;
 import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
 import pl.illchess.game.domain.board.event.delete.BoardDeleted;
 import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesUpdated;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.board.exception.BoardWithPreMovesDoesNotExistException;
-
 import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.ERROR;
 import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.SUCCESS;
 
@@ -99,15 +99,15 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     }
 
     @Override
-    public ActiveBoardsView activeBoardsChanged(BoardUpdated event) {
+    public ActiveBoardNewView activeBoardsChanged(BoardInitialized event) {
         log.info("State off active boards has changed. Sending update info with ids off active boards");
-        ActiveBoardsView activeBoards = activeBoardsQueryPort.activeBoards();
+        ActiveBoardNewView view = new ActiveBoardNewView(event.boardId().uuid());
         messagingTemplate.convertAndSend(
-            "/chess-topic/active-boards",
-            activeBoards
+            "/chess-topic/new-active-board",
+            view
         );
         log.info("Successfully send info with new active boards");
-        return activeBoards;
+        return view;
     }
 
     @Override
