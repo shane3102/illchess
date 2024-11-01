@@ -5,10 +5,10 @@ import jakarta.ws.rs.Produces
 import pl.illchess.player_info.application.commons.command.out.PublishEvent
 import pl.illchess.player_info.application.game.command.GameManager
 import pl.illchess.player_info.application.game.command.out.SaveGame
-import pl.illchess.player_info.application.user.UserManager
-import pl.illchess.player_info.application.user.command.out.CreateUser
-import pl.illchess.player_info.application.user.command.out.LoadUser
-import pl.illchess.player_info.application.user.command.out.SaveUser
+import pl.illchess.player_info.application.player.PlayerManager
+import pl.illchess.player_info.application.player.command.out.CreatePlayer
+import pl.illchess.player_info.application.player.command.out.LoadPlayer
+import pl.illchess.player_info.application.player.command.out.SavePlayer
 
 class QuarkusScopeConfig {
 
@@ -16,14 +16,14 @@ class QuarkusScopeConfig {
     @ApplicationScoped
     fun gameManager(
         saveGame: SaveGame,
-        saveUser: SaveUser,
-        loadUser: LoadUser,
-        createUser: CreateUser,
+        savePlayer: SavePlayer,
+        loadPlayer: LoadPlayer,
+        createPlayer: CreatePlayer,
         publishEvent: PublishEvent
-    ) = GameManager(saveGame, saveUser, loadUser, createUser, publishEvent)
+    ) = GameManager(saveGame, savePlayer, loadPlayer, createPlayer, publishEvent)
 
     @Produces
     @ApplicationScoped
-    fun userManager(saveUser: SaveUser) = UserManager(saveUser)
+    fun userManager(savePlayer: SavePlayer) = PlayerManager(savePlayer)
 
 }

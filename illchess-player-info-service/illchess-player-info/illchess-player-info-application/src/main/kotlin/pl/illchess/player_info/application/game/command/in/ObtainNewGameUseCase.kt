@@ -10,7 +10,7 @@ import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
-import pl.illchess.player_info.domain.user.model.User
+import pl.illchess.player_info.domain.player.model.Player
 
 interface ObtainNewGameUseCase {
 
@@ -24,7 +24,7 @@ interface ObtainNewGameUseCase {
         val endTime: LocalDateTime,
         val performedMoves: List<PerformedMoveCmd>
     ) {
-        fun toCommand(whitePlayer: User, blackPlayer: User): ObtainNewGame {
+        fun toCommand(whitePlayer: Player, blackPlayer: Player): ObtainNewGame {
             return ObtainNewGame(
                 GameId(id),
                 whitePlayer,

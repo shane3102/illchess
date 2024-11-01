@@ -6,23 +6,23 @@ import pl.illchess.player_info.application.commons.command.out.PublishEvent
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase.ObtainNewGameCmd
 import pl.illchess.player_info.application.game.command.out.SaveGame
-import pl.illchess.player_info.application.user.command.out.CreateUser
-import pl.illchess.player_info.application.user.command.out.LoadUser
-import pl.illchess.player_info.application.user.command.out.SaveUser
+import pl.illchess.player_info.application.player.command.out.CreatePlayer
+import pl.illchess.player_info.application.player.command.out.LoadPlayer
+import pl.illchess.player_info.application.player.command.out.SavePlayer
 import pl.illchess.player_info.domain.commons.exception.DomainException
 import pl.illchess.player_info.domain.game.event.ErrorWhileSavingGameEvent
 import pl.illchess.player_info.domain.game.event.GameSavedEvent
 import pl.illchess.player_info.domain.game.model.Game
 import pl.illchess.player_info.domain.game.model.GameId
-import pl.illchess.player_info.domain.user.exception.UserNotFoundException
-import pl.illchess.player_info.domain.user.model.User
-import pl.illchess.player_info.domain.user.model.Username
+import pl.illchess.player_info.domain.player.exception.PlayerNotFoundException
+import pl.illchess.player_info.domain.player.model.Player
+import pl.illchess.player_info.domain.player.model.Username
 
 class GameManager(
     private val saveGame: SaveGame,
-    private val saveUser: SaveUser,
-    private val loadUser: LoadUser,
-    private val createUser: CreateUser,
+    private val savePlayer: SavePlayer,
+    private val loadPlayer: LoadPlayer,
+    private val createPlayer: CreatePlayer,
     private val publishEvent: PublishEvent
 ) : ObtainNewGameUseCase {
 
@@ -36,16 +36,16 @@ class GameManager(
                 """.trimIndent().replace(Regex("(\n*)\n"), "$1")
             )
             val whiteUsername = Username(cmd.whiteUsername)
-            val whiteUser: User = loadOrCreateAndLoadUser(whiteUsername)
+            val whitePlayer: Player = loadOrCreateAndLoadUser(whiteUsername)
             val blackUsername = Username(cmd.blackUsername)
-            val blackUser: User = loadOrCreateAndLoadUser(blackUsername)
-            val command = cmd.toCommand(whiteUser, blackUser)
+            val blackPlayer: Player = loadOrCreateAndLoadUser(blackUsername)
+            val command = cmd.toCommand(whitePlayer, blackPlayer)
 
             val game = Game.generateNewGame(command)
 
             saveGame.save(game)
-            saveUser.save(whiteUser)
-            saveUser.save(blackUser)
+            savePlayer.save(whitePlayer)
+            savePlayer.save(blackPlayer)
 
             log.info(
                 """
@@ -62,13 +62,13 @@ class GameManager(
         }
     }
 
-    private fun loadOrCreateAndLoadUser(username: Username): User {
-        var user = loadUser.load(username)
+    private fun loadOrCreateAndLoadUser(username: Username): Player {
+        var user = loadPlayer.load(username)
         if (user != null) {
             return user
         }
-        val createdUserId = createUser.create(username)
-        user = loadUser.load(createdUserId) ?: throw UserNotFoundException(createdUserId)
+        val createdUserId = createPlayer.create(username)
+        user = loadPlayer.load(createdUserId) ?: throw PlayerNotFoundException(createdUserId)
         return user
     }
 

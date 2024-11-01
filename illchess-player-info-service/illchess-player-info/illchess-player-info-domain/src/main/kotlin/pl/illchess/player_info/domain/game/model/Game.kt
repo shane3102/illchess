@@ -6,8 +6,8 @@ import pl.illchess.player_info.domain.game.model.PieceColor.WHITE
 
 data class Game(
     val id: GameId,
-    val whiteUserGameInfo: UserGameInfo,
-    val blackUserGameInfo: UserGameInfo,
+    val whitePlayerGameInfo: PlayerGameInfo,
+    val blackPlayerGameInfo: PlayerGameInfo,
     val gameResult: GameResult,
     val endTime: EndTime,
     val performedMoves: List<PerformedMove>
@@ -15,8 +15,8 @@ data class Game(
 
     companion object {
         fun generateNewGame(command: ObtainNewGame): Game {
-            val whiteUser = command.whiteUser
-            val blackUser = command.blackUser
+            val whiteUser = command.whitePlayer
+            val blackUser = command.blackPlayer
 
             val whiteUserCurrentRanking = whiteUser.currentRanking
             val blackUserCurrentRanking = blackUser.currentRanking
@@ -24,10 +24,10 @@ data class Game(
             val whiteResult = command.gameResult.forPlayerByColor(WHITE)
             val blackResult = command.gameResult.forPlayerByColor(BLACK)
 
-            val whiteUserGameInfo = whiteUserCurrentRanking.establishUserGameInfo(
+            val whiteUserGameInfo = whiteUserCurrentRanking.establishPlayerGameInfo(
                 whiteUser, blackUserCurrentRanking, whiteResult
             )
-            val blackUserGameInfo = blackUserCurrentRanking.establishUserGameInfo(
+            val blackUserGameInfo = blackUserCurrentRanking.establishPlayerGameInfo(
                 blackUser, whiteUserCurrentRanking, blackResult
             )
 

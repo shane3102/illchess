@@ -3,17 +3,17 @@ package pl.illchess.player_info.domain.game.model
 import pl.illchess.player_info.domain.game.exception.GameResultNotRecognisedException
 import pl.illchess.player_info.domain.game.model.PieceColor.BLACK
 import pl.illchess.player_info.domain.game.model.PieceColor.WHITE
-import pl.illchess.player_info.domain.user.model.UserGameResult
-import pl.illchess.player_info.domain.user.model.UserGameResult.DRAWN
-import pl.illchess.player_info.domain.user.model.UserGameResult.LOST
-import pl.illchess.player_info.domain.user.model.UserGameResult.WON
+import pl.illchess.player_info.domain.player.model.PlayerGameResult
+import pl.illchess.player_info.domain.player.model.PlayerGameResult.DRAWN
+import pl.illchess.player_info.domain.player.model.PlayerGameResult.LOST
+import pl.illchess.player_info.domain.player.model.PlayerGameResult.WON
 
 enum class GameResult {
     WHITE_WON,
     DRAW,
     BLACK_WON;
 
-    fun forPlayerByColor(color: PieceColor): UserGameResult {
+    fun forPlayerByColor(color: PieceColor): PlayerGameResult {
         return when (color) {
             WHITE -> when (this) {
                 WHITE_WON -> WON

@@ -2,7 +2,7 @@ package pl.illchess.player_info.adapter.game.command.out.jpa_streamer.mapper
 
 import pl.illchess.player_info.adapter.shared_entities.GameEntity
 import pl.illchess.player_info.adapter.shared_entities.PerformedMoveEntity
-import pl.illchess.player_info.adapter.user.command.out.jpa_streamer.mapper.UserMapper
+import pl.illchess.player_info.adapter.player.command.out.jpa_streamer.mapper.PlayerMapper
 import pl.illchess.player_info.domain.game.model.ChessSquare
 import pl.illchess.player_info.domain.game.model.EndTime
 import pl.illchess.player_info.domain.game.model.Game
@@ -11,21 +11,21 @@ import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.MoveAlgebraicNotation
 import pl.illchess.player_info.domain.game.model.PerformedMove
 import pl.illchess.player_info.domain.game.model.PieceColor
-import pl.illchess.player_info.domain.game.model.UserGameInfo
-import pl.illchess.player_info.domain.user.model.UserRankingPoints
+import pl.illchess.player_info.domain.game.model.PlayerGameInfo
+import pl.illchess.player_info.domain.player.model.PlayerRankingPoints
 
 class GameMapper {
     companion object {
         fun toEntity(game: Game) = GameEntity(
             game.id.uuid,
-            UserMapper.toEntity(game.whiteUserGameInfo.user),
-            game.whiteUserGameInfo.rankingPointsBeforeGame.value,
-            game.whiteUserGameInfo.rankingPointsAfterGame.value,
-            game.whiteUserGameInfo.rankingPointsChange.value,
-            UserMapper.toEntity(game.blackUserGameInfo.user),
-            game.blackUserGameInfo.rankingPointsBeforeGame.value,
-            game.blackUserGameInfo.rankingPointsAfterGame.value,
-            game.blackUserGameInfo.rankingPointsChange.value,
+            PlayerMapper.toEntity(game.whitePlayerGameInfo.player),
+            game.whitePlayerGameInfo.rankingPointsBeforeGame.value,
+            game.whitePlayerGameInfo.rankingPointsAfterGame.value,
+            game.whitePlayerGameInfo.rankingPointsChange.value,
+            PlayerMapper.toEntity(game.blackPlayerGameInfo.player),
+            game.blackPlayerGameInfo.rankingPointsBeforeGame.value,
+            game.blackPlayerGameInfo.rankingPointsAfterGame.value,
+            game.blackPlayerGameInfo.rankingPointsChange.value,
             game.endTime.time,
             game.gameResult.name,
             game.performedMoves.map {
@@ -40,17 +40,17 @@ class GameMapper {
 
         fun toModel(gameEntity: GameEntity) = Game(
             GameId(gameEntity.id),
-            UserGameInfo(
-                UserMapper.toModel(gameEntity.whiteUser),
-                UserRankingPoints(gameEntity.whiteRankingPointsBeforeGame),
-                UserRankingPoints(gameEntity.whiteRankingPointsAfterGame),
-                UserRankingPoints(gameEntity.whiteRankingPointsChange)
+            PlayerGameInfo(
+                PlayerMapper.toModel(gameEntity.whiteUser),
+                PlayerRankingPoints(gameEntity.whiteRankingPointsBeforeGame),
+                PlayerRankingPoints(gameEntity.whiteRankingPointsAfterGame),
+                PlayerRankingPoints(gameEntity.whiteRankingPointsChange)
             ),
-            UserGameInfo(
-                UserMapper.toModel(gameEntity.blackUser),
-                UserRankingPoints(gameEntity.blackRankingPointsBeforeGame),
-                UserRankingPoints(gameEntity.blackRankingPointsAfterGame),
-                UserRankingPoints(gameEntity.blackRankingPointsChange)
+            PlayerGameInfo(
+                PlayerMapper.toModel(gameEntity.blackUser),
+                PlayerRankingPoints(gameEntity.blackRankingPointsBeforeGame),
+                PlayerRankingPoints(gameEntity.blackRankingPointsAfterGame),
+                PlayerRankingPoints(gameEntity.blackRankingPointsChange)
             ),
             GameResult.of(gameEntity.winningPieceColor),
             EndTime(gameEntity.endTime),

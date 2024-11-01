@@ -5,21 +5,21 @@ import pl.illchess.player_info.application.game.command.GameManager
 import pl.illchess.player_info.application.game.command.out.LoadGame
 import pl.illchess.player_info.application.game.command.out.SaveGame
 import pl.illchess.player_info.application.test_impl.InMemoryGameRepository
-import pl.illchess.player_info.application.test_impl.InMemoryUserRepository
+import pl.illchess.player_info.application.test_impl.InMemoryPlayerRepository
 import pl.illchess.player_info.application.test_impl.TestPublishEvent
-import pl.illchess.player_info.application.user.command.out.CreateUser
-import pl.illchess.player_info.application.user.command.out.LoadUser
-import pl.illchess.player_info.application.user.command.out.SaveUser
+import pl.illchess.player_info.application.player.command.out.CreatePlayer
+import pl.illchess.player_info.application.player.command.out.LoadPlayer
+import pl.illchess.player_info.application.player.command.out.SavePlayer
 import spock.lang.Specification
 
 class UnitTestSpecification extends Specification {
 
-    private def inMemoryUserRepository = new InMemoryUserRepository()
+    private def inMemoryUserRepository = new InMemoryPlayerRepository()
     private def inMemoryGameRepository = new InMemoryGameRepository()
 
-    protected LoadUser loadUser = inMemoryUserRepository
-    protected SaveUser saveUser = inMemoryUserRepository
-    protected CreateUser createUser = inMemoryUserRepository
+    protected LoadPlayer loadUser = inMemoryUserRepository
+    protected SavePlayer saveUser = inMemoryUserRepository
+    protected CreatePlayer createUser = inMemoryUserRepository
 
     protected SaveGame saveGame = inMemoryGameRepository
     protected LoadGame loadGame = inMemoryGameRepository

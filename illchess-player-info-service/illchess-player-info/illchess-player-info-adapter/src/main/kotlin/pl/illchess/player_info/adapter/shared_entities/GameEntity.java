@@ -35,7 +35,7 @@ public class GameEntity extends PanacheEntityBase {
     @JoinColumn(name = "white_user_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.EAGER)
     @Cascade(CascadeType.MERGE)
-    public UserEntity whiteUser;
+    public PlayerEntity whiteUser;
     @Column(name = "white_ranking_points_before_game")
     public int whiteRankingPointsBeforeGame;
     @Column(name = "white_ranking_points_after_game")
@@ -47,7 +47,7 @@ public class GameEntity extends PanacheEntityBase {
     @JoinColumn(name = "black_user_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.EAGER)
     @Cascade(CascadeType.MERGE)
-    public UserEntity blackUser;
+    public PlayerEntity blackUser;
     @Column(name = "black_ranking_points_before_game")
     public int blackRankingPointsBeforeGame;
     @Column(name = "black_ranking_points_after_game")
@@ -66,11 +66,11 @@ public class GameEntity extends PanacheEntityBase {
 
     public GameEntity(
             UUID id,
-            UserEntity whiteUser,
+            PlayerEntity whiteUser,
             int whiteRankingPointsBeforeGame,
             int whiteRankingPointsAfterGame,
             int whiteRankingPointsChange,
-            UserEntity blackUser,
+            PlayerEntity blackUser,
             int blackRankingPointsBeforeGame,
             int blackRankingPointsAfterGame,
             int blackRankingPointsChange,

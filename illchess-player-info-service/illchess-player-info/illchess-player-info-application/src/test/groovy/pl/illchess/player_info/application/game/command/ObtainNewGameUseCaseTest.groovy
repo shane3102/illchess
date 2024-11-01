@@ -3,14 +3,13 @@ package pl.illchess.player_info.application.game.command
 import pl.illchess.player_info.application.UnitTestSpecification
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase.PerformedMoveCmd
-import pl.illchess.player_info.domain.game.model.Game
 import pl.illchess.player_info.domain.game.model.GameId
 import pl.illchess.player_info.domain.game.model.GameResult
 import pl.illchess.player_info.domain.game.model.PieceColor
-import pl.illchess.player_info.domain.user.model.User
-import pl.illchess.player_info.domain.user.model.UserId
-import pl.illchess.player_info.domain.user.model.UserRankingPoints
-import pl.illchess.player_info.domain.user.model.Username
+import pl.illchess.player_info.domain.player.model.Player
+import pl.illchess.player_info.domain.player.model.PlayerId
+import pl.illchess.player_info.domain.player.model.PlayerRankingPoints
+import pl.illchess.player_info.domain.player.model.Username
 
 import java.time.LocalDateTime
 
@@ -27,17 +26,17 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
         def gameId = UUID.randomUUID()
 
         def userWhiteUsername = new Username(generateRandomString())
-        saveUser.save(new User(
-                new UserId(UUID.randomUUID()),
+        saveUser.save(new Player(
+                new PlayerId(UUID.randomUUID()),
                 userWhiteUsername,
-                new UserRankingPoints(userWhiteStartingPoints)
+                new PlayerRankingPoints(userWhiteStartingPoints)
         ))
 
         def userBlackUsername = new Username(generateRandomString())
-        saveUser.save(new User(
-                new UserId(UUID.randomUUID()),
+        saveUser.save(new Player(
+                new PlayerId(UUID.randomUUID()),
                 userBlackUsername,
-                new UserRankingPoints(userBlackStartingPoints)
+                new PlayerRankingPoints(userBlackStartingPoints)
         ))
 
         def cmd = new ObtainNewGameUseCase.ObtainNewGameCmd(
@@ -76,8 +75,8 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
         userBlack != null
         checkPointChangeByResult(userBlack, userBlackStartingPoints, userWhiteStartingPoints, game.gameResult, BLACK)
 
-        game.whiteUserGameInfo.rankingPointsBeforeGame.value == userWhiteStartingPoints
-        game.blackUserGameInfo.rankingPointsBeforeGame.value == userBlackStartingPoints
+        game.whitePlayerGameInfo.rankingPointsBeforeGame.value == userWhiteStartingPoints
+        game.blackPlayerGameInfo.rankingPointsBeforeGame.value == userBlackStartingPoints
 
         where:
         gameResult | userWhiteStartingPoints | userBlackStartingPoints | performedMoves
@@ -87,7 +86,7 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
 
     }
 
-    boolean checkPointChangeByResult(User user, int startingPoints, int enemyStartingPoints, GameResult gameResult, PieceColor playerColor) {
+    boolean checkPointChangeByResult(Player user, int startingPoints, int enemyStartingPoints, GameResult gameResult, PieceColor playerColor) {
         if (playerColor == WHITE) {
             if (gameResult == WHITE_WON) {
                 return user.currentRanking.value > startingPoints

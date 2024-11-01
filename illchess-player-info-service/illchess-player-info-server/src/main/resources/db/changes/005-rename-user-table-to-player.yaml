@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - renameTable:
+            oldTableName: user
+            newTableName: player
