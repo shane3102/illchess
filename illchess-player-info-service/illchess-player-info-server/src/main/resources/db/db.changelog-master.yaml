@@ -11,3 +11,6 @@ databaseChangeLog:
   - include:
       file: changes/004-add-inbox-outbox-message.yaml
       relativeToChangeLogFile: true
+  - include:
+      file: changes/005-rename-user-table-to-player.yaml
+      relativeToChangeLogFile: true
