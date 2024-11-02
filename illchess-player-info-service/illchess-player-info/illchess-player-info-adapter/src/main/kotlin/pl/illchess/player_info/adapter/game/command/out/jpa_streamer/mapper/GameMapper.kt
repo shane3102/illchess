@@ -52,7 +52,7 @@ class GameMapper {
                 PlayerRankingPoints(gameEntity.blackRankingPointsAfterGame),
                 PlayerRankingPoints(gameEntity.blackRankingPointsChange)
             ),
-            GameResult.of(gameEntity.winningPieceColor),
+            GameResult.of(gameEntity.gameResult),
             EndTime(gameEntity.endTime),
             gameEntity.performedMoves.map {
                 PerformedMove(

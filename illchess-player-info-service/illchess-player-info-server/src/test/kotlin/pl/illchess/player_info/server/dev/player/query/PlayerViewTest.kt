@@ -1,4 +1,4 @@
-package pl.illchess.player_info.server.dev.player
+package pl.illchess.player_info.server.dev.player.query
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.common.mapper.TypeRef

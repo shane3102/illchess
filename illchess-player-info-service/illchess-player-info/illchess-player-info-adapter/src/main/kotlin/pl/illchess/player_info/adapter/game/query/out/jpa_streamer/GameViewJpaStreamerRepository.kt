@@ -3,15 +3,20 @@ package pl.illchess.player_info.adapter.game.query.out.jpa_streamer
 import com.speedment.jpastreamer.application.JPAStreamer
 import com.speedment.jpastreamer.streamconfiguration.StreamConfiguration
 import jakarta.enterprise.context.ApplicationScoped
+import pl.illchess.player_info.adapter.game.query.out.jpa_streamer.mapper.GameViewMapper
 import pl.illchess.player_info.adapter.shared_entities.GameEntity
 import pl.illchess.player_info.adapter.shared_entities.GameEntityMetaModel
+import pl.illchess.player_info.application.commons.query.model.Page
+import pl.illchess.player_info.application.game.query.out.GameSnippetViewLatestQueryPort
 import pl.illchess.player_info.application.game.query.out.GameViewQueryPort
+import pl.illchess.player_info.application.game.query.out.model.GameSnippetView
 import pl.illchess.player_info.application.game.query.out.model.GameView
-import pl.illchess.player_info.application.game.query.out.model.GameView.UserGameInfoView
 import java.util.UUID
 
 @ApplicationScoped
-class GameViewJpaStreamerRepository(private val jpaStreamer: JPAStreamer) : GameViewQueryPort {
+class GameViewJpaStreamerRepository(
+    private val jpaStreamer: JPAStreamer
+) : GameViewQueryPort, GameSnippetViewLatestQueryPort {
 
     override fun findById(id: UUID): GameView? {
 
@@ -21,33 +26,26 @@ class GameViewJpaStreamerRepository(private val jpaStreamer: JPAStreamer) : Game
 
         return jpaStreamer.stream(sc)
             .filter { it.id == id }.findFirst()
-            .map {
-                GameView(
-                    it.id,
-                    UserGameInfoView(
-                        it.whiteUser.username,
-                        it.whiteRankingPointsBeforeGame,
-                        it.whiteRankingPointsAfterGame,
-                        it.whiteRankingPointsChange
-                    ),
-                    UserGameInfoView(
-                        it.blackUser.username,
-                        it.blackRankingPointsBeforeGame,
-                        it.blackRankingPointsAfterGame,
-                        it.blackRankingPointsChange
-                    ),
-                    it.winningPieceColor,
-                    it.endTime,
-                    it.performedMoves.map { moveEntity ->
-                        GameView.PerformedMoveView(
-                            moveEntity.startSquare,
-                            moveEntity.endSquare,
-                            moveEntity.stringValue,
-                            moveEntity.color
-                        )
-                    }
-                )
-            }
+            .map { GameViewMapper.toView(it) }
             .orElse(null)
+    }
+
+    override fun findLatestGamesPageable(pageNumber: Int, pageSize: Int): Page<GameSnippetView> {
+        val sc = StreamConfiguration.of(GameEntity::class.java)
+            .joining(GameEntityMetaModel.whiteUser)
+            .joining(GameEntityMetaModel.blackUser)
+
+        val streamSupplier = { jpaStreamer.stream(sc) }
+
+        val totalPages = streamSupplier.invoke().count() / pageSize
+
+        val content = streamSupplier.invoke()
+            .sorted(GameEntityMetaModel.endTime.reversed())
+            .skip(pageNumber.toLong() * pageSize.toLong())
+            .limit(pageSize.toLong())
+            .map { GameViewMapper.toSnippetView(it) }
+            .toList()
+
+        return Page(content, pageNumber, pageSize, totalPages.toInt())
     }
 }
