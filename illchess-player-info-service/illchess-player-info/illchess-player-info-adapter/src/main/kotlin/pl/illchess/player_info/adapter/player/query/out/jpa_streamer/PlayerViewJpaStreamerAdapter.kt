@@ -11,16 +11,16 @@ import pl.illchess.player_info.application.player.query.out.model.PlayerView
 @ApplicationScoped
 class PlayerViewJpaStreamerAdapter(private val jpaStreamer: JPAStreamer) : PlayerViewQueryPort {
 
-    override fun findHighestRatedPlayersPageable(page: Int, pageSize: Int): Page<PlayerView> {
+    override fun findHighestRatedPlayersPageable(pageNumber: Int, pageSize: Int): Page<PlayerView> {
         val streamSupplier = { jpaStreamer.stream(PlayerEntity::class.java) }
         val totalPages = streamSupplier.invoke().count() / pageSize
         val content = streamSupplier.invoke()
             .sorted(PlayerEntityMetaModel.currentRankingPoints.reversed())
-            .skip(page.toLong() * pageSize.toLong())
+            .skip(pageNumber.toLong() * pageSize.toLong())
             .limit(pageSize.toLong())
             .map { PlayerView(it.id, it.username, it.currentRankingPoints) }
             .toList()
-        val result = Page(content, page, pageSize, totalPages.toInt())
+        val result = Page(content, pageNumber, pageSize, totalPages.toInt())
         return result
     }
 }

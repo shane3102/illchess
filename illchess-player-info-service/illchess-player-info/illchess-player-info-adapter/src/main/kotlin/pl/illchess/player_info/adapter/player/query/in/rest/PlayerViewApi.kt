@@ -12,7 +12,7 @@ interface PlayerViewApi {
     @GET
     @Path("/ranking")
     fun ranking(
-        @RestQuery page: Int,
+        @RestQuery pageNumber: Int,
         @RestQuery pageSize: Int
     ): Page<PlayerView>
 

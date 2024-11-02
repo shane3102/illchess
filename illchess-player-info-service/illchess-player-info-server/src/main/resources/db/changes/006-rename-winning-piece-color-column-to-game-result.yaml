@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - renameColumn:
+            tableName: game
+            columnDataType: TEXT
+            oldColumnName: winning_piece_color
+            newColumnName: game_result

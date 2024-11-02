@@ -6,7 +6,7 @@ class PlayerViewController(
     private val playerViewQueryPort: PlayerViewQueryPort
 ): PlayerViewApi {
     override fun ranking(
-        page: Int,
+        pageNumber: Int,
         pageSize: Int
-    ) = playerViewQueryPort.findHighestRatedPlayersPageable(page, pageSize)
+    ) = playerViewQueryPort.findHighestRatedPlayersPageable(pageNumber, pageSize)
 }

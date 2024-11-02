@@ -1,4 +1,4 @@
-package pl.illchess.player_info.server.dev.game
+package pl.illchess.player_info.server.dev.game.command
 
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
