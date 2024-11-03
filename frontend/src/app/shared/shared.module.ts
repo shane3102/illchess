@@ -9,6 +9,8 @@ import { boardAdditionalInfoReducer } from './state/board-additional-info/board-
 import { BoardEffects } from './state/board/board.effects';
 import { ActiveBoardEffects } from './state/active-boards/active-boards.effects';
 import { BoardAdditionalInfoEffects } from './state/board-additional-info/board-additional-info.effects';
+import { PlayerInfoEffects } from './state/player-info/player-info.effects';
+import { playerInfoReducer } from './state/player-info/player-info.reducers';
 
 @NgModule({
   declarations: [
@@ -20,10 +22,11 @@ import { BoardAdditionalInfoEffects } from './state/board-additional-info/board-
       {
         boardState: boardReducer,
         activeBoardsState: activeBoardsReducer,
-        boardAdditionalInfoState: boardAdditionalInfoReducer
+        boardAdditionalInfoState: boardAdditionalInfoReducer,
+        playerInfoState: playerInfoReducer
       }
     ),
-    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects, BoardAdditionalInfoEffects])
+    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects, BoardAdditionalInfoEffects, PlayerInfoEffects])
   ],
   exports: [
     SpinnerComponent
