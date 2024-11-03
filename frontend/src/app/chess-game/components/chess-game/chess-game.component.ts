@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
-import { BoardAdditionalInfoView } from '../../../shared/model/BoardAdditionalInfoView';
+import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
 import { Observable } from 'rxjs';
 import { boardAdditionalInfoSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
 

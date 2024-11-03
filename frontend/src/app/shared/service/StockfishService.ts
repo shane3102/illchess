@@ -1,13 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { BestMoveAndContinuationResponse } from "../model/BestMoveAndContinuationResponse";
-import { EvaluationResponse } from "../model/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../model/stockfish/BestMoveAndContinuationResponse";
+import { EvaluationResponse } from "../model/stockfish/EvaluationResponse";
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChessBoardStockfishService {
+export class StockfishService {
 
     readonly PATH: string = `/gateway/stockfish/api/board`
 

@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
-import { ChessBoardService } from "../../../shared/service/ChessBoardService";
+import { GameService } from "../../../shared/service/GameService";
 import { ComponentStore } from "@ngrx/component-store";
-import { BoardView } from "../../../shared/model/BoardView";
+import { BoardView } from "../../../shared/model/game/BoardView";
 import { Observable, from, map, switchMap } from "rxjs";
-import { BoardGameObtainedInfoView } from "../../../shared/model/BoardGameObtainedInfoView";
+import { BoardGameObtainedInfoView } from "../../../shared/model/game/BoardGameObtainedInfoView";
 
 @Injectable()
 export class ChessBoardMiniStore extends ComponentStore<ChessBoardMiniState> {
 
-    constructor(private chessBoardService: ChessBoardService) {
+    constructor(private chessBoardService: GameService) {
         super({})
     }
 

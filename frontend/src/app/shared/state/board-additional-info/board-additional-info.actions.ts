@@ -1,15 +1,15 @@
 import { createAction, props } from "@ngrx/store";
-import { AcceptDrawRequest } from "../../model/AcceptDrawRequest";
-import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
-import { ProposeDrawRequest } from "../../model/ProposeDrawRequest";
-import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
-import { RejectDrawRequest } from "../../model/RejectDrawRequest";
-import { ResignGameRequest } from "../../model/ResignGameRequest";
-import { EvaluationResponse } from "../../model/EvaluationResponse";
-import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
-import { ProposeTakingBackMoveRequest } from "../../model/ProposeTakingBackMoveRequest";
-import { RejectTakingBackMoveRequest } from "../../model/RejectTakingBackMoveRequest";
-import { AcceptTakingBackMoveRequest } from "../../model/AcceptTakingBackMoveRequest";
+import { AcceptDrawRequest } from "../../model/game/AcceptDrawRequest";
+import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { ProposeDrawRequest } from "../../model/game/ProposeDrawRequest";
+import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
+import { RejectDrawRequest } from "../../model/game/RejectDrawRequest";
+import { ResignGameRequest } from "../../model/game/ResignGameRequest";
+import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
+import { ProposeTakingBackMoveRequest } from "../../model/game/ProposeTakingBackMoveRequest";
+import { RejectTakingBackMoveRequest } from "../../model/game/RejectTakingBackMoveRequest";
+import { AcceptTakingBackMoveRequest } from "../../model/game/AcceptTakingBackMoveRequest";
 
 export const refreshAdditionalInfoOfBoard = createAction(
     'Manual refresh of board additional info',

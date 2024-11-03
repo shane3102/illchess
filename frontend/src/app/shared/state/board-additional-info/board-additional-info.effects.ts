@@ -1,20 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { from, map, switchMap } from "rxjs";
-import { AcceptDrawRequest } from "../../model/AcceptDrawRequest";
-import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
-import { ProposeDrawRequest } from "../../model/ProposeDrawRequest";
-import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
-import { RejectDrawRequest } from "../../model/RejectDrawRequest";
-import { ResignGameRequest } from "../../model/ResignGameRequest";
-import { ChessBoardService } from "../../service/ChessBoardService";
+import { AcceptDrawRequest } from "../../model/game/AcceptDrawRequest";
+import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { ProposeDrawRequest } from "../../model/game/ProposeDrawRequest";
+import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
+import { RejectDrawRequest } from "../../model/game/RejectDrawRequest";
+import { ResignGameRequest } from "../../model/game/ResignGameRequest";
+import { GameService } from "../../service/GameService";
 import { acceptDraw, acceptTakingBackMove, bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded, proposeDraw, proposeTakingBackMove, refreshAdditionalInfoOfBoard, rejectDraw, rejectTakingBackMove, resignGame } from "./board-additional-info.actions";
-import { ChessBoardStockfishService } from "../../service/ChessBoardStockfishService";
-import { EvaluationResponse } from "../../model/EvaluationResponse";
-import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
-import { ProposeTakingBackMoveRequest } from "../../model/ProposeTakingBackMoveRequest";
-import { RejectTakingBackMoveRequest } from "../../model/RejectTakingBackMoveRequest";
-import { AcceptTakingBackMoveRequest } from "../../model/AcceptTakingBackMoveRequest";
+import { StockfishService } from "../../service/StockfishService";
+import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
+import { ProposeTakingBackMoveRequest } from "../../model/game/ProposeTakingBackMoveRequest";
+import { RejectTakingBackMoveRequest } from "../../model/game/RejectTakingBackMoveRequest";
+import { AcceptTakingBackMoveRequest } from "../../model/game/AcceptTakingBackMoveRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -23,8 +23,8 @@ export class BoardAdditionalInfoEffects {
 
     constructor(
         private actions$: Actions,
-        private chessBoardService: ChessBoardService,
-        private chessBoardStockfishService: ChessBoardStockfishService
+        private chessBoardService: GameService,
+        private chessBoardStockfishService: StockfishService
     ) { }
 
     refreshBoardAdditionalInfo$ = createEffect(

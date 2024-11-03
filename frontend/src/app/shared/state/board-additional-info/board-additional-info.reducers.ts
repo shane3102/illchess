@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
-import { BestMoveAndContinuationResponse } from "../../model/BestMoveAndContinuationResponse";
-import { BoardAdditionalInfoView } from "../../model/BoardAdditionalInfoView";
-import { EvaluationResponse } from "../../model/EvaluationResponse";
+import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
+import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
 import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded } from "./board-additional-info.actions";
 
 export interface BoardAdditionalInfoState {

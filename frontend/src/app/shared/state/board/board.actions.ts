@@ -1,15 +1,15 @@
 import { createAction, props } from "@ngrx/store";
-import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
-import { BoardView } from "../../model/BoardView";
-import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
-import { IllegalMoveResponse } from "../../model/IllegalMoveView";
-import { InitializeBoardRequest } from "../../model/InitializeBoardRequest";
-import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
-import { MovePieceRequest } from "../../model/MovePieceRequest";
-import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
-import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
-import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
-import { GameFinishedView } from "../../model/GameFinishedView";
+import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
+import { BoardView } from "../../model/game/BoardView";
+import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
+import { IllegalMoveResponse } from "../../model/game/IllegalMoveView";
+import { InitializeBoardRequest } from "../../model/game/InitializeBoardRequest";
+import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { MovePieceRequest } from "../../model/game/MovePieceRequest";
+import { PieceDraggedInfo } from "../../model/game/PieceDraggedInfo";
+import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
+import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 
 export const movePiece = createAction(
     'Move piece',

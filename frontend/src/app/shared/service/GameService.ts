@@ -1,26 +1,26 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { AcceptDrawRequest } from "../model/AcceptDrawRequest";
-import { AcceptTakingBackMoveRequest } from "../model/AcceptTakingBackMoveRequest";
-import { ActiveBoardsView } from "../model/ActiveBoardsView";
-import { BoardAdditionalInfoView } from "../model/BoardAdditionalInfoView";
-import { BoardLegalMovesResponse } from "../model/BoardLegalMovesResponse";
-import { BoardView } from "../model/BoardView";
-import { CheckLegalMovesRequest } from "../model/CheckLegalMovesRequest";
-import { InitializeBoardRequest } from "../model/InitializeBoardRequest";
-import { InitializedBoardResponse } from "../model/InitializedBoardResponse";
-import { MovePieceRequest } from "../model/MovePieceRequest";
-import { ProposeDrawRequest } from "../model/ProposeDrawRequest";
-import { ProposeTakingBackMoveRequest } from "../model/ProposeTakingBackMoveRequest";
-import { RejectDrawRequest } from "../model/RejectDrawRequest";
-import { RejectTakingBackMoveRequest } from "../model/RejectTakingBackMoveRequest";
-import { ResignGameRequest } from "../model/ResignGameRequest";
+import { AcceptDrawRequest } from "../model/game/AcceptDrawRequest";
+import { AcceptTakingBackMoveRequest } from "../model/game/AcceptTakingBackMoveRequest";
+import { ActiveBoardsView } from "../model/game/ActiveBoardsView";
+import { BoardAdditionalInfoView } from "../model/game/BoardAdditionalInfoView";
+import { BoardLegalMovesResponse } from "../model/game/BoardLegalMovesResponse";
+import { BoardView } from "../model/game/BoardView";
+import { CheckLegalMovesRequest } from "../model/game/CheckLegalMovesRequest";
+import { InitializeBoardRequest } from "../model/game/InitializeBoardRequest";
+import { InitializedBoardResponse } from "../model/game/InitializedBoardResponse";
+import { MovePieceRequest } from "../model/game/MovePieceRequest";
+import { ProposeDrawRequest } from "../model/game/ProposeDrawRequest";
+import { ProposeTakingBackMoveRequest } from "../model/game/ProposeTakingBackMoveRequest";
+import { RejectDrawRequest } from "../model/game/RejectDrawRequest";
+import { RejectTakingBackMoveRequest } from "../model/game/RejectTakingBackMoveRequest";
+import { ResignGameRequest } from "../model/game/ResignGameRequest";
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChessBoardService {
+export class GameService {
 
     readonly PATH: string = `/gateway/game/api/board`
 
