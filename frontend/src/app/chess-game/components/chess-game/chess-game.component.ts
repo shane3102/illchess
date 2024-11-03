@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../state/chess-game.state';
-import { BoardAdditionalInfoView } from '../../model/BoardAdditionalInfoView';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { BoardAdditionalInfoView } from '../../../shared/model/BoardAdditionalInfoView';
 import { Observable } from 'rxjs';
-import { boardAdditionalInfoSelector } from '../../state/board-additional-info/board-additional-info.selectors';
+import { boardAdditionalInfoSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
 
 @Component({
   selector: 'app-chess-game',

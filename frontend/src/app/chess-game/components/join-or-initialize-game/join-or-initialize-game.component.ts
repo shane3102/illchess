@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../state/chess-game.state';
-import { initializeBoard } from '../../state/board/board.actions';
-import { InitializeBoardRequest } from '../../model/InitializeBoardRequest';
-import { initializedBoardIdSelector } from '../../state/board/board.selectors';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { initializeBoard } from '../../../shared/state/board/board.actions';
+import { InitializeBoardRequest } from '../../../shared/model/InitializeBoardRequest';
+import { initializedBoardIdSelector } from '../../../shared/state/board/board.selectors';
 import { Router } from '@angular/router';
-import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
+import { RefreshBoardDto } from '../../../shared/model/RefreshBoardRequest';
 
 @Component({
   selector: 'app-join-or-initialize-game',

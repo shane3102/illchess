@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { SquareInfo } from '../../model/SquareInfo';
+import { SquareInfo } from '../../../shared/model/SquareInfo';
 import { ChessBoardMiniStore } from './chess-board-mini.store';
 import { Observable } from 'rxjs';
-import { BoardView } from '../../model/BoardView';
-import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
-import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
+import { BoardView } from '../../../shared/model/BoardView';
+import { ChessBoardWebsocketService } from '../../../shared/service/ChessBoardWebsocketService';
+import { BoardGameObtainedInfoView } from '../../../shared/model/BoardGameObtainedInfoView';
 import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../state/chess-game.state';
-import { removeFinishedBoardFromActiveBoard } from '../../state/active-boards/active-boards.actions';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
 
 @Component({
   selector: 'app-chess-board-mini',

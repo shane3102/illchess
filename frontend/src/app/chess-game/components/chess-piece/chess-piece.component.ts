@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Piece, PieceInfo } from '../../model/PieceInfo';
+import { Piece, PieceInfo } from '../../../shared/model/PieceInfo';
 
 @Component({
   selector: 'app-chess-piece',

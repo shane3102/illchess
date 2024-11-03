@@ -1,20 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
-import { BoardView } from '../../model/BoardView';
-import { CheckLegalMovesRequest } from '../../model/CheckLegalMovesRequest';
-import { IllegalMoveResponse } from '../../model/IllegalMoveView';
-import { MovePieceRequest } from '../../model/MovePieceRequest';
-import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
-import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
-import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
-import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../state/board-additional-info/board-additional-info.selectors';
-import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../state/board/board.actions';
-import { boardGameObtainedInfoView, boardSelector, draggedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../state/board/board.selectors';
-import { ChessGameState } from '../../state/chess-game.state';
-import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
-import { GameFinishedView } from '../../model/GameFinishedView';
+import { BoardLegalMovesResponse } from '../../../shared/model/BoardLegalMovesResponse';
+import { BoardView } from '../../../shared/model/BoardView';
+import { CheckLegalMovesRequest } from '../../../shared/model/CheckLegalMovesRequest';
+import { IllegalMoveResponse } from '../../../shared/model/IllegalMoveView';
+import { MovePieceRequest } from '../../../shared/model/MovePieceRequest';
+import { PieceDraggedInfo } from '../../../shared/model/PieceDraggedInfo';
+import { RefreshBoardDto } from '../../../shared/model/RefreshBoardRequest';
+import { ChessBoardWebsocketService } from '../../../shared/service/ChessBoardWebsocketService';
+import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
+import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../../shared/state/board/board.actions';
+import { boardGameObtainedInfoView, boardSelector, draggedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../../shared/state/board/board.selectors';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { BoardGameObtainedInfoView } from '../../../shared/model/BoardGameObtainedInfoView';
+import { GameFinishedView } from '../../../shared/model/GameFinishedView';
 
 @Component({
   selector: 'app-chess-board',
