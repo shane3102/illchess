@@ -1,5 +1,5 @@
 import { createSelector } from "@ngrx/store";
-import { RefreshBoardDto } from "../../model/RefreshBoardRequest";
+import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { ChessGameState } from "../chess-game.state";
 import { BoardState } from "./board.reducer";
 

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BoardAdditionalInfoView } from '../../../shared/model/BoardAdditionalInfoView';
-import { PieceColor } from '../../../shared/model/PieceInfo';
-import { RefreshBoardDto } from '../../../shared/model/RefreshBoardRequest';
-import { ChessBoardWebsocketService } from '../../../shared/service/ChessBoardWebsocketService';
+import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
+import { PieceColor } from '../../../shared/model/game/PieceInfo';
+import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
+import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../../shared/state/board-additional-info/board-additional-info.actions';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 

@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { BestMoveAndContinuationResponse } from '../../../shared/model/BestMoveAndContinuationResponse';
-import { BoardAdditionalInfoView } from '../../../shared/model/BoardAdditionalInfoView';
-import { EvaluationResponse } from '../../../shared/model/EvaluationResponse';
+import { BestMoveAndContinuationResponse } from '../../../shared/model/stockfish/BestMoveAndContinuationResponse';
+import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
+import { EvaluationResponse } from '../../../shared/model/stockfish/EvaluationResponse';
 import { establishBestMoveAndContinuation, establishEvaluation } from '../../../shared/state/board-additional-info/board-additional-info.actions';
 import { bestMoveAndContinuation, boardAdditionalInfoSelector, evaluation } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';

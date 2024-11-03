@@ -1,11 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
-import { BoardView } from "../../model/BoardView";
-import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
-import { PieceDraggedInfo } from "../../model/PieceDraggedInfo";
+import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
+import { BoardView } from "../../model/game/BoardView";
+import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { PieceDraggedInfo } from "../../model/game/PieceDraggedInfo";
 import { boardInitialized, boardLoaded, draggedPieceChanged, draggedPieceReleased, gameFinished, gameFinishedLoaded, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
-import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
-import { GameFinishedView } from "../../model/GameFinishedView";
+import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 
 
 export interface BoardState {

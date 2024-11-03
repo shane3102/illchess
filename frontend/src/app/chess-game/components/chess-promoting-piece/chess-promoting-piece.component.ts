@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MovePieceRequest } from '../../../shared/model/MovePieceRequest';
-import { PieceDraggedInfo } from '../../../shared/model/PieceDraggedInfo';
-import { Piece, PieceColor } from '../../../shared/model/PieceInfo';
-import { SquareInfo } from '../../../shared/model/SquareInfo';
+import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
+import { PieceDraggedInfo } from '../../../shared/model/game/PieceDraggedInfo';
+import { Piece, PieceColor } from '../../../shared/model/game/PieceInfo';
+import { SquareInfo } from '../../../shared/model/game/SquareInfo';
 
 @Component({
   selector: 'app-chess-promoting-piece',

@@ -2,16 +2,16 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded } from "./board.actions";
 import { Observable, catchError, from, map, of, switchMap } from "rxjs";
-import { ChessBoardService } from "../../service/ChessBoardService";
-import { BoardLegalMovesResponse } from "../../model/BoardLegalMovesResponse";
-import { CheckLegalMovesRequest } from "../../model/CheckLegalMovesRequest";
-import { IllegalMoveResponse } from "../../model/IllegalMoveView";
-import { InitializedBoardResponse } from "../../model/InitializedBoardResponse";
-import { BoardView } from "../../model/BoardView";
-import { RefreshBoardDto as RefreshBoardRequest } from "../../model/RefreshBoardRequest";
+import { GameService } from "../../service/GameService";
+import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
+import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
+import { IllegalMoveResponse } from "../../model/game/IllegalMoveView";
+import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { BoardView } from "../../model/game/BoardView";
+import { RefreshBoardDto as RefreshBoardRequest } from "../../model/game/RefreshBoardRequest";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
-import { BoardGameObtainedInfoView } from "../../model/BoardGameObtainedInfoView";
-import { GameFinishedView } from "../../model/GameFinishedView";
+import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +20,7 @@ export class BoardEffects {
 
     constructor(
         private actions$: Actions,
-        private chessBoardService: ChessBoardService,
+        private chessBoardService: GameService,
         private playerInfoService: PlayerInfoService
     ) { }
 

@@ -3,9 +3,9 @@ import { faAngleDoubleLeft, faFlag, faHandshake } from '@fortawesome/free-solid-
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { Store } from '@ngrx/store';
 import { acceptDraw, acceptTakingBackMove, proposeDraw, proposeTakingBackMove, rejectDraw, rejectTakingBackMove, resignGame } from '../../../shared/state/board-additional-info/board-additional-info.actions';
-import { ResignGameRequest } from '../../../shared/model/ResignGameRequest';
-import { PieceColor } from '../../../shared/model/PieceInfo';
-import { PlayerView } from '../../../shared/model/BoardAdditionalInfoView';
+import { ResignGameRequest } from '../../../shared/model/game/ResignGameRequest';
+import { PieceColor } from '../../../shared/model/game/PieceInfo';
+import { PlayerView } from '../../../shared/model/game/BoardAdditionalInfoView';
 
 @Component({
   selector: 'app-chess-game-action-buttons',

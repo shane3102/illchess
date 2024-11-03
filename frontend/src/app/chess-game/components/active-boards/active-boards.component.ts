@@ -1,14 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ChessBoardWebsocketService } from '../../../shared/service/ChessBoardWebsocketService';
+import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { Store } from '@ngrx/store';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
-import { ActiveBoardsView } from '../../../shared/model/ActiveBoardsView';
+import { ActiveBoardsView } from '../../../shared/model/game/ActiveBoardsView';
 import { activeBoardsRefreshed, newActiveBoardObtained, refreshActiveBoards } from '../../../shared/state/active-boards/active-boards.actions';
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../../shared/state/active-boards/active-boards.selectors';
 import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { ActiveBoardNewView } from '../../../shared/model/ActiveBoardNewView';
+import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewView';
 
 @Component({
   selector: 'app-active-boards',

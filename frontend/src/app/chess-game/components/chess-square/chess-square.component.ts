@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
-import { BoardLegalMovesResponse } from '../../../shared/model/BoardLegalMovesResponse';
-import { MoveView } from '../../../shared/model/BoardView';
-import { IllegalMoveResponse } from '../../../shared/model/IllegalMoveView';
-import { MovePieceRequest } from '../../../shared/model/MovePieceRequest';
-import { PieceDraggedInfo } from '../../../shared/model/PieceDraggedInfo';
-import { Piece, PieceColor, PieceInfo } from '../../../shared/model/PieceInfo';
-import { SquareInfo } from '../../../shared/model/SquareInfo';
+import { BoardLegalMovesResponse } from '../../../shared/model/game/BoardLegalMovesResponse';
+import { MoveView } from '../../../shared/model/game/BoardView';
+import { IllegalMoveResponse } from '../../../shared/model/game/IllegalMoveView';
+import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
+import { PieceDraggedInfo } from '../../../shared/model/game/PieceDraggedInfo';
+import { Piece, PieceColor, PieceInfo } from '../../../shared/model/game/PieceInfo';
+import { SquareInfo } from '../../../shared/model/game/SquareInfo';
 
 @Component({
   selector: 'app-chess-square',

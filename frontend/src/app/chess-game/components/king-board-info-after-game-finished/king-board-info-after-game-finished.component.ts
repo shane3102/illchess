@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Piece, PieceInfo } from '../../../shared/model/PieceInfo';
+import { Piece, PieceInfo } from '../../../shared/model/game/PieceInfo';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons';
 

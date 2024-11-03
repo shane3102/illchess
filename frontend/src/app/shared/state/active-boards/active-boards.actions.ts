@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
-import { ActiveBoardsView } from "../../model/ActiveBoardsView";
-import { ActiveBoardNewView } from "../../model/ActiveBoardNewView";
+import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
+import { ActiveBoardNewView } from "../../model/game/ActiveBoardNewView";
 
 export const activeBoardsRefreshed = createAction(
     'Refreshed list with active boards',

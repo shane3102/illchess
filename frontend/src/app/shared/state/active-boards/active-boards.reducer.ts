@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
-import { ActiveBoardsView } from "../../../shared/model/ActiveBoardsView";
+import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
 import { activeBoardsRefreshed, newActiveBoardObtained, removeFinishedBoardFromActiveBoard } from "../../../shared/state/active-boards/active-boards.actions";
-import { ActiveBoardNewView } from "../../../shared/model/ActiveBoardNewView";
+import { ActiveBoardNewView } from "../../model/game/ActiveBoardNewView";
 
 export interface ActiveBoardsState {
     activeBoardsView: ActiveBoardsView

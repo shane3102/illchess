@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { ChessBoardService } from "../../service/ChessBoardService";
+import { GameService } from "../../service/GameService";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { activeBoardsRefreshed, refreshActiveBoards } from "./active-boards.actions";
 import { from, map, switchMap } from "rxjs";
-import { ActiveBoardsView } from "../../model/ActiveBoardsView";
+import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@ export class ActiveBoardEffects {
 
     constructor(
         private actions$: Actions,
-        private chessBoardService: ChessBoardService
+        private chessBoardService: GameService
     ) {
     }
 

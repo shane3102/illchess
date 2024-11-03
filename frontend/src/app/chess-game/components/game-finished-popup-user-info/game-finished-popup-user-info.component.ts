@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UserGameInfoView } from '../../../shared/model/GameFinishedView';
+import { UserGameInfoView } from '../../../shared/model/player-info/GameFinishedView';
 import { faArrowDown, faArrowRight, faArrowUp, faUser, faUserMinus, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

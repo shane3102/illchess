@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { webSocket } from 'rxjs/webSocket';
 import { RxStomp } from "@stomp/rx-stomp";
 import { Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 
 @Injectable({
