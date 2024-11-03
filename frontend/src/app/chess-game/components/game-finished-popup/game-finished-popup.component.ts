@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { faUser, faUserPlus, faUserMinus, faArrowDown, faArrowUp, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { BoardGameObtainedInfoView } from '../../model/BoardGameObtainedInfoView';
-import { GameFinishedView } from '../../model/GameFinishedView';
+import { BoardGameObtainedInfoView } from '../../../shared/model/BoardGameObtainedInfoView';
+import { GameFinishedView } from '../../../shared/model/GameFinishedView';
 
 @Component({
   selector: 'app-game-finished-popup',

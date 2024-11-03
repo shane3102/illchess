@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
-import { BoardLegalMovesResponse } from '../../model/BoardLegalMovesResponse';
-import { MoveView } from '../../model/BoardView';
-import { IllegalMoveResponse } from '../../model/IllegalMoveView';
-import { MovePieceRequest } from '../../model/MovePieceRequest';
-import { PieceDraggedInfo } from '../../model/PieceDraggedInfo';
-import { Piece, PieceColor, PieceInfo } from '../../model/PieceInfo';
-import { SquareInfo } from '../../model/SquareInfo';
+import { BoardLegalMovesResponse } from '../../../shared/model/BoardLegalMovesResponse';
+import { MoveView } from '../../../shared/model/BoardView';
+import { IllegalMoveResponse } from '../../../shared/model/IllegalMoveView';
+import { MovePieceRequest } from '../../../shared/model/MovePieceRequest';
+import { PieceDraggedInfo } from '../../../shared/model/PieceDraggedInfo';
+import { Piece, PieceColor, PieceInfo } from '../../../shared/model/PieceInfo';
+import { SquareInfo } from '../../../shared/model/SquareInfo';
 
 @Component({
   selector: 'app-chess-square',

@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { faAngleDoubleLeft, faFlag, faHandshake } from '@fortawesome/free-solid-svg-icons';
-import { ChessGameState } from '../../state/chess-game.state';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { Store } from '@ngrx/store';
-import { acceptDraw, acceptTakingBackMove, proposeDraw, proposeTakingBackMove, rejectDraw, rejectTakingBackMove, resignGame } from '../../state/board-additional-info/board-additional-info.actions';
-import { ResignGameRequest } from '../../model/ResignGameRequest';
-import { PieceColor } from '../../model/PieceInfo';
-import { PlayerView } from '../../model/BoardAdditionalInfoView';
+import { acceptDraw, acceptTakingBackMove, proposeDraw, proposeTakingBackMove, rejectDraw, rejectTakingBackMove, resignGame } from '../../../shared/state/board-additional-info/board-additional-info.actions';
+import { ResignGameRequest } from '../../../shared/model/ResignGameRequest';
+import { PieceColor } from '../../../shared/model/PieceInfo';
+import { PlayerView } from '../../../shared/model/BoardAdditionalInfoView';
 
 @Component({
   selector: 'app-chess-game-action-buttons',

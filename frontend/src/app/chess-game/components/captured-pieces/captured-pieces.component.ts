@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Piece, PieceColor, getColorByPieceColor } from '../../model/PieceInfo';
+import { Piece, PieceColor, getColorByPieceColor } from '../../../shared/model/PieceInfo';
 import { faChessBishop, faChessKing, faChessKnight, faChessPawn, faChessQueen, faChessRook } from '@fortawesome/free-solid-svg-icons';
 
 @Component({

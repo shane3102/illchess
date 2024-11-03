@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BoardAdditionalInfoView } from '../../model/BoardAdditionalInfoView';
-import { PieceColor } from '../../model/PieceInfo';
-import { RefreshBoardDto } from '../../model/RefreshBoardRequest';
-import { ChessBoardWebsocketService } from '../../service/ChessBoardWebsocketService';
-import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../state/board-additional-info/board-additional-info.actions';
-import { ChessGameState } from '../../state/chess-game.state';
+import { BoardAdditionalInfoView } from '../../../shared/model/BoardAdditionalInfoView';
+import { PieceColor } from '../../../shared/model/PieceInfo';
+import { RefreshBoardDto } from '../../../shared/model/RefreshBoardRequest';
+import { ChessBoardWebsocketService } from '../../../shared/service/ChessBoardWebsocketService';
+import { boardAdditionalInfoLoaded, refreshAdditionalInfoOfBoard } from '../../../shared/state/board-additional-info/board-additional-info.actions';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
 
 @Component({
   selector: 'app-chess-board-additional-info',
