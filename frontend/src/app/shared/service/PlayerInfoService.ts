@@ -11,7 +11,7 @@ import { PlayerView } from "../model/player-info/PlayerView";
 })
 export class PlayerInfoService {
 
-    readonly PATH: string = `/gateway/player-info/`
+    readonly PATH: string = `/gateway/player-info`
 
     private http: HttpClient = inject(HttpClient)
 

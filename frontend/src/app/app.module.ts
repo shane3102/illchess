@@ -10,6 +10,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderButtonComponent } from './components/header-button/header-button.component';
+import { PlayerInfoModule } from "./player-info/player-info.module";
 
 @NgModule({
   declarations: [
@@ -24,8 +25,9 @@ import { HeaderButtonComponent } from './components/header-button/header-button.
     FontAwesomeModule,
     ChessGameModule,
     HttpClientModule,
-    FontAwesomeModule
-  ],
+    FontAwesomeModule,
+    PlayerInfoModule
+],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
