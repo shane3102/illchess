@@ -1,0 +1,67 @@
+<div class="everything">
+    <div class="table-content">
+        <table style="width: 100%;">
+            <tr class="labels">
+                <th>
+                    <div class="label">
+                        L.p. 
+                    </div>
+                </th>
+                <th *ngFor="let label of labels" [ngStyle]="label.width ? {'width': label.width} : {}">
+                    <div class="label">
+                        {{label.content}}
+                    </div>
+                </th>
+            </tr>
+            <tr *ngFor="let i of pageSizeIndexNumbers"
+                [ngStyle]="{'background-color': (i%2==1 ? 'white': 'lightgray')}">
+                @if(dataList.length != 0) {
+                    <td>
+                        <div class="data">
+                            {{pageSize * currentPage + i + 1}}
+                        </div>
+                    </td>
+                    @if(dataList[i]) {
+                        <td *ngFor="let data of dataList[i]" [ngStyle]="{'color': data.color}">
+                            <div class="data">
+                                <div>
+                                    {{data.content}}
+                                </div>
+                                <div *ngIf="data.icon">
+                                    &nbsp;<fa-icon [icon]="data.icon"></fa-icon>
+                                </div>
+                            </div>
+                        </td>
+                    } @else {
+                        <td *ngFor="let empty of labels">
+                            <div style="user-select: none;" class="data">
+                                &nbsp;
+                            </div>
+                        </td>
+                    }
+                    
+                } @else {
+                    <td>
+                        <div class="data">
+                            &nbsp;
+                        </div>
+                    </td>
+                    <td *ngFor="let empty of labels">
+                        <div style="user-select: none;" class="data">
+                            &nbsp;
+                        </div>
+                    </td>
+                }
+            </tr>
+        </table>
+    </div>
+
+    <div class="next-previous-page-buttons">
+        <div class="next-previous-page-button" [ngClass]="isDisabledUp() ? 'next-previous-page-button-disabled' : ''">
+            <fa-icon [icon]="anglesUp" (click)="isDisabledUp() ? null: previousPage()"></fa-icon>
+        </div>
+        <div class="next-previous-page-button" [ngClass]="isDisabledDown() ? 'next-previous-page-button-disabled' : ''">
+            <fa-icon [icon]="anglesDown" (click)="isDisabledDown() ? null : nextPage()"></fa-icon>
+        </div>
+    </div>
+</div>

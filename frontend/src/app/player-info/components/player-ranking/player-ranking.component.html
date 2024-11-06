@@ -1,0 +1,13 @@
+@if (data$ | async; as data) {
+    <app-common-table 
+        [labels]="[{'content': 'Username', 'width': '50%'}, {'content': 'Punkty ELO', 'width': '50%' }]"
+        [dataList]="currentContent$ | async | playerViewToTableCellData"
+        [currentPage]="data.currentPage"
+        [pageSize]="data.pageSize"
+        [totalPagesCount]="totalPages$ | async"
+        (nextPageEmitter)="nextPage($event)"
+        (previousPageEmitter)="previousPage($event)"
+        (loadDataEmitter)="reloadRanking($event)">
+    </app-common-table>
+}
+
