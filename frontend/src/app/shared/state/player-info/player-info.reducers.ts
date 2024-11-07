@@ -1,106 +1,48 @@
 import { createReducer, on } from "@ngrx/store";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
-import { currentPagePlayerRankingLoaded, loadCurrentPagePlayerRanking, nextPagePlayerRanking, nextPagePlayerRankingLoaded, previousPagePlayerRanking, previousPagePlayerRankingLoaded } from "./player-info.actions";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
+import { nextPagePlayerRanking, playerRankingLoaded as playerRankingLoaded, previousPagePlayerRanking } from "./player-info.actions";
 
 export interface PlayerInfoState {
-    latestGamesInfo: {
-        latestGamesPreviousPage?: GameSnippetView[],
-        latestGames?: GameSnippetView[]
-        latestGamesNextPage?: GameSnippetView[],
-        pageNumber: number,
-        totalPages?: number
-    }
-    playerRankingInfo: {
-        playerRankingPreviousPage?: PlayerView[]
-        playerRanking?: PlayerView[]
-        playerRankingNextPage?: PlayerView[]
-        pageNumber: number,
-        totalPages?: number
-    }
+    latestGamesInfoPage?: Page<GameSnippetView>
+    playerRankingInfoPage?: Page<PlayerView>
     pageSize: number
 }
 
 export const initialState: PlayerInfoState = {
-    latestGamesInfo: {
-        pageNumber: 0
-    },
-    playerRankingInfo: {
-        pageNumber: 0
-    },
     pageSize: 5
 }
 
 export const playerInfoReducer = createReducer(
     initialState,
+
     on(
         nextPagePlayerRanking,
         (state: PlayerInfoState) => (
             {
                 ...state,
-                playerRankingInfo: {
-                    ...state.playerRankingInfo,
-                    pageNumber: state.playerRankingInfo.pageNumber + 1,
-                    playerRankingPreviousPage: state.playerRankingInfo.playerRanking,
-                    playerRanking: state.playerRankingInfo.playerRankingNextPage,
-                    playerRankingNextPage: []
-                }
+                playerRankingInfoPage: undefined
             }
         )
     ),
+
     on(
         previousPagePlayerRanking,
         (state: PlayerInfoState) => (
             {
                 ...state,
-                playerRankingInfo: {
-                    ...state.playerRankingInfo,
-                    pageNumber: state.playerRankingInfo.pageNumber - 1,
-                    playerRankingPreviousPage: [],
-                    playerRanking: state.playerRankingInfo.playerRankingPreviousPage,
-                    playerRankingNextPage: state.playerRankingInfo.playerRanking
-                }
+                playerRankingInfoPage: undefined
             }
         )
     ),
+
     on(
-        currentPagePlayerRankingLoaded,
+        playerRankingLoaded,
         (state: PlayerInfoState, view: Page<PlayerView>) => (
             {
                 ...state,
-                playerRankingInfo: {
-                    ...state.playerRankingInfo,
-                    playerRanking: view.content,
-                    pageNumber: view.pageNumber,
-                    totalPages: view.totalPages
-                }
-            }
-        )
-    ),
-    on(
-        nextPagePlayerRankingLoaded,
-        (state: PlayerInfoState, view: Page<PlayerView>) => (
-            {
-                ...state,
-                playerRankingInfo: {
-                    ...state.playerRankingInfo,
-                    playerRankingNextPage: view.content,
-                    totalPages: view.totalPages
-                }
-            }
-        )
-    ),
-    on(
-        previousPagePlayerRankingLoaded,
-        (state: PlayerInfoState, view: Page<PlayerView>) => (
-            {
-                ...state,
-                playerRankingInfo: {
-                    ...state.playerRankingInfo,
-                    playerRankingPreviousPage: view.content,
-                    totalPages: view.totalPages
-                }
+                playerRankingInfoPage: view
             }
         )
     )

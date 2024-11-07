@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { PlayerView } from 'src/app/shared/model/player-info/PlayerView';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
-import { nextPagePlayerRanking, previousPagePlayerRanking, reloadFullPlayerRanking } from 'src/app/shared/state/player-info/player-info.actions';
+import { loadPlayerRanking, nextPagePlayerRanking, previousPagePlayerRanking } from 'src/app/shared/state/player-info/player-info.actions';
 import { commonPageSize, currentPageContentPlayerRankingSelector, currentPageNumberPlayerRankingSelector, totalPageNumberPlayerRankingSelector } from 'src/app/shared/state/player-info/player-info.selectors';
 
 @Component({
@@ -48,7 +48,7 @@ export class PlayerRankingComponent implements OnInit {
   }
 
   reloadRanking(event: { pageNumber: number, pageSize: number}) {
-    this.store.dispatch(reloadFullPlayerRanking(event))
+    this.store.dispatch(loadPlayerRanking(event))
   }
 
 }
