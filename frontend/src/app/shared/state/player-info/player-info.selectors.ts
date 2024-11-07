@@ -9,12 +9,12 @@ export const playerInfoSelector = createSelector(
     (state: PlayerInfoState) => state
 )
 
-export const currentPageContentPlayerRankingSelector = createSelector(
+export const playerRankingSelector = createSelector(
     selectPlayerInfo,
     (state: PlayerInfoState) => state.playerRankingInfoPage?.content
 )
 
-export const currentPageNumberPlayerRankingSelector = createSelector(
+export const pageNumberPlayerRankingSelector = createSelector(
     selectPlayerInfo,
     (state: PlayerInfoState) => state.playerRankingInfoPage ? state.playerRankingInfoPage?.pageNumber : 0
 )
@@ -22,6 +22,21 @@ export const currentPageNumberPlayerRankingSelector = createSelector(
 export const totalPageNumberPlayerRankingSelector = createSelector(
     selectPlayerInfo,
     (state: PlayerInfoState) => state.playerRankingInfoPage?.totalPages
+)
+
+export const LatestGamesSelector = createSelector(
+    selectPlayerInfo,
+    (state: PlayerInfoState) => state.latestGamesInfoPage?.content
+)
+
+export const pageNumberLatestGamesSelector = createSelector(
+    selectPlayerInfo,
+    (state: PlayerInfoState) => state.latestGamesInfoPage ? state.latestGamesInfoPage?.pageNumber : 0
+)
+
+export const totalPageNumberLatestGamesSelector = createSelector(
+    selectPlayerInfo,
+    (state: PlayerInfoState) => state.latestGamesInfoPage?.totalPages
 )
 
 export const commonPageSize = createSelector(

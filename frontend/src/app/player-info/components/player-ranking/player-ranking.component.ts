@@ -5,7 +5,7 @@ import { Observable, combineLatest, map } from 'rxjs';
 import { PlayerView } from 'src/app/shared/model/player-info/PlayerView';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 import { loadPlayerRanking, nextPagePlayerRanking, previousPagePlayerRanking } from 'src/app/shared/state/player-info/player-info.actions';
-import { commonPageSize, currentPageContentPlayerRankingSelector, currentPageNumberPlayerRankingSelector, totalPageNumberPlayerRankingSelector } from 'src/app/shared/state/player-info/player-info.selectors';
+import { commonPageSize, playerRankingSelector, pageNumberPlayerRankingSelector, totalPageNumberPlayerRankingSelector } from 'src/app/shared/state/player-info/player-info.selectors';
 
 @Component({
   selector: 'app-player-ranking',
@@ -20,8 +20,8 @@ export class PlayerRankingComponent implements OnInit {
 
   data$: Observable<PageData>
 
-  currentContent$: Observable<PlayerView[] | null | undefined> = this.store.select(currentPageContentPlayerRankingSelector)
-  currentPage$: Observable<number> = this.store.select(currentPageNumberPlayerRankingSelector)
+  currentContent$: Observable<PlayerView[] | null | undefined> = this.store.select(playerRankingSelector)
+  currentPage$: Observable<number> = this.store.select(pageNumberPlayerRankingSelector)
   totalPages$: Observable<number | null | undefined> = this.store.select(totalPageNumberPlayerRankingSelector)
   commonPageSize$: Observable<number> = this.store.select(commonPageSize)
 
