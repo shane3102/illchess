@@ -2,15 +2,17 @@ import { createReducer, on } from "@ngrx/store";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
-import { latestGamesLoaded, nextPageLatestGames, nextPagePlayerRanking, playerRankingLoaded as playerRankingLoaded, previousPageLatestGames, previousPagePlayerRanking } from "./player-info.actions";
+import { latestGamesLoaded, playerRankingLoaded } from "./player-info.actions";
 
 export interface PlayerInfoState {
-    latestGamesInfoPage?: Page<GameSnippetView>
-    playerRankingInfoPage?: Page<PlayerView>
+    latestGamesInfoPage: Page<GameSnippetView> | null
+    playerRankingInfoPage: Page<PlayerView> | null
     pageSize: number
 }
 
 export const initialState: PlayerInfoState = {
+    latestGamesInfoPage: null,
+    playerRankingInfoPage: null,
     pageSize: 5
 }
 
@@ -18,51 +20,11 @@ export const playerInfoReducer = createReducer(
     initialState,
 
     on(
-        nextPagePlayerRanking,
-        (state: PlayerInfoState) => (
-            {
-                ...state,
-                playerRankingInfoPage: undefined
-            }
-        )
-    ),
-
-    on(
-        previousPagePlayerRanking,
-        (state: PlayerInfoState) => (
-            {
-                ...state,
-                playerRankingInfoPage: undefined
-            }
-        )
-    ),
-
-    on(
         playerRankingLoaded,
         (state: PlayerInfoState, view: Page<PlayerView>) => (
             {
                 ...state,
                 playerRankingInfoPage: view
-            }
-        )
-    ),
-
-    on(
-        nextPageLatestGames,
-        (state: PlayerInfoState) => (
-            {
-                ...state,
-                latestGamesInfoPage: undefined
-            }
-        )
-    ),
-
-    on(
-        previousPageLatestGames,
-        (state: PlayerInfoState) => (
-            {
-                ...state,
-                latestGamesInfoPage: undefined
             }
         )
     ),

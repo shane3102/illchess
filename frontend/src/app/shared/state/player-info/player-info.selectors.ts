@@ -24,7 +24,7 @@ export const totalPageNumberPlayerRankingSelector = createSelector(
     (state: PlayerInfoState) => state.playerRankingInfoPage?.totalPages
 )
 
-export const LatestGamesSelector = createSelector(
+export const latestGamesSelector = createSelector(
     selectPlayerInfo,
     (state: PlayerInfoState) => state.latestGamesInfoPage?.content
 )

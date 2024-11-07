@@ -2,11 +2,11 @@
     <app-common-table 
         [labels]="[{'content': 'Username', 'width': '50%'}, {'content': 'Punkty ELO', 'width': '50%' }]"
         [dataList]="currentContent$ | async | playerViewToTableCellData"
-        [currentPage]="data.currentPage"
+        [pageNumber]="data.pageNumber"
         [pageSize]="data.pageSize"
         [totalPagesCount]="totalPages$ | async"
-        (nextPageEmitter)="nextPage($event)"
-        (previousPageEmitter)="previousPage($event)"
+        (nextPageEmitter)="reloadRanking($event)"
+        (previousPageEmitter)="reloadRanking($event)"
         (loadDataEmitter)="reloadRanking($event)">
     </app-common-table>
 }

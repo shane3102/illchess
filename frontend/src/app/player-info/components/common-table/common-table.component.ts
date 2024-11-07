@@ -12,7 +12,7 @@ export class CommonTableComponent implements OnInit {
   @Input() labels: LabelInfo[]
   @Input() dataList: TableCellData[][]
   @Input() totalPagesCount: number | null | undefined
-  @Input() currentPage: number
+  @Input() pageNumber: number
   @Input() pageSize: number
 
   pageSizeIndexNumbers: number[]
@@ -31,24 +31,26 @@ export class CommonTableComponent implements OnInit {
   }
 
   nextPage() {
-    this.nextPageEmitter.next({ pageNumber: this.currentPage + 1, pageSize: this.pageSize, totalPages: this.totalPagesCount! })
+    this.dataList = []
+    this.nextPageEmitter.next({ pageNumber: this.pageNumber + 1, pageSize: this.pageSize, totalPages: this.totalPagesCount! })
   }
 
   previousPage() {
-    this.previousPageEmitter.next({ pageNumber: this.currentPage - 1, pageSize: this.pageSize, totalPages: this.totalPagesCount! })
+    this.dataList = []
+    this.previousPageEmitter.next({ pageNumber: this.pageNumber - 1, pageSize: this.pageSize, totalPages: this.totalPagesCount! })
   }
 
   loadData() {
-    this.loadDataEmitter.next({ pageNumber: this.currentPage, pageSize: this.pageSize })
+    this.loadDataEmitter.next({ pageNumber: this.pageNumber, pageSize: this.pageSize })
     this.pageSizeIndexNumbers = Array(this.pageSize).fill(this.pageSize).map((_x, i) => i)
   }
 
   isDisabledUp() {
-    return this.currentPage <= 0
+    return this.pageNumber <= 0
   }
 
   isDisabledDown() {
-    return this.currentPage >= this.totalPagesCount!
+    return this.pageNumber >= this.totalPagesCount!
   }
 
 }
