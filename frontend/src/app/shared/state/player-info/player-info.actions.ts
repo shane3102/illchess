@@ -2,21 +2,13 @@ import { createAction, props } from "@ngrx/store";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
+import { PlayerRankingLoadDto } from "../../model/player-info/PlayerRankingLoadDto";
+import { LatestGamesLoadDto } from "../../model/player-info/LatestGamesLoadDto";
 
 // Player ranking
-export const nextPagePlayerRanking = createAction(
-    'Next page in player ranking',
-    props<{ pageNumber: number, pageSize: number }>()
-)
-
-export const previousPagePlayerRanking = createAction(
-    'Previous page in player ranking',
-    props<{ pageNumber: number, pageSize: number }>()
-)
-
 export const loadPlayerRanking = createAction(
     'Load page of player ranking',
-    props<{pageNumber: number, pageSize: number }>()
+    props<PlayerRankingLoadDto>()
 )
 
 export const playerRankingLoaded = createAction(
@@ -24,21 +16,10 @@ export const playerRankingLoaded = createAction(
     props<Page<PlayerView>>()
 )
 
-// Latest games - TODO
-
-export const nextPageLatestGames = createAction(
-    'Next page in player ranking',
-    props<{ pageNumber: number, pageSize: number }>()
-)
-
-export const previousPageLatestGames = createAction(
-    'Previous page in player ranking',
-    props<{ pageNumber: number, pageSize: number }>()
-)
-
+// Latest games
 export const loadLatestGames = createAction(
     'Reload full latest games',
-    props<{ pageNumber: number, pageSize: number }>()
+    props<LatestGamesLoadDto>()
 )
 
 export const latestGamesLoaded = createAction(
@@ -46,7 +27,7 @@ export const latestGamesLoaded = createAction(
     props<Page<GameSnippetView>>()
 )
 
-// Common - TODO
+// Common
 export const commonPageSizeChange = createAction(
     'Common page size change',
     props<{ pageSize: number }>()
