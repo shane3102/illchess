@@ -4,8 +4,7 @@ import { CommonTableComponent } from './components/common-table/common-table.com
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlayerRankingComponent } from './components/player-ranking/player-ranking.component';
 import { PlayerViewToTableCellDataPipe } from './pipes/player-view-to-table-cell-data.pipe';
-
-
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +13,7 @@ import { PlayerViewToTableCellDataPipe } from './pipes/player-view-to-table-cell
     PlayerViewToTableCellDataPipe
   ],
   imports: [
+    SharedModule,
     CommonModule,
     FontAwesomeModule
   ],
