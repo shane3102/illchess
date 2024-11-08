@@ -1,0 +1,18 @@
+<div class="shared-tables">
+    <div style="width: 10%"></div>
+    <div style="width: 40%;">
+        <app-player-ranking></app-player-ranking>
+    </div>
+    <div class="shared-page-size">
+        <div 
+            *ngFor="let size of availablePageSizes" class="page-size" 
+            [ngStyle]="size == (commonPageSize$ |async) ? {'background-color': 'rgb(150,75,0)'} : {}"
+            (click)="changePageSize(size)">
+            <b>{{size}}</b>
+        </div>
+    </div>
+    <div style="width: 40%;">
+        <app-latest-games></app-latest-games>
+    </div>
+    <div style="width: 10%"></div>
+</div>

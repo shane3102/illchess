@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
-import { latestGamesLoaded, playerRankingLoaded } from "./player-info.actions";
+import { commonPageSizeChange, latestGamesLoaded, playerRankingLoaded } from "./player-info.actions";
 
 export interface PlayerInfoState {
     latestGamesInfoPage: Page<GameSnippetView> | null
@@ -35,6 +35,17 @@ export const playerInfoReducer = createReducer(
             {
                 ...state,
                 latestGamesInfoPage: view
+            }
+        )
+    ),
+
+    on(
+        commonPageSizeChange,
+        (state: PlayerInfoState, dto: { pageSize: number }) => (
+            {
+                latestGamesInfoPage: null,
+                playerRankingInfoPage: null,
+                pageSize: dto.pageSize
             }
         )
     )

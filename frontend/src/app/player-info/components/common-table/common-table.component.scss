@@ -35,6 +35,9 @@
     padding: 0.5vh 0.5vw 0.5vh 0.5vw;
     background-color: rgb(150, 75, 0);
     border-radius: 1vh;
+    text-wrap: nowrap;
+    text-overflow: hidden;
+    overflow: hidden;
 }
 
 .next-previous-page-buttons {
@@ -53,15 +56,19 @@
 }
 
 .next-previous-page-button:hover {
-    color:green
+    color: green
 }
 
 .table-content {
     width: 100%
 }
 
-table,
 th,
 td {
     border-collapse: collapse;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
 }
