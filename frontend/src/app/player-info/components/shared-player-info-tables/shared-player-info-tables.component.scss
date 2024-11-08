@@ -1,0 +1,35 @@
+.shared-tables {
+    display: flex;
+    justify-content: center;
+}
+
+.shared-page-size {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 3%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+.page-size {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #F3E5AB;
+    width: 2.1em;
+    user-select: none;
+    height: 2.1em;
+    border-radius: 50%;
+    -webkit-transition: background-color 250ms linear;
+    -ms-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
+    margin: 0.2vh 0.2vw 0.2vh 0.2vw;
+    z-index: 3;
+}
+
+.page-size:hover {
+    background-color: green !important;
+}

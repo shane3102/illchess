@@ -1,18 +1,22 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { from, map, switchMap } from "rxjs";
+import { from, map, switchMap, tap, withLatestFrom } from "rxjs";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
 import { LatestGamesLoadDto } from "../../model/player-info/LatestGamesLoadDto";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
-import { latestGamesLoaded, loadLatestGames, loadPlayerRanking, playerRankingLoaded } from "./player-info.actions";
+import { commonPageSizeChange, latestGamesLoaded, loadLatestGames, loadPlayerRanking, playerRankingLoaded } from "./player-info.actions";
+import { ChessGameState } from "../chess-game.state";
+import { Store } from "@ngrx/store";
+import { pageNumberPlayerRankingSelector } from "./player-info.selectors";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlayerInfoEffects {
 
+    private store = inject(Store<ChessGameState>)
     private actions$ = inject(Actions)
     private playerInfoService = inject(PlayerInfoService)
 
@@ -38,6 +42,21 @@ export class PlayerInfoEffects {
                     )
             )
         )
+    )
+
+    loadLatestGamesAndPlayerRankingOnPageSizeChange$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(commonPageSizeChange),
+            tap(
+                (dto: { pageSize: number }, ) => {
+                    this.store.dispatch(loadLatestGames({ pageNumberLatestGames: 0, pageSizeLatestGames: dto.pageSize }))
+                    this.store.dispatch(loadPlayerRanking({ pageNumberPlayerRanking: 0, pageSizePlayerRanking: dto.pageSize }))
+                }
+            )
+        ),
+        {
+            dispatch: false
+        }
     )
 
 }

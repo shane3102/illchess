@@ -2,18 +2,18 @@
     <div class="table-content">
         <table style="width: 100%;">
             <tr class="labels">
-                <th>
+                <th style="width: 10%">
                     <div class="label">
                         L.p. 
                     </div>
                 </th>
-                <th *ngFor="let label of labels" [ngStyle]="label.width ? {'width': label.width} : {}">
+                <th *ngFor="let label of labels" [ngStyle]="label.width ? {'width': label.width, 'max-width': label.width} : {}">
                     <div class="label">
                         {{label.content}}
                     </div>
                 </th>
             </tr>
-            <tr *ngFor="let i of pageSizeIndexNumbers"
+            <tr *ngFor="let i of pageSize | numberToArray"
                 [ngStyle]="{'background-color': (i%2==1 ? 'white': 'lightgray')}">
                 @if(dataList.length != 0) {
                     <td>

@@ -22,12 +22,12 @@ export class LatestGamesToTableCellDataPipe implements PipeTransform {
           content: it.whiteUsername
         },
         {
-          content: it.whiteUserPointChange.toString(),
+          content: it.whiteUserPointChange < 0 ? it.whiteUserPointChange.toString() : (it.whiteUserPointChange > 0 ? '+'+it.whiteUserPointChange.toString() : it.whiteUserPointChange.toString()).toString(),
           color: it.whiteUserPointChange < 0 ? 'red' : (it.whiteUserPointChange > 0 ? 'green' : undefined),
           icon: it.whiteUserPointChange < 0 ? this.pointLoss : (it.whiteUserPointChange > 0 ? this.pointGain : this.pointNotChange)
         },
         {
-          content: it.blackUserPointChange.toString(),
+          content: it.blackUserPointChange < 0 ? it.blackUserPointChange.toString() : (it.blackUserPointChange > 0 ? '+'+it.blackUserPointChange.toString() : it.blackUserPointChange.toString()).toString(),
           color: it.blackUserPointChange < 0 ? 'red' : (it.blackUserPointChange > 0 ? 'green' : undefined),
           icon: it.blackUserPointChange < 0 ? this.pointLoss : (it.blackUserPointChange > 0 ? this.pointGain : this.pointNotChange)
         },

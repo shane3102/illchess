@@ -24,10 +24,10 @@ import { PlayerInfoModule } from "./player-info/player-info.module";
     AppRoutingModule,
     FontAwesomeModule,
     ChessGameModule,
+    PlayerInfoModule,
     HttpClientModule,
-    FontAwesomeModule,
-    PlayerInfoModule
-],
+    FontAwesomeModule
+  ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],

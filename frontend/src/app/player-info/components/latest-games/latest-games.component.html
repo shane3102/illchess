@@ -2,8 +2,8 @@
     <app-common-table 
         [labels]="[
             {'content': 'Biały', 'width': '30%'}, 
-            {'content': 'Zmiana punktów biały', 'width': '20%'},
-            {'content': 'Zmiana punktów czarny', 'width': '20%'},
+            {'content': '+ -', 'width': '20%'},
+            {'content': '+ -', 'width': '20%'},
             {'content': 'Czarny', 'width': '30%'}, 
         ]"
         [dataList]="currentContent$ | async | latestGamesToTableCellData"

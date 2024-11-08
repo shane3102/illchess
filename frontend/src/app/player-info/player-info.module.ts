@@ -7,6 +7,8 @@ import { PlayerViewToTableCellDataPipe } from './pipes/player-view-to-table-cell
 import { SharedModule } from '../shared/shared.module';
 import { LatestGamesToTableCellDataPipe } from './pipes/latest-games-to-table-cell-data.pipe';
 import { LatestGamesComponent } from './components/latest-games/latest-games.component';
+import { SharedPlayerInfoTablesComponent } from './components/shared-player-info-tables/shared-player-info-tables.component';
+import { NumberToArrayPipe } from './pipes/number-to-array.pipe';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { LatestGamesComponent } from './components/latest-games/latest-games.com
     PlayerRankingComponent,
     PlayerViewToTableCellDataPipe,
     LatestGamesToTableCellDataPipe,
-    LatestGamesComponent
+    LatestGamesComponent,
+    SharedPlayerInfoTablesComponent,
+    NumberToArrayPipe
   ],
   imports: [
     SharedModule,
@@ -22,8 +26,7 @@ import { LatestGamesComponent } from './components/latest-games/latest-games.com
     FontAwesomeModule
   ],
   exports: [
-    PlayerRankingComponent,
-    LatestGamesComponent
+    SharedPlayerInfoTablesComponent
   ]
 })
 export class PlayerInfoModule { }
