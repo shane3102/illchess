@@ -116,6 +116,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
         log.info("Sending info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
         BoardGameObtainedInfoView result = new BoardGameObtainedInfoView(boardDeleteInfo.boardId().uuid(), status);
         messagingTemplate.convertAndSend("/chess-topic/obtain-status/%s".formatted(boardDeleteInfo.boardId().uuid()), result);
+        messagingTemplate.convertAndSend("/chess-topic/obtain-status", result);
         log.info("Sent info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
         return result;
     }

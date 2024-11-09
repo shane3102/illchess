@@ -3,12 +3,13 @@ import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocke
 import { Store } from '@ngrx/store';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { ActiveBoardsView } from '../../../shared/model/game/ActiveBoardsView';
-import { activeBoardsRefreshed, newActiveBoardObtained, refreshActiveBoards } from '../../../shared/state/active-boards/active-boards.actions';
+import { activeBoardsRefreshed, newActiveBoardObtained, refreshActiveBoards, removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
 import { Observable } from 'rxjs';
 import { selectActiveBoards } from '../../../shared/state/active-boards/active-boards.selectors';
 import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewView';
+import { BoardGameObtainedInfoView } from 'src/app/shared/model/game/BoardGameObtainedInfoView';
 
 @Component({
   selector: 'app-active-boards',
@@ -17,7 +18,7 @@ import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewVie
 })
 export class ActiveBoardsComponent implements OnInit {
 
-  pageSize = 4 
+  pageSize = 4
 
   router = inject(Router)
   store = inject(Store<ChessGameState>)
@@ -42,6 +43,17 @@ export class ActiveBoardsComponent implements OnInit {
       (response: any) => {
         let activeBoardNewView: ActiveBoardNewView = JSON.parse(response)
         this.store.dispatch(newActiveBoardObtained(activeBoardNewView))
+      }
+    )
+
+    this.chessBoardWebSocketService.subscribe(
+      `/chess-topic/obtain-status`,
+      (response: any) => {
+        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+        setTimeout(
+          () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.boardId })) },
+          1000
+        )
       }
     )
   }
@@ -81,8 +93,12 @@ export class ActiveBoardsComponent implements OnInit {
     }, 900)
   }
 
-  getSliceFrom() {
-    return Math.max(this.page-this.pageSize, 0)
+  getSliceFrom(): number {
+    return Math.max(this.page - this.pageSize, 0)
+  }
+
+  getSliceTo(): number {
+    return this.page + 2 * this.pageSize
   }
 
 }
