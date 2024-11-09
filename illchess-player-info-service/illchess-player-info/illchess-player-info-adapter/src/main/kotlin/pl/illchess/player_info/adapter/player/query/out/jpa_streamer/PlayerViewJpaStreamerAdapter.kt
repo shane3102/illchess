@@ -13,7 +13,10 @@ class PlayerViewJpaStreamerAdapter(private val jpaStreamer: JPAStreamer) : Playe
 
     override fun findHighestRatedPlayersPageable(pageNumber: Int, pageSize: Int): Page<PlayerView> {
         val streamSupplier = { jpaStreamer.stream(PlayerEntity::class.java) }
-        val totalPages = streamSupplier.invoke().count() / pageSize
+
+        val count = streamSupplier.invoke().count()
+        val totalPages = streamSupplier.invoke().count() / pageSize - (if (count % pageSize == 0L) 1 else 0)
+
         val content = streamSupplier.invoke()
             .sorted(PlayerEntityMetaModel.currentRankingPoints.reversed())
             .skip(pageNumber.toLong() * pageSize.toLong())

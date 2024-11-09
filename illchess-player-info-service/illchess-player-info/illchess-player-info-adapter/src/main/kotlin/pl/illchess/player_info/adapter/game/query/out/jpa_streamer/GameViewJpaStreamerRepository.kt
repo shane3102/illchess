@@ -37,7 +37,8 @@ class GameViewJpaStreamerRepository(
 
         val streamSupplier = { jpaStreamer.stream(sc) }
 
-        val totalPages = streamSupplier.invoke().count() / pageSize
+        val count = streamSupplier.invoke().count()
+        val totalPages = (count / pageSize) - (if (count % pageSize == 0L) 1 else 0)
 
         val content = streamSupplier.invoke()
             .sorted(GameEntityMetaModel.endTime.reversed())
