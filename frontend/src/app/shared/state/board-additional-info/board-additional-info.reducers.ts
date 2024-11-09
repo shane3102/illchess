@@ -1,8 +1,9 @@
 import { createReducer, on } from "@ngrx/store";
-import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
 import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
 import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
-import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded } from "./board-additional-info.actions";
+import { boardInitialized } from "../board/board.actions";
+import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, evaluationLoaded } from "./board-additional-info.actions";
 
 export interface BoardAdditionalInfoState {
     boardAdditionalInfoView: BoardAdditionalInfoView,
@@ -73,5 +74,10 @@ export const boardAdditionalInfoReducer = createReducer(
                 }
             }
         )
+    ),
+
+    on(
+        boardInitialized,
+        () => (initialState)
     )
 )

@@ -26,6 +26,11 @@ export const boardLoaded = createAction(
     props<BoardView>()
 )
 
+export const boardLoadingError = createAction(
+    'Board loading error',
+    props<any>()
+)
+
 export const illegalMove = createAction(
     'Illegal move',
     props<IllegalMoveResponse>()

@@ -5,6 +5,10 @@ import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
 import { Observable } from 'rxjs';
 import { boardAdditionalInfoSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
+import { BoardView, PiecesLocations } from 'src/app/shared/model/game/BoardView';
+import { boardSelector } from 'src/app/shared/state/board/board.selectors';
+import { RefreshBoardDto } from 'src/app/shared/model/game/RefreshBoardRequest';
+import { refreshBoard } from 'src/app/shared/state/board/board.actions';
 
 @Component({
   selector: 'app-chess-game',
@@ -20,6 +24,7 @@ export class ChessGameComponent implements OnInit {
   private route = inject(ActivatedRoute)
 
   boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
+  boardView$: Observable<BoardView> = this.store.select(boardSelector)
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -28,5 +33,18 @@ export class ChessGameComponent implements OnInit {
         this.username =  params['username']
       }
     )
+    this.sendChessBoardRefreshRequest()
   }
+
+  sendChessBoardRefreshRequest() {
+    let refreshBoardDto: RefreshBoardDto = {
+      'boardId': this.boardId
+    }
+    this.store.dispatch(refreshBoard(refreshBoardDto))
+  }
+
+  haveAnyPiecesSet(piecesLocations: PiecesLocations) {
+    return Object.keys(piecesLocations).length != 0
+  }
+
 }

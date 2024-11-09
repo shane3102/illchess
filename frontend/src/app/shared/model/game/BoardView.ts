@@ -9,7 +9,7 @@ export interface BoardView {
     blackUsername?: string
 }
 
-interface PiecesLocations {
+export interface PiecesLocations {
     [square: string]: PieceInfo
 }
 

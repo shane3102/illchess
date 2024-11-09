@@ -27,6 +27,7 @@ import { KnightComponent } from './components/pieces/knight/knight.component';
 import { PawnComponent } from './components/pieces/pawn/pawn.component';
 import { QueenComponent } from './components/pieces/queen/queen.component';
 import { RookComponent } from './components/pieces/rook/rook.component';
+import { LoadingGameComponent } from './components/loading-game/loading-game.component';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { RookComponent } from './components/pieces/rook/rook.component';
     ChessGameOfferFromOponentComponent,
     ChessEngineInfoComponent,
     GameFinishedPopupComponent,
-    GameFinishedPopupUserInfoComponent
+    GameFinishedPopupUserInfoComponent,
+    LoadingGameComponent
   ],
   imports: [
     SharedModule,

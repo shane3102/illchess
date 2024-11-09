@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded } from "./board.actions";
-import { Observable, catchError, from, map, of, switchMap } from "rxjs";
+import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded, boardLoadingError } from "./board.actions";
+import { Observable, catchError, from, map, of, switchMap, tap } from "rxjs";
 import { GameService } from "../../service/GameService";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
@@ -12,17 +12,17 @@ import { RefreshBoardDto as RefreshBoardRequest } from "../../model/game/Refresh
 import { PlayerInfoService } from "../../service/PlayerInfoService";
 import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
+import { Router } from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
 })
 export class BoardEffects {
 
-    constructor(
-        private actions$: Actions,
-        private chessBoardService: GameService,
-        private playerInfoService: PlayerInfoService
-    ) { }
+    private actions$ = inject(Actions)
+    private chessBoardService = inject(GameService)
+    private playerInfoService = inject(PlayerInfoService)
+    private router = inject(Router)
 
     initializeBoard$ = createEffect(
         () => this.actions$.pipe(
@@ -72,7 +72,8 @@ export class BoardEffects {
             switchMap(
                 (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoard(dto.boardId))
                     .pipe(
-                        map((response: BoardView) => boardLoaded(response))
+                        map((response: BoardView) => boardLoaded(response)),
+                        catchError(() => of(boardLoadingError({})))
                     )
             )
         )
@@ -104,6 +105,18 @@ export class BoardEffects {
                 )
             )
         )
+    )
+
+    redirectOnBoardNotFound$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(boardLoadingError),
+            tap(
+                () => this.router.navigateByUrl('')
+            )
+        ),
+        {
+            dispatch:  false
+        }
     )
 
 }

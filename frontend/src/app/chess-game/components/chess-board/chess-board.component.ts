@@ -48,7 +48,6 @@ export class ChessBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sendChessBoardRefreshRequest()
     this.boardView$.subscribe(boardView => {
       if ((boardView.whiteUsername == this.username || boardView.blackUsername == this.username) && !this.isUsernamePlayerOnBoard) {
         this.isUsernamePlayerOnBoard = true
@@ -100,13 +99,6 @@ export class ChessBoardComponent implements OnInit {
 
   pieceDraggedRelease() {
     this.store.dispatch(draggedPieceReleased({}))
-  }
-
-  sendChessBoardRefreshRequest() {
-    let refreshBoardDto: RefreshBoardDto = {
-      'boardId': this.boardId
-    }
-    this.store.dispatch(refreshBoard(refreshBoardDto))
   }
 
   sendChessBoardWithPreMovesRefreshRequest() {
