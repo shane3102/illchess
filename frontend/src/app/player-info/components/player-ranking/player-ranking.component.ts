@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { PlayerView } from 'src/app/shared/model/player-info/PlayerView';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 import { loadPlayerRanking } from 'src/app/shared/state/player-info/player-info.actions';
 import { commonPageSize, pageNumberPlayerRankingSelector, playerRankingSelector, totalPageNumberPlayerRankingSelector } from 'src/app/shared/state/player-info/player-info.selectors';
 import { PageData } from '../../model/PageData';
+import { ChessBoardWebsocketService } from 'src/app/shared/service/GameWebsocketService';
 
 @Component({
   selector: 'app-player-ranking',
@@ -15,8 +16,10 @@ import { PageData } from '../../model/PageData';
 export class PlayerRankingComponent implements OnInit {
 
   store = inject(Store<ChessGameState>)
+  chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
   data$: Observable<PageData>
+  reloadSubject: Subject<void> = new Subject<void>();
 
   currentContent$: Observable<PlayerView[] | null | undefined> = this.store.select(playerRankingSelector)
   currentPage$: Observable<number> = this.store.select(pageNumberPlayerRankingSelector)
@@ -35,6 +38,11 @@ export class PlayerRankingComponent implements OnInit {
           }
         )
       )
+
+    this.chessBoardWebSocketService.subscribe(
+      `/chess-topic/obtain-status`,
+      () => this.reloadSubject.next()
+    )
   }
 
   reloadRanking(event: { pageNumber: number, pageSize: number }) {

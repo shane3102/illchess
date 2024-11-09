@@ -5,6 +5,7 @@
         [pageNumber]="data.pageNumber"
         [pageSize]="data.pageSize"
         [totalPagesCount]="totalPages$ | async"
+        [reload]="reloadSubject.asObservable()"
         (nextPageEmitter)="reloadRanking($event)"
         (previousPageEmitter)="reloadRanking($event)"
         (loadDataEmitter)="reloadRanking($event)">

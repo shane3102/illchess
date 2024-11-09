@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faAngleDoubleDown, faAngleDoubleUp, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-common-table',
@@ -14,6 +15,7 @@ export class CommonTableComponent implements OnInit {
   @Input() totalPagesCount: number | null | undefined
   @Input() pageNumber: number
   @Input() pageSize: number
+  @Input() reload: Observable<void>
 
   pageSizeIndexNumbers: number[]
 
@@ -28,6 +30,9 @@ export class CommonTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData()
+    this.reload.subscribe(
+      () => this.loadData()
+    )
   }
 
   nextPage() {
