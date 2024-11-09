@@ -96,12 +96,12 @@ $panel-width: 4 * $chess-square-size;
 
 .vertical-line {
     height: calc($chess-square-size*4/5);
-    border-left: 1px solid gray; 
+    border-left: 0.1vw solid gray; 
 }
 
 .horizontal-line {
     width: 80%;
-    border-bottom: 1px solid gray; 
+    border-bottom: 0.1vh solid gray; 
 }
 
 ::-webkit-scrollbar {
