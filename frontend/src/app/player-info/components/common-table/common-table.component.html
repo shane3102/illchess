@@ -1,59 +1,48 @@
 <div class="everything">
     <div class="table-content">
-        <table style="width: 100%;">
-            <tr class="labels">
-                <th style="width: 10%">
-                    <div class="label">
-                        L.p. 
-                    </div>
-                </th>
-                <th *ngFor="let label of labels" [ngStyle]="label.width ? {'width': label.width, 'max-width': label.width} : {}">
-                    <div class="label">
-                        {{label.content}}
-                    </div>
-                </th>
-            </tr>
-            <tr *ngFor="let i of pageSize | numberToArray"
-                [ngStyle]="{'background-color': (i%2==1 ? 'white': 'lightgray')}">
-                @if(dataList.length != 0) {
-                    <td>
-                        <div class="data">
+        
+        <div style="width: 100%;">
+            <div class="headers">
+                <div class="label" style="width: 10%">
+                    <b>#</b> 
+                </div>
+                <div class="label" *ngFor="let label of labels" [ngStyle]="label.width ? {'width': label.width, 'max-width': label.width} : {}">
+                    <b>{{label.content}}</b>
+                </div>
+            </div>
+            <div class="datas">
+                <div *ngFor="let i of pageSize | numberToArray; last as isLast">
+                    <div class="data-line">
+                        <div class="data" style="width: 10%">
                             {{pageSize * pageNumber + i + 1}}
                         </div>
-                    </td>
-                    @if(dataList[i]) {
-                        <td *ngFor="let data of dataList[i]" [ngStyle]="{'color': data.color}">
-                            <div class="data">
-                                <div>
-                                    {{data.content}}
+
+                        @if(dataList.length != 0) { 
+
+                            @if(dataList[i]) {
+                                <div class="data" *ngFor="let data of dataList[i]; let j=index" [ngStyle]="{'color': data.color, 'width': labels[j].width, 'max-width': labels[j].width}">
+                                    <div>
+                                        {{data.content}}
+                                    </div>
+                                    <div *ngIf="data.icon">
+                                        &nbsp;<fa-icon [icon]="data.icon"></fa-icon>
+                                    </div>
                                 </div>
-                                <div *ngIf="data.icon">
-                                    &nbsp;<fa-icon [icon]="data.icon"></fa-icon>
+                            } @else {
+                                <div style="user-select: none;" class="data" [ngStyle]="emptyLabel.width ? {'width': emptyLabel.width, 'max-width': emptyLabel.width} : {}" *ngFor="let emptyLabel of labels">
                                 </div>
+                            }
+
+                        } @else {
+                            <div style="user-select: none;" class="data" [ngStyle]="emptyLabel.width ? {'width': emptyLabel.width, 'max-width': emptyLabel.width} : {}" *ngFor="let emptyLabel of labels">
                             </div>
-                        </td>
-                    } @else {
-                        <td *ngFor="let empty of labels">
-                            <div style="user-select: none;" class="data">
-                                &nbsp;
-                            </div>
-                        </td>
-                    }
-                    
-                } @else {
-                    <td>
-                        <div class="data">
-                            &nbsp;
-                        </div>
-                    </td>
-                    <td *ngFor="let empty of labels">
-                        <div style="user-select: none;" class="data">
-                            &nbsp;
-                        </div>
-                    </td>
-                }
-            </tr>
-        </table>
+                        }
+
+                    </div>
+                    <div *ngIf="!isLast" class="horizontal-line"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="next-previous-page-buttons">
