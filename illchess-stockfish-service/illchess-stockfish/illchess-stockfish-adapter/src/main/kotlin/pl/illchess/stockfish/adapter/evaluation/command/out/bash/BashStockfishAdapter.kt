@@ -6,14 +6,16 @@ import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.evaluation.command.out.bash.util.StockfishConnector
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
+import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 
 
 @ApplicationScoped
 @IfBuildProperty(name = "working.mode", stringValue = "ENGINE")
-class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation {
+class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, LoadTopMoves {
 
     @field:ConfigProperty(
         name = "stockfish.path",
@@ -36,5 +38,14 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation {
         stockfishConnector.stopEngine()
         return result
     }
+
+    override fun loadTopMoves(fenPosition: FenBoardPosition, topMoveCount: Int): TopMoves? {
+        val stockfishConnector = StockfishConnector()
+        stockfishConnector.startEngine(stockfishPath)
+        val result = stockfishConnector.getTopMovesByNumber(fenPosition, topMoveCount)
+        stockfishConnector.stopEngine()
+        return result
+    }
+
 
 }

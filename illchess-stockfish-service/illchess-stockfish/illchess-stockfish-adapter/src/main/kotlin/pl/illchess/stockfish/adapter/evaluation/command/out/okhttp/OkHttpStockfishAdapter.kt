@@ -12,9 +12,12 @@ import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.evaluation.command.out.okhttp.dto.StockfishApiResponseDto
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
+import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
+import pl.illchess.stockfish.domain.evaluation.exception.TopMovesNotAvailableWhenUsingApi
 import pl.illchess.stockfish.domain.evaluation.exception.UrlOfStockfishEngineNotProvided
 
 @ApplicationScoped
@@ -22,7 +25,7 @@ import pl.illchess.stockfish.domain.evaluation.exception.UrlOfStockfishEngineNot
 class OkHttpStockfishAdapter(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
     private val objectMapper: ObjectMapper = jacksonObjectMapper()
-) : LoadBoardEvaluation, LoadBestMoveAndContinuation {
+) : LoadBoardEvaluation, LoadBestMoveAndContinuation, LoadTopMoves {
 
     @field:ConfigProperty(
         name = "urls.stockfish-api",
@@ -81,5 +84,9 @@ class OkHttpStockfishAdapter(
         val call = okHttpClient.newCall(request)
         val response = call.execute()
         return response
+    }
+
+    override fun loadTopMoves(fenPosition: FenBoardPosition, topMoveCount: Int): TopMoves? {
+        throw TopMovesNotAvailableWhenUsingApi()
     }
 }

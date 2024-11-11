@@ -3,6 +3,7 @@ package pl.illchess.stockfish.adapter.evaluation.command.out.bash.util
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
+import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 import pl.illchess.stockfish.domain.evaluation.exception.EvaluationByEngineCouldNotBeEstablished
 import java.io.BufferedReader
 import java.io.IOException
@@ -40,6 +41,13 @@ class StockfishConnector {
         sendCommand("position fen ${fenPosition.value}")
         sendCommand("go depth 15")
         return getBestMoveAndContinuation()
+    }
+
+    fun getTopMovesByNumber(fenPosition: FenBoardPosition, moveCount: Int): TopMoves {
+        sendCommand("position fen ${fenPosition.value}")
+        sendCommand("setoption name multipv value $moveCount")
+        sendCommand("go depth 15")
+        return getListOfTopMoves(moveCount)
     }
 
     fun getEvaluation(fenPosition: FenBoardPosition): Evaluation {
@@ -82,6 +90,21 @@ class StockfishConnector {
             .filter { it != "" }
 
         return BestMoveAndContinuation(bestMove, continuation)
+    }
+
+    private fun getListOfTopMoves(moveNumber: Int): TopMoves {
+        val topMovesLine: List<String> = processReader!!.lines()
+            .peek{ println(it) }
+            .takeWhile { !it.contains("bestmove") }
+            .filter { it.contains("info depth 15 seldepth") }
+            .limit(moveNumber.toLong())
+            .toList()
+
+        val topMovesList = topMovesLine
+            .map { it.split("pv")[2].split(" ")[1] }
+            .toList()
+
+        return TopMoves(topMovesList)
     }
 
     fun stopEngine() {
