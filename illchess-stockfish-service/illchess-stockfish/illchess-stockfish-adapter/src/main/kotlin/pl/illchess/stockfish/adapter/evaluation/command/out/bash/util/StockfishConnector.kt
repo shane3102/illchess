@@ -94,7 +94,6 @@ class StockfishConnector {
 
     private fun getListOfTopMoves(moveNumber: Int): TopMoves {
         val topMovesLine: List<String> = processReader!!.lines()
-            .peek{ println(it) }
             .takeWhile { !it.contains("bestmove") }
             .filter { it.contains("info depth 15 seldepth") }
             .limit(moveNumber.toLong())
