@@ -1,22 +1,22 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
-import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../../shared/state/chess-game.state';
-import { ActiveBoardsView } from '../../../shared/model/game/ActiveBoardsView';
-import { activeBoardsRefreshed, newActiveBoardObtained, refreshActiveBoards, removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
-import { Observable } from 'rxjs';
-import { selectActiveBoards } from '../../../shared/state/active-boards/active-boards.selectors';
-import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewView';
+import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { BoardGameObtainedInfoView } from 'src/app/shared/model/game/BoardGameObtainedInfoView';
+import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewView';
+import { ActiveBoardsView } from '../../../shared/model/game/ActiveBoardsView';
+import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
+import { newActiveBoardObtained, refreshActiveBoards, removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
+import { selectActiveBoards } from '../../../shared/state/active-boards/active-boards.selectors';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
 
 @Component({
   selector: 'app-active-boards',
   templateUrl: './active-boards.component.html',
   styleUrls: ['./active-boards.component.scss']
 })
-export class ActiveBoardsComponent implements OnInit {
+export class ActiveBoardsComponent implements OnInit, OnDestroy {
 
   pageSize = 4
 
@@ -35,27 +35,38 @@ export class ActiveBoardsComponent implements OnInit {
   page = 0
 
   activeBoardsView$: Observable<ActiveBoardsView> = this.store.select(selectActiveBoards)
+  newActiveBoardSubscription$: Subscription
+  obtainStatusSubscription$: Subscription
 
   ngOnInit(): void {
     this.store.dispatch(refreshActiveBoards({}))
-    this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/new-active-board`,
-      (response: any) => {
-        let activeBoardNewView: ActiveBoardNewView = JSON.parse(response)
-        this.store.dispatch(newActiveBoardObtained(activeBoardNewView))
-      }
-    )
+    setTimeout(
+      async () => {
+        this.newActiveBoardSubscription$ = await this.chessBoardWebSocketService.subscribe(
+          `/chess-topic/new-active-board`,
+          (response: any) => {
+            let activeBoardNewView: ActiveBoardNewView = JSON.parse(response)
+            this.store.dispatch(newActiveBoardObtained(activeBoardNewView))
+          }
+        )
 
-    this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/obtain-status`,
-      (response: any) => {
-        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
-        setTimeout(
-          () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.boardId })) },
-          1000
+        this.obtainStatusSubscription$ = await this.chessBoardWebSocketService.subscribe(
+          `/chess-topic/obtain-status`,
+          (response: any) => {
+            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            setTimeout(
+              () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.boardId })) },
+              1000
+            )
+          }
         )
       }
     )
+  }
+
+  ngOnDestroy(): void {
+    this.newActiveBoardSubscription$.unsubscribe()
+    this.obtainStatusSubscription$.unsubscribe()
   }
 
   spectateBoard(boardId: string) {

@@ -1,4 +1,5 @@
 1. stockfish nie może ewaluować tych pozycji (WTF!?!?):
     - r5r1/3n4/1p2p1Pp/P4p2/P1q2kP1/R7/1Q2BP2/4K2b w K - 0 29
     - 1n2kb1r/5p1p/rqp3pn/1p1p2NB/PP1P3P/6P1/1R3P2/2BQK2b b Kk - 0 24
+    - 2kr3r/1pp2pp1/2n1p3/p2q2bp/P3bP1P/4B1P1/3NP2R/q2QK3 w Q - 0 21
 2. ziomek0 - co on odwala
