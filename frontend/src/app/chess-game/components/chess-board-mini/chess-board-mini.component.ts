@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { SquareInfo } from '../../../shared/model/game/SquareInfo';
 import { ChessBoardMiniStore } from './chess-board-mini.store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BoardView } from '../../../shared/model/game/BoardView';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
@@ -15,7 +15,7 @@ import { removeFinishedBoardFromActiveBoard } from '../../../shared/state/active
   styleUrls: ['./chess-board-mini.component.scss'],
   providers: [ChessBoardMiniStore]
 })
-export class ChessBoardMiniComponent implements OnInit {
+export class ChessBoardMiniComponent implements OnInit, OnDestroy {
 
   @Input() boardId: string
 
@@ -30,21 +30,27 @@ export class ChessBoardMiniComponent implements OnInit {
 
   boardView$: Observable<BoardView | undefined> = this.chessBoardMiniStore.boardView$
   boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = this.chessBoardMiniStore.boardGameObtainedInfoView$
+  chessTopic$: Subscription
+  chessStatus$: Subscription
 
   ngOnInit(): void {
     this.chessBoardMiniStore.refresh(this.boardId)
-    this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/${this.boardId}`,
-      (response: any) => {
-        let boardView: BoardView = JSON.parse(response)
-        this.chessBoardMiniStore.patchState({ boardView: boardView })
-      }
-    )
-    this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/obtain-status/${this.boardId}`,
-      (response: any) => {
-        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
-        this.chessBoardMiniStore.patchState({ boardGameObtainedInfoView: boardGameObtainedInfoView })
+    setTimeout(
+      async () => {
+        this.chessTopic$ = await this.chessBoardWebSocketService.subscribe(
+          `/chess-topic/${this.boardId}`,
+          (response: any) => {
+            let boardView: BoardView = JSON.parse(response)
+            this.chessBoardMiniStore.patchState({ boardView: boardView })
+          }
+        )
+        this.chessStatus$ = await this.chessBoardWebSocketService.subscribe(
+          `/chess-topic/obtain-status/${this.boardId}`,
+          (response: any) => {
+            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            this.chessBoardMiniStore.patchState({ boardGameObtainedInfoView: boardGameObtainedInfoView })
+          }
+        )
       }
     )
 
@@ -55,6 +61,11 @@ export class ChessBoardMiniComponent implements OnInit {
         }
       }
     )
+  }
+
+  ngOnDestroy(): void {
+    this.chessTopic$.unsubscribe()
+    this.chessStatus$.unsubscribe()
   }
 
   public calculateSquareColor(squareInfo: SquareInfo) {

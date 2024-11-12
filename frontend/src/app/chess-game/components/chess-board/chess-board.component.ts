@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { BoardLegalMovesResponse } from '../../../shared/model/game/BoardLegalMovesResponse';
 import { BoardView } from '../../../shared/model/game/BoardView';
 import { CheckLegalMovesRequest } from '../../../shared/model/game/CheckLegalMovesRequest';
@@ -21,10 +21,13 @@ import { GameFinishedView } from '../../../shared/model/player-info/GameFinished
   templateUrl: './chess-board.component.html',
   styleUrls: ['./chess-board.component.scss']
 })
-export class ChessBoardComponent implements OnInit {
+export class ChessBoardComponent implements OnInit, OnDestroy {
 
   @Input() boardId: string;
   @Input() username: string
+  
+  private store = inject(Store<ChessGameState>)
+  private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
   boardView$: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
@@ -36,50 +39,67 @@ export class ChessBoardComponent implements OnInit {
   boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
   gameFinishedView$: Observable<GameFinishedView | null | undefined> = this.store.select(gameFinishedView)
 
+  private chessTopicWithPreMovesSubscription$: Subscription
+  private chessTopicSubscription$: Subscription
+  private obtainStatusSubscription$: Subscription
+
   ranks: number[] = [8, 7, 6, 5, 4, 3, 2, 1]
   files: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
   isUsernamePlayerOnBoard: boolean
 
-  constructor(
-    private store: Store<ChessGameState>,
-    private chessBoardWebSocketService: ChessBoardWebsocketService
-  ) {
-  }
-
   ngOnInit(): void {
-    this.boardView$.subscribe(boardView => {
-      if ((boardView.whiteUsername == this.username || boardView.blackUsername == this.username) && !this.isUsernamePlayerOnBoard) {
-        this.isUsernamePlayerOnBoard = true
-        this.sendChessBoardWithPreMovesRefreshRequest()
-        this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/${this.boardId}/${this.username}`,
-          (response: any) => {
-            let boardView: BoardView = JSON.parse(response)
-            this.store.dispatch(boardLoaded(boardView))
+    
+    this.boardView$.pipe(take(1)).subscribe(boardView => {
+      setTimeout(
+        async () => {
+          if ((boardView.whiteUsername == this.username || boardView.blackUsername == this.username) && !this.isUsernamePlayerOnBoard) { 
+            this.isUsernamePlayerOnBoard = true
+            this.sendChessBoardWithPreMovesRefreshRequest()
           }
-        )
-      }
+          this.chessTopicWithPreMovesSubscription$ = await this.chessBoardWebSocketService.subscribe(
+            `/chess-topic/${this.boardId}/${this.username}`,
+            (response: any) => {
+              let boardView: BoardView = JSON.parse(response)
+              this.store.dispatch(boardLoaded(boardView))
+            }
+          )
+        }
+      )
     })
     
     if (!this.isUsernamePlayerOnBoard) {
-      this.chessBoardWebSocketService.subscribe(
-        `/chess-topic/${this.boardId}`,
-        (response: any) => {
-          let boardView: BoardView = JSON.parse(response)
-          this.store.dispatch(boardLoaded(boardView))
+      setTimeout(
+        async () => {
+          this.chessTopicSubscription$ = await this.chessBoardWebSocketService.subscribe(
+            `/chess-topic/${this.boardId}`,
+            (response: any) => {
+              let boardView: BoardView = JSON.parse(response)
+              this.store.dispatch(boardLoaded(boardView))
+            }
+          )
         }
       )
     }
 
-    this.chessBoardWebSocketService.subscribe(
-      `/chess-topic/obtain-status/${this.boardId}`,
-      (response: any) => {
-        let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
-        this.store.dispatch(gameFinished(boardGameObtainedInfoView))
-      } 
+    setTimeout(
+      async () => {
+        this.obtainStatusSubscription$ = await this.chessBoardWebSocketService.subscribe(
+          `/chess-topic/obtain-status/${this.boardId}`,
+          (response: any) => {
+            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            this.store.dispatch(gameFinished(boardGameObtainedInfoView))
+          } 
+        )
+      }
     )
 
+  }
+
+  ngOnDestroy(): void {
+    this.chessTopicWithPreMovesSubscription$.unsubscribe()
+    this.chessTopicSubscription$.unsubscribe()
+    this.obtainStatusSubscription$.unsubscribe()
   }
 
   pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
