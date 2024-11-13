@@ -1,5 +1,5 @@
 package pl.illchess.stockfish.domain.evaluation.domain
 
 data class TopMoves(
-    val topMovesList: List<String>
+    val topMovesList: Set<String>
 )
