@@ -15,6 +15,6 @@ fun main(args: Array<String>) {
     }
 
     players.map { thread { it.play() } }
-        .forEach(Thread::run)
+        .forEach(Thread::start)
 
 }

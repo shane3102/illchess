@@ -1,12 +1,12 @@
 package pl.illchess.presentation.player
 
+import java.util.UUID
+import kotlin.random.Random
 import pl.illchess.presentation.exception.BoardNotFound
 import pl.illchess.presentation.okhttp.IllChessGameAdapter
 import pl.illchess.presentation.okhttp.IllChessGameAdapter.BoardAdditionalInfoView
 import pl.illchess.presentation.okhttp.IllChessGameAdapter.MovePieceRequest
 import pl.illchess.presentation.okhttp.IllChessStockFishAdapter
-import java.util.*
-import kotlin.random.Random
 
 class Player(
     private val username: String,
