@@ -10,7 +10,7 @@
         [pageNumber]="pageDataLatestGames.pageNumber"
         [pageSize]="pageDataLatestGames.pageSize"
         [totalPagesCount]="totalPages$ | async"
-        [reload]="reloadSubject.asObservable()"
+        [reload]="reloadPage$"
         (nextPageEmitter)="reloadLatestGames($event)"
         (previousPageEmitter)="reloadLatestGames($event)"
         (loadDataEmitter)="reloadLatestGames($event)">

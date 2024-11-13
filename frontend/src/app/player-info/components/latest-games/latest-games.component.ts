@@ -1,8 +1,7 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, Subscription, combineLatest, map } from 'rxjs';
+import { Observable, Subject, combineLatest, map } from 'rxjs';
 import { GameSnippetView } from 'src/app/shared/model/player-info/GameSnippetView';
-import { ChessBoardWebsocketService } from 'src/app/shared/service/GameWebsocketService';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 import { loadLatestGames } from 'src/app/shared/state/player-info/player-info.actions';
 import { commonPageSize, latestGamesSelector, pageNumberLatestGamesSelector, totalPageNumberLatestGamesSelector } from 'src/app/shared/state/player-info/player-info.selectors';
@@ -13,10 +12,11 @@ import { PageData } from '../../model/PageData';
   templateUrl: './latest-games.component.html',
   styleUrls: ['./latest-games.component.scss']
 })
-export class LatestGamesComponent implements OnDestroy {
+export class LatestGamesComponent {
+
+  @Input() reloadPage$: Observable<void>
 
   store = inject(Store<ChessGameState>)
-  chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
   pageDataLatestGames$: Observable<PageData>
   reloadSubject: Subject<void> = new Subject<void>();
@@ -25,8 +25,6 @@ export class LatestGamesComponent implements OnDestroy {
   currentPage$: Observable<number> = this.store.select(pageNumberLatestGamesSelector)
   totalPages$: Observable<number | null | undefined> = this.store.select(totalPageNumberLatestGamesSelector)
   commonPageSize$: Observable<number> = this.store.select(commonPageSize)
-
-  latestGamesSubscription$: Subscription
 
   ngOnInit(): void {
     this.pageDataLatestGames$ = combineLatest([this.currentPage$, this.commonPageSize$])
@@ -41,19 +39,6 @@ export class LatestGamesComponent implements OnDestroy {
         )
       )
 
-    setTimeout(
-      async () => {
-        this.latestGamesSubscription$ = await this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/obtain-status`,
-          () => this.reloadSubject.next()
-        )
-      }
-    )
-
-  }
-
-  ngOnDestroy(): void {
-    this.latestGamesSubscription$.unsubscribe()
   }
 
   reloadLatestGames(event: PageData) {

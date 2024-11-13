@@ -1,7 +1,7 @@
 <div class="shared-tables">
     <div style="width: 10%"></div>
     <div style="width: 40%;">
-        <app-player-ranking></app-player-ranking>
+        <app-player-ranking [reloadPage$]="reloadSubject.asObservable()"></app-player-ranking>
     </div>
     <div class="shared-page-size">
         <div 
@@ -12,7 +12,7 @@
         </div>
     </div>
     <div style="width: 40%;">
-        <app-latest-games></app-latest-games>
+        <app-latest-games [reloadPage$]="reloadSubject.asObservable()"></app-latest-games>
     </div>
     <div style="width: 10%"></div>
 </div>
