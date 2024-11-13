@@ -93,15 +93,18 @@ class StockfishConnector {
     }
 
     private fun getListOfTopMoves(moveNumber: Int): TopMoves {
-        val topMovesLine: List<String> = processReader!!.lines()
+        val allTopMoves: List<String> = processReader!!.lines()
             .takeWhile { !it.contains("bestmove") }
-            .filter { it.contains("info depth 15 seldepth") }
+            .filter { it.contains("info depth") && it.contains("seldepth") }
+            .toList()
+
+        val topMovesByHighestDepth = allTopMoves.sortedBy { it.split(" ")[3] }.stream()
             .limit(moveNumber.toLong())
             .toList()
 
-        val topMovesList = topMovesLine
+        val topMovesList = topMovesByHighestDepth
             .map { it.split("pv")[2].split(" ")[1] }
-            .toList()
+            .toSet()
 
         return TopMoves(topMovesList)
     }
