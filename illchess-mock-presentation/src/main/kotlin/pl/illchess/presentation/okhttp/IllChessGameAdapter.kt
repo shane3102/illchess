@@ -76,6 +76,25 @@ class IllChessGameAdapter(
         return initializedBoardResponse
     }
 
+    fun resign(resignGameRequest: ResignGameRequest) {
+        val illChessGameUrl = properties.getProperty("illchess.game.url")
+
+        val mediaType: MediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = objectMapper.writeValueAsString(resignGameRequest).toRequestBody(mediaType)
+
+        val request: Request = Request.Builder()
+            .url("$illChessGameUrl/api/board/resign")
+            .put(requestBody)
+            .build()
+        val call = okHttpClient.newCall(request)
+        call.execute()
+    }
+
+    data class ResignGameRequest(
+        val boardId: UUID,
+        val username: String
+    )
+
     data class MovePieceRequest(
         val boardId: UUID,
         val startSquare: String,

@@ -50,25 +50,17 @@
 }
 
 .board-wrapper-disappear {
-    animation: disappear-finished-board-opacity 1s, disappear-finished-board-width 1s;
+    animation: disappear-finished-board 1s;
 }
 
-@keyframes disappear-finished-board-opacity {
+@keyframes disappear-finished-board {
     from {
         opacity: 1;
-    }
-
-    to {
-        opacity: 0
-    }
-}
-
-@keyframes disappear-finished-board-width {
-    from {
         width: $board-wrapper-size-mini;
     }
 
     to {
-        width: 0
+        opacity: 0;
+        width: 0;
     }
 }
