@@ -40,11 +40,18 @@ class Player(
                     if (!isMyTurn(boardAdditionalInfoView)) {
                         continue
                     }
-                    val moveRequest = toMovePieceRequest(
-                        stockfishAdapter.loadTopMoves(currentBoardId!!, moveCount)!!.topMoves.random()
-                    )
+                    val topMoves = stockfishAdapter.loadTopMoves(currentBoardId!!, moveCount)!!.topMoves
 
-                    gameAdapter.performMove(moveRequest)
+                    if (topMoves.isEmpty()) {
+                        gameAdapter.resign(IllChessGameAdapter.ResignGameRequest(currentBoardId!!, username))
+                    } else {
+                        val moveRequest = toMovePieceRequest(
+                            topMoves.random()
+                        )
+
+                        gameAdapter.performMove(moveRequest)
+                    }
+
                 } catch (e: BoardNotFound) {
                     currentBoardId = null
                 }

@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
     val playerCount = properties.getProperty("player.count").toInt()
 
     val players: MutableList<Player> = mutableListOf()
-    for (i in 0..playerCount) {
+    for (i in 0..<playerCount) {
         players.add(i, Player("ziomek$i"))
     }
 
