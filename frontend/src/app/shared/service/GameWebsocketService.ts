@@ -10,7 +10,7 @@ export class ChessBoardWebsocketService {
     async subscribe(topic: string, callback: any): Promise<Subscription> {
         const rxStomp = new RxStomp();
         rxStomp.configure({
-            brokerURL: `/chess`,
+            brokerURL: `/gateway/game/chess`,
         });
 
         rxStomp.activate();
