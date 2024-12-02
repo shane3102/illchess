@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build-prod
 
 FROM nginx:stable
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /app/dist/illchess-frontend /usr/share/nginx/html
 COPY --from=build app/default.conf /etc/nginx/conf.d/default.conf
 CMD ["nginx", "-g", "daemon off;"]
 EXPOSE 80
