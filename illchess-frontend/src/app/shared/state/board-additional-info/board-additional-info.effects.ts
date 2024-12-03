@@ -1,31 +1,29 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { from, map, switchMap } from "rxjs";
 import { AcceptDrawRequest } from "../../model/game/AcceptDrawRequest";
+import { AcceptTakingBackMoveRequest } from "../../model/game/AcceptTakingBackMoveRequest";
 import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
 import { ProposeDrawRequest } from "../../model/game/ProposeDrawRequest";
+import { ProposeTakingBackMoveRequest } from "../../model/game/ProposeTakingBackMoveRequest";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { RejectDrawRequest } from "../../model/game/RejectDrawRequest";
-import { ResignGameRequest } from "../../model/game/ResignGameRequest";
-import { GameService } from "../../service/GameService";
-import { acceptDraw, acceptTakingBackMove, bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded, proposeDraw, proposeTakingBackMove, refreshAdditionalInfoOfBoard, rejectDraw, rejectTakingBackMove, resignGame } from "./board-additional-info.actions";
-import { StockfishService } from "../../service/StockfishService";
-import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
-import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
-import { ProposeTakingBackMoveRequest } from "../../model/game/ProposeTakingBackMoveRequest";
 import { RejectTakingBackMoveRequest } from "../../model/game/RejectTakingBackMoveRequest";
-import { AcceptTakingBackMoveRequest } from "../../model/game/AcceptTakingBackMoveRequest";
+import { ResignGameRequest } from "../../model/game/ResignGameRequest";
+import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
+import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
+import { StockfishService } from "../../service/StockfishService";
+import { acceptDraw, acceptTakingBackMove, bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, establishEvaluation, evaluationLoaded, proposeDraw, proposeTakingBackMove, refreshAdditionalInfoOfBoard, rejectDraw, rejectTakingBackMove, resignGame } from "./board-additional-info.actions";
+import { GameService } from "../../service/GameService";
 
 @Injectable({
     providedIn: 'root'
 })
 export class BoardAdditionalInfoEffects {
 
-    constructor(
-        private actions$: Actions,
-        private chessBoardService: GameService,
-        private chessBoardStockfishService: StockfishService
-    ) { }
+    private actions$ = inject(Actions)
+    private chessBoardService = inject(GameService)
+    private chessBoardStockfishService = inject(StockfishService) 
 
     refreshBoardAdditionalInfo$ = createEffect(
         () => this.actions$.pipe(
@@ -47,11 +45,11 @@ export class BoardAdditionalInfoEffects {
             )
         ),
         {
-            dispatch:  false
+            dispatch: false
         }
     )
 
-    proposeDraw$ =  createEffect(
+    proposeDraw$ = createEffect(
         () => this.actions$.pipe(
             ofType(proposeDraw),
             switchMap(
@@ -62,8 +60,8 @@ export class BoardAdditionalInfoEffects {
             dispatch: false
         }
     )
-    
-    rejectDraw$ =  createEffect(
+
+    rejectDraw$ = createEffect(
         () => this.actions$.pipe(
             ofType(rejectDraw),
             switchMap(
@@ -75,7 +73,7 @@ export class BoardAdditionalInfoEffects {
         }
     )
 
-    acceptDraw$ =  createEffect(
+    acceptDraw$ = createEffect(
         () => this.actions$.pipe(
             ofType(acceptDraw),
             switchMap(
@@ -127,7 +125,7 @@ export class BoardAdditionalInfoEffects {
         () => this.actions$.pipe(
             ofType(establishEvaluation),
             switchMap(
-                (dto: {boardId: string}) => from(this.chessBoardStockfishService.evaluateBoard(dto.boardId))
+                (dto: { boardId: string }) => from(this.chessBoardStockfishService.evaluateBoard(dto.boardId))
                     .pipe(
                         map((response: EvaluationResponse) => evaluationLoaded(response))
                     )
@@ -139,7 +137,7 @@ export class BoardAdditionalInfoEffects {
         () => this.actions$.pipe(
             ofType(establishBestMoveAndContinuation),
             switchMap(
-                (dto: {boardId: string}) => from(this.chessBoardStockfishService.establishBestMoveAndContinuation(dto.boardId))
+                (dto: { boardId: string }) => from(this.chessBoardStockfishService.establishBestMoveAndContinuation(dto.boardId))
                     .pipe(
                         map((response: BestMoveAndContinuationResponse) => bestMoveAndContinuationLoaded(response))
                     )

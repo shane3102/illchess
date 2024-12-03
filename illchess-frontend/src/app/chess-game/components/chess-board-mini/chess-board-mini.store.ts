@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { GameService } from "../../../shared/service/GameService";
 import { ComponentStore } from "@ngrx/component-store";
 import { BoardView } from "../../../shared/model/game/BoardView";
@@ -8,7 +8,9 @@ import { BoardGameObtainedInfoView } from "../../../shared/model/game/BoardGameO
 @Injectable()
 export class ChessBoardMiniStore extends ComponentStore<ChessBoardMiniState> {
 
-    constructor(private chessBoardService: GameService) {
+    private chessBoardService = inject(GameService)
+
+    constructor() {
         super({})
     }
 

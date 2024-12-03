@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { AcceptDrawRequest } from "../model/game/AcceptDrawRequest";
 import { AcceptTakingBackMoveRequest } from "../model/game/AcceptTakingBackMoveRequest";
@@ -24,8 +24,7 @@ export class GameService {
 
     readonly PATH: string = `/gateway/game/api/board`
 
-    constructor(private httpService: HttpClient) {
-    }
+    private httpService = inject(HttpClient)
 
     async initializeBoard(initializeBoardRequest: InitializeBoardRequest): Promise<InitializedBoardResponse> {
         return firstValueFrom(this.httpService.put<InitializedBoardResponse>(this.PATH + "/join-or-initialize", initializeBoardRequest))

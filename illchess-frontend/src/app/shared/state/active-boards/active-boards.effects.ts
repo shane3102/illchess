@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { GameService } from "../../service/GameService";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { activeBoardsRefreshed, refreshActiveBoards } from "./active-boards.actions";
@@ -10,11 +10,9 @@ import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
 })
 export class ActiveBoardEffects {
 
-    constructor(
-        private actions$: Actions,
-        private chessBoardService: GameService
-    ) {
-    }
+    private actions$ = inject(Actions)
+    private chessBoardService = inject(GameService) 
+
 
     refreshActiveBoards$ = createEffect(
         () => this.actions$.pipe(
