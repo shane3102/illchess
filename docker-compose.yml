@@ -34,7 +34,7 @@ services:
     ports:
       - 2137:2137
     environment:
-      - URLS_GAME-SERVICE=http://illchess-game-service:8080
+      - URLS_GAME-SERVICE=http://chess-game-service:8080
 
   # Player info service
   player-info-db:
