@@ -41,8 +41,6 @@ export class ChessSquareComponent implements OnInit {
   hashtag = faHashtag
   equals = faEquals
 
-  constructor() { }
-
   ngOnInit(): void {
 
     this.illegalMoveResponse.subscribe(

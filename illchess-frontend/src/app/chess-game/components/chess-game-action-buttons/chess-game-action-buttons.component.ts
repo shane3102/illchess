@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { faAngleDoubleLeft, faFlag, faHandshake } from '@fortawesome/free-solid-svg-icons';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { Store } from '@ngrx/store';
@@ -28,8 +28,7 @@ export class ChessGameActionButtonsComponent {
 
   PieceColor = PieceColor
 
-  constructor(private store: Store<ChessGameState>) {
-  }
+  private store = inject(Store<ChessGameState>)
 
   resignGame() {
     let dto: ResignGameRequest = {'boardId': this.boardId, 'username': this.username}

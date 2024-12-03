@@ -10,18 +10,12 @@ import { faChessBishop } from '@fortawesome/free-solid-svg-icons'
     '../../chess-board-style.scss'
   ]
 })
-export class BishopComponent implements OnInit {
+export class BishopComponent {
 
   getColorByPieceColor = getColorByPieceColor
 
   bishopIcon = faChessBishop
 
   @Input() color: PieceColor;
-
-  constructor() { }
-
-  ngOnInit(): void {
-    getColorByPieceColor(this.color)
-  }
 
 }

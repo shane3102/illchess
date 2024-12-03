@@ -9,15 +9,10 @@ import { Piece, PieceInfo } from '../../../shared/model/game/PieceInfo';
     '../chess-board-style.scss'
   ]
 })
-export class ChessPieceComponent implements OnInit {
+export class ChessPieceComponent {
 
   Piece = Piece
 
   @Input() pieceInfo: PieceInfo | undefined;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

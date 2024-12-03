@@ -10,17 +10,12 @@ import { faChessPawn } from '@fortawesome/free-solid-svg-icons'
     '../../chess-board-style.scss'
   ]
 })
-export class PawnComponent implements OnInit {
+export class PawnComponent {
 
   getColorByPieceColor = getColorByPieceColor
 
   pawnIcon = faChessPawn;
 
   @Input() color: PieceColor;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
