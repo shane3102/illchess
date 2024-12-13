@@ -1,0 +1,5 @@
+<div style="display: flex; justify-content: center; align-items: center;" *ngIf="username$ | async as uname">
+    <div style="font-size: 1.5vw; color: #F3E5AB;">Login:</div>
+    <input #username class="username-input" maxlength="10" [value]="uname" (focusout)="changeUsername(username)">
+</div>
+    

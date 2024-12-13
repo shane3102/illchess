@@ -70,10 +70,7 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
   }
 
   spectateBoard(boardId: string) {
-    let randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
-    let username: string = randomNames[Math.floor(Math.random() * randomNames.length)] + Math.floor(100 * Math.random())
-
-    this.router.navigateByUrl(`/game/${boardId}/${username}`)
+    this.router.navigateByUrl(`/game/${boardId}`)
   }
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {

@@ -7,7 +7,7 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 const routes: Routes = [
   { path: '', component: MainPageComponent},
   { path: 'join-or-initialize', component: JoinOrInitializeGameComponent},
-  { path: 'game/:boardId/:username', component: ChessGameComponent}
+  { path: 'game/:boardId', component: ChessGameComponent}
 ];
 
 @NgModule({

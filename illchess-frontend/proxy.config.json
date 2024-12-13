@@ -1,6 +1,6 @@
 {
-  "/chess": {
-    "target": "http://localhost:8080",
+  "/gateway/game/chess": {
+    "target": "http://localhost:1337",
     "secure": false,
     "changeOrigin": true,
     "ws": true,

@@ -9,6 +9,7 @@ import { BoardView, PiecesLocations } from 'src/app/shared/model/game/BoardView'
 import { boardSelector } from 'src/app/shared/state/board/board.selectors';
 import { RefreshBoardDto } from 'src/app/shared/model/game/RefreshBoardRequest';
 import { refreshBoard } from 'src/app/shared/state/board/board.actions';
+import { username } from 'src/app/shared/state/player-info/player-info.selectors';
 
 @Component({
   selector: 'app-chess-game',
@@ -18,11 +19,11 @@ import { refreshBoard } from 'src/app/shared/state/board/board.actions';
 export class ChessGameComponent implements OnInit {
 
   boardId: string
-  username: string
-
+  
   private store = inject(Store<ChessGameState>)
   private route = inject(ActivatedRoute)
-
+  
+  username$: Observable<string | undefined> = this.store.select(username)
   boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
   boardView$: Observable<BoardView> = this.store.select(boardSelector)
 
@@ -30,7 +31,6 @@ export class ChessGameComponent implements OnInit {
     this.route.params.subscribe(
       params => {
         this.boardId = params['boardId']
-        this.username =  params['username']
       }
     )
     this.sendChessBoardRefreshRequest()

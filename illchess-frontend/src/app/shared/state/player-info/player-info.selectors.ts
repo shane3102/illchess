@@ -1,6 +1,7 @@
 import { createSelector } from "@ngrx/store";
 import { ChessGameState } from "../chess-game.state";
 import { PlayerInfoState } from "./player-info.reducers";
+import { state } from "@angular/animations";
 
 export const selectPlayerInfo = (state: ChessGameState) => state.playerInfoState;
 
@@ -42,4 +43,9 @@ export const totalPageNumberLatestGamesSelector = createSelector(
 export const commonPageSize = createSelector(
     selectPlayerInfo,
     (state: PlayerInfoState) => state.pageSize
+)
+
+export const username = createSelector(
+    selectPlayerInfo,
+    (state: PlayerInfoState) => state.username
 )

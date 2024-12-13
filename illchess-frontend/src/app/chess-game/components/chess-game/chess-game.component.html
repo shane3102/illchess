@@ -1,18 +1,20 @@
-@if(boardView$ | async; as boardView) {
-    @if(boardId && username && haveAnyPiecesSet(boardView.piecesLocations)) {
-        <div class="chess-game">
-            <div>
-                <app-chess-board [boardId]="boardId" [username]="username"></app-chess-board>
+@if(username$ | async; as username) {
+    @if(boardView$ | async; as boardView) {
+        @if(boardId && haveAnyPiecesSet(boardView.piecesLocations)) {
+            <div class="chess-game">
+                <div>
+                    <app-chess-board [boardId]="boardId" [username]="username"></app-chess-board>
+                </div>
+                <div>
+                    <app-chess-engine-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-engine-info>
+                </div>
+                <div>
+                    <app-chess-board-additional-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-board-additional-info>
+                </div>
             </div>
-            <div>
-                <app-chess-engine-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-engine-info>
-            </div>
-            <div>
-                <app-chess-board-additional-info [boardId]="boardId" [username]="username" [boardAdditionalInfoView]="boardAdditionalInfoView$ | async"></app-chess-board-additional-info>
-            </div>
-        </div>
-    } @else {
-        <app-loading-game></app-loading-game>
+        } @else {
+            <app-loading-game></app-loading-game>
+        }
     }
 }
 

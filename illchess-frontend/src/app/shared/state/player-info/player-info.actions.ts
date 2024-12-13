@@ -32,3 +32,14 @@ export const commonPageSizeChange = createAction(
     'Common page size change',
     props<{ pageSize: number }>()
 )
+
+// User info
+export const changeUsername = createAction(
+    'Changing username',
+    props<{username: string}>()
+)
+
+export const generateRandomUsername = createAction(
+    'Generating randoim username', 
+    props<any>()
+)

@@ -1,20 +1,21 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { from, map, switchMap, tap, withLatestFrom } from "rxjs";
+import { Store } from "@ngrx/store";
+import { from, map, switchMap, tap } from "rxjs";
 import { GameSnippetView } from "../../model/player-info/GameSnippetView";
 import { LatestGamesLoadDto } from "../../model/player-info/LatestGamesLoadDto";
 import { Page } from "../../model/player-info/Page";
 import { PlayerView } from "../../model/player-info/PlayerView";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
-import { commonPageSizeChange, latestGamesLoaded, loadLatestGames, loadPlayerRanking, playerRankingLoaded } from "./player-info.actions";
 import { ChessGameState } from "../chess-game.state";
-import { Store } from "@ngrx/store";
-import { pageNumberPlayerRankingSelector } from "./player-info.selectors";
+import { changeUsername, commonPageSizeChange, generateRandomUsername, latestGamesLoaded, loadLatestGames, loadPlayerRanking, playerRankingLoaded } from "./player-info.actions";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlayerInfoEffects {
+
+    randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
 
     private store = inject(Store<ChessGameState>)
     private actions$ = inject(Actions)
@@ -22,9 +23,9 @@ export class PlayerInfoEffects {
 
     loadPlayerRanking$ = createEffect(
         () => this.actions$.pipe(
-            ofType(loadPlayerRanking), 
+            ofType(loadPlayerRanking),
             switchMap(
-                (dto: {pageNumberPlayerRanking: number, pageSizePlayerRanking: number }) => from(this.playerInfoService.getPlayerRankingPageable(dto.pageNumberPlayerRanking, dto.pageSizePlayerRanking))
+                (dto: { pageNumberPlayerRanking: number, pageSizePlayerRanking: number }) => from(this.playerInfoService.getPlayerRankingPageable(dto.pageNumberPlayerRanking, dto.pageSizePlayerRanking))
                     .pipe(
                         map((response: Page<PlayerView>) => playerRankingLoaded(response))
                     )
@@ -34,7 +35,7 @@ export class PlayerInfoEffects {
 
     loadLatestGames$ = createEffect(
         () => this.actions$.pipe(
-            ofType(loadLatestGames), 
+            ofType(loadLatestGames),
             switchMap(
                 (dto: LatestGamesLoadDto) => from(this.playerInfoService.getLatestGamesPageable(dto.pageNumberLatestGames, dto.pageSizeLatestGames))
                     .pipe(
@@ -48,9 +49,38 @@ export class PlayerInfoEffects {
         () => this.actions$.pipe(
             ofType(commonPageSizeChange),
             tap(
-                (dto: { pageSize: number }, ) => {
+                (dto: { pageSize: number },) => {
                     this.store.dispatch(loadLatestGames({ pageNumberLatestGames: 0, pageSizeLatestGames: dto.pageSize }))
                     this.store.dispatch(loadPlayerRanking({ pageNumberPlayerRanking: 0, pageSizePlayerRanking: dto.pageSize }))
+                }
+            )
+        ),
+        {
+            dispatch: false
+        }
+    )
+
+    changeUsername$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(changeUsername),
+            tap(
+                (dto: { username: string }) => {
+                    localStorage.setItem('username', dto.username)
+                }
+            )
+        ),
+        {
+            dispatch: false
+        }
+    )
+
+    generateRandomUsername$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(generateRandomUsername),
+            tap(
+                () => {
+                    let username: string = this.randomNames[Math.floor(Math.random() * this.randomNames.length)] + Math.floor(100 * Math.random())
+                    this.store.dispatch(changeUsername({username: username}))
                 }
             )
         ),

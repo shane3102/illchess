@@ -11,13 +11,15 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HeaderButtonComponent } from './components/header-button/header-button.component';
 import { PlayerInfoModule } from "./player-info/player-info.module";
+import { HeaderUsernameInputComponent } from './components/header-username-input/header-username-input.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
     HeaderComponent,
-    HeaderButtonComponent
+    HeaderButtonComponent,
+    HeaderUsernameInputComponent
   ],
   imports: [
     BrowserModule,
