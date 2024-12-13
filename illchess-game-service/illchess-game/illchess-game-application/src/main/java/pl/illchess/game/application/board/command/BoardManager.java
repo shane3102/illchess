@@ -1,5 +1,7 @@
 package pl.illchess.game.application.board.command;
 
+import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.illchess.game.application.board.command.in.AcceptDrawUseCase;
@@ -35,19 +37,16 @@ import pl.illchess.game.domain.board.command.Resign;
 import pl.illchess.game.domain.board.event.BoardInitialized;
 import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.game.domain.board.event.BoardStateUpdated;
-import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesOfUsernameUpdated;
 import pl.illchess.game.domain.board.event.GameFinished;
+import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesOfUsernameUpdated;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.board.model.Board;
 import pl.illchess.game.domain.board.model.BoardId;
 import pl.illchess.game.domain.board.model.FenBoardString;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.GameState;
+import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
-
-import java.util.Optional;
-import java.util.Set;
-
 import static pl.illchess.game.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.game.domain.commons.model.MoveType.MOVE;
 
@@ -148,24 +147,33 @@ public class BoardManager implements
 
         JoinOrInitializeNewGame command = cmd.toCommand();
         BoardId savedBoardId;
-
-        Optional<Board> boardWithoutPlayer = loadBoard.loadBoardWithoutPlayer();
-        if (boardWithoutPlayer.isPresent()) {
-            savedBoardId = boardWithoutPlayer.get().boardId();
-            boardWithoutPlayer.get().assignSecondPlayer(command.username());
-            saveBoard.saveBoard(boardWithoutPlayer.get());
+        Optional<Board> currentPlayerBoard = loadBoard.loadBoardByUsername(new Username(cmd.username()));
+        if (currentPlayerBoard.isPresent()) {
+            savedBoardId = currentPlayerBoard.get().boardId();
+            saveBoard.saveBoard(currentPlayerBoard.get());
             log.info(
-                "Username {} has joined existing game",
+                "Username {} has rejoined played game",
                 cmd.username()
             );
         } else {
-            Board initializedBoard = Board.generateNewBoard(command);
-            savedBoardId = saveBoard.saveBoard(initializedBoard);
-            eventPublisher.publishDomainEvent(new BoardInitialized(savedBoardId));
-            log.info(
-                "Username {} initialized new game",
-                cmd.username()
-            );
+            Optional<Board> boardWithoutPlayer = loadBoard.loadBoardWithoutPlayer();
+            if (boardWithoutPlayer.isPresent()) {
+                savedBoardId = boardWithoutPlayer.get().boardId();
+                boardWithoutPlayer.get().assignSecondPlayer(command.username());
+                saveBoard.saveBoard(boardWithoutPlayer.get());
+                log.info(
+                    "Username {} has joined existing game",
+                    cmd.username()
+                );
+            } else {
+                Board initializedBoard = Board.generateNewBoard(command);
+                savedBoardId = saveBoard.saveBoard(initializedBoard);
+                eventPublisher.publishDomainEvent(new BoardInitialized(savedBoardId));
+                log.info(
+                    "Username {} initialized new game",
+                    cmd.username()
+                );
+            }
         }
 
         eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(savedBoardId));

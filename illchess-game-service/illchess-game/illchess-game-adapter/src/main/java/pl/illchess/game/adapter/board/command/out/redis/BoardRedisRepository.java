@@ -1,5 +1,6 @@
 package pl.illchess.game.adapter.board.command.out.redis;
 
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,7 @@ import pl.illchess.game.domain.board.model.Board;
 import pl.illchess.game.domain.board.model.BoardId;
 
 import java.util.Optional;
+import pl.illchess.game.domain.board.model.state.player.Username;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,6 +42,24 @@ public class BoardRedisRepository implements SaveBoard, LoadBoard, DeleteBoard {
             .map(board -> (BoardEntity) board)
             .map(BoardMapper::toDomain)
             .filter(board -> board.boardState().blackPlayer() == null)
+            .findFirst();
+    }
+
+    @Override
+    public Optional<Board> loadBoardByUsername(Username username) {
+        return template.opsForHash()
+            .entries(BOARD_HASH_KEY)
+            .values()
+            .stream()
+            .map(board -> (BoardEntity) board)
+            .map(BoardMapper::toDomain)
+            .filter(
+                board -> Objects.equals(board.boardState().whitePlayer().username(), username)
+                || (
+                    board.boardState().blackPlayer()!= null
+                    && Objects.equals(board.boardState().blackPlayer().username(), username)
+                )
+            )
             .findFirst();
     }
 

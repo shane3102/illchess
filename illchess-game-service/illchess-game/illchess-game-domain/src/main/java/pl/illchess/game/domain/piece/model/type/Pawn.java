@@ -1,5 +1,10 @@
 package pl.illchess.game.domain.piece.model.type;
 
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import pl.illchess.game.domain.board.model.history.Move;
 import pl.illchess.game.domain.board.model.history.MoveHistory;
 import pl.illchess.game.domain.board.model.square.PiecesLocations;
@@ -9,12 +14,6 @@ import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
 import pl.illchess.game.domain.piece.model.info.PieceType;
-
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class Pawn implements Piece {
 
@@ -206,6 +205,11 @@ public final class Pawn implements Piece {
                 && lastPerformedMove.movedPiece() instanceof Pawn
                 && lastPerformedMove.targetSquare().getRank().getNumber() == 5
                 && square.getRank().getNumber() == 5
+                &&
+                (
+                    square.getFile().getNumber() - 1 == lastPerformedMove.targetSquare().getFile().getNumber()
+                        || square.getFile().getNumber() + 1 == lastPerformedMove.targetSquare().getFile().getNumber()
+                )
         );
 
         boolean blackEnPassant = (
@@ -213,6 +217,11 @@ public final class Pawn implements Piece {
                 && lastPerformedMove.movedPiece() instanceof Pawn
                 && lastPerformedMove.targetSquare().getRank().getNumber() == 4
                 && square.getRank().getNumber() == 4
+                &&
+                (
+                    square.getFile().getNumber() - 1 == lastPerformedMove.targetSquare().getFile().getNumber()
+                        || square.getFile().getNumber() + 1 == lastPerformedMove.targetSquare().getFile().getNumber()
+                )
         );
 
         return whiteEnPassant || blackEnPassant;

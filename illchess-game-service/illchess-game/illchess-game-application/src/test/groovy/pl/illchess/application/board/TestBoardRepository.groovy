@@ -5,6 +5,7 @@ import pl.illchess.game.application.board.command.out.LoadBoard
 import pl.illchess.game.application.board.command.out.SaveBoard
 import pl.illchess.game.domain.board.model.Board
 import pl.illchess.game.domain.board.model.BoardId
+import pl.illchess.game.domain.board.model.state.player.Username
 
 class TestBoardRepository implements LoadBoard, SaveBoard, DeleteBoard {
 
@@ -21,6 +22,17 @@ class TestBoardRepository implements LoadBoard, SaveBoard, DeleteBoard {
             .stream()
             .filter {it.boardState().blackPlayer() == null}
             .findFirst()
+    }
+
+    @Override
+    Optional<Board> loadBoardByUsername(Username username) {
+        return repo.values()
+                .stream()
+                .filter {
+                    (it.boardState().blackPlayer() !=  null && it.boardState().blackPlayer().username() == username)
+                            || it.boardState().whitePlayer().username() == username
+                }
+                .findFirst()
     }
 
     @Override
