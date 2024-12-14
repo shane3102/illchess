@@ -7,7 +7,7 @@ import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoV
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
-import pl.illchess.game.domain.board.event.BoardInitialized;
+import pl.illchess.game.domain.board.event.BoardGameStarted;
 import pl.illchess.game.domain.board.event.BoardUpdated;
 import pl.illchess.game.domain.board.event.delete.BoardDeleteError;
 import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
@@ -25,8 +25,8 @@ public interface BoardViewSupplier {
     @EventListener(BoardWithPreMovesUpdated.class)
     BoardWithPreMovesView updateBoardWithPreMovesView(BoardWithPreMovesUpdated event);
 
-    @EventListener(BoardInitialized.class)
-    ActiveBoardNewView activeBoardsChanged(BoardInitialized event);
+    @EventListener(BoardGameStarted.class)
+    ActiveBoardNewView activeBoardsChanged(BoardGameStarted event);
 
     @EventListener({
         BoardDeleted.class,

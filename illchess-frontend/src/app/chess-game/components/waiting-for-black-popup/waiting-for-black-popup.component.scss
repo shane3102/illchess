@@ -1,0 +1,10 @@
+@import '../chess-board-style.scss';
+
+.content-obtain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: $popup-content-height;
+    width: $popup-content-width;
+}

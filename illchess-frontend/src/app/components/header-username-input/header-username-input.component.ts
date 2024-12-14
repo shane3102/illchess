@@ -15,14 +15,19 @@ export class HeaderUsernameInputComponent implements OnInit {
   store = inject(Store<PlayerInfoState>)
   username$: Observable<string | undefined> = this.store.select(username)
 
+  ngOnInit() {
+    this.assignRandomUsernameIfEmpty()
+  }
+
   changeUsername(usernameInput: HTMLInputElement) {
     this.store.dispatch(changeUsername({ username: usernameInput.value }))
   }
 
-  ngOnInit() {
-    if (!localStorage.getItem('username')) {
+  assignRandomUsernameIfEmpty() {
+    if (!sessionStorage.getItem('username')) {
       this.store.dispatch(generateRandomUsername({}))
     }
+    
   }
 
 }

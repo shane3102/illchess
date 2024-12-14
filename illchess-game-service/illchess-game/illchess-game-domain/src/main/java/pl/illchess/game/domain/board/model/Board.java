@@ -1,5 +1,10 @@
 package pl.illchess.game.domain.board.model;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import pl.illchess.game.domain.board.command.AcceptDraw;
 import pl.illchess.game.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.game.domain.board.command.CheckLegalMoves;
@@ -11,6 +16,7 @@ import pl.illchess.game.domain.board.command.RejectDraw;
 import pl.illchess.game.domain.board.command.RejectTakingBackMove;
 import pl.illchess.game.domain.board.command.Resign;
 import pl.illchess.game.domain.board.exception.InvalidUserPerformedMoveException;
+import pl.illchess.game.domain.board.exception.NoBlackPlayerException;
 import pl.illchess.game.domain.board.exception.NoMovesPerformedException;
 import pl.illchess.game.domain.board.exception.PieceCantMoveToGivenSquareException;
 import pl.illchess.game.domain.board.exception.PieceColorIncorrectException;
@@ -28,14 +34,8 @@ import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
 import pl.illchess.game.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.game.domain.piece.model.Piece;
-import pl.illchess.game.domain.piece.model.type.King;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
+import pl.illchess.game.domain.piece.model.type.King;
 
 public record Board(
     BoardId boardId,
@@ -59,6 +59,7 @@ public record Board(
     }
 
     public MoveType movePieceOrAddPreMove(MovePiece command) {
+        throwIfNoBlackPlayer();
         if (boardState.isPreMove(command)) {
             addPreMove(command);
             return MoveType.PRE_MOVE;
@@ -153,6 +154,7 @@ public record Board(
     }
 
     public Set<Square> legalMoves(CheckLegalMoves command) {
+        throwIfNoBlackPlayer();
         Optional<Player> playerByUsername = boardState.getPlayerByUsername(command.username());
 
         if (playerByUsername.isEmpty() || playerByUsername.get().equals(boardState.currentPlayer())) {
@@ -253,6 +255,12 @@ public record Board(
 
     public void resetCachedMovesOfPieces() {
         piecesLocations.locations().forEach(Piece::resetCachedReachableSquares);
+    }
+
+    private void throwIfNoBlackPlayer() {
+        if (boardState.blackPlayer() == null) {
+            throw new NoBlackPlayerException();
+        }
     }
 
     public FenBoardString establishFenBoardString() {

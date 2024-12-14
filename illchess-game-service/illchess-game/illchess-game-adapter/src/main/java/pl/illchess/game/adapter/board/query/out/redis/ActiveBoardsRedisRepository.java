@@ -24,6 +24,7 @@ public class ActiveBoardsRedisRepository implements ActiveBoardsQueryPort {
                 .values()
                 .stream()
                 .map(board -> (BoardEntity) board)
+                .filter(board -> board.boardState().blackPlayer() != null)
                 .sorted(Comparator.comparing(b -> b.boardState().startTime()))
                 .map(BoardEntity::boardId)
                 .toList()

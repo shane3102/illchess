@@ -15,7 +15,7 @@ export const initialState: PlayerInfoState = {
     latestGamesInfoPage: null,
     playerRankingInfoPage: null,
     pageSize: 5,
-    username: localStorage.getItem('username') ? localStorage.getItem('username')! : undefined
+    username: sessionStorage.getItem('username') ? sessionStorage.getItem('username')! : undefined
 }
 
 export const playerInfoReducer = createReducer(

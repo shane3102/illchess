@@ -28,6 +28,7 @@ import { PawnComponent } from './components/pieces/pawn/pawn.component';
 import { QueenComponent } from './components/pieces/queen/queen.component';
 import { RookComponent } from './components/pieces/rook/rook.component';
 import { LoadingGameComponent } from './components/loading-game/loading-game.component';
+import { WaitingForBlackPopupComponent } from './components/waiting-for-black-popup/waiting-for-black-popup.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { LoadingGameComponent } from './components/loading-game/loading-game.com
     ChessEngineInfoComponent,
     GameFinishedPopupComponent,
     GameFinishedPopupUserInfoComponent,
-    LoadingGameComponent
+    LoadingGameComponent,
+    WaitingForBlackPopupComponent
   ],
   imports: [
     SharedModule,

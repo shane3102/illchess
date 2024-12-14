@@ -65,7 +65,7 @@ export class PlayerInfoEffects {
             ofType(changeUsername),
             tap(
                 (dto: { username: string }) => {
-                    localStorage.setItem('username', dto.username)
+                    sessionStorage.setItem('username', dto.username)
                 }
             )
         ),

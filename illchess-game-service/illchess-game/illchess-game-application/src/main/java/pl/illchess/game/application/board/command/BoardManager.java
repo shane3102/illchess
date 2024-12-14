@@ -34,7 +34,7 @@ import pl.illchess.game.domain.board.command.ProposeTakingBackMove;
 import pl.illchess.game.domain.board.command.RejectDraw;
 import pl.illchess.game.domain.board.command.RejectTakingBackMove;
 import pl.illchess.game.domain.board.command.Resign;
-import pl.illchess.game.domain.board.event.BoardInitialized;
+import pl.illchess.game.domain.board.event.BoardGameStarted;
 import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.game.domain.board.event.BoardStateUpdated;
 import pl.illchess.game.domain.board.event.GameFinished;
@@ -161,6 +161,7 @@ public class BoardManager implements
                 savedBoardId = boardWithoutPlayer.get().boardId();
                 boardWithoutPlayer.get().assignSecondPlayer(command.username());
                 saveBoard.saveBoard(boardWithoutPlayer.get());
+                eventPublisher.publishDomainEvent(new BoardGameStarted(savedBoardId));
                 log.info(
                     "Username {} has joined existing game",
                     cmd.username()
@@ -168,7 +169,6 @@ public class BoardManager implements
             } else {
                 Board initializedBoard = Board.generateNewBoard(command);
                 savedBoardId = saveBoard.saveBoard(initializedBoard);
-                eventPublisher.publishDomainEvent(new BoardInitialized(savedBoardId));
                 log.info(
                     "Username {} initialized new game",
                     cmd.username()

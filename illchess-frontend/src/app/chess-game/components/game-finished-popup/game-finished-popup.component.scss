@@ -1,26 +1,11 @@
 @import '../chess-board-style.scss';
 
-$content-height: 3 * $chess-square-size;
-$content-width: 5 * $chess-square-size;
-
-.content {
-    position: relative;
-    top: 2.5 * $chess-square-size;
-    left: 1.5 * $chess-square-size;
-    border-radius: calc($chess-square-size/2);
-    background-color: rgb(128,128,128, 0.75);
-    width: $content-width;
-    height: $content-height;
-    z-index: 2;
-    animation: show-username 1s;
-}
-
 .content-obtain {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    height: $content-height;
-    width: $content-width;
+    height: $popup-content-height;
+    width: $popup-content-width;
 }
 
 .content-obtain-unsuccessful {

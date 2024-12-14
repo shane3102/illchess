@@ -16,7 +16,7 @@ import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoV
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
-import pl.illchess.game.domain.board.event.BoardInitialized;
+import pl.illchess.game.domain.board.event.BoardGameStarted;
 import pl.illchess.game.domain.board.event.BoardUpdated;
 import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
 import pl.illchess.game.domain.board.event.delete.BoardDeleted;
@@ -99,7 +99,7 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     }
 
     @Override
-    public ActiveBoardNewView activeBoardsChanged(BoardInitialized event) {
+    public ActiveBoardNewView activeBoardsChanged(BoardGameStarted event) {
         log.info("State off active boards has changed. Sending update info with ids off active boards");
         ActiveBoardNewView view = new ActiveBoardNewView(event.boardId().uuid());
         messagingTemplate.convertAndSend(

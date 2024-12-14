@@ -33,7 +33,7 @@ import static pl.illchess.game.domain.board.model.state.GameState.RESIGNED;
 
 public class BoardState {
     private final CurrentPlayerColor currentPlayerColor;
-    private Player whitePlayer;
+    private final Player whitePlayer;
     private Player blackPlayer;
     private GameState gameState;
     private PieceColor victoriousPlayerColor;

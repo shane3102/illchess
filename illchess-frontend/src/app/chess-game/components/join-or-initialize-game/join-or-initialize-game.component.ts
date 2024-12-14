@@ -16,7 +16,7 @@ import { ChessGameState } from '../../../shared/state/chess-game.state';
 export class JoinOrInitializeGameComponent implements OnInit {
 
   boardId: string
-  username: string = localStorage.getItem('username')!
+  username: string = sessionStorage.getItem('username')!
 
   private store = inject(Store<ChessGameState>)
   private router = inject(Router)

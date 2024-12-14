@@ -1,5 +1,20 @@
 $chess-square-size: 8.5vh;
 
+$popup-content-height: 3 * $chess-square-size;
+$popup-content-width: 5 * $chess-square-size;
+
+.popup-content {
+    position: relative;
+    top: 2.5 * $chess-square-size;
+    left: 1.5 * $chess-square-size;
+    border-radius: calc($chess-square-size/2);
+    background-color: rgb(128,128,128, 0.75);
+    width: $popup-content-width;
+    height: $popup-content-height;
+    z-index: 2;
+    animation: show-username 1s;
+}
+
 .piece {
     font-size: calc($chess-square-size * 8 / 10);
 }
