@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.illchess.stockfish</groupId>
     <artifactId>illchess-stockfish-service</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -15,6 +15,7 @@
     </modules>
 
     <properties>
+        <revision>1.0.0</revision>
         <jackson.module.kotlin.version>2.9.8</jackson.module.kotlin.version>
         <ok.http.version>4.12.0</ok.http.version>
         <logback.version>1.4.14</logback.version>

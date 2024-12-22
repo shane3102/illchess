@@ -5,12 +5,12 @@
     <parent>
         <groupId>pl.illchess.stockfish</groupId>
         <artifactId>illchess-stockfish-service</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>pl.illchess.stockfish.domain</groupId>
     <artifactId>illchess-stockfish-domain</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
