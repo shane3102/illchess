@@ -13,6 +13,13 @@
     <groupId>pl.illchess.player-info.adapter</groupId>
     <artifactId>illchess-player-info-adapter</artifactId>
 
+    <repositories>
+        <repository>
+            <id>Self hosted nexus</id>
+            <url>https://nexus.shane3102.pl/repository/maven-releases/</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>

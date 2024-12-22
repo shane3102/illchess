@@ -78,6 +78,7 @@
     </dependencies>
 
     <build>
+        <finalName>illchess-player-info-server</finalName>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>

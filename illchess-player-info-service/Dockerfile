@@ -1,4 +1,4 @@
-FROM illchess-build-stage as build
+FROM maven:3.9-eclipse-temurin-17-alpine as build
 
 # copy main pom
 RUN mkdir -p /usr/src/app/illchess/illchess-player-info
@@ -24,6 +24,6 @@ RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests
 
 FROM openjdk:17
-COPY --from=build /usr/src/app/illchess/illchess-player-info-server/target/illchess-player-info-server-1.0.0-SNAPSHOT-runner.jar illchess-player-info-server-1.0.0-SNAPSHOT-runner.jar
-ENTRYPOINT ["java", "-jar", "illchess-player-info-server-1.0.0-SNAPSHOT-runner.jar"]
+COPY --from=build /usr/src/app/illchess/illchess-player-info-server/target/illchess-player-info-server-runner.jar illchess-player-info-server.jar
+ENTRYPOINT ["java", "-jar", "illchess-player-info-server.jar"]
 EXPOSE 420
