@@ -7,7 +7,7 @@ import pl.illchess.SpecificationIT
 import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
 import pl.illchess.game.application.board.query.out.BoardGameFinishedQueryPort
-import pl.messaging.repository.LoadMessages
+import pl.shane3102.messaging.repository.LoadMessages
 
 abstract class InboxOutboxRepositoryImplementationSpecification extends SpecificationIT {
 

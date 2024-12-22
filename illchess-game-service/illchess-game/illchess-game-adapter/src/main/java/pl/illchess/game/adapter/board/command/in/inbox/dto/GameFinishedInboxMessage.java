@@ -1,10 +1,10 @@
 package pl.illchess.game.adapter.board.command.in.inbox.dto;
 
 import lombok.Getter;
-import pl.messaging.model.Message;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import pl.shane3102.messaging.model.Message;
 
 @Getter
 public class GameFinishedInboxMessage extends Message {

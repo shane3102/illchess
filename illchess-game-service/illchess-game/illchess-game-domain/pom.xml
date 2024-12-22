@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>pl.illchess.domain</groupId>
-    <artifactId>illchess-game-domain</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>Domain layer of illchess websocket</description>
 
     <parent>
         <groupId>pl.illchess.game</groupId>
         <artifactId>illchess-game-service</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
+
+    <groupId>pl.illchess.domain</groupId>
+    <artifactId>illchess-game-domain</artifactId>
+    <description>Domain layer of illchess game service</description>
 
 </project>

@@ -7,26 +7,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.0</version>
-        <relativePath/>
     </parent>
 
     <groupId>pl.illchess.game</groupId>
     <artifactId>illchess-game-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
-
-    <properties>
-        <logback.version>1.4.14</logback.version>
-        <slf4j.version>2.0.9</slf4j.version>
-        <java.version>17</java.version>
-        <jedis.version>4.3.1</jedis.version>
-        <lombok.version>1.18.30</lombok.version>
-        <inbox-outbox.version>1.0.0-SNAPSHOT</inbox-outbox.version>
-        <spock.version>2.2-M3-groovy-4.0</spock.version>
-        <groovy-all.version>4.0.16</groovy-all.version>
-        <awaitility-groovy.version>4.2.0</awaitility-groovy.version>
-        <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
-    </properties>
 
     <modules>
         <module>illchess-game/illchess-game-domain</module>
@@ -34,6 +20,23 @@
         <module>illchess-game/illchess-game-adapter</module>
         <module>illchess-game-server</module>
     </modules>
+
+    <properties>
+        <revision>1.0.0</revision>
+        <logback.version>1.4.14</logback.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <java.version>17</java.version>
+        <jedis.version>4.3.1</jedis.version>
+        <lombok.version>1.18.30</lombok.version>
+        <inbox-outbox.version>1.0.0</inbox-outbox.version>
+        <redis.version>3.1.0</redis.version>
+        <web-socket.version>6.0.11</web-socket.version>
+        <spring-messaging.version>6.0.10</spring-messaging.version>
+        <spock.version>2.2-M3-groovy-4.0</spock.version>
+        <groovy-all.version>4.0.16</groovy-all.version>
+        <awaitility-groovy.version>4.2.0</awaitility-groovy.version>
+        <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
+    </properties>
 
     <build>
         <plugins>
