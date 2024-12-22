@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.UUID
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
-import pl.messaging.model.Message
+import pl.shane3102.messaging.model.Message
 
 data class ObtainNewGameInboxMessage(
     val gameId: UUID,

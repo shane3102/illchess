@@ -6,7 +6,8 @@
     <parent>
         <groupId>pl.illchess.player-info</groupId>
         <artifactId>illchess-player-info-service</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>pl.illchess.player-info.server</groupId>
@@ -28,7 +29,7 @@
         <dependency>
             <groupId>pl.illchess.player-info.adapter</groupId>
             <artifactId>illchess-player-info-adapter</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
