@@ -12,7 +12,7 @@ import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
 import pl.illchess.game.domain.board.event.GameFinished;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.commons.exception.DomainException;
-import pl.messaging.aggregator.InboxOutbox;
+import pl.shane3102.messaging.aggregator.InboxOutbox;
 
 @Service
 @RequiredArgsConstructor

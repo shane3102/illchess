@@ -9,10 +9,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.mapper.InboxOutboxMessageMapper;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.model.InboxOutboxMessageEntity;
-import pl.messaging.model.Message;
-import pl.messaging.repository.DeleteMessage;
-import pl.messaging.repository.LoadMessages;
-import pl.messaging.repository.SaveMessage;
+import pl.shane3102.messaging.model.Message;
+import pl.shane3102.messaging.repository.DeleteMessage;
+import pl.shane3102.messaging.repository.LoadMessages;
+import pl.shane3102.messaging.repository.SaveMessage;
 
 @Repository
 @RequiredArgsConstructor

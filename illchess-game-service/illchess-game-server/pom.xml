@@ -5,45 +5,35 @@
     <parent>
         <groupId>pl.illchess.game</groupId>
         <artifactId>illchess-game-service</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>illchess-game-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>illchess-game-server</name>
-    <description>Server layer of illchess websocket</description>
 
-    <properties>
-        <adapter.version>0.0.1-SNAPSHOT</adapter.version>
-        <spring-boot.version>3.2.0</spring-boot.version>
-        <spring.version>6.2.0</spring.version>
-    </properties>
+    <artifactId>illchess-game-server</artifactId>
+    <description>Server layer of illchess websocket</description>
 
     <dependencies>
         <dependency>
             <groupId>pl.illchess.adapter</groupId>
             <artifactId>illchess-game-adapter</artifactId>
-            <version>${adapter.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>

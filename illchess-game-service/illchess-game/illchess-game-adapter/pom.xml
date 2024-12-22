@@ -2,28 +2,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>pl.illchess.adapter</groupId>
-    <artifactId>illchess-game-adapter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>Adapter layer of illchess websocket</description>
 
     <parent>
         <groupId>pl.illchess.game</groupId>
         <artifactId>illchess-game-service</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <redis.version>3.1.0</redis.version>
-        <web-socket.version>6.0.11</web-socket.version>
-        <spring-messaging.version>6.0.10</spring-messaging.version>
-    </properties>
+    <groupId>pl.illchess.adapter</groupId>
+    <artifactId>illchess-game-adapter</artifactId>
+    <description>Adapter layer of illchess game service</description>
+
+    <repositories>
+        <repository>
+            <id>Self hosted nexus</id>
+            <url>https://nexus.shane3102.pl/repository/maven-releases/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>pl.illchess.application</groupId>
             <artifactId>illchess-game-application</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -53,8 +55,13 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
-            <groupId>pl.illchess.messaging</groupId>
-            <artifactId>inbox-outbox-spring</artifactId>
+            <groupId>pl.shane3102.messaging</groupId>
+            <artifactId>inbox-outbox-spring-boot</artifactId>
+            <version>${inbox-outbox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.shane3102.messaging</groupId>
+            <artifactId>inbox-outbox-commons</artifactId>
             <version>${inbox-outbox.version}</version>
         </dependency>
         <dependency>

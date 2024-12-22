@@ -9,7 +9,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.mapper.mixin.InboxOutboxMessageMixin;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.model.InboxOutboxMessageEntity;
-import pl.messaging.model.Message;
+import pl.shane3102.messaging.model.Message;
 
 @Component
 public class InboxOutboxMessageMapper {

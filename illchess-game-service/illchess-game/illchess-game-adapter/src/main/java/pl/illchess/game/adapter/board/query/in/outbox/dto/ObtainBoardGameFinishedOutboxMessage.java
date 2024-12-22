@@ -2,7 +2,7 @@ package pl.illchess.game.adapter.board.query.in.outbox.dto;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
-import pl.messaging.model.Message;
+import pl.shane3102.messaging.model.Message;
 
 public class ObtainBoardGameFinishedOutboxMessage extends Message {
 

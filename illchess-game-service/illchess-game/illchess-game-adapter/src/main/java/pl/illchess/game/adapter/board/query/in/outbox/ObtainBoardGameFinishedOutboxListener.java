@@ -10,8 +10,8 @@ import pl.illchess.game.adapter.board.query.in.outbox.dto.ObtainBoardGameFinishe
 import pl.illchess.game.application.board.query.out.BoardGameFinishedQueryPort;
 import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
-import pl.messaging.annotation.InboxOutboxListener;
-import pl.messaging.annotation.MessagingAwareComponent;
+import pl.shane3102.messaging.annotation.InboxOutboxListener;
+import pl.shane3102.messaging.annotation.MessagingAwareComponent;
 import static pl.illchess.game.adapter.board.query.in.rabbitmq.BoardInfoRabbitMqSupplier.OBTAIN_GAME_QUEUE;
 
 @Component

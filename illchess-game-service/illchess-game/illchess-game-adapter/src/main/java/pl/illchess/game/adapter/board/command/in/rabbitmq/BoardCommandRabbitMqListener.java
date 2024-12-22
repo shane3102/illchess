@@ -13,7 +13,7 @@ import pl.illchess.game.domain.board.event.delete.BoardDeleteError;
 import pl.illchess.game.domain.board.event.delete.BoardDeleted;
 import pl.illchess.game.domain.board.model.BoardId;
 import pl.illchess.game.domain.commons.exception.DomainException;
-import pl.messaging.aggregator.InboxOutbox;
+import pl.shane3102.messaging.aggregator.InboxOutbox;
 
 @Component
 @RequiredArgsConstructor

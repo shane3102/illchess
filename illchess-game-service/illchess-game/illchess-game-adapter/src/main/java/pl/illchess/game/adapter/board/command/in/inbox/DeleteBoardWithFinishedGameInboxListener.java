@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 import pl.illchess.game.adapter.board.command.in.inbox.dto.GameFinishedInboxMessage;
 import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase;
 import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase.DeleteBoardWithFinishedGameCmd;
-import pl.messaging.annotation.InboxOutboxListener;
-import pl.messaging.annotation.MessagingAwareComponent;
+import pl.shane3102.messaging.annotation.InboxOutboxListener;
+import pl.shane3102.messaging.annotation.MessagingAwareComponent;
 
 @Component
 @MessagingAwareComponent
