@@ -1,4 +1,4 @@
-FROM illchess-build-stage as build
+FROM maven:3.9-eclipse-temurin-17-alpine as build
 
 # copy main pom
 RUN mkdir -p /usr/src/app/illchess/illchess-game
@@ -22,8 +22,9 @@ COPY illchess-game-server/src /usr/src/app/illchess/illchess-game-server/src
 
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests
+RUN ls /usr/src/app/illchess/illchess-game-server/target
 
 FROM openjdk:17
-COPY --from=build /usr/src/app/illchess/illchess-game-server/target/illchess-game-server-0.0.1-SNAPSHOT.jar illchess-game-server-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "illchess-game-server-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /usr/src/app/illchess/illchess-game-server/target/illchess-game-server.jar illchess-game-server.jar
+ENTRYPOINT ["java", "-jar", "illchess-game-server.jar"]
 EXPOSE 8080

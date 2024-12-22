@@ -7,6 +7,6 @@ COPY src /usr/src/app/src
 RUN mvn -f /usr/src/app clean install -DskipTests
 
 FROM openjdk:17
-COPY --from=build /usr/src/app/target/illchess-gateway-0.0.1-SNAPSHOT.jar illchess-gateway-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "illchess-gateway-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /usr/src/app/target/illchess-gateway.jar illchess-gateway.jar
+ENTRYPOINT ["java", "-jar", "illchess-gateway.jar"]
 EXPOSE 1337

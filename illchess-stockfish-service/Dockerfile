@@ -1,4 +1,4 @@
-FROM illchess-build-stage as build
+FROM maven:3.9-eclipse-temurin-17-alpine as build
 
 # copy main pom
 RUN mkdir -p /usr/src/app/illchess/illchess-stockfish
@@ -29,7 +29,7 @@ RUN apt install stockfish
 RUN apt install default-jre --assume-yes
 ENV PATH="$PATH:/usr/games"
 
-COPY --from=build /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-1.0.0-SNAPSHOT-runner.jar illchess-stockfish-server-1.0.0-SNAPSHOT-runner.jar
+COPY --from=build /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner.jar illchess-stockfish-server.jar
 
-ENTRYPOINT ["java", "-jar", "illchess-stockfish-server-1.0.0-SNAPSHOT-runner.jar"]
+ENTRYPOINT ["java", "-jar", "illchess-stockfish-server.jar"]
 EXPOSE 2137

@@ -91,6 +91,7 @@
     </dependencies>
 
     <build>
+        <finalName>illchess-game-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
