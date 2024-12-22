@@ -5,7 +5,7 @@ import jakarta.inject.Inject
 import org.mockito.Mockito
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.illchess.player_info.server.dev.Specification
-import pl.messaging.repository.LoadMessages
+import pl.shane3102.messaging.repository.LoadMessages
 
 abstract class InboxOutboxRepositoryImplementationSpecification : Specification() {
     @Inject

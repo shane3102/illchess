@@ -11,7 +11,7 @@ import jakarta.enterprise.context.ApplicationScoped
 import lombok.SneakyThrows
 import pl.illchess.player_info.adapter.inbox_outbox.out.jpa_streamer.repository.mapper.mixin.InboxOutboxMessageMixin
 import pl.illchess.player_info.adapter.shared_entities.InboxOutboxMessageEntity
-import pl.messaging.model.Message
+import pl.shane3102.messaging.model.Message
 
 @ApplicationScoped
 class InboxOutboxMessageMapper {

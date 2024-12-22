@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>pl.illchess.player-info</groupId>
     <artifactId>illchess-player-info-service</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -15,6 +15,7 @@
     </modules>
 
     <properties>
+        <revision>1.0.0</revision>
         <kotlin.version>1.9.23</kotlin.version>
         <compiler-plugin.version>3.12.1</compiler-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +33,7 @@
         <lombok.version>1.18.30</lombok.version>
         <jackson.module.kotlin.version>2.9.8</jackson.module.kotlin.version>
         <awaitility.version>4.2.0</awaitility.version>
+        <inbox-outbox.version>1.0.0</inbox-outbox.version>
     </properties>
 
     <dependencies>

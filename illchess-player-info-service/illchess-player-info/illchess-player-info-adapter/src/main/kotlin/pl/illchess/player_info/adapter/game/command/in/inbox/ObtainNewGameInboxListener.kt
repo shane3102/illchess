@@ -3,8 +3,8 @@ package pl.illchess.player_info.adapter.game.command.`in`.inbox
 import jakarta.enterprise.context.ApplicationScoped
 import pl.illchess.player_info.adapter.game.command.`in`.inbox.dto.ObtainNewGameInboxMessage
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
-import pl.messaging.annotation.InboxOutboxListener
-import pl.messaging.quarkus.runtime.annotation.MessagingAwareComponent
+import pl.shane3102.messaging.annotation.InboxOutboxListener
+import pl.shane3102.messaging.quarkus.runtime.annotation.MessagingAwareComponent
 
 @ApplicationScoped
 @MessagingAwareComponent

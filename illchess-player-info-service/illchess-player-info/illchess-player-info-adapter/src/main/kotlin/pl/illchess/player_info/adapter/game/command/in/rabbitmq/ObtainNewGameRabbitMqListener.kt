@@ -8,11 +8,11 @@ import org.eclipse.microprofile.reactive.messaging.Incoming
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.illchess.player_info.domain.commons.exception.DomainException
-import pl.messaging.quarkus.runtime.aggregator.InboxOutbox
+import pl.shane3102.messaging.quarkus.runtime.aggregator.InboxOutbox
 
 @ApplicationScoped
 class ObtainNewGameRabbitMqListener(
-    private val inbox: InboxOutbox,
+    private val inboxOutbox: InboxOutbox,
     private val obtainNewGameUseCase: ObtainNewGameUseCase
 ) {
 
@@ -26,7 +26,7 @@ class ObtainNewGameRabbitMqListener(
         try {
             obtainNewGameUseCase.obtainNewGame(message.toCmd())
         } catch (e: DomainException) {
-            inbox.saveMessage(message.toInboxMessage())
+            inboxOutbox.saveMessage(message.toInboxMessage())
         }
     }
 }

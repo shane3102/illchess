@@ -5,10 +5,10 @@ import jakarta.transaction.Transactional
 import java.util.UUID
 import pl.illchess.player_info.adapter.inbox_outbox.out.jpa_streamer.repository.InboxOutboxMessageRepository
 import pl.illchess.player_info.adapter.inbox_outbox.out.jpa_streamer.repository.mapper.InboxOutboxMessageMapper
-import pl.messaging.model.Message
-import pl.messaging.repository.DeleteMessage
-import pl.messaging.repository.LoadMessages
-import pl.messaging.repository.SaveMessage
+import pl.shane3102.messaging.model.Message
+import pl.shane3102.messaging.repository.DeleteMessage
+import pl.shane3102.messaging.repository.LoadMessages
+import pl.shane3102.messaging.repository.SaveMessage
 
 @ApplicationScoped
 class JpaStreamerInboxOutboxAdapter(

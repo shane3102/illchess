@@ -6,7 +6,8 @@
     <parent>
         <groupId>pl.illchess.player-info</groupId>
         <artifactId>illchess-player-info-service</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>pl.illchess.player-info.adapter</groupId>
@@ -28,7 +29,7 @@
         <dependency>
             <groupId>pl.illchess.player-info.application</groupId>
             <artifactId>illchess-player-info-application</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -47,9 +48,14 @@
             <artifactId>quarkus-rest</artifactId>
         </dependency>
         <dependency>
-            <groupId>pl</groupId>
+            <groupId>pl.shane3102.messaging</groupId>
             <artifactId>inbox-outbox-quarkus</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${inbox-outbox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>pl.shane3102.messaging</groupId>
+            <artifactId>inbox-outbox-commons</artifactId>
+            <version>${inbox-outbox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
