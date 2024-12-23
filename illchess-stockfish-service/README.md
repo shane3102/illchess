@@ -1,18 +1,19 @@
 # Illchess stockfish service
 
-Serwis używany do komunikacji z silnikiem szachowym stockfish przez pozostałe serwisy aplikacji.
+Service used to communicate with stockfish game engine by other application services.
 
-Konfiguracja:
+Configuration:
 
 * **working.mode**<br>
-    Określa sposób kominikacji z silnikiem stockfish<br>
-    Wartości:
-    1. **ENGINE** - aplikacja komunikuje się z lokalnym silnikiem
-    2. **API** - aplikacja komunikuje się z silnikiem udostępnionym przez api
+    Determines communication mode with stockfish engine. Available values:
+    1. **ENGINE** - application is communicating with local engine
+    2. **API** - application is communicating with engine available by api
 * **stockfish.path**<br>
-    Określa ścieżkę do silnika stockfish na maszynie. Jeżeli wartość nie jest określona aplikacja zakłada, że silnik znajduje sie w zmiennej środowiskowej.
+    Determines the path to stockfish engine present on machine. 
+    If value is not provided application assumes that engine is present in path variables
 * **urls.game-service**<br>
-    Określa url serwisu udostępniającego informacje o stanie gry
+    Determines url of service providing info of current game state (**illchess-game-service**)
 * **urls.stockfish-api**<br>
-    Określa url serwisu z silnikiem stockfish (używane wyłącznie w przypadku gdy **working.mode** jest ustawiony na **API**, domyślna wartość wynosi **https://stockfish.online/api/s/v2.php**)
+    Determines url of engine provided by api
+    (used only when **working.mode** is set to **API**, default value is **https://stockfish.online/api/s/v2.php**)
     
