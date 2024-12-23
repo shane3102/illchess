@@ -24,7 +24,7 @@ For presenting real time data about active games (for example current position) 
 >#### illchess-stockfish
 >Implementation: Kotlin + Quarkus
 >>Service responsible for communication with stockfish chess engine.
-Provides evaluation and best moves in position based on game privided by **illchess-game** service
+Provides evaluation and best moves in position based on game privided by **illchess-game** service.
 Has two modes:
 >>* engine - service is communicating with engine present on host machine 
 >>* API - service is communicating API available here: https://stockfish.online/
@@ -46,7 +46,7 @@ and stores data of finished game to **MySQL** database.
 
 ### 1.2 Additional info
 
-In order to ensure that events shared between application services are received the inbox and outbox patterns are used.
+In order to ensure that events shared between application services are received, inbox and outbox patterns are used.
 The implementation of patterns was accomplished by using following library: [inbox-outbox](https://github.com/shane3102/inbox-outbox)
 
 

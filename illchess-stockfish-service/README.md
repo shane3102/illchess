@@ -15,5 +15,5 @@ Configuration:
     Determines url of service providing info of current game state (**illchess-game-service**)
 * **urls.stockfish-api**<br>
     Determines url of engine provided by api
-    (used only when **working.mode** is set to **API**, default value is **https://stockfish.online/api/s/v2.php**)
+    (used only when **working.mode** is set to **API**, default value is: **https://stockfish.online/api/s/v2.php**)
     
