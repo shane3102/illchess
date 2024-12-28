@@ -23,11 +23,24 @@ COPY illchess-stockfish-server/src /usr/src/app/illchess/illchess-stockfish-serv
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests
 
-FROM ubuntu
-RUN apt update --assume-yes
-RUN apt install stockfish
-RUN apt install default-jre --assume-yes
-ENV PATH="$PATH:/usr/games"
+FROM alpine
+ARG PV=17
+
+RUN apk add --no-cache make g++ wget ca-certificates
+
+RUN mkdir -p /root/tmp && \
+	cd /root/tmp && \
+	wget https://github.com/official-stockfish/Stockfish/archive/sf_${PV}.tar.gz && \
+	tar xvf /root/tmp/sf_${PV}.tar.gz && \
+	cd /root/tmp/Stockfish-sf_${PV}/src && \
+	make build ARCH=x86-64-modern && \
+	mv /root/tmp/Stockfish-sf_${PV}/src/stockfish /usr/local/bin/stockfish
+
+RUN apk del --no-cache wget ca-certificates
+RUN rm -rf /root/tmp
+
+RUN apk add openjdk21-jre
+ENV PATH="$PATH:/usr/local/bin/stockfish"
 
 COPY --from=build /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner.jar illchess-stockfish-server.jar
 
