@@ -1,7 +1,7 @@
 .content {
     display: flex;
     justify-content: left;
-    align-items: center;
+    align-items: top;
     width: 100%;
     height: 10vh;
     background-color: rgb(150, 75, 0);
@@ -11,7 +11,7 @@
 .content-left {
     display: flex;
     justify-content: left;
-    align-items: center;
+    align-items: top;
     width: 40%;
 }
 
@@ -41,4 +41,16 @@
     -webkit-transition: color 250ms linear;
     -ms-transition: color 250ms linear;
     transition: color 250ms linear;
+}
+
+.title {
+    color: #F3E5AB;
+    font-size: 2.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    -webkit-transition: color 250ms linear, border 250ms linear;
+    -ms-transition: color 250ms linear, border 250ms linear;
+    transition: color 250ms linear, border 250ms linear;
 }
