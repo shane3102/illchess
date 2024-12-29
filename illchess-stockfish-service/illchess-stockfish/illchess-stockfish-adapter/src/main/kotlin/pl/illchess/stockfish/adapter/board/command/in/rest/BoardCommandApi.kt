@@ -15,12 +15,12 @@ import java.util.*
 interface BoardCommandApi {
 
     @GET
-    @Path("/evaluate/{boardId}")
+    @Path("/{boardId}/evaluate")
     @Produces(MediaType.APPLICATION_JSON)
     fun evaluateBoard(@RestPath boardId: UUID): EvaluationResponse
 
     @GET
-    @Path("/best-move-and-continuation/{boardId}")
+    @Path("/{boardId}/best-move-and-continuation")
     @Produces(MediaType.APPLICATION_JSON)
     fun establishBestMoveAndContinuation(
         @RestPath boardId: UUID,
@@ -28,7 +28,7 @@ interface BoardCommandApi {
     ): BestMoveAndContinuationResponse
 
     @GET
-    @Path("/top-moves/{moveCount}/{boardId}")
+    @Path("/{boardId}/top-moves/{moveCount}")
     @Produces(MediaType.APPLICATION_JSON)
     fun establishTopMoves(
         @RestPath moveCount: Int,

@@ -15,13 +15,13 @@ export class StockfishService {
 
     async evaluateBoard(boardId: string): Promise<EvaluationResponse>  {
         return firstValueFrom(
-            this.http.get<EvaluationResponse>(`${this.PATH}/evaluate/${boardId}`)
+            this.http.get<EvaluationResponse>(`${this.PATH}/${boardId}/evaluate`)
         )
     }
 
     async establishBestMoveAndContinuation(boardId: string): Promise<BestMoveAndContinuationResponse> {
         return firstValueFrom(
-            this.http.get<BestMoveAndContinuationResponse>(`${this.PATH}/best-move-and-continuation/${boardId}`)
+            this.http.get<BestMoveAndContinuationResponse>(`${this.PATH}/${boardId}/best-move-and-continuation`)
         )
     }
 
