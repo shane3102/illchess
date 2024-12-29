@@ -20,14 +20,14 @@ class BoardCommandController(
         return EvaluationResponse(result.value)
     }
 
-    override fun establishBestMoveAndContinuation(boardId: UUID): BestMoveAndContinuationResponse {
-        val cmd = EstablishBestMoveAndContinuationUseCase.EstablishBestMoveAndContinuationCmd(boardId)
+    override fun establishBestMoveAndContinuation(boardId: UUID, depth: Int?): BestMoveAndContinuationResponse {
+        val cmd = EstablishBestMoveAndContinuationUseCase.EstablishBestMoveAndContinuationCmd(boardId, depth)
         val result = bestMoveAndContinuationUseCase.establishBestMoveAndContinuation(cmd)
         return BestMoveAndContinuationResponse(result.bestMove, result.continuation)
     }
 
-    override fun establishTopMoves(moveCount: Int,boardId: UUID): TopMovesResponse {
-        val cmd = EstablishListOfTopMovesUseCase.EstablishListOfTopMovesCmd(boardId, moveCount)
+    override fun establishTopMoves(moveCount: Int, boardId: UUID, depth: Int?): TopMovesResponse {
+        val cmd = EstablishListOfTopMovesUseCase.EstablishListOfTopMovesCmd(boardId, moveCount, depth)
         val result = establishListOfTopMovesUseCase.establishListOfTopMoves(cmd)
         return TopMovesResponse(result.topMovesList)
     }

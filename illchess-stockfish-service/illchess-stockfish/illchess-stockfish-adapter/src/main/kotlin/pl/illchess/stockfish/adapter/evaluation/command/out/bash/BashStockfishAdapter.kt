@@ -18,12 +18,20 @@ import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, LoadTopMoves {
 
     @field:ConfigProperty(
+        name = "stockfish.default-depth",
+        defaultValue = "15"
+    )
+    lateinit var defaultDepth: String
+
+    @field:ConfigProperty(
         name = "stockfish.path",
         defaultValue = "stockfish"
     )
     lateinit var stockfishPath: String
 
-    override fun loadBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
+    override fun loadBoardEvaluation(
+        fenPosition: FenBoardPosition,
+    ): Evaluation? {
         val stockfishConnector = StockfishConnector()
         stockfishConnector.startEngine(stockfishPath)
         val result = stockfishConnector.getEvaluation(fenPosition)
@@ -31,18 +39,32 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, L
         return result
     }
 
-    override fun loadBestMoveAndContinuation(fenPosition: FenBoardPosition): BestMoveAndContinuation? {
+    override fun loadBestMoveAndContinuation(
+        fenPosition: FenBoardPosition,
+        depth: Int?
+    ): BestMoveAndContinuation? {
         val stockfishConnector = StockfishConnector()
         stockfishConnector.startEngine(stockfishPath)
-        val result = stockfishConnector.getBestMoveAndContinuation(fenPosition)
+        val result = stockfishConnector.getBestMoveAndContinuation(
+            fenPosition,
+            depth ?: defaultDepth.toInt()
+        )
         stockfishConnector.stopEngine()
         return result
     }
 
-    override fun loadTopMoves(fenPosition: FenBoardPosition, topMoveCount: Int): TopMoves? {
+    override fun loadTopMoves(
+        fenPosition: FenBoardPosition,
+        topMoveCount: Int,
+        depth: Int?
+    ): TopMoves? {
         val stockfishConnector = StockfishConnector()
         stockfishConnector.startEngine(stockfishPath)
-        val result = stockfishConnector.getTopMovesByNumber(fenPosition, topMoveCount)
+        val result = stockfishConnector.getTopMovesByNumber(
+            fenPosition,
+            topMoveCount,
+            depth ?: defaultDepth.toInt()
+        )
         stockfishConnector.stopEngine()
         return result
     }

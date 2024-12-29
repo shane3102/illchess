@@ -33,6 +33,12 @@ class OkHttpStockfishAdapter(
     )
     lateinit var stockfishApiUrl: String
 
+    @field:ConfigProperty(
+        name = "stockfish.default-depth",
+        defaultValue = "15"
+    )
+    lateinit var defaultDepth: String
+
     override fun loadBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
         val response = commonApiCallResponse(fenPosition)
         val result: Evaluation? =
@@ -49,15 +55,17 @@ class OkHttpStockfishAdapter(
         return result
     }
 
-    override fun loadBestMoveAndContinuation(fenPosition: FenBoardPosition): BestMoveAndContinuation? {
-        val response = commonApiCallResponse(fenPosition)
+    override fun loadBestMoveAndContinuation(
+        fenPosition: FenBoardPosition,
+        depth: Int?
+    ): BestMoveAndContinuation? {
+        val response = commonApiCallResponse(fenPosition, depth)
 
         val responseBody: StockfishApiResponseDto? = if (response.body == null) null
         else objectMapper.readValue(
             response.body?.string(),
             StockfishApiResponseDto::class.java
         )
-
 
         val result: BestMoveAndContinuation? =
             if (responseBody == null) null
@@ -69,11 +77,14 @@ class OkHttpStockfishAdapter(
         return result
     }
 
-    private fun commonApiCallResponse(fenPosition: FenBoardPosition): Response {
+    private fun commonApiCallResponse(
+        fenPosition: FenBoardPosition,
+        depth: Int? = null
+    ): Response {
         val httpBuilder = (stockfishApiUrl.toHttpUrlOrNull() ?: throw UrlOfStockfishEngineNotProvided())
             .newBuilder()
             .addQueryParameter("fen", fenPosition.value)
-            .addQueryParameter("depth", "15")
+            .addQueryParameter("depth", depth?.toString() ?: defaultDepth)
             .build()
 
         val request: Request = Request.Builder()
@@ -86,7 +97,11 @@ class OkHttpStockfishAdapter(
         return response
     }
 
-    override fun loadTopMoves(fenPosition: FenBoardPosition, topMoveCount: Int): TopMoves? {
+    override fun loadTopMoves(
+        fenPosition: FenBoardPosition,
+        topMoveCount: Int,
+        depth: Int?
+    ): TopMoves? {
         throw TopMovesNotAvailableWhenUsingApi()
     }
 }

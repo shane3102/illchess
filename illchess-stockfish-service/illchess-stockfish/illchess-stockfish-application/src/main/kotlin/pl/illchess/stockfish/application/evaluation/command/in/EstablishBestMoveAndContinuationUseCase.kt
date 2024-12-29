@@ -9,7 +9,10 @@ interface EstablishBestMoveAndContinuationUseCase {
 
     fun establishBestMoveAndContinuation(cmd : EstablishBestMoveAndContinuationCmd): BestMoveAndContinuation
 
-    data class EstablishBestMoveAndContinuationCmd(val boardId: UUID) {
-        fun toCommand(): EstablishBestMoveAndContinuation = EstablishBestMoveAndContinuation(BoardId(boardId))
+    data class EstablishBestMoveAndContinuationCmd(
+        val boardId: UUID,
+        val depth: Int?
+    ) {
+        fun toCommand(): EstablishBestMoveAndContinuation = EstablishBestMoveAndContinuation(BoardId(boardId), depth)
     }
 }

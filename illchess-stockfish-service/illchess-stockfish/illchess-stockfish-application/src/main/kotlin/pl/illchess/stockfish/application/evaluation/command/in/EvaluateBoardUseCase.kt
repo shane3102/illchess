@@ -8,7 +8,9 @@ import java.util.*
 interface EvaluateBoardUseCase {
     fun evaluateBoard(cmd: EvaluateBoardCmd): Evaluation
 
-    data class EvaluateBoardCmd(val boardId: UUID) {
+    data class EvaluateBoardCmd(
+        val boardId: UUID,
+    ) {
         fun toCommand(): EvaluateBoard = EvaluateBoard(BoardId(boardId))
     }
 }

@@ -9,7 +9,7 @@ interface EstablishListOfTopMovesUseCase {
 
     fun establishListOfTopMoves(cmd: EstablishListOfTopMovesCmd): TopMoves
 
-    data class EstablishListOfTopMovesCmd(val boardId: UUID, val moveCount: Int) {
-        fun toCommand() = EstablishListOfTopMoves(BoardId(boardId), moveCount)
+    data class EstablishListOfTopMovesCmd(val boardId: UUID, val moveCount: Int, val depth: Int?) {
+        fun toCommand() = EstablishListOfTopMoves(BoardId(boardId), moveCount, depth)
     }
 }
