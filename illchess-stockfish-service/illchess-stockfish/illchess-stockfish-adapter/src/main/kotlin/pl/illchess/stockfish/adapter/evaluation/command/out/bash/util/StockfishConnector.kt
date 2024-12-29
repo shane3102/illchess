@@ -37,16 +37,20 @@ class StockfishConnector {
         }
     }
 
-    fun getBestMoveAndContinuation(fenPosition: FenBoardPosition): BestMoveAndContinuation {
+    fun getBestMoveAndContinuation(fenPosition: FenBoardPosition, depth: Int): BestMoveAndContinuation {
         sendCommand("position fen ${fenPosition.value}")
-        sendCommand("go depth 15")
-        return getBestMoveAndContinuation()
+        sendCommand("go depth $depth")
+        return getBestMoveAndContinuation(depth)
     }
 
-    fun getTopMovesByNumber(fenPosition: FenBoardPosition, moveCount: Int): TopMoves {
+    fun getTopMovesByNumber(
+        fenPosition: FenBoardPosition,
+        moveCount: Int,
+        depth: Int
+    ): TopMoves {
         sendCommand("position fen ${fenPosition.value}")
         sendCommand("setoption name multipv value $moveCount")
-        sendCommand("go depth 15")
+        sendCommand("go depth $depth")
         return getListOfTopMoves(moveCount)
     }
 
@@ -74,9 +78,9 @@ class StockfishConnector {
             .orElseThrow { EvaluationByEngineCouldNotBeEstablished() }
     }
 
-    private fun getBestMoveAndContinuation(): BestMoveAndContinuation {
+    private fun getBestMoveAndContinuation(depth: Int):BestMoveAndContinuation {
         val bestMoveAndContinuation = processReader!!.lines()
-            .filter { it.contains("bestmove") || it.contains("info depth 15") }
+            .filter { it.contains("bestmove") || it.contains("info depth $depth") }
             .limit(2)
             .toList()
 
@@ -84,7 +88,7 @@ class StockfishConnector {
             .split(" ")[1]
 
         val continuation = bestMoveAndContinuation
-            .filter { line: String -> line.contains("info depth 15") }[0]
+            .filter { line: String -> line.contains("info depth $depth") }[0]
             .split("pv")[2]
             .split(" ")
             .filter { it != "" }

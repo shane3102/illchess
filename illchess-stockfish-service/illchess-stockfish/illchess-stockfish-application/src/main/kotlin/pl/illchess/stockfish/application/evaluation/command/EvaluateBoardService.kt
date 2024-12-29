@@ -42,7 +42,7 @@ class EvaluateBoardService(
         log.info("Establishing best move and following continuation on board with id = {}", cmd.boardId)
         val command = cmd.toCommand()
         val fenBoardPosition = loadBoard.loadBoard(command.boardId) ?: throw BoardNotFoundException(command.boardId)
-        val result = loadBestMoveAndContinuation.loadBestMoveAndContinuation(fenBoardPosition)
+        val result = loadBestMoveAndContinuation.loadBestMoveAndContinuation(fenBoardPosition, command.depth)
             ?: throw BestMoveAndContinuationCouldNotBeEstablished(command.boardId)
         log.info(
             "Successfully established best move and continuation on board with id = {}. Best move is {} and best continuation is {}",
@@ -59,7 +59,8 @@ class EvaluateBoardService(
         val fenBoardPosition = loadBoard.loadBoard(command.boardId) ?: throw BoardNotFoundException(command.boardId)
         val result = loadTopMoves.loadTopMoves(
             fenBoardPosition,
-            command.moveCount
+            command.moveCount,
+            command.depth
         ) ?: throw TopMovesCouldNotBeEstablished(command.boardId)
         log.info(
             "Successfully established list of top moves on board with id = {}. Top moves in position are {}",

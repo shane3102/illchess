@@ -9,10 +9,11 @@ urls:
   game-service: "http://localhost:8080"
   stockfish-api: "https://stockfish.online/api/s/v2.php"
 
-### USED TO CONFIGURE PATH TO LOCAL STOCKFISH ENGINE. ###
-### IF NOT PROVIDED APP ASSUMES THAT ENGINE IS ADDED TO PATH ###
-#stockfish:
-#  path: "C:\\Tools\\stockfish\\stockfish.exe"
+stockfish:
+  default-depth: 15
+#### USED TO CONFIGURE PATH TO LOCAL STOCKFISH ENGINE. ###
+#### IF NOT PROVIDED APP ASSUMES THAT ENGINE IS ADDED TO PATH ###
+##  path: "C:\\Tools\\stockfish\\stockfish.exe"
 
 ### USED TO CONFIGURE WORKING MODE. POSSIBLE VALUES: ENGINE, API ###
 working:
