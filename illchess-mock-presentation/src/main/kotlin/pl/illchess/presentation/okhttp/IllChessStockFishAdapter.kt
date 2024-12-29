@@ -22,8 +22,9 @@ class IllChessStockFishAdapter(
     fun loadTopMoves(boardId: UUID, moveCount: Int): TopMoves? {
         try {
             val illChessStockfishUrl = properties.getProperty("illchess.stockfish.url")
+            val depth = properties.getProperty("depth")
             val request: Request = Request.Builder()
-                .url("$illChessStockfishUrl/api/board/top-moves/$moveCount/$boardId")
+                .url("$illChessStockfishUrl/api/board/$boardId/top-moves/$moveCount?depth=$depth")
                 .build()
             val call = okHttpClient.newCall(request)
             val response = call.execute()
