@@ -39,7 +39,7 @@ RUN mkdir -p /root/tmp && \
 RUN apk del --no-cache wget ca-certificates
 RUN rm -rf /root/tmp
 
-RUN apk add openjdk21-jre
+RUN apk add openjdk17-jre
 ENV PATH="$PATH:/usr/local/bin/stockfish"
 
 COPY --from=build /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner.jar illchess-stockfish-server.jar

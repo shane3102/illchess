@@ -23,7 +23,7 @@ COPY illchess-player-info-server/src /usr/src/app/illchess/illchess-player-info-
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests
 
-FROM openjdk:17
+FROM eclipse-temurin:17-alpine
 COPY --from=build /usr/src/app/illchess/illchess-player-info-server/target/illchess-player-info-server-runner.jar illchess-player-info-server.jar
 ENTRYPOINT ["java", "-jar", "illchess-player-info-server.jar"]
 EXPOSE 420

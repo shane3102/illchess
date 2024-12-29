@@ -24,7 +24,7 @@ RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
 RUN mvn -f /usr/src/app/illchess clean install -DskipTests
 RUN ls /usr/src/app/illchess/illchess-game-server/target
 
-FROM openjdk:17
+FROM eclipse-temurin:17-alpine
 COPY --from=build /usr/src/app/illchess/illchess-game-server/target/illchess-game-server.jar illchess-game-server.jar
 ENTRYPOINT ["java", "-jar", "illchess-game-server.jar"]
 EXPOSE 8080

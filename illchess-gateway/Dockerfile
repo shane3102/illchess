@@ -6,7 +6,7 @@ COPY src /usr/src/app/src
 
 RUN mvn -f /usr/src/app clean install -DskipTests
 
-FROM openjdk:17
+FROM eclipse-temurin:17-alpine
 COPY --from=build /usr/src/app/target/illchess-gateway.jar illchess-gateway.jar
 ENTRYPOINT ["java", "-jar", "illchess-gateway.jar"]
 EXPOSE 1337
