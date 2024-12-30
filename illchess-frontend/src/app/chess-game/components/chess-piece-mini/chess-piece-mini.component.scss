@@ -1,5 +1,6 @@
 @import '../chess-board-style.scss';
 
 .piece-mini {
-    font-size: $chess-piece-size-mini;
+    width: calc($chess-piece-size-mini * 1.3);
+    height: calc($chess-piece-size-mini * 1.3);
 }

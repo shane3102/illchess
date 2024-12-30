@@ -1,8 +1,44 @@
-<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type">
-    <app-pawn *ngSwitchCase="Piece.PAWN" [color]="pieceInfo.color"></app-pawn>
-    <app-knight *ngSwitchCase="Piece.KNIGHT" [color]="pieceInfo.color"></app-knight>
-    <app-bishop *ngSwitchCase="Piece.BISHOP" [color]="pieceInfo.color"></app-bishop>
-    <app-rook *ngSwitchCase="Piece.ROOK" [color]="pieceInfo.color"></app-rook>
-    <app-queen *ngSwitchCase="Piece.QUEEN" [color]="pieceInfo.color"></app-queen>
-    <app-king *ngSwitchCase="Piece.KING" [color]="pieceInfo.color"></app-king>
+<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type" class="piece">
+    <div *ngSwitchCase="Piece.PAWN">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wP.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bP.svg" />
+        }
+    </div>
+    <div *ngSwitchCase="Piece.KNIGHT">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wN.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bN.svg" />
+        }
+    </div>
+    <div *ngSwitchCase="Piece.BISHOP">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wB.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bB.svg" />
+        }
+    </div>
+    <div *ngSwitchCase="Piece.ROOK">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wR.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bR.svg" />
+        }
+    </div>
+    <div *ngSwitchCase="Piece.QUEEN">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wQ.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bQ.svg" />
+        }
+    </div>
+    <div *ngSwitchCase="Piece.KING">
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wK.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bK.svg" />
+        }
+    </div>
 </div>

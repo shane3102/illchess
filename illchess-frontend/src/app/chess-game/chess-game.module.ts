@@ -21,12 +21,6 @@ import { GameFinishedPopupUserInfoComponent } from './components/game-finished-p
 import { GameFinishedPopupComponent } from './components/game-finished-popup/game-finished-popup.component';
 import { JoinOrInitializeGameComponent } from './components/join-or-initialize-game/join-or-initialize-game.component';
 import { KingBoardInfoAfterGameFinishedComponent } from './components/king-board-info-after-game-finished/king-board-info-after-game-finished.component';
-import { BishopComponent } from './components/pieces/bishop/bishop.component';
-import { KingComponent } from './components/pieces/king/king.component';
-import { KnightComponent } from './components/pieces/knight/knight.component';
-import { PawnComponent } from './components/pieces/pawn/pawn.component';
-import { QueenComponent } from './components/pieces/queen/queen.component';
-import { RookComponent } from './components/pieces/rook/rook.component';
 import { LoadingGameComponent } from './components/loading-game/loading-game.component';
 import { WaitingForBlackPopupComponent } from './components/waiting-for-black-popup/waiting-for-black-popup.component';
 
@@ -35,12 +29,6 @@ import { WaitingForBlackPopupComponent } from './components/waiting-for-black-po
   declarations: [
     ChessBoardComponent,
     ChessPieceComponent,
-    PawnComponent,
-    KnightComponent,
-    BishopComponent,
-    RookComponent,
-    QueenComponent,
-    KingComponent,
     ChessSquareComponent,
     ChessPromotingPieceComponent,
     ChessLegalMoveCircleComponent,

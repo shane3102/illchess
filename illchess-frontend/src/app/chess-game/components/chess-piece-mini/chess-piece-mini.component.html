@@ -1,32 +1,44 @@
 <div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type" class="piece-mini">
     <div *ngSwitchCase="Piece.PAWN">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="pawnIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wP.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bP.svg" />
+        }
     </div>
     <div *ngSwitchCase="Piece.KNIGHT">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="knightIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wN.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bN.svg" />
+        }
     </div>
     <div *ngSwitchCase="Piece.BISHOP">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="bishopIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wB.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bB.svg" />
+        }
     </div>
     <div *ngSwitchCase="Piece.ROOK">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="rookIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wR.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bR.svg" />
+        }
     </div>
     <div *ngSwitchCase="Piece.QUEEN">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="queenIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wQ.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bQ.svg" />
+        }
     </div>
     <div *ngSwitchCase="Piece.KING">
-        <div [ngStyle]="{'color': getColorByPieceColor(this.pieceInfo.color)}" class="piece-mini">
-            <fa-icon [icon]="kingIcon"></fa-icon>
-        </div>
+        @if(pieceInfo.color == PieceColor.WHITE) {
+            <img class="piece-mini" src="assets/chess-pieces/wK.svg" />
+        } @else {
+            <img class="piece-mini" src="assets/chess-pieces/bK.svg" />
+        }
     </div>
 </div>

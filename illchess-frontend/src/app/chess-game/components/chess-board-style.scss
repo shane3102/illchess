@@ -16,11 +16,13 @@ $popup-content-width: 5 * $chess-square-size;
 }
 
 .piece {
-    font-size: calc($chess-square-size * 8 / 10);
+    width: $chess-square-size;
+    height: $chess-square-size;
 }
 
 .piece:hover {
-    font-size: calc($chess-square-size* 9 / 10);
+    width: calc($chess-square-size * 1.1);
+    height: calc($chess-square-size * 1.1);
 }
 
 

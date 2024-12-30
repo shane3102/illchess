@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Piece, PieceInfo, getColorByPieceColor } from '../../../shared/model/game/PieceInfo';
-import { faChessBishop, faChessKing, faChessKnight, faChessPawn, faChessQueen, faChessRook } from '@fortawesome/free-solid-svg-icons';
+import { Piece, PieceColor, PieceInfo } from '../../../shared/model/game/PieceInfo';
 
 @Component({
   selector: 'app-chess-piece-mini',
@@ -10,16 +9,8 @@ import { faChessBishop, faChessKing, faChessKnight, faChessPawn, faChessQueen, f
 export class ChessPieceMiniComponent {
 
   Piece = Piece
+  PieceColor = PieceColor
 
   @Input() pieceInfo: PieceInfo | undefined;
-
-  getColorByPieceColor = getColorByPieceColor
-
-  bishopIcon = faChessBishop
-  kingIcon = faChessKing;
-  knightIcon = faChessKnight;
-  pawnIcon = faChessPawn;
-  queenIcon = faChessQueen;
-  rookIcon = faChessRook;
 
 }

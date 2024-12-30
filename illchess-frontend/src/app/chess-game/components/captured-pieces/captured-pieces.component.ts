@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Piece, PieceColor, getColorByPieceColor } from '../../../shared/model/game/PieceInfo';
-import { faChessBishop, faChessKing, faChessKnight, faChessPawn, faChessQueen, faChessRook } from '@fortawesome/free-solid-svg-icons';
+import { Component, Input } from '@angular/core';
+import { Piece, PieceColor } from '../../../shared/model/game/PieceInfo';
 
 @Component({
   selector: 'app-captured-pieces',
@@ -13,14 +12,6 @@ export class CapturedPiecesComponent {
   @Input() capturedPieces: string[]
 
   Piece = Piece
-
-  getColorByPieceColor = getColorByPieceColor
-
-  bishopIcon = faChessBishop
-  kingIcon = faChessKing;
-  knightIcon = faChessKnight;
-  pawnIcon = faChessPawn;
-  queenIcon = faChessQueen;
-  rookIcon = faChessRook;
+  PieceColor = PieceColor
 
 }

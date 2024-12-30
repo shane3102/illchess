@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Piece, PieceInfo } from '../../../shared/model/game/PieceInfo';
+import { Component, Input } from '@angular/core';
+import { Piece, PieceColor, PieceInfo } from '../../../shared/model/game/PieceInfo';
 
 @Component({
   selector: 'app-chess-piece',
@@ -12,6 +12,7 @@ import { Piece, PieceInfo } from '../../../shared/model/game/PieceInfo';
 export class ChessPieceComponent {
 
   Piece = Piece
+  PieceColor = PieceColor
 
   @Input() pieceInfo: PieceInfo | undefined;
 

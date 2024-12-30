@@ -13,8 +13,7 @@ $captured-pieces-width: calc($panel-width / 2);
     flex-wrap: wrap;
     padding-left: calc($captured-pieces-width / 8);
     padding-right: calc($captured-pieces-width / 8);
-    padding-top: calc($chess-square-size / 5);
-    padding-bottom: calc($chess-square-size / 5);
+    padding-top: calc($chess-square-size / 15);
     transition: all 0.5s;
 }
 
@@ -26,14 +25,12 @@ $captured-pieces-width: calc($panel-width / 2);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc($chess-square-size / 5);
-    width: calc($captured-pieces-width / 8) + calc(2  * $captured-pieces-width / 256);
-    font-size: calc($chess-square-size / 5);
+    height: calc($chess-square-size / 3.5);
+    width: calc($chess-square-size / 3.5);
     transition: all 0.5s;
 }
 
 .captured-pieces-wrapper:hover .captured-piece {
-    font-size: calc($chess-square-size / 3.5);
-    width: calc($captured-pieces-width / 8);
-    padding: calc($captured-pieces-width / 8 / 4);
+    width: calc($chess-square-size / 2.9);
+    height: calc($chess-square-size / 2.9);
 }
