@@ -15,6 +15,8 @@ import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.domain.bot.domain.Bot
+import pl.illchess.stockfish.domain.bot.domain.Username
 
 class QuarkusScopeConfig {
 
@@ -52,4 +54,8 @@ class QuarkusScopeConfig {
         botPerformMove,
         botResignGame
     )
+
+    @Produces
+    @ApplicationScoped
+    fun botCache(): HashMap<Username, Bot> = hashMapOf()
 }
