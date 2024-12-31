@@ -9,7 +9,7 @@ import pl.illchess.stockfish.domain.bot.domain.Username
 
 @ApplicationScoped
 class InMemoryBotRepository(
-    private val botCache: HashMap<Username, Bot> = hashMapOf()
+    private val botCache: HashMap<Username, Bot>
 ) : LoadBot, SaveBot, DeleteBot {
 
     override fun loadBot(username: Username) = botCache[username]
