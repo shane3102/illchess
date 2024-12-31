@@ -1,4 +1,4 @@
-package pl.illchess.stockfish.application.position.command.out
+package pl.illchess.stockfish.application.board.command.out
 
 import pl.illchess.stockfish.domain.board.domain.BoardId
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
