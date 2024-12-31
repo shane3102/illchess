@@ -2,17 +2,17 @@ package pl.illchess.stockfish.application.bot.command
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import pl.illchess.stockfish.application.board.command.out.BotPerformMove
+import pl.illchess.stockfish.application.board.command.out.BotResignGame
+import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
 import pl.illchess.stockfish.application.bot.command.`in`.AddBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteBotsUseCase
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
-import pl.illchess.stockfish.application.board.command.out.BotPerformMove
-import pl.illchess.stockfish.application.board.command.out.BotResignGame
-import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
 import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.bot.command.PerformMove
@@ -37,26 +37,30 @@ class BotService(
     private var threadCache: MutableList<Thread> = mutableListOf()
 
     override fun addBots(cmd: AddBotsUseCase.AddBotsCmd) {
-        log.info("Adding ${cmd.addedBotCmd.count()} bots")
+        log.info("Adding ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
         val command = cmd.toCommand()
-        command.bots.forEach{
+        command.bots.forEach {
             saveBot.saveBot(it)
             threadCache.add(
                 thread(name = it.username.text) { playingGameLogic(it.username) }
             )
         }
-        log.info("Successfully added ${cmd.addedBotCmd.count()} bots")
+        log.info("Successfully added ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
     }
 
     override fun deleteBots(cmd: DeleteBotsUseCase.DeleteBotsCmd) {
-        log.info("Removing ${cmd.deletedBotsUsernames.count()} bots")
+        log.info("Removing ${cmd.deletedBotsUsernames.count()} bots with usernames: ${cmd.deletedBotsUsernames}")
         val command = cmd.toCommand()
-        command.usernames.forEach{ username ->
-            val interruptedThread = threadCache.first { it.name == username.text }
-            interruptedThread.interrupt()
-            deleteBot.deleteBot(username)
+        command.usernames.forEach { username ->
+            val interruptedThread = threadCache.firstOrNull { it.name == username.text }
+            interruptedThread?.interrupt()
+            val deletedBot = loadBot.loadBot(username)
+            if (deletedBot != null) {
+                botResignGame.botResignGame(deletedBot)
+                deleteBot.deleteBot(username)
+            }
         }
-        log.info("Successfully removed ${cmd.deletedBotsUsernames.count()} bots")
+        log.info("Successfully removed ${cmd.deletedBotsUsernames.count()} bots with usernames: ${cmd.deletedBotsUsernames}")
     }
 
     private fun playingGameLogic(username: Username) {
@@ -103,7 +107,8 @@ class BotService(
                 } catch (topMovesCouldNotBeEstablished: TopMovesCouldNotBeEstablished) {
                     botResignGame.botResignGame(bot)
                     bot.currentBoardId = null
-                } catch (ignored: InterruptedException) { }
+                } catch (ignored: InterruptedException) {
+                }
             }
         }
     }

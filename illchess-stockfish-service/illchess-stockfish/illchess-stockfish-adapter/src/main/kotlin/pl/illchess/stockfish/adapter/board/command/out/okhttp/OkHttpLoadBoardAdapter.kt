@@ -1,5 +1,6 @@
 package pl.illchess.stockfish.adapter.board.command.out.okhttp
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.enterprise.context.ApplicationScoped
@@ -11,6 +12,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.BoardAdditionalInfoViewResponse
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializeNewBoardRequest
+import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializedBoardResponse
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.PerformMoveRequest
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.ResignGameRequest
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
@@ -24,12 +26,14 @@ import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.bot.command.PerformMove
 import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
-import java.util.UUID
 
 @ApplicationScoped
 class OkHttpLoadBoardAdapter(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
-    private val objectMapper: ObjectMapper = jacksonObjectMapper()
+    private val objectMapper: ObjectMapper = jacksonObjectMapper().configure(
+        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+        false
+    )
 ) : LoadBoard, LoadBoardAdditionalInfo, JoinOrInitializeBoard, BotPerformMove, BotResignGame {
 
     @field:ConfigProperty(name = "urls.game-service")
@@ -43,7 +47,7 @@ class OkHttpLoadBoardAdapter(
         val response = call.execute()
 
         val fenBoardPosition: FenBoardPosition? =
-            if (response.body == null) null
+            if (response.body == null || response.code != 200) null
             else objectMapper.readValue(response.body?.string(), FenBoardPosition::class.java)
 
         return fenBoardPosition
@@ -51,15 +55,15 @@ class OkHttpLoadBoardAdapter(
 
     override fun loadBoardAdditionalInfo(boardId: BoardId): BoardAdditionalInfo? {
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/refresh/info/${boardId.uuid}}")
+            .url("${gameServiceUrl}/api/board/refresh/info/${boardId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
-        val result = call.execute()
+        val response = call.execute()
 
         val boardAdditionalInfo: BoardAdditionalInfo? =
-            if (result.body == null) null
+            if (response.body == null || response.code != 200) null
             else objectMapper.readValue(
-                result.body?.string(),
+                response.body?.string(),
                 BoardAdditionalInfoViewResponse::class.java
             ).let {
                 BoardAdditionalInfo(
@@ -89,8 +93,8 @@ class OkHttpLoadBoardAdapter(
         val response = call.execute()
 
         val initializedBoardId: BoardId? =
-            if (response.body == null) null
-            else BoardId(objectMapper.readValue(response.body?.string(), UUID::class.java))
+            if (response.body == null || response.code != 200) null
+            else BoardId(objectMapper.readValue(response.body?.string(), InitializedBoardResponse::class.java).id)
 
         return initializedBoardId
     }
