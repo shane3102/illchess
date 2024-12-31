@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.eclipse.microprofile.config.inject.ConfigProperty
-import pl.illchess.stockfish.application.position.command.out.LoadBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoard
 import pl.illchess.stockfish.domain.board.domain.BoardId
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 
