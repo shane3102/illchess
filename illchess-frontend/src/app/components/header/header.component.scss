@@ -1,49 +1,31 @@
+$header-height: 10vh;
+$title-width: 10vw;
+$empty-space-left-width: 10vw;
+
 .content {
     display: flex;
     justify-content: left;
     align-items: top;
     width: 100%;
-    height: 10vh;
+    height: $header-height;
     background-color: rgb(150, 75, 0);
     border-radius: 0 0 10vw 10vw;
 }
 
 .content-left {
     display: flex;
-    justify-content: left;
-    align-items: top;
-    width: 50%;
+    width: 70%;
 }
 
 .content-right {
     display: flex;
     justify-content: right;
     align-items: center;
-    width: 30%;
-}
-
-.header-button {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 15vw;
-    height: 5vh;
-    margin: 2.5vh 1vw 2.5vh 1vw;
-    font-size: 1.5vw;
-    user-select: none;
-    background-color: #F3E5AB;
-    color: gray;
-    border-radius: 1vw;
-}
-
-.header-button:hover {
-    color: green;
-    -webkit-transition: color 250ms linear;
-    -ms-transition: color 250ms linear;
-    transition: color 250ms linear;
+    width: 10%;
 }
 
 .title {
+    width: $title-width;
     color: #F3E5AB;
     font-size: 2.5vw;
     display: flex;
@@ -53,4 +35,8 @@
     -webkit-transition: color 250ms linear, border 250ms linear;
     -ms-transition: color 250ms linear, border 250ms linear;
     transition: color 250ms linear, border 250ms linear;
+}
+
+.empty-space-left {
+    width: $empty-space-left-width;
 }

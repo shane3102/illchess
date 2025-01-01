@@ -9,4 +9,6 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class HeaderButtonComponent {
   @Input() text: string
   @Input() icon: IconProp
+
+  clicked: boolean = false
 }

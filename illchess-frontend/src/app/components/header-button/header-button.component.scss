@@ -1,28 +1,44 @@
+@import '../header/header.component.scss';
+
+$header-button-width: 15vw;
+$header-button-margin: 1vw;
+$header-button-border: 0.5vh;
+
+$header-button-unroll-height: 2vh;
+
 .header-button {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 15vw;
-    height: 6vh;
-    margin: 0 1vw 1vh 1vw;
+    width: $header-button-width;
+    height: calc($header-height * 3/5);
+    margin: 0 $header-button-margin 1vh $header-button-margin;
     font-size: 1.5vw;
     user-select: none;
     background-color: #F3E5AB;
     color: gray;
     border-radius: 0 0 1vw 1vw;
-    -webkit-transition: color 250ms linear, border 250ms linear, padding 250ms linear;
-    -ms-transition: color 250ms linear, border 250ms linear, padding 250ms linear;
-    transition: color 250ms linear, border 250ms linear, padding 250ms linear;
-    border-left: 0.5vh solid gray;
-    border-bottom: 0.5vh solid gray;
-    border-right: 0.5vh solid gray;
+    -webkit-transition: color 250ms linear, border 250ms linear, padding 250ms linear, border-radius 250ms linear, margin-top 250ms linear, margin-bottom 250ms linear;
+    -ms-transition: color 250ms linear, border 250ms linear, padding 250ms linear, border-radius 250ms linear, margin-top 250ms linear, margin-bottom 250ms linear;
+    transition: color 250ms linear, border 250ms linear, padding 250ms linear, border-radius 250ms linear, margin-top 250ms linear, margin-bottom 250ms linear;
+    border-top: 0;
+    border-left: $header-button-border solid gray;
+    border-bottom: $header-button-border solid gray;
+    border-right: $header-button-border solid gray;
 }
 
 .header-button:hover {
     color: green;
-    border-left: 0.5vh solid green;
-    border-bottom: 0.5vh solid green;
-    border-right: 0.5vh solid green;
+    border-color: green;
     padding-top: 1vh;
     padding-bottom: 1vh;
+}
+
+.header-button-unroll {
+    border-radius: 1vw 1vw 0 0;
+    border-top: $header-button-border solid gray;
+    border-bottom: 0;
+    margin-top: calc($header-height * 1.5/10);
+    padding-top: 1vh !important;
+    padding-bottom: calc($header-button-unroll-height + 1vh) !important;
 }
