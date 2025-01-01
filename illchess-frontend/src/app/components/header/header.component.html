@@ -1,5 +1,5 @@
 <div class="content">
-    <div style="width: 10%"></div>
+    <div class="empty-space-left" ></div>
     
     <div class="content-left">
         <div class="title" routerLink="">
@@ -7,8 +7,10 @@
         </div>
         <app-header-button text="Strona główna" [icon]="home" routerLink=""></app-header-button>
         <app-header-button text="Dołącz do gry" [icon]="gamepad" routerLink="/join-or-initialize"></app-header-button>
+        <app-header-button text="Stwórz boty" [icon]="robot"></app-header-button>
     </div>
     <div class="content-right">
         <app-header-username-input></app-header-username-input>
     </div>
 </div>
+<app-bot-managment></app-bot-managment>

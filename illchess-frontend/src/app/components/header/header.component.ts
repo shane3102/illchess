@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faGamepad, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faGamepad, faHome, faRobot } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
@@ -10,5 +10,6 @@ export class HeaderComponent {
 
   gamepad = faGamepad
   home = faHome
+  robot = faRobot
 
 }
