@@ -1,7 +1,6 @@
 import { createSelector } from "@ngrx/store";
 import { ChessGameState } from "../chess-game.state";
 import { PlayerInfoState } from "./player-info.reducers";
-import { state } from "@angular/animations";
 
 export const selectPlayerInfo = (state: ChessGameState) => state.playerInfoState;
 
