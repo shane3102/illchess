@@ -12,7 +12,8 @@ $management-content-height: 50vh;
     left: calc(50vw - 0.5 * $management-content-width);
     height: $management-content-height;
     width: $management-content-width;
-    background-color: rgb(128,128,128, 0.9);
+    background-color: rgb(255,255,255, 0.75);
     border-radius: 1vw;
     border: $header-button-border solid gray;
+    padding: 1vh 1vw 1vh 1vw;
 }

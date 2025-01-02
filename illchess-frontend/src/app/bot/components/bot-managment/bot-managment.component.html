@@ -1,3 +1,17 @@
 <div class="management-content">
-    siema
+    <div>
+        dodaj: <input [(ngModel)]="added"><button (click)="addBot()">Dodaj</button>
+    </div>
+    <div>
+        usun: <input [(ngModel)]="deleted"><button (click)="deleteBot()">Usuń</button>
+    </div>
+    @if (bots$ | async; as bots) {
+
+        <div>
+            obecnie odpalone: 
+            <div *ngFor="let bot of bots">
+                {{bot.username}}
+            </div>
+        </div>
+    }
 </div>

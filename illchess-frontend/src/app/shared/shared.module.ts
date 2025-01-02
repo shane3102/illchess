@@ -11,6 +11,8 @@ import { ActiveBoardEffects } from './state/active-boards/active-boards.effects'
 import { BoardAdditionalInfoEffects } from './state/board-additional-info/board-additional-info.effects';
 import { PlayerInfoEffects } from './state/player-info/player-info.effects';
 import { playerInfoReducer } from './state/player-info/player-info.reducers';
+import { botReducer } from './state/bot/bot.reducers';
+import { BotEffects } from './state/bot/bot.effects';
 
 @NgModule({
   declarations: [
@@ -23,10 +25,17 @@ import { playerInfoReducer } from './state/player-info/player-info.reducers';
         boardState: boardReducer,
         activeBoardsState: activeBoardsReducer,
         boardAdditionalInfoState: boardAdditionalInfoReducer,
-        playerInfoState: playerInfoReducer
+        playerInfoState: playerInfoReducer,
+        botState: botReducer
       }
     ),
-    EffectsModule.forRoot([BoardEffects, ActiveBoardEffects, BoardAdditionalInfoEffects, PlayerInfoEffects])
+    EffectsModule.forRoot([
+      BoardEffects, 
+      ActiveBoardEffects,
+      BoardAdditionalInfoEffects,
+      PlayerInfoEffects,
+      BotEffects
+    ])
   ],
   exports: [
     SpinnerComponent

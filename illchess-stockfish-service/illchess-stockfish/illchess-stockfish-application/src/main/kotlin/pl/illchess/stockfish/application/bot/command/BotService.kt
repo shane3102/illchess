@@ -2,11 +2,7 @@ package pl.illchess.stockfish.application.bot.command
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import pl.illchess.stockfish.application.board.command.out.BotPerformMove
-import pl.illchess.stockfish.application.board.command.out.BotResignGame
-import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.application.board.command.out.*
 import pl.illchess.stockfish.application.bot.command.`in`.AddBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteBotsUseCase
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
@@ -21,6 +17,7 @@ import pl.illchess.stockfish.domain.bot.domain.Username
 import pl.illchess.stockfish.domain.bot.exception.BotNotFound
 import pl.illchess.stockfish.domain.evaluation.exception.TopMovesCouldNotBeEstablished
 import kotlin.concurrent.thread
+import kotlin.random.Random
 
 class BotService(
     private val saveBot: SaveBot,
@@ -34,16 +31,12 @@ class BotService(
     private val botResignGame: BotResignGame
 ) : AddBotsUseCase, DeleteBotsUseCase {
 
-    private var threadCache: MutableList<Thread> = mutableListOf()
-
     override fun addBots(cmd: AddBotsUseCase.AddBotsCmd) {
         log.info("Adding ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
         val command = cmd.toCommand()
         command.bots.forEach {
             saveBot.saveBot(it)
-            threadCache.add(
-                thread(name = it.username.text) { playingGameLogic(it.username) }
-            )
+            thread(name = it.username.text) { playingGameLogic(it.username) }
         }
         log.info("Successfully added ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
     }
@@ -52,8 +45,6 @@ class BotService(
         log.info("Removing ${cmd.deletedBotsUsernames.count()} bots with usernames: ${cmd.deletedBotsUsernames}")
         val command = cmd.toCommand()
         command.usernames.forEach { username ->
-            val interruptedThread = threadCache.firstOrNull { it.name == username.text }
-            interruptedThread?.interrupt()
             val deletedBot = loadBot.loadBot(username)
             if (deletedBot != null) {
                 botResignGame.botResignGame(deletedBot)
@@ -64,51 +55,59 @@ class BotService(
     }
 
     private fun playingGameLogic(username: Username) {
-        val bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
 
         while (true) {
-            val currentBoardId = joinOrInitializeBoard.joinOrInitialize(username)
-            bot.currentBoardId = currentBoardId
-            saveBot.saveBot(bot)
-            while (bot.currentBoardId != null) {
-                try {
-                    val boardAdditionalInfo = loadBoardAdditionalInfo.loadBoardAdditionalInfo(bot.currentBoardId!!)
-                        ?: throw BoardNotFoundException(bot.currentBoardId!!)
+            try {
+                val bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
+                Thread.sleep((Random.nextDouble() * 2000).toLong())
 
-                    if (isGameFinished(boardAdditionalInfo)) {
+                val currentBoardId = joinOrInitializeBoard.joinOrInitialize(username)
+                bot.currentBoardId = currentBoardId
+                saveBot.saveBot(bot)
+                while (bot.currentBoardId != null) {
+                    try {
+                        Thread.sleep((Random.nextDouble() * 1000).toLong())
+                        val boardAdditionalInfo = loadBoardAdditionalInfo.loadBoardAdditionalInfo(bot.currentBoardId!!)
+                            ?: throw BoardNotFoundException(bot.currentBoardId!!)
+
+                        if (isGameFinished(boardAdditionalInfo)) {
+                            bot.currentBoardId = null
+                            saveBot.saveBot(bot)
+                            continue
+                        }
+
+                        if (!isBlackPlayerPresent(boardAdditionalInfo) || !isMyTurn(bot, boardAdditionalInfo)) {
+                            continue
+                        }
+
+                        val fenBoardPosition = loadBoard.loadBoard(bot.currentBoardId!!)
+                            ?: throw BoardNotFoundException(bot.currentBoardId!!)
+
+                        val loadedTopMoves = loadTopMoves.loadTopMoves(
+                            fenBoardPosition,
+                            bot.obtainedBestMovesCount,
+                            bot.searchedDepth
+                        ) ?: throw TopMovesCouldNotBeEstablished(bot.currentBoardId!!)
+
+                        if (loadedTopMoves.topMovesList.isEmpty()) {
+                            botResignGame.botResignGame(bot)
+                        } else {
+                            botPerformMove.performMove(
+                                PerformMove(bot, loadedTopMoves.topMovesList.random())
+                            )
+                        }
+
+                    } catch (boardNotFound: BoardNotFoundException) {
                         bot.currentBoardId = null
-                        saveBot.saveBot(bot)
-                        continue
-                    }
-
-                    if (!isBlackPlayerPresent(boardAdditionalInfo) || !isMyTurn(bot, boardAdditionalInfo)) {
-                        continue
-                    }
-
-                    val fenBoardPosition = loadBoard.loadBoard(bot.currentBoardId!!)
-                        ?: throw BoardNotFoundException(bot.currentBoardId!!)
-
-                    val loadedTopMoves = loadTopMoves.loadTopMoves(
-                        fenBoardPosition,
-                        bot.obtainedBestMovesCount,
-                        bot.searchedDepth
-                    ) ?: throw TopMovesCouldNotBeEstablished(bot.currentBoardId!!)
-
-                    if (loadedTopMoves.topMovesList.isEmpty()) {
+                    } catch (topMovesCouldNotBeEstablished: TopMovesCouldNotBeEstablished) {
                         botResignGame.botResignGame(bot)
-                    } else {
-                        botPerformMove.performMove(
-                            PerformMove(bot, loadedTopMoves.topMovesList.random())
-                        )
+                        bot.currentBoardId = null
+                    } catch (ignored: InterruptedException) {
                     }
-
-                } catch (boardNotFound: BoardNotFoundException) {
-                    bot.currentBoardId = null
-                } catch (topMovesCouldNotBeEstablished: TopMovesCouldNotBeEstablished) {
-                    botResignGame.botResignGame(bot)
-                    bot.currentBoardId = null
-                } catch (ignored: InterruptedException) {
                 }
+            } catch (botNotFound: BotNotFound) {
+                log.info("Bot with username: ${username.text} was removed. Stopping thread playing game")
+                break
             }
         }
     }

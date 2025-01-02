@@ -34,6 +34,13 @@ $header-button-unroll-height: 2vh;
     padding-bottom: 1vh;
 }
 
+.management-content:hover .header-button {
+    color: green;
+    border-color: green;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+}
+
 .header-button-unroll {
     border-radius: 1vw 1vw 0 0;
     border-top: $header-button-border solid gray;
