@@ -11,7 +11,7 @@ $captured-pieces-width: calc($panel-width / 2);
     display: flex;
     justify-content: left;
     flex-wrap: wrap;
-    padding-left: calc($captured-pieces-width / 8);
+    padding-left: calc($captured-pieces-width / 16);
     padding-right: calc($captured-pieces-width / 8);
     padding-top: calc($chess-square-size / 15);
     transition: all 0.5s;

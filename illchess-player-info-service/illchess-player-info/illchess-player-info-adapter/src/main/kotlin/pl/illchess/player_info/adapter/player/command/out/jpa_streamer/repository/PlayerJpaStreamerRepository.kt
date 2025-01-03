@@ -20,7 +20,7 @@ class PlayerJpaStreamerRepository(
 
     fun loadByUsername(username: String): PlayerEntity? {
         return jpaStreamer.stream(PlayerEntity::class.java)
-            .filter(PlayerEntityMetaModel.username.contains(username))
+            .filter(PlayerEntityMetaModel.username.`in`(username))
             .findFirst()
             .orElse(null)
     }

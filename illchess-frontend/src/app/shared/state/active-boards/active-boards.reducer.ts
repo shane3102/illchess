@@ -34,7 +34,9 @@ export const activeBoardsReducer = createReducer(
             {
                 ...state,
                 activeBoardsView: {
-                    activeBoardsIds: [...state.activeBoardsView.activeBoardsIds, content.boardId]
+                    activeBoardsIds: state.activeBoardsView.activeBoardsIds.includes(content.boardId) 
+                        ? state.activeBoardsView.activeBoardsIds 
+                        :  [...state.activeBoardsView.activeBoardsIds, content.boardId]
                 }
             }
         )
