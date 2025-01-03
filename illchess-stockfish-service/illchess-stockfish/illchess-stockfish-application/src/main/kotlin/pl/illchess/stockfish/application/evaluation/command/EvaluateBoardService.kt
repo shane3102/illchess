@@ -11,7 +11,7 @@ import pl.illchess.stockfish.application.evaluation.command.`in`.EvaluateBoardUs
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
-import pl.illchess.stockfish.application.position.command.out.LoadBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoard
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation

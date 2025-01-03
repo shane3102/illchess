@@ -12,6 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { HeaderButtonComponent } from './components/header-button/header-button.component';
 import { PlayerInfoModule } from "./player-info/player-info.module";
 import { HeaderUsernameInputComponent } from './components/header-username-input/header-username-input.component';
+import { BotModule } from './bot/bot.module';
+import { BotsHeaderButtonComponent } from './components/bots-header-button/bots-header-button.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { HeaderUsernameInputComponent } from './components/header-username-input
     MainPageComponent,
     HeaderComponent,
     HeaderButtonComponent,
-    HeaderUsernameInputComponent
+    HeaderUsernameInputComponent,
+    BotsHeaderButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +30,7 @@ import { HeaderUsernameInputComponent } from './components/header-username-input
     FontAwesomeModule,
     ChessGameModule,
     PlayerInfoModule,
+    BotModule,
     HttpClientModule,
     FontAwesomeModule
   ],
