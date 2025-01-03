@@ -1,16 +1,16 @@
 import { createAction, props } from "@ngrx/store";
-import { AddBotsRequest } from "../../model/stockfish/AddBotsRequest";
+import { AddBotRequest } from "../../model/stockfish/AddBotRequest";
 import { BotView } from "../../model/stockfish/BotView";
-import { DeleteBotsRequest } from "../../model/stockfish/DeleteBotsRequest";
+import { DeleteBotRequest } from "../../model/stockfish/DeleteBotRequest";
 
 export const addBots = createAction(
     'Add bots playing chess',
-    props<AddBotsRequest>()
+    props<AddBotRequest>()
 )
 
 export const deleteBots = createAction(
     'Delete bots playing chess',
-    props<DeleteBotsRequest>()
+    props<DeleteBotRequest>()
 )
 
 export const loadCurrentllyRunBots = createAction(

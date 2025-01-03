@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { firstValueFrom } from "rxjs";
-import { AddBotsRequest } from "../model/stockfish/AddBotsRequest";
+import { AddBotRequest } from "../model/stockfish/AddBotRequest";
 import { BestMoveAndContinuationResponse } from "../model/stockfish/BestMoveAndContinuationResponse";
-import { DeleteBotsRequest } from "../model/stockfish/DeleteBotsRequest";
+import { DeleteBotRequest } from "../model/stockfish/DeleteBotRequest";
 import { EvaluationResponse } from "../model/stockfish/EvaluationResponse";
 import { BotView } from "../model/stockfish/BotView";
 
@@ -28,13 +28,13 @@ export class StockfishService {
         )
     }
 
-    async addBotsPlayingChess(addBotsRequest: AddBotsRequest): Promise<void> {
+    async addBotsPlayingChess(addBotsRequest: AddBotRequest): Promise<void> {
         return firstValueFrom(
             this.http.post<void>(`${this.PATH}/bot`, addBotsRequest)
         )
     }
 
-    async deleteBotsPlayingChess(deleteBotsRequest: DeleteBotsRequest): Promise<void> {
+    async deleteBotsPlayingChess(deleteBotsRequest: DeleteBotRequest): Promise<void> {
         return firstValueFrom(
             this.http.delete<void>(`${this.PATH}/bot`, { body: deleteBotsRequest })
         )
