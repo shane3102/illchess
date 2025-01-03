@@ -4,8 +4,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { addBots, currentllyRunBotsLoaded, deleteBots, loadCurrentllyRunBots } from "./bot.actions";
 import { from, map, switchMap } from "rxjs";
 import { BotView } from "../../model/stockfish/BotView";
-import { AddBotsRequest } from "../../model/stockfish/AddBotsRequest";
-import { DeleteBotsRequest } from "../../model/stockfish/DeleteBotsRequest";
+import { AddBotRequest } from "../../model/stockfish/AddBotRequest";
+import { DeleteBotRequest } from "../../model/stockfish/DeleteBotRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +31,7 @@ export class BotEffects {
         () => this.actions$.pipe(
             ofType(addBots),
             switchMap(
-                (request: AddBotsRequest) => from(this.stockfishService.addBotsPlayingChess(request))
+                (request: AddBotRequest) => from(this.stockfishService.addBotsPlayingChess(request))
                     .pipe(
                         map(() => loadCurrentllyRunBots({}))
                     )
@@ -43,7 +43,7 @@ export class BotEffects {
         () => this.actions$.pipe(
             ofType(deleteBots),
             switchMap(
-                (request: DeleteBotsRequest) => from(this.stockfishService.deleteBotsPlayingChess(request))
+                (request: DeleteBotRequest) => from(this.stockfishService.deleteBotsPlayingChess(request))
                     .pipe(
                         map(() => loadCurrentllyRunBots({}))
                     )

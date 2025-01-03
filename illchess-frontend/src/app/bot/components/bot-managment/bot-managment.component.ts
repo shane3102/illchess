@@ -20,11 +20,11 @@ export class BotManagmentComponent {
   deleted: string
 
   addBot() {
-    this.store.dispatch(addBots({usernames: [this.added]}))
+    this.store.dispatch(addBots({username: this.added}))
   }
 
   deleteBot() {
-    this.store.dispatch(deleteBots({usernames: [this.deleted]}))
+    this.store.dispatch(deleteBots({username: this.deleted}))
   }
 
 
