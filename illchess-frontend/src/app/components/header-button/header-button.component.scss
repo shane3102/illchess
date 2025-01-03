@@ -48,4 +48,9 @@ $header-button-unroll-height: 2vh;
     margin-top: calc($header-height * 1.5/10);
     padding-top: 1vh !important;
     padding-bottom: calc($header-button-unroll-height + 1vh) !important;
+    transition-delay: 0;
+}
+
+.header-button-roll {
+    transition-delay: 250ms;
 }

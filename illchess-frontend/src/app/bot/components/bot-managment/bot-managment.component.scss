@@ -16,4 +16,18 @@ $management-content-height: 50vh;
     border-radius: 1vw;
     border: $header-button-border solid gray;
     padding: 1vh 1vw 1vh 1vw;
+    -webkit-transition: transform 250ms linear;
+    -ms-transition: transform 250ms linear;
+    transition: transform 250ms linear;
+    transform-origin: top;
+}
+
+.management-content-hidden {
+    transform: scaleY(0);
+    transition-delay: 0;
+}
+
+.management-content-shown {
+    transform: scaleY(1);
+    transition-delay: 250ms;
 }

@@ -13,6 +13,7 @@ import { HeaderButtonComponent } from './components/header-button/header-button.
 import { PlayerInfoModule } from "./player-info/player-info.module";
 import { HeaderUsernameInputComponent } from './components/header-username-input/header-username-input.component';
 import { BotModule } from './bot/bot.module';
+import { BotsHeaderButtonComponent } from './components/bots-header-button/bots-header-button.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BotModule } from './bot/bot.module';
     MainPageComponent,
     HeaderComponent,
     HeaderButtonComponent,
-    HeaderUsernameInputComponent
+    HeaderUsernameInputComponent,
+    BotsHeaderButtonComponent
   ],
   imports: [
     BrowserModule,

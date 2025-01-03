@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BotView } from 'src/app/shared/model/stockfish/BotView';
 import { addBots, deleteBots } from 'src/app/shared/state/bot/bot.actions';
-import { botListSelector } from 'src/app/shared/state/bot/bot.selectors';
+import { botListSelector, botManagmentShown } from 'src/app/shared/state/bot/bot.selectors';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 
 @Component({
@@ -15,6 +15,7 @@ export class BotManagmentComponent {
 
   store = inject(Store<ChessGameState>)
   bots$: Observable<BotView[] | undefined | null> = this.store.select(botListSelector)
+  botManagmentShown$: Observable<boolean | undefined | null> = this.store.select(botManagmentShown)
 
   added: string
   deleted: string

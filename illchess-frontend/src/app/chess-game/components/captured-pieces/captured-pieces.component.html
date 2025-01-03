@@ -1,7 +1,7 @@
 <div class="captured-pieces-wrapper">
     <div class="captured-pieces">
         <ng-container *ngFor="let capturedPiece of capturedPieces; let i = index">
-            <div [ngStyle]="{'z-index': i}" class="captured-piece" [ngSwitch]="capturedPiece">
+            <div class="captured-piece" [ngSwitch]="capturedPiece">
                 <div *ngSwitchCase="Piece.PAWN" class="captured-piece">
                     @if(color == PieceColor.WHITE) {
                         <img class="piece-mini" src="assets/chess-pieces/wP.svg" />

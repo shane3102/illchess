@@ -22,3 +22,8 @@ export const currentllyRunBotsLoaded = createAction(
     'Currentlly bots playing chess loaded',
     props<{ bots: BotView[] }>()
 )
+
+export const showOrHideBotsManagement = createAction(
+    'Show or hide bots management component',
+    props<any>()
+)
