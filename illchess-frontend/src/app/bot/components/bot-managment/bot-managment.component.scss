@@ -2,8 +2,8 @@
 
 $corresponding-button-number: 0;
 
-$management-content-width: 70vw;
-$management-content-height: 50vh;
+$management-content-width: 40vw;
+$management-content-height: 40vh;
 
 .management-content {
     position: absolute;
@@ -12,7 +12,7 @@ $management-content-height: 50vh;
     left: calc(50vw - 0.5 * $management-content-width);
     height: $management-content-height;
     width: $management-content-width;
-    background-color: rgb(255,255,255, 0.75);
+    background-color: rgb(255,255,255, 0.8);
     border-radius: 1vw;
     border: $header-button-border solid gray;
     padding: 1vh 1vw 1vh 1vw;
@@ -20,6 +20,10 @@ $management-content-height: 50vh;
     -ms-transition: transform 250ms linear;
     transition: transform 250ms linear;
     transform-origin: top;
+    display: flex;
+    justify-content: center;
+    align-items: left;
+    flex-direction: column;
 }
 
 .management-content-hidden {
@@ -30,4 +34,57 @@ $management-content-height: 50vh;
 .management-content-shown {
     transform: scaleY(1);
     transition-delay: 250ms;
+}
+
+.active-bots {
+    display: flex; 
+    justify-content: left; 
+    align-items: left; 
+    flex-direction: column; 
+    flex-wrap: wrap;
+    height: calc($management-content-height*0.7);
+}
+
+.active-bot {
+    width: calc($management-content-width/2);
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.bot-button {
+    padding: 0.5vw;
+    color: gray;
+    border-radius: 1vw;
+    border: 0.5vh solid gray;
+    text-align: center; 
+    transition: color 250ms linear, border-color 250ms linear;
+    background-color: rgb(150,75,0);
+}
+
+.add-bot-button:hover {
+    border-color: green;
+    color: green;
+}
+
+.remove-bot-button:hover {
+    border-color: red;
+    color: red;
+}
+
+.bot-number {
+    color: gray;
+    font-size: 1.5vw;
+}
+
+.add-bot {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.horizontal-line {
+    width: 80%;
+    border-bottom: 0.1vh solid gray;
+    align-self: center;
 }

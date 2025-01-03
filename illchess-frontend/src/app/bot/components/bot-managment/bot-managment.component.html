@@ -1,17 +1,38 @@
 <div class="management-content" [ngClass]="(botManagmentShown$ | async) ? 'management-content-shown' : 'management-content-hidden'">
-    <div>
-        dodaj: <input [(ngModel)]="added"><button (click)="addBot()">Dodaj</button>
-    </div>
-    <div>
-        usun: <input [(ngModel)]="deleted"><button (click)="deleteBot()">Usuń</button>
-    </div>
     @if (bots$ | async; as bots) {
 
-        <div>
-            obecnie odpalone: 
-            <div *ngFor="let bot of bots">
-                {{bot.username}}
+        <div style="text-align: center;">
+            @if(bots.length!=0) {
+                <b>Obecnie rozgrywające gry boty: </b>
+            } @else {
+                <b>Brak botów rozgrywających partie</b>
+            }
+        </div>
+
+        <div class="active-bots">
+            <div *ngFor="let bot of bots; let i = index">
+                <div class="active-bot">
+                    <div class="bot-number">{{i + 1}}</div>.
+                    <div class="common-text-input" style="border-color: gray;">
+                        <div>{{bot.username}}</div>
+                    </div>
+                    <div class="bot-button remove-bot-button" (click)="deleteBot(bot.username)">
+                        <fa-icon [icon]="minusIcon"></fa-icon>
+                    </div>
+                </div>
             </div>
         </div>
+    } @else {
+        <b>Brak botów rozgrywających partie</b>
     }
+    <div class="horizontal-line"></div>
+    <div class="add-bot">
+        <div><b>Dodaj nowego bota:</b></div>
+        <div>
+            <input [(ngModel)]="added" class="common-text-input" maxlength="10">
+        </div> 
+        <div class="bot-button add-bot-button" (click)="addBot()">
+            <fa-icon [icon]="plusIcon"></fa-icon>
+        </div>
+    </div>
 </div>
