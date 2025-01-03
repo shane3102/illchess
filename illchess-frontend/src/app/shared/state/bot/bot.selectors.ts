@@ -8,3 +8,8 @@ export const botListSelector = createSelector(
     botSelector,
     (state: BotState) => state.bots
 )
+
+export const botManagmentShown = createSelector(
+    botSelector,
+    (state: BotState) => state.isShowed
+)

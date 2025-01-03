@@ -1,4 +1,4 @@
-<div class="management-content">
+<div class="management-content" [ngClass]="(botManagmentShown$ | async) ? 'management-content-shown' : 'management-content-hidden'">
     <div>
         dodaj: <input [(ngModel)]="added"><button (click)="addBot()">Dodaj</button>
     </div>
