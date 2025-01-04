@@ -11,6 +11,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.BoardAdditionalInfoViewResponse
+import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.FenBoardPositionResponse
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializeNewBoardRequest
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializedBoardResponse
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.PerformMoveRequest
@@ -48,7 +49,7 @@ class OkHttpLoadBoardAdapter(
 
         val fenBoardPosition: FenBoardPosition? =
             if (response.body == null || response.code != 200) null
-            else objectMapper.readValue(response.body?.string(), FenBoardPosition::class.java)
+            else FenBoardPosition(objectMapper.readValue(response.body?.string(), FenBoardPositionResponse::class.java).value)
 
         return fenBoardPosition
     }

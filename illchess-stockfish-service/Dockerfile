@@ -1,4 +1,10 @@
-FROM maven:3.9-eclipse-temurin-17-alpine as build
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 as buildApp
+
+USER root
+
+# copy wrapper
+COPY illchess-stockfish-server/.mvn .mvn
+COPY illchess-stockfish-server/mvnw mvnw
 
 # copy main pom
 RUN mkdir -p /usr/src/app/illchess/illchess-stockfish
@@ -20,13 +26,13 @@ RUN mkdir /usr/src/app/illchess/illchess-stockfish-server
 COPY illchess-stockfish-server/pom.xml /usr/src/app/illchess/illchess-stockfish-server
 COPY illchess-stockfish-server/src /usr/src/app/illchess/illchess-stockfish-server/src
 
-RUN mvn -f /usr/src/app/illchess clean install -DskipTests -N
-RUN mvn -f /usr/src/app/illchess clean install -DskipTests
+RUN ./mvnw -f /usr/src/app/illchess clean package -DskipTests -N
+RUN ./mvnw -f /usr/src/app/illchess clean package -DskipTests -Dnative
 
-FROM alpine
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10 as buildStockfish
 ARG PV=17
 
-RUN apk add --no-cache make g++ wget ca-certificates
+RUN microdnf install make gcc-c++ wget ca-certificates tar gzip
 
 RUN mkdir -p /root/tmp && \
 	cd /root/tmp && \
@@ -36,13 +42,23 @@ RUN mkdir -p /root/tmp && \
 	make build ARCH=x86-64-modern && \
 	mv /root/tmp/Stockfish-sf_${PV}/src/stockfish /usr/local/bin/stockfish
 
-RUN apk del --no-cache wget ca-certificates
 RUN rm -rf /root/tmp
 
-RUN apk add openjdk17-jre
+FROM quay.io/quarkus/quarkus-micro-image:2.0
+WORKDIR /work/
+USER root
+
+COPY --from=buildStockfish /usr/local/bin/stockfish /usr/local/bin/stockfish
 ENV PATH="$PATH:/usr/local/bin/stockfish"
 
-COPY --from=build /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner.jar illchess-stockfish-server.jar
+COPY --from=buildApp /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner /work/illchess-stockfish-server
 
-ENTRYPOINT ["java", "-jar", "illchess-stockfish-server.jar"]
+RUN chmod 775 /work /work/illchess-stockfish-server \
+  && chown -R 1001 /work \
+  && chmod -R "g+rwX" /work \
+  && chown -R 1001:root /work
+
 EXPOSE 2137
+USER 1001
+
+CMD ["./illchess-stockfish-server", "-Dquarkus.http.host=0.0.0.0"]
