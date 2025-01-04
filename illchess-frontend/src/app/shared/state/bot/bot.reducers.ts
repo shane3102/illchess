@@ -1,15 +1,18 @@
 import { createReducer, on } from "@ngrx/store";
 import { BotView } from "../../model/stockfish/BotView";
-import { currentllyRunBotsLoaded, showOrHideBotsManagement } from "./bot.actions";
+import { currentllyRunBotsLoaded, maxBotCountLoaded, showOrHideBotsManagement } from "./bot.actions";
+import { state } from "@angular/animations";
 
 export interface BotState {
     isShowed: boolean,
-    bots: BotView[]
+    bots: BotView[],
+    maxBotsCount: number | undefined
 }
 
 export const initialState: BotState = {
     isShowed: false,
-    bots: []
+    bots: [],
+    maxBotsCount: undefined
 }
 
 export const botReducer = createReducer(
@@ -31,6 +34,16 @@ export const botReducer = createReducer(
             {
                 ...state,
                 isShowed: !state.isShowed
+            }
+        )
+    ),
+
+    on(
+        maxBotCountLoaded,
+        (state: BotState, loadedMaxCount: {maxCount: number}) => (
+            {
+                ...state,
+                maxBotsCount: loadedMaxCount.maxCount
             }
         )
     )

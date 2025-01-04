@@ -8,4 +8,6 @@ class BotViewController(
 
     override fun listAllCurrentlyRunBots() = botViewQueryPort.listAllCurrentlyRunBots()
 
+    override fun getMaxBotCount() = botViewQueryPort.getMaxBotCount()
+
 }

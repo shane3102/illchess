@@ -46,4 +46,10 @@ export class StockfishService {
         )
     }
 
+    async loadMaxBotCount(): Promise<number> {
+        return firstValueFrom(
+            this.http.get<number>(`${this.PATH}/bot/max`)
+        )
+    }
+
 }

@@ -9,6 +9,9 @@ urls:
   game-service: "http://localhost:8080"
   stockfish-api: "https://stockfish.online/api/s/v2.php"
 
+bots:
+  max-count: 8
+
 stockfish:
   default-depth: 15
 #### USED TO CONFIGURE PATH TO LOCAL STOCKFISH ENGINE. ###

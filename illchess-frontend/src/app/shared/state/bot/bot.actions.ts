@@ -27,3 +27,8 @@ export const showOrHideBotsManagement = createAction(
     'Show or hide bots management component',
     props<any>()
 )
+
+export const maxBotCountLoaded = createAction(
+    'Max bot count loaded',
+    props<{maxCount: number}>()
+)

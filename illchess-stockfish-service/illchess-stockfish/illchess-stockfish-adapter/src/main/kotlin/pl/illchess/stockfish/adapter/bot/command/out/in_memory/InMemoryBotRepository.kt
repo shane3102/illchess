@@ -14,6 +14,8 @@ class InMemoryBotRepository(
 
     override fun loadBot(username: Username) = botCache[username]
 
+    override fun botCount() = botCache.size
+
     override fun saveBot(bot: Bot) {
         botCache[bot.username] = bot
     }
