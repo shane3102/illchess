@@ -59,11 +59,11 @@ class BotService(
         while (true) {
             try {
                 val bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
-                Thread.sleep((Random.nextDouble() * 2000).toLong())
-
                 val currentBoardId = joinOrInitializeBoard.joinOrInitialize(username)
                 bot.currentBoardId = currentBoardId
                 saveBot.saveBot(bot)
+
+                Thread.sleep((Random.nextDouble() * 2000).toLong())
                 while (bot.currentBoardId != null) {
                     try {
                         Thread.sleep((Random.nextDouble() * 1000).toLong())

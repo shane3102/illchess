@@ -1,7 +1,9 @@
 package pl.illchess.stockfish.adapter.board.command.out.okhttp.dto
 
+import io.quarkus.runtime.annotations.RegisterForReflection
 import java.util.UUID
 
+@RegisterForReflection
 data class BoardAdditionalInfoViewResponse(
     val boardId: UUID,
     val currentPlayerColor: String,
@@ -10,6 +12,7 @@ data class BoardAdditionalInfoViewResponse(
     val gameState: String,
     val victoriousPlayerColor: String?
 ) {
+    @RegisterForReflection
     data class PlayerView(
         val username: String
     )

@@ -13,7 +13,7 @@
             <div *ngFor="let bot of bots; let i = index">
                 <div class="active-bot">
                     <div class="bot-number">{{i + 1}}</div>.
-                    <div class="common-text-input" style="border-color: gray;">
+                    <div class="common-text-input" style="display: flex; justify-content: center; align-items: center; border-color: gray;">
                         <div>{{bot.username}}</div>
                     </div>
                     <div class="bot-button remove-bot-button" (click)="deleteBot(bot.username)">
