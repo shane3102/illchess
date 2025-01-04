@@ -3,7 +3,7 @@ import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BotView } from 'src/app/shared/model/stockfish/BotView';
-import { addBots, deleteBots, loadCurrentllyRunBots } from 'src/app/shared/state/bot/bot.actions';
+import { addBots, deleteBots } from 'src/app/shared/state/bot/bot.actions';
 import { botListSelector, botManagmentShown } from 'src/app/shared/state/bot/bot.selectors';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 
@@ -24,11 +24,11 @@ export class BotManagmentComponent {
   added: string
 
   addBot() {
-    this.store.dispatch(addBots({username: this.added}))
+    this.store.dispatch(addBots({ username: this.added }))
   }
 
   deleteBot(username: string) {
-    this.store.dispatch(deleteBots({username: username}))
+    this.store.dispatch(deleteBots({ username: username }))
   }
 
 

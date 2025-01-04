@@ -19,6 +19,20 @@ export class BotsHeaderButtonComponent {
 
   botManagmentShown$: Observable<boolean | undefined | null> = this.store.select(botManagmentShown)
 
+  isBeingHidden: boolean = false
+
+  ngOnInit() {
+    this.botManagmentShown$.subscribe(
+      () => {
+        this.isBeingHidden = true
+        setTimeout(
+          () => { this.isBeingHidden = false },
+          250
+        )
+      }
+    )
+  }
+
   showOrHideBotsManagement() {
     this.store.dispatch(showOrHideBotsManagement({}))
   }
