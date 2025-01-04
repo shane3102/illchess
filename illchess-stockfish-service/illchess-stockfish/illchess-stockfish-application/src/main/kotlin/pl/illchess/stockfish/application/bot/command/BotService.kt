@@ -1,8 +1,14 @@
 package pl.illchess.stockfish.application.bot.command
 
+import kotlin.concurrent.thread
+import kotlin.random.Random
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import pl.illchess.stockfish.application.board.command.out.*
+import pl.illchess.stockfish.application.board.command.out.BotPerformMove
+import pl.illchess.stockfish.application.board.command.out.BotResignGame
+import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoard
+import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
 import pl.illchess.stockfish.application.bot.command.`in`.AddBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteBotsUseCase
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
@@ -10,14 +16,14 @@ import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
+import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.bot.command.PerformMove
 import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
 import pl.illchess.stockfish.domain.bot.exception.BotNotFound
+import pl.illchess.stockfish.domain.bot.exception.TooManyBotsAddedException
 import pl.illchess.stockfish.domain.evaluation.exception.TopMovesCouldNotBeEstablished
-import kotlin.concurrent.thread
-import kotlin.random.Random
 
 class BotService(
     private val saveBot: SaveBot,
@@ -28,17 +34,22 @@ class BotService(
     private val loadBoardAdditionalInfo: LoadBoardAdditionalInfo,
     private val loadTopMoves: LoadTopMoves,
     private val botPerformMove: BotPerformMove,
-    private val botResignGame: BotResignGame
+    private val botResignGame: BotResignGame,
+    private val botsMaxCount: Int
 ) : AddBotsUseCase, DeleteBotsUseCase {
 
     override fun addBots(cmd: AddBotsUseCase.AddBotsCmd) {
-        log.info("Adding ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
+        val addedBotCount = cmd.addedBotCmd.count()
+        log.info("Adding $addedBotCount bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
         val command = cmd.toCommand()
+        if (loadBot.botCount() + addedBotCount > botsMaxCount) {
+            throw TooManyBotsAddedException(botsMaxCount)
+        }
         command.bots.forEach {
             saveBot.saveBot(it)
             thread(name = it.username.text) { playingGameLogic(it.username) }
         }
-        log.info("Successfully added ${cmd.addedBotCmd.count()} bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
+        log.info("Successfully added $addedBotCount bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
     }
 
     override fun deleteBots(cmd: DeleteBotsUseCase.DeleteBotsCmd) {
@@ -58,7 +69,7 @@ class BotService(
 
         while (true) {
             try {
-                val bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
+                var bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
                 val currentBoardId = joinOrInitializeBoard.joinOrInitialize(username)
                 bot.currentBoardId = currentBoardId
                 saveBot.saveBot(bot)
@@ -66,6 +77,7 @@ class BotService(
                 Thread.sleep((Random.nextDouble() * 2000).toLong())
                 while (bot.currentBoardId != null) {
                     try {
+                        bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
                         Thread.sleep((Random.nextDouble() * 1000).toLong())
                         val boardAdditionalInfo = loadBoardAdditionalInfo.loadBoardAdditionalInfo(bot.currentBoardId!!)
                             ?: throw BoardNotFoundException(bot.currentBoardId!!)
@@ -83,19 +95,7 @@ class BotService(
                         val fenBoardPosition = loadBoard.loadBoard(bot.currentBoardId!!)
                             ?: throw BoardNotFoundException(bot.currentBoardId!!)
 
-                        val loadedTopMoves = loadTopMoves.loadTopMoves(
-                            fenBoardPosition,
-                            bot.obtainedBestMovesCount,
-                            bot.searchedDepth
-                        ) ?: throw TopMovesCouldNotBeEstablished(bot.currentBoardId!!)
-
-                        if (loadedTopMoves.topMovesList.isEmpty()) {
-                            botResignGame.botResignGame(bot)
-                        } else {
-                            botPerformMove.performMove(
-                                PerformMove(bot, loadedTopMoves.topMovesList.random())
-                            )
-                        }
+                        loadMovesAndPerformRandomMove(fenBoardPosition, bot)
 
                     } catch (boardNotFound: BoardNotFoundException) {
                         bot.currentBoardId = null
@@ -109,6 +109,25 @@ class BotService(
                 log.info("Bot with username: ${username.text} was removed. Stopping thread playing game")
                 break
             }
+        }
+    }
+
+    private fun loadMovesAndPerformRandomMove(
+        fenBoardPosition: FenBoardPosition,
+        bot: Bot
+    ) {
+        val loadedTopMoves = loadTopMoves.loadTopMoves(
+            fenBoardPosition,
+            bot.obtainedBestMovesCount,
+            bot.searchedDepth
+        ) ?: throw TopMovesCouldNotBeEstablished(bot.currentBoardId!!)
+
+        if (loadedTopMoves.topMovesList.isEmpty()) {
+            botResignGame.botResignGame(bot)
+        } else {
+            botPerformMove.performMove(
+                PerformMove(bot, loadedTopMoves.topMovesList.random())
+            )
         }
     }
 

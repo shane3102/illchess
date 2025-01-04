@@ -2,6 +2,7 @@ package pl.illchess.stockfish.server.config
 
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.ws.rs.Produces
+import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.application.bot.command.BotService
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
@@ -19,6 +20,12 @@ import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
 
 class QuarkusScopeConfig {
+
+    @field:ConfigProperty(
+        name = "bots.max-count",
+        defaultValue = "8"
+    )
+    lateinit var maxBotCount: String
 
     @Produces
     @ApplicationScoped
@@ -52,7 +59,8 @@ class QuarkusScopeConfig {
         loadBoardAdditionalInfo,
         loadTopMoves,
         botPerformMove,
-        botResignGame
+        botResignGame,
+        maxBotCount.toInt()
     )
 
     @Produces

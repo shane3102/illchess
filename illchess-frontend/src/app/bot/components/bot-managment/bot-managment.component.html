@@ -2,11 +2,9 @@
     @if (bots$ | async; as bots) {
 
         <div style="text-align: center;">
-            @if(bots.length!=0) {
-                <b>Obecnie rozgrywające gry boty: </b>
-            } @else {
-                <b>Brak botów rozgrywających partie</b>
-            }
+            <b>
+                Obecnie rozgrywające gry boty ({{bots.length}}/{{maxBotCount$ | async}}): 
+            </b>
         </div>
 
         <div class="active-bots">

@@ -5,4 +5,6 @@ import pl.illchess.stockfish.domain.bot.domain.Username
 
 interface LoadBot {
     fun loadBot(username: Username): Bot?
+
+    fun botCount(): Int
 }

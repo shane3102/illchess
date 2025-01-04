@@ -10,4 +10,9 @@ interface BotViewApi {
     @GET
     @Path("/list")
     fun listAllCurrentlyRunBots(): List<BotView>
+
+    @GET
+    @Path("/max")
+    fun getMaxBotCount(): Int
+
 }

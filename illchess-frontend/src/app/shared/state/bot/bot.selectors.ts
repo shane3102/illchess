@@ -13,3 +13,8 @@ export const botManagmentShown = createSelector(
     botSelector,
     (state: BotState) => state.isShowed
 )
+
+export const botMaxCount = createSelector(
+    botSelector,
+    (state: BotState) => state.maxBotsCount
+)
