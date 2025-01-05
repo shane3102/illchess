@@ -6,4 +6,6 @@ interface BotViewQueryPort {
     fun listAllCurrentlyRunBots(): List<BotView>
 
     fun getMaxBotCount(): Int
+
+    fun getBotExpirationMinutes(): Long
 }

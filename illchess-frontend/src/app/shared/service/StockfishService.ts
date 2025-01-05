@@ -52,4 +52,10 @@ export class StockfishService {
         )
     }
 
+    async loadBotExpirationMinutes(): Promise<number> {
+        return firstValueFrom(
+            this.http.get<number>(`${this.PATH}/bot/expiration-minutes`)
+        )
+    }
+
 }
