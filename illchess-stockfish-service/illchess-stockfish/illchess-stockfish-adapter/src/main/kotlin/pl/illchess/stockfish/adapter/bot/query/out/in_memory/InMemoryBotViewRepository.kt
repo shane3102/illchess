@@ -18,6 +18,12 @@ class InMemoryBotViewRepository(
     )
     lateinit var maxBotCount: String
 
+    @field:ConfigProperty(
+        name = "bots.expiration-minutes",
+        defaultValue = "5"
+    )
+    lateinit var botExpirationMinutes: String
+
     override fun listAllCurrentlyRunBots() = botCache.values
         .map {
             BotView(it.username.text, it.currentBoardId?.uuid)
@@ -25,6 +31,10 @@ class InMemoryBotViewRepository(
 
     override fun getMaxBotCount(): Int {
         return maxBotCount.toInt()
+    }
+
+    override fun getBotExpirationMinutes(): Long {
+        return botExpirationMinutes.toLong()
     }
 
 }

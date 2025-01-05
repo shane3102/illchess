@@ -32,3 +32,8 @@ export const maxBotCountLoaded = createAction(
     'Max bot count loaded',
     props<{maxCount: number}>()
 )
+
+export const botExpirationMinutesLoaded = createAction(
+    'BotExpiration minutes loaded',
+    props<{expirationMinutes: number}>()
+)

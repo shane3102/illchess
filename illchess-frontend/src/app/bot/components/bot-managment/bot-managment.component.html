@@ -29,8 +29,15 @@
         <div>
             <input [(ngModel)]="added" class="common-text-input" maxlength="10">
         </div> 
+        <div class="bot-button add-bot-button" (click)="randomName()">
+            <fa-icon [icon]="randomIcon"></fa-icon>
+        </div>
         <div class="bot-button add-bot-button" (click)="addBot()">
             <fa-icon [icon]="plusIcon"></fa-icon>
         </div>
+    </div>
+    <div class="bot-info">
+        <fa-icon [icon]="infoIcon"></fa-icon>
+        Bot po dodaniu będzie aktywny przez ok. {{botExpirationMinutes$ | async}} minut
     </div>
 </div>

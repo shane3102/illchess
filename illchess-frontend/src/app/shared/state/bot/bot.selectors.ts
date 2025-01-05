@@ -18,3 +18,8 @@ export const botMaxCount = createSelector(
     botSelector,
     (state: BotState) => state.maxBotsCount
 )
+
+export const botExpirationMinutes = createSelector(
+    botSelector,
+    (state: BotState)=> state.botExpirationMinutes
+)

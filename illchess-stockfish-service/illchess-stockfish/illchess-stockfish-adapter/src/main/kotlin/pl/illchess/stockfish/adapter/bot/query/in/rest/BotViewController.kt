@@ -10,4 +10,6 @@ class BotViewController(
 
     override fun getMaxBotCount() = botViewQueryPort.getMaxBotCount()
 
+    override fun getBotExpirationMinutes() = botViewQueryPort.getBotExpirationMinutes()
+
 }

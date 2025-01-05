@@ -60,6 +60,7 @@ $management-content-height: 40vh;
     text-align: center; 
     transition: color 250ms linear, border-color 250ms linear;
     background-color: rgb(150,75,0);
+    margin-right: 1vw;
 }
 
 .add-bot-button:hover {
@@ -87,4 +88,10 @@ $management-content-height: 40vh;
     width: 80%;
     border-bottom: 0.1vh solid gray;
     align-self: center;
+}
+
+.bot-info {
+    text-align: center; 
+    font-size: small;
+    color: gray;
 }

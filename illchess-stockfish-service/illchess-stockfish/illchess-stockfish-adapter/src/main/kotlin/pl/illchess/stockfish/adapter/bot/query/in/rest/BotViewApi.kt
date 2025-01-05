@@ -15,4 +15,8 @@ interface BotViewApi {
     @Path("/max")
     fun getMaxBotCount(): Int
 
+    @GET
+    @Path("/expiration-minutes")
+    fun getBotExpirationMinutes(): Long
+
 }

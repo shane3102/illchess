@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { StockfishService } from "../../service/StockfishService";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { addBots, currentllyRunBotsLoaded, deleteBots, loadCurrentllyRunBots, maxBotCountLoaded, showOrHideBotsManagement } from "./bot.actions";
+import { addBots, botExpirationMinutesLoaded, currentllyRunBotsLoaded, deleteBots, loadCurrentllyRunBots, maxBotCountLoaded, showOrHideBotsManagement } from "./bot.actions";
 import { from, map, switchMap } from "rxjs";
 import { BotView } from "../../model/stockfish/BotView";
 import { AddBotRequest } from "../../model/stockfish/AddBotRequest";
@@ -34,6 +34,18 @@ export class BotEffects {
                 () => from(this.stockfishService.loadMaxBotCount())
                     .pipe(
                         map((count: number) => maxBotCountLoaded({maxCount: count}))
+                    )
+            )
+        )
+    )
+
+    loadBotExpirationMinutes$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(loadCurrentllyRunBots, showOrHideBotsManagement), 
+            switchMap(
+                () => from(this.stockfishService.loadBotExpirationMinutes())
+                    .pipe(
+                        map((expirationMinutes: number) => botExpirationMinutesLoaded({expirationMinutes: expirationMinutes}))
                     )
             )
         )

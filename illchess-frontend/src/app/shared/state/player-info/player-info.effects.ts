@@ -9,17 +9,17 @@ import { PlayerView } from "../../model/player-info/PlayerView";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
 import { ChessGameState } from "../chess-game.state";
 import { changeUsername, commonPageSizeChange, generateRandomUsername, latestGamesLoaded, loadLatestGames, loadPlayerRanking, playerRankingLoaded } from "./player-info.actions";
+import { GenerateRandomNameService } from "../../service/GenerateRandomNameService";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlayerInfoEffects {
 
-    randomNames: string[] = ["Mark", "Tom", "Pablo", "Jose", "William"]
-
     private store = inject(Store<ChessGameState>)
     private actions$ = inject(Actions)
     private playerInfoService = inject(PlayerInfoService)
+    private generateRandomNameService = inject(GenerateRandomNameService)
 
     loadPlayerRanking$ = createEffect(
         () => this.actions$.pipe(
@@ -79,7 +79,7 @@ export class PlayerInfoEffects {
             ofType(generateRandomUsername),
             tap(
                 () => {
-                    let username: string = this.randomNames[Math.floor(Math.random() * this.randomNames.length)] + Math.floor(100 * Math.random())
+                    let username: string = this.generateRandomNameService.generateRandomName()
                     this.store.dispatch(changeUsername({username: username}))
                 }
             )
