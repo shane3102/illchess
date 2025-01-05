@@ -27,6 +27,12 @@ class QuarkusScopeConfig {
     )
     lateinit var maxBotCount: String
 
+    @field:ConfigProperty(
+        name = "bots.expiration-minutes",
+        defaultValue = "5"
+    )
+    lateinit var botExpirationMinutes: String
+
     @Produces
     @ApplicationScoped
     fun evaluateBoardService(
@@ -60,7 +66,8 @@ class QuarkusScopeConfig {
         loadTopMoves,
         botPerformMove,
         botResignGame,
-        maxBotCount.toInt()
+        maxBotCount.toInt(),
+        botExpirationMinutes.toLong()
     )
 
     @Produces

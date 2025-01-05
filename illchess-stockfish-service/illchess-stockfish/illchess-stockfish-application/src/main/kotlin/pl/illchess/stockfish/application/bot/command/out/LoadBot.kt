@@ -7,4 +7,6 @@ interface LoadBot {
     fun loadBot(username: Username): Bot?
 
     fun botCount(): Int
+
+    fun listBots(): List<Bot>
 }
