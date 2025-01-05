@@ -12,7 +12,7 @@ class GameJpaStreamerRepository(private val jpaStreamer: JPAStreamer) : PanacheR
 
     fun loadById(id: UUID): GameEntity? {
         return jpaStreamer.stream(GameEntity::class.java)
-            .filter(GameEntityMetaModel.id.equal(id))
+            .filter(GameEntityMetaModel.id.`in`(id))
             .findFirst()
             .orElse(null)
     }
