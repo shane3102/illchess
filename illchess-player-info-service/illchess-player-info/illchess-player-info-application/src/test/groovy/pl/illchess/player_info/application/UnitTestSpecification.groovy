@@ -28,6 +28,7 @@ class UnitTestSpecification extends Specification {
 
     protected GameManager gameManager = new GameManager(
             saveGame,
+            loadGame,
             saveUser,
             loadUser,
             createUser,

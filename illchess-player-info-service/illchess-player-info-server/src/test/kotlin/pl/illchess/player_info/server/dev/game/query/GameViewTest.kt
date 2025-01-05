@@ -66,7 +66,7 @@ class GameViewTest : GameViewSpecification() {
         }
 
         // when
-        Thread.sleep(1000)
+        Thread.sleep(2000)
         val result = getLatestGames(0, generatedGames).body()
             .`as`(object : TypeRef<Page<GameSnippetView>>() {})
 

@@ -1,33 +1,37 @@
-FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 as buildApp
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 as buildStockfishApp
 
 USER root
 
 # copy wrapper
 COPY illchess-stockfish-server/.mvn .mvn
 COPY illchess-stockfish-server/mvnw mvnw
+RUN chmod +x mvnw
+RUN sed -i -e 's/\r$//' mvnw
 
 # copy main pom
-RUN mkdir -p /usr/src/app/illchess/illchess-stockfish
-COPY pom.xml /usr/src/app/illchess
+RUN mkdir illchess-stockfish
+COPY pom.xml pom.xml
 # copy domain
-RUN mkdir /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-domain
-COPY illchess-stockfish/illchess-stockfish-domain/pom.xml /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-domain
-COPY illchess-stockfish/illchess-stockfish-domain/src /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-domain/src
+RUN mkdir illchess-stockfish/illchess-stockfish-domain
+COPY illchess-stockfish/illchess-stockfish-domain/pom.xml illchess-stockfish/illchess-stockfish-domain
+COPY illchess-stockfish/illchess-stockfish-domain/src illchess-stockfish/illchess-stockfish-domain/src
 # copy application
-RUN mkdir /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-application
-COPY illchess-stockfish/illchess-stockfish-application/pom.xml /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-application
-COPY illchess-stockfish/illchess-stockfish-application/src /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-application/src
+RUN mkdir illchess-stockfish/illchess-stockfish-application
+COPY illchess-stockfish/illchess-stockfish-application/pom.xml illchess-stockfish/illchess-stockfish-application
+COPY illchess-stockfish/illchess-stockfish-application/src illchess-stockfish/illchess-stockfish-application/src
 # copy adapter
-RUN mkdir /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-adapter
-COPY illchess-stockfish/illchess-stockfish-adapter/pom.xml /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-adapter
-COPY illchess-stockfish/illchess-stockfish-adapter/src /usr/src/app/illchess/illchess-stockfish/illchess-stockfish-adapter/src
+RUN mkdir illchess-stockfish/illchess-stockfish-adapter
+COPY illchess-stockfish/illchess-stockfish-adapter/pom.xml illchess-stockfish/illchess-stockfish-adapter
+COPY illchess-stockfish/illchess-stockfish-adapter/src illchess-stockfish/illchess-stockfish-adapter/src
 # copy server
-RUN mkdir /usr/src/app/illchess/illchess-stockfish-server
-COPY illchess-stockfish-server/pom.xml /usr/src/app/illchess/illchess-stockfish-server
-COPY illchess-stockfish-server/src /usr/src/app/illchess/illchess-stockfish-server/src
+RUN mkdir illchess-stockfish-server
+COPY illchess-stockfish-server/pom.xml illchess-stockfish-server
+COPY illchess-stockfish-server/src illchess-stockfish-server/src
 
-RUN ./mvnw -f /usr/src/app/illchess clean package -DskipTests -N
-RUN ./mvnw -f /usr/src/app/illchess clean package -DskipTests -Dnative
+RUN ls
+RUN ./mvnw clean package -DskipTests -N
+RUN ./mvnw clean package -DskipTests -Dnative
+
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10 as buildStockfish
 ARG PV=17
@@ -51,7 +55,7 @@ USER root
 COPY --from=buildStockfish /usr/local/bin/stockfish /usr/local/bin/stockfish
 ENV PATH="$PATH:/usr/local/bin/stockfish"
 
-COPY --from=buildApp /usr/src/app/illchess/illchess-stockfish-server/target/illchess-stockfish-server-runner /work/illchess-stockfish-server
+COPY --from=buildStockfishApp /project/illchess-stockfish-server/target/illchess-stockfish-server-runner /work/illchess-stockfish-server
 
 RUN chmod 775 /work /work/illchess-stockfish-server \
   && chown -R 1001 /work \

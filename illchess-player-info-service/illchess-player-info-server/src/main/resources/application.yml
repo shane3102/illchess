@@ -1,6 +1,9 @@
 quarkus:
   http:
     port: 420
+  native:
+    resources:
+      includes: db/*.yaml,db/changes/*.yaml
   package:
     jar:
       type: uber-jar
@@ -12,7 +15,7 @@ quarkus:
     password: admin
   liquibase:
     migrate-at-start: true
-    change-log: classpath:db/db.changelog-master.yaml
+    change-log: db/db.changelog-master.yaml
 mp:
   messaging:
     incoming:
