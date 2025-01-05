@@ -11,6 +11,8 @@ urls:
 
 bots:
   max-count: 8
+  expiration-check-cron: "0 */1 * * * ?"
+  expiration-minutes: 5
 
 stockfish:
   default-depth: 15

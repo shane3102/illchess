@@ -1,5 +1,6 @@
 package pl.illchess.stockfish.application.bot.command.`in`
 
+import java.time.LocalDateTime
 import pl.illchess.stockfish.domain.bot.command.AddBots
 import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
@@ -12,10 +13,11 @@ interface AddBotsUseCase {
         val addedBotCmd: List<AddedBotCmd>
     ) {
 
-        fun toCommand() = AddBots(
+        fun toCommand(expirationMinutesBot: Long) = AddBots(
            addedBotCmd.map {
                Bot(
                    Username(it.username),
+                   LocalDateTime.now().plusMinutes(expirationMinutesBot),
                    null,
                    it.obtainedBestMovesCount,
                    it.searchedDepth

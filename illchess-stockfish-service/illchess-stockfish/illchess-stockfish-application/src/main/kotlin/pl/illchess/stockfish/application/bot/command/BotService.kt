@@ -1,5 +1,6 @@
 package pl.illchess.stockfish.application.bot.command
 
+import java.time.LocalDateTime
 import kotlin.concurrent.thread
 import kotlin.random.Random
 import org.slf4j.Logger
@@ -11,6 +12,7 @@ import pl.illchess.stockfish.application.board.command.out.LoadBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
 import pl.illchess.stockfish.application.bot.command.`in`.AddBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteBotsUseCase
+import pl.illchess.stockfish.application.bot.command.`in`.DeleteExpiredBotsUseCase
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
@@ -35,13 +37,14 @@ class BotService(
     private val loadTopMoves: LoadTopMoves,
     private val botPerformMove: BotPerformMove,
     private val botResignGame: BotResignGame,
-    private val botsMaxCount: Int
-) : AddBotsUseCase, DeleteBotsUseCase {
+    private val botsMaxCount: Int,
+    private val botExpirationMinutes: Long
+) : AddBotsUseCase, DeleteBotsUseCase, DeleteExpiredBotsUseCase {
 
     override fun addBots(cmd: AddBotsUseCase.AddBotsCmd) {
         val addedBotCount = cmd.addedBotCmd.count()
         log.info("Adding $addedBotCount bots with usernames: ${cmd.addedBotCmd.map { it.username }}")
-        val command = cmd.toCommand()
+        val command = cmd.toCommand(botExpirationMinutes)
         if (loadBot.botCount() + addedBotCount > botsMaxCount) {
             throw TooManyBotsAddedException(botsMaxCount)
         }
@@ -63,6 +66,20 @@ class BotService(
             }
         }
         log.info("Successfully removed ${cmd.deletedBotsUsernames.count()} bots with usernames: ${cmd.deletedBotsUsernames}")
+    }
+
+    override fun deleteExpiredBots() {
+        val expiredBots = loadBot.listBots().filter { it.expirationDate.isBefore(LocalDateTime.now()) }
+        if(expiredBots.isNotEmpty()) {
+            val expiredBotsCount = expiredBots.size
+            val expiredBotsUsernames = expiredBots.map { it.username }
+            log.info("Found $expiredBotsCount expired bots with usernames: $expiredBotsUsernames. Deleting listed bots")
+            expiredBots.forEach {
+                botResignGame.botResignGame(it)
+                deleteBot.deleteBot(it.username)
+            }
+            log.info("Successfully deleted $expiredBotsCount expired bots with usernames: $expiredBotsUsernames")
+        }
     }
 
     private fun playingGameLogic(username: Username) {
