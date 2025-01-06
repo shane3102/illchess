@@ -1,5 +1,6 @@
 package pl.illchess.player_info.adapter.game.command.`in`.rabbitmq
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.smallrye.reactive.messaging.annotations.Blocking
 import io.smallrye.reactive.messaging.annotations.Merge
@@ -21,7 +22,7 @@ class ObtainNewGameRabbitMqListener(
     @Incoming(value = "obtain-game")
     fun obtainNewGameOrSaveItForLaterOnError(json: ByteArray) {
         // TODO try to not make it ByteArray but JsonObject
-        val objectMapper = jacksonObjectMapper().findAndRegisterModules()
+        val objectMapper = jacksonObjectMapper().findAndRegisterModules().registerModule(JavaTimeModule())
         val message = objectMapper.readValue(json, ObtainNewGameRabbitMqMessage::class.java)
         try {
             obtainNewGameUseCase.obtainNewGame(message.toCmd())

@@ -1,10 +1,12 @@
 package pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto
 
+import io.quarkus.runtime.annotations.RegisterForReflection
 import java.time.LocalDateTime
 import java.util.UUID
 import pl.illchess.player_info.adapter.game.command.`in`.inbox.dto.ObtainNewGameInboxMessage
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 
+@RegisterForReflection
 data class ObtainNewGameRabbitMqMessage(
     val gameId: UUID,
     val whiteUsername: String,
@@ -13,6 +15,7 @@ data class ObtainNewGameRabbitMqMessage(
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMovesRabbitMqMessage>
 ) {
+    @RegisterForReflection
     data class PerformedMovesRabbitMqMessage(
         val startSquare: String,
         val endSquare: String,

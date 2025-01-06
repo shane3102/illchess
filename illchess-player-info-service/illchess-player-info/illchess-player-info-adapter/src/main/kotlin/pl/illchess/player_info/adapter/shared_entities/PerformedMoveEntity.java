@@ -1,10 +1,12 @@
 package pl.illchess.player_info.adapter.shared_entities;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@RegisterForReflection
 public class PerformedMoveEntity {
     public String startSquare;
     public String endSquare;
