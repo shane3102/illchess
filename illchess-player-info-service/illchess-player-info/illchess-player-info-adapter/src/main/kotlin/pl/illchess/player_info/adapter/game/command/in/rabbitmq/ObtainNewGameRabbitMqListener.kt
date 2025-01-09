@@ -9,6 +9,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming
 import pl.illchess.player_info.adapter.game.command.`in`.rabbitmq.dto.ObtainNewGameRabbitMqMessage
 import pl.illchess.player_info.application.game.command.`in`.ObtainNewGameUseCase
 import pl.illchess.player_info.domain.commons.exception.DomainException
+import pl.illchess.player_info.domain.game.exception.GameAlreadyExistsException
 import pl.shane3102.messaging.quarkus.runtime.aggregator.InboxOutbox
 
 @ApplicationScoped
@@ -26,6 +27,7 @@ class ObtainNewGameRabbitMqListener(
         val message = objectMapper.readValue(json, ObtainNewGameRabbitMqMessage::class.java)
         try {
             obtainNewGameUseCase.obtainNewGame(message.toCmd())
+        } catch (ignored: GameAlreadyExistsException) {
         } catch (e: DomainException) {
             inboxOutbox.saveMessage(message.toInboxMessage())
         }

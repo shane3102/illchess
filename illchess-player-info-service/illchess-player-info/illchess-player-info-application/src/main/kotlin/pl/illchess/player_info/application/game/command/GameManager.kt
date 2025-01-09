@@ -64,6 +64,9 @@ class GameManager(
             )
 
             publishEvent.publish("game.saved", GameSavedEvent(game.id))
+        } catch (e: GameAlreadyExistsException) {
+            log.info("Game with id: ${cmd.id} already saved")
+            publishEvent.publish("game.saved", GameSavedEvent(GameId(cmd.id)))
         } catch (d: DomainException) {
             log.error("Error while saving game with id ${cmd.id}")
             publishEvent.publish("game.error", ErrorWhileSavingGameEvent(GameId(cmd.id)))
