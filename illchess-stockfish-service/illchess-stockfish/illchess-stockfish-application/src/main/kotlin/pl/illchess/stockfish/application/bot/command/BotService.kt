@@ -6,6 +6,7 @@ import kotlin.random.Random
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
+import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoard
@@ -37,6 +38,7 @@ class BotService(
     private val loadTopMoves: LoadTopMoves,
     private val botPerformMove: BotPerformMove,
     private val botResignGame: BotResignGame,
+    private val botQuitNotYetStartedGame: BotQuitNotYetStartedGame,
     private val botsMaxCount: Int,
     private val botExpirationMinutes: Long
 ) : AddBotsUseCase, DeleteBotsUseCase, DeleteExpiredBotsUseCase {
@@ -62,6 +64,7 @@ class BotService(
             val deletedBot = loadBot.loadBot(username)
             if (deletedBot != null) {
                 botResignGame.botResignGame(deletedBot)
+                botQuitNotYetStartedGame.quitNotYetStartedGame(deletedBot)
                 deleteBot.deleteBot(username)
             }
         }
@@ -70,12 +73,13 @@ class BotService(
 
     override fun deleteExpiredBots() {
         val expiredBots = loadBot.listBots().filter { it.expirationDate.isBefore(LocalDateTime.now()) }
-        if(expiredBots.isNotEmpty()) {
+        if (expiredBots.isNotEmpty()) {
             val expiredBotsCount = expiredBots.size
             val expiredBotsUsernames = expiredBots.map { it.username }
             log.info("Found $expiredBotsCount expired bots with usernames: $expiredBotsUsernames. Deleting listed bots")
             expiredBots.forEach {
                 botResignGame.botResignGame(it)
+                botQuitNotYetStartedGame.quitNotYetStartedGame(it)
                 deleteBot.deleteBot(it.username)
             }
             log.info("Successfully deleted $expiredBotsCount expired bots with usernames: $expiredBotsUsernames")
