@@ -8,3 +8,15 @@
     height: $popup-content-height;
     width: $popup-content-width;
 }
+
+.quit-game-button {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    user-select: none;
+    transition: border-color 250ms linear, color 250ms linear;
+}
+
+.quit-game-button:hover {
+    color: green;
+}

@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded, boardLoadingError } from "./board.actions";
+import { boardLoaded, checkLegalMoves, boardInitialized, draggedPieceReleased, illegalMove, initializeBoard, legalMovesChanged, movePiece, refreshBoard, refreshBoardWithPreMoves, gameFinished, gameFinishedLoaded, boardLoadingError, quitNotYetStartedGame } from "./board.actions";
 import { Observable, catchError, from, map, of, switchMap, tap } from "rxjs";
 import { GameService } from "../../service/GameService";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
@@ -13,6 +13,7 @@ import { PlayerInfoService } from "../../service/PlayerInfoService";
 import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 import { Router } from "@angular/router";
+import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -116,6 +117,21 @@ export class BoardEffects {
         ),
         {
             dispatch:  false
+        }
+    )
+
+    quitNotYetStartedGame$ = createEffect(
+        () => this.actions$.pipe(
+            ofType(quitNotYetStartedGame),
+            tap(
+                (dto: QuitOccupiedBoardRequest) => {
+                    this.chessBoardService.quitNotYetStartedGame(dto)
+                    this.router.navigateByUrl('')
+                }
+            )
+        ),
+        {
+            dispatch: false
         }
     )
 

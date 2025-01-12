@@ -63,9 +63,7 @@ class BotService(
         command.usernames.forEach { username ->
             val deletedBot = loadBot.loadBot(username)
             if (deletedBot != null) {
-                botResignGame.botResignGame(deletedBot)
-                botQuitNotYetStartedGame.quitNotYetStartedGame(deletedBot)
-                deleteBot.deleteBot(username)
+                wipeOutBotExistence(deletedBot)
             }
         }
         log.info("Successfully removed ${cmd.deletedBotsUsernames.count()} bots with usernames: ${cmd.deletedBotsUsernames}")
@@ -77,11 +75,7 @@ class BotService(
             val expiredBotsCount = expiredBots.size
             val expiredBotsUsernames = expiredBots.map { it.username }
             log.info("Found $expiredBotsCount expired bots with usernames: $expiredBotsUsernames. Deleting listed bots")
-            expiredBots.forEach {
-                botResignGame.botResignGame(it)
-                botQuitNotYetStartedGame.quitNotYetStartedGame(it)
-                deleteBot.deleteBot(it.username)
-            }
+            expiredBots.forEach { wipeOutBotExistence(it) }
             log.info("Successfully deleted $expiredBotsCount expired bots with usernames: $expiredBotsUsernames")
         }
     }
@@ -165,6 +159,12 @@ class BotService(
 
     private fun isGameFinished(boardAdditionalInfoView: BoardAdditionalInfo) =
         boardAdditionalInfoView.victoriousPlayerColor != null
+
+    private fun wipeOutBotExistence(bot: Bot) {
+        botResignGame.botResignGame(bot)
+        botQuitNotYetStartedGame.quitNotYetStartedGame(bot)
+        deleteBot.deleteBot(bot.username)
+    }
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(BotService::class.java)

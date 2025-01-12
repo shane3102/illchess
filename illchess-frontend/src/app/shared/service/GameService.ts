@@ -16,6 +16,7 @@ import { ProposeTakingBackMoveRequest } from "../model/game/ProposeTakingBackMov
 import { RejectDrawRequest } from "../model/game/RejectDrawRequest";
 import { RejectTakingBackMoveRequest } from "../model/game/RejectTakingBackMoveRequest";
 import { ResignGameRequest } from "../model/game/ResignGameRequest";
+import { QuitOccupiedBoardRequest } from "../model/game/QuitOccupiedBoardRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -80,6 +81,10 @@ export class GameService {
 
     async acceptTakingBackMove(acceptTakingBackMove: AcceptTakingBackMoveRequest): Promise<void> {
         return firstValueFrom(this.httpService.put<void>(`${this.PATH}/accept-take-back-move`, acceptTakingBackMove))
+    }
+
+    async quitNotYetStartedGame(quitOccupiedBoardRequest: QuitOccupiedBoardRequest): Promise<void> {
+        return firstValueFrom(this.httpService.put<void>(`${this.PATH}/quit-not-yet-started`, quitOccupiedBoardRequest))
     }
 
 }
