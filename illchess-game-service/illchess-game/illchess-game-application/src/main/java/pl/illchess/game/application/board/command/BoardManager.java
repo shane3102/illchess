@@ -1,5 +1,6 @@
 package pl.illchess.game.application.board.command;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseC
 import pl.illchess.game.application.board.command.in.MovePieceUseCase;
 import pl.illchess.game.application.board.command.in.ProposeDrawUseCase;
 import pl.illchess.game.application.board.command.in.ProposeTakingBackLastMoveUseCase;
+import pl.illchess.game.application.board.command.in.QuitOccupiedBoardUseCase;
 import pl.illchess.game.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.game.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.game.application.board.command.in.ResignGameUseCase;
@@ -31,6 +33,7 @@ import pl.illchess.game.domain.board.command.JoinOrInitializeNewGame;
 import pl.illchess.game.domain.board.command.MovePiece;
 import pl.illchess.game.domain.board.command.ProposeDraw;
 import pl.illchess.game.domain.board.command.ProposeTakingBackMove;
+import pl.illchess.game.domain.board.command.QuitOccupiedBoard;
 import pl.illchess.game.domain.board.command.RejectDraw;
 import pl.illchess.game.domain.board.command.RejectTakingBackMove;
 import pl.illchess.game.domain.board.command.Resign;
@@ -39,12 +42,14 @@ import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
 import pl.illchess.game.domain.board.event.BoardStateUpdated;
 import pl.illchess.game.domain.board.event.GameFinished;
 import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesOfUsernameUpdated;
+import pl.illchess.game.domain.board.exception.BoardCanNotBeQuitAsAlreadyStartedException;
 import pl.illchess.game.domain.board.exception.BoardNotFoundException;
 import pl.illchess.game.domain.board.model.Board;
 import pl.illchess.game.domain.board.model.BoardId;
 import pl.illchess.game.domain.board.model.FenBoardString;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.GameState;
+import pl.illchess.game.domain.board.model.state.player.Player;
 import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
 import static pl.illchess.game.domain.board.model.state.GameState.CONTINUE;
@@ -63,7 +68,8 @@ public class BoardManager implements
     RejectTakingBackLastMoveUseCase,
     AcceptTakingBackLastMoveUseCase,
     EstablishFenStringOfBoardUseCase,
-    DeleteBoardWithFinishedGameUseCase {
+    DeleteBoardWithFinishedGameUseCase,
+    QuitOccupiedBoardUseCase {
 
     private static final Logger log = LoggerFactory.getLogger(BoardManager.class);
 
@@ -299,5 +305,20 @@ public class BoardManager implements
         DeleteBoardWithFinishedGame command = cmd.toCommand();
         deleteBoard.deleteBoard(command.boardId());
         log.info("Successfully deleted board with finished game with id = {}", cmd.boardId());
+    }
+
+    @Override
+    public void quitOccupiedBoard(QuitOccupiedBoardCmd cmd) {
+        log.info("Quiting occupied board with id: {} by username: {} ", cmd.boardId(), cmd.username());
+        QuitOccupiedBoard command = cmd.toCommand();
+        Board board = loadBoard.loadBoard(command.boardId()).orElseThrow(() -> new BoardNotFoundException(command.boardId()));
+        Player whitePlayer = board.boardState().whitePlayer();
+        Player blackPlayer = board.boardState().blackPlayer();
+        if (Objects.equals(whitePlayer.username(), command.username()) && blackPlayer == null) {
+            deleteBoard.deleteBoard(command.boardId());
+        } else {
+            throw new BoardCanNotBeQuitAsAlreadyStartedException(command.boardId());
+        }
+        log.info("Player with username: {} successfully quit not yet started game on board with id: {}", cmd.username(), cmd.boardId());
     }
 }
