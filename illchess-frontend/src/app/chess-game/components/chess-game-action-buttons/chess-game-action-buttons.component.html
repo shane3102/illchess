@@ -4,14 +4,15 @@
             info="Poddaj gre" 
             [icon]="flag" 
             (click)="resignGame()"
-            [disabled]="gameState != 'CONTINUE'"></app-chess-game-button>
+            [disabled]="gameState != 'CONTINUE' || blackPlayer == undefined"></app-chess-game-button>
         <app-chess-game-button 
             info="Zaproponuj remis" 
             [icon]="handshake" 
             (click)="proposeDraw()"
             [disabled]="gameState != 'CONTINUE' || (color == PieceColor.BLACK 
                 ? (whitePlayer?.username != username && blackPlayer?.isProposingDraw)! 
-                : (blackPlayer?.username != username && whitePlayer?.isProposingDraw)!)"></app-chess-game-button>
+                : (blackPlayer?.username != username && whitePlayer?.isProposingDraw)!)
+                || blackPlayer == undefined"></app-chess-game-button>
         <app-chess-game-button 
             info="Poproś o cofnięcie ruchu" 
             [icon]="back"

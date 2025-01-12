@@ -12,7 +12,7 @@
 
     <div style="position: absolute;">
         @if(!boardView.blackUsername) {
-            <app-waiting-for-black-popup></app-waiting-for-black-popup>
+            <app-waiting-for-black-popup [boardId]="boardId" [username]="username"></app-waiting-for-black-popup>
         }
     </div>
 

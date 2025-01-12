@@ -10,6 +10,7 @@ import { PieceDraggedInfo } from "../../model/game/PieceDraggedInfo";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
+import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
 
 export const movePiece = createAction(
     'Move piece',
@@ -79,5 +80,10 @@ export const gameFinished = createAction(
 export const gameFinishedLoaded = createAction(
     'Game finished view loaded', 
     props<GameFinishedView>()
+)
+
+export const quitNotYetStartedGame = createAction(
+    'Quit game that is not yet started',
+    props<QuitOccupiedBoardRequest>()
 )
 

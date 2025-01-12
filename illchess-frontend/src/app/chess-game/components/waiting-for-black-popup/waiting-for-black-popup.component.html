@@ -1,10 +1,13 @@
 <div class="popup-content">
     <div class="content-obtain">
-        <div>
-            <app-spinner></app-spinner>
-        </div>
         <div style="text-align: center;">
             <b>Oczekiwanie na drugiego gracza...</b>
+        </div>
+        <div>
+            <app-spinner></app-spinner>
+        </div>   
+        <div class="common-text-input quit-game-button" (click)="quitNotYetStartedGame()">
+            Porzuć grę
         </div>
     </div>
 </div>
