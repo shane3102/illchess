@@ -1,5 +1,7 @@
 package pl.illchess.game.adapter.board.command.in.rest;
 
+import java.util.Set;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import pl.illchess.game.adapter.board.command.in.rest.dto.LegalMovesResponse;
 import pl.illchess.game.adapter.board.command.in.rest.dto.MovePieceRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ProposeDrawRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ProposeTakingBackMoveRequest;
+import pl.illchess.game.adapter.board.command.in.rest.dto.QuitOccupiedBoardRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectDrawRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectTakingBackMoveRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest;
@@ -25,16 +28,13 @@ import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseC
 import pl.illchess.game.application.board.command.in.MovePieceUseCase;
 import pl.illchess.game.application.board.command.in.ProposeDrawUseCase;
 import pl.illchess.game.application.board.command.in.ProposeTakingBackLastMoveUseCase;
+import pl.illchess.game.application.board.command.in.QuitOccupiedBoardUseCase;
 import pl.illchess.game.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.game.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.game.application.board.command.in.ResignGameUseCase;
 import pl.illchess.game.domain.board.model.BoardId;
 import pl.illchess.game.domain.board.model.FenBoardString;
 import pl.illchess.game.domain.board.model.square.Square;
-
-import java.util.Set;
-import java.util.UUID;
-
 import static org.springframework.http.HttpStatus.OK;
 
 @Controller
@@ -52,6 +52,7 @@ public class BoardCommandController implements BoardCommandApi {
     private final ProposeTakingBackLastMoveUseCase proposeTakingBackLastMoveUseCase;
     private final AcceptTakingBackLastMoveUseCase acceptTakingBackLastMoveUseCase;
     private final RejectTakingBackLastMoveUseCase rejectTakingBackLastMoveUseCase;
+    private final QuitOccupiedBoardUseCase quitOccupiedBoardUseCase;
 
     @Override
     public ResponseEntity<InitializedBoardResponse> initializeNewBoard(InitializeNewBoardRequest initializeNewBoardRequest) {
@@ -133,6 +134,12 @@ public class BoardCommandController implements BoardCommandApi {
     @Override
     public ResponseEntity<Void> rejectTakingBackMove(RejectTakingBackMoveRequest request) {
         rejectTakingBackLastMoveUseCase.rejectTakingBackLastMove(request.toCmd());
+        return new ResponseEntity<>(OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> quitNotYetStartedGame(QuitOccupiedBoardRequest request) {
+        quitOccupiedBoardUseCase.quitOccupiedBoard(request.toCmd());
         return new ResponseEntity<>(OK);
     }
 }

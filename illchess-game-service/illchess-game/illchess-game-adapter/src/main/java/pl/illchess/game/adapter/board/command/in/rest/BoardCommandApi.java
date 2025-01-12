@@ -17,6 +17,7 @@ import pl.illchess.game.adapter.board.command.in.rest.dto.LegalMovesResponse;
 import pl.illchess.game.adapter.board.command.in.rest.dto.MovePieceRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ProposeDrawRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ProposeTakingBackMoveRequest;
+import pl.illchess.game.adapter.board.command.in.rest.dto.QuitOccupiedBoardRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectDrawRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectTakingBackMoveRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest;
@@ -69,5 +70,9 @@ public interface BoardCommandApi {
     @ResponseBody
     @PutMapping(value = "/reject-take-back-move", produces = "application/json")
     ResponseEntity<Void> rejectTakingBackMove(@RequestBody RejectTakingBackMoveRequest request);
+
+    @ResponseBody
+    @PutMapping(value = "/quit-not-yet-started", produces = "application/json")
+    ResponseEntity<Void> quitNotYetStartedGame(@RequestBody QuitOccupiedBoardRequest request);
 
 }
