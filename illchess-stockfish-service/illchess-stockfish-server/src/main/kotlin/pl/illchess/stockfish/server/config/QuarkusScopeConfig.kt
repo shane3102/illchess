@@ -12,6 +12,7 @@ import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndC
 import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
+import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoard
@@ -55,7 +56,8 @@ class QuarkusScopeConfig {
         loadBoard: LoadBoard,
         loadTopMoves: LoadTopMoves,
         botPerformMove: BotPerformMove,
-        botResignGame: BotResignGame
+        botResignGame: BotResignGame,
+        botQuitNotYetStartedGame: BotQuitNotYetStartedGame,
     ) = BotService(
         saveBot,
         loadBot,
@@ -66,6 +68,7 @@ class QuarkusScopeConfig {
         loadTopMoves,
         botPerformMove,
         botResignGame,
+        botQuitNotYetStartedGame,
         maxBotCount.toInt(),
         botExpirationMinutes.toLong()
     )

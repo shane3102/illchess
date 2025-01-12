@@ -15,8 +15,10 @@ import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.FenBoardPositi
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializeNewBoardRequest
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.InitializedBoardResponse
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.PerformMoveRequest
+import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.QuitNotYetStartedGameRequest
 import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.ResignGameRequest
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
+import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoard
@@ -35,7 +37,7 @@ class OkHttpLoadBoardAdapter(
         DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
         false
     )
-) : LoadBoard, LoadBoardAdditionalInfo, JoinOrInitializeBoard, BotPerformMove, BotResignGame {
+) : LoadBoard, LoadBoardAdditionalInfo, JoinOrInitializeBoard, BotPerformMove, BotResignGame, BotQuitNotYetStartedGame {
 
     @field:ConfigProperty(name = "urls.game-service")
     lateinit var gameServiceUrl: String
@@ -49,7 +51,12 @@ class OkHttpLoadBoardAdapter(
 
         val fenBoardPosition: FenBoardPosition? =
             if (response.body == null || response.code != 200) null
-            else FenBoardPosition(objectMapper.readValue(response.body?.string(), FenBoardPositionResponse::class.java).value)
+            else FenBoardPosition(
+                objectMapper.readValue(
+                    response.body?.string(),
+                    FenBoardPositionResponse::class.java
+                ).value
+            )
 
         return fenBoardPosition
     }
@@ -122,6 +129,20 @@ class OkHttpLoadBoardAdapter(
 
         val request: Request = Request.Builder()
             .url("${gameServiceUrl}/api/board/resign")
+            .put(requestBody)
+            .build()
+        val call = okHttpClient.newCall(request)
+        call.execute()
+    }
+
+    override fun quitNotYetStartedGame(bot: Bot) {
+        val quitNotYetStartedGameRequest = QuitNotYetStartedGameRequest(bot.currentBoardId!!.uuid, bot.username.text)
+
+        val mediaType: MediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = objectMapper.writeValueAsString(quitNotYetStartedGameRequest).toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .url("${gameServiceUrl}/api/board/quit-not-yet-started")
             .put(requestBody)
             .build()
         val call = okHttpClient.newCall(request)
