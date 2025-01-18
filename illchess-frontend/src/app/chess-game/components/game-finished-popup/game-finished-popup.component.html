@@ -1,7 +1,7 @@
 <div class="popup-content">
     @if((!boardGameObtainedInfoView) || (boardGameObtainedInfoView.status == 'SUCCESS' && !gameFinishedView)) {
         <div class="content-obtain">
-            <app-spinner></app-spinner>
+            <app-spinner [size]="10"></app-spinner>
         </div>
     } @else {
         @if(boardGameObtainedInfoView.status == 'SUCCESS' && gameFinishedView) {
