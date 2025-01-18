@@ -1,17 +1,19 @@
+$size: 10vh;
+
 .lds-ring {
     display: inline-block;
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: $size;
+    height: $size;
   }
   .lds-ring div {
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 8px solid rgb(150,75,0);
+    width: calc(4/5 * $size);
+    height: calc(4/5 * $size);
+    margin: calc(1/10 * $size);
+    border: calc(1/10 * $size) solid rgb(150,75,0);
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: rgb(150,75,0) transparent transparent transparent;

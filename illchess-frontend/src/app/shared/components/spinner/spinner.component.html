@@ -1,6 +1,34 @@
-<div class="lds-ring">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
+<div class="lds-ring" [ngStyle]="size ? {'width': size+'vw', 'height': size+'vw'} : {}">
+    <div
+        [ngStyle]="size ? {
+            'width': ringSize+'vw',
+            'height': ringSize+'vw',
+            'margin': marginAndBorderSize+'vw',
+            'border-width': marginAndBorderSize+'vw',
+        } : {}"
+    ></div>
+    <div
+        [ngStyle]="size ? {
+            'width': ringSize+'vw',
+            'height': ringSize+'vw',
+            'margin': marginAndBorderSize+'vw',
+            'border-width': marginAndBorderSize+'vw',
+        } : {}"
+    ></div>
+    <div
+        [ngStyle]="size ? {
+            'width': ringSize+'vw',
+            'height': ringSize+'vw',
+            'margin': marginAndBorderSize+'vw',
+            'border-width': marginAndBorderSize+'vw',
+        } : {}"
+    ></div>
+    <div
+        [ngStyle]="size ? {
+            'width': ringSize+'vw',
+            'height': ringSize+'vw',
+            'margin': marginAndBorderSize+'vw',
+            'border-width': marginAndBorderSize+'vw',
+        } : {}"
+    ></div>
 </div>
