@@ -1,44 +1,46 @@
-<div *ngIf="pieceInfo" [ngSwitch]="pieceInfo.type" class="piece-mini">
-    <div *ngSwitchCase="Piece.PAWN">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wP.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bP.svg" />
+@if(pieceInfo) {
+    @switch (pieceInfo.type) {
+        @case (Piece.PAWN) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wP.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bP.svg" />
+            }
         }
-    </div>
-    <div *ngSwitchCase="Piece.KNIGHT">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wN.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bN.svg" />
+        @case (Piece.KNIGHT) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wN.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bN.svg" />
+            }
         }
-    </div>
-    <div *ngSwitchCase="Piece.BISHOP">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wB.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bB.svg" />
+        @case (Piece.BISHOP) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wB.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bB.svg" />
+            }
         }
-    </div>
-    <div *ngSwitchCase="Piece.ROOK">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wR.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bR.svg" />
+        @case (Piece.ROOK) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wR.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bR.svg" />
+            }
         }
-    </div>
-    <div *ngSwitchCase="Piece.QUEEN">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wQ.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bQ.svg" />
+        @case (Piece.QUEEN) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wQ.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bQ.svg" />
+            }
         }
-    </div>
-    <div *ngSwitchCase="Piece.KING">
-        @if(pieceInfo.color == PieceColor.WHITE) {
-            <img class="piece-mini" src="assets/chess-pieces/wK.svg" />
-        } @else {
-            <img class="piece-mini" src="assets/chess-pieces/bK.svg" />
+        @case (Piece.KING) {
+            @if(pieceInfo.color == PieceColor.WHITE) {
+                <img class="piece-mini" src="assets/chess-pieces/wK.svg" />
+            } @else {
+                <img class="piece-mini" src="assets/chess-pieces/bK.svg" />
+            }
         }
-    </div>
-</div>
+    }
+}

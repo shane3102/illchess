@@ -7,7 +7,7 @@
                     <div *ngFor="let file of files">
                         <div class="chess-square"
                             [ngStyle]="{'background-color': calculateSquareColor({file: file, rank: rank})}">
-                            <app-chess-piece-mini [pieceInfo]="
+                            <app-chess-piece-mini class="chess-square" [pieceInfo]="
                                 boardView?.piecesLocations ?
                                 boardView?.piecesLocations![file+rank] ?
                                 boardView?.piecesLocations![file+rank] :
