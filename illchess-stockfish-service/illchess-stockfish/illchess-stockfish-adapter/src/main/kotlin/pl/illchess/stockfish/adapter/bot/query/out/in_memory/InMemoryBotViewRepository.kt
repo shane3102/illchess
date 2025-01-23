@@ -25,6 +25,7 @@ class InMemoryBotViewRepository(
     lateinit var botExpirationMinutes: String
 
     override fun listAllCurrentlyRunBots() = botCache.values
+        .sortedBy { it.expirationDate }
         .map {
             BotView(it.username.text, it.currentBoardId?.uuid)
         }
