@@ -16,4 +16,10 @@ Configuration:
 * **urls.stockfish-api**<br>
     Determines url of engine provided by api
     (used only when **working.mode** is set to **API**, default value is: **https://stockfish.online/api/s/v2.php**)
-    
+* **bots.max-count** <br>
+Determines maximum count of simultaneously playing bots
+* **bots.expiration-check-cron** <br>
+Cron for checking if bot is expired
+* **bots.expiration-minutes** <br>
+Determines amount of minutes which bot is playing games
+ 

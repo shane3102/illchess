@@ -24,10 +24,15 @@ For presenting real time data about active games (for example current position) 
 >#### illchess-stockfish
 >Implementation: Kotlin + Quarkus
 >>Service responsible for communication with stockfish chess engine.
-Provides evaluation and best moves in position based on game privided by **illchess-game** service.
-Has two modes:
->>* engine - service is communicating with engine present on host machine 
->>* API - service is communicating API available here: https://stockfish.online/
+Provides evaluation and best moves in position based on game provided by **illchess-game** service.
+>> Service also provides bot management and logic. Configuration of bot functionality includes:
+>> * **bots.max-count** - maximum count of simultaneously playing bots 
+>> * **bots.expiration-check-cron** - cron for checking if bot is expired
+>> * **bots.expiration-minutes** - amount of minutes which bot is playing games
+>>
+>>Service has two modes of operation:
+>>* **engine** - service is communicating with engine present on host machine 
+>>* **API** - service is communicating API available here: https://stockfish.online/
 
 >#### illchess-player-info
 >Implementation: Kotlin + Quarkus
