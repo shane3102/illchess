@@ -22,16 +22,16 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.10.0</quarkus.platform.version>
+        <quarkus.platform.version>3.19.2</quarkus.platform.version>
         <surefire-plugin.version>3.2.5</surefire-plugin.version>
-        <logback.version>1.4.14</logback.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.5.17</logback.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <spock.version>2.4-M4-groovy-4.0</spock.version>
         <groovy-all.version>4.0.16</groovy-all.version>
         <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
         <jpastreamer.version>3.0.3.Final</jpastreamer.version>
-        <lombok.version>1.18.30</lombok.version>
-        <jackson.module.kotlin.version>2.9.8</jackson.module.kotlin.version>
+        <lombok.version>1.18.36</lombok.version>
+        <jackson.module.kotlin.version>2.18.3</jackson.module.kotlin.version>
         <awaitility.version>4.2.0</awaitility.version>
         <inbox-outbox.version>1.0.0</inbox-outbox.version>
     </properties>
