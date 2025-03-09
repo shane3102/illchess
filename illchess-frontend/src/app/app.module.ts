@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ChessGameModule } from './chess-game/chess-game.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -15,28 +15,27 @@ import { HeaderUsernameInputComponent } from './components/header-username-input
 import { BotModule } from './bot/bot.module';
 import { BotsHeaderButtonComponent } from './components/bots-header-button/bots-header-button.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    MainPageComponent,
-    HeaderComponent,
-    HeaderButtonComponent,
-    HeaderUsernameInputComponent,
-    BotsHeaderButtonComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FontAwesomeModule,
-    ChessGameModule,
-    PlayerInfoModule,
-    BotModule,
-    HttpClientModule,
-    FontAwesomeModule
-  ],
-  providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy },
-  ],
-  bootstrap: [AppComponent]
+@NgModule({ 
+    declarations: [
+        AppComponent,
+        MainPageComponent,
+        HeaderComponent,
+        HeaderButtonComponent,
+        HeaderUsernameInputComponent,
+        BotsHeaderButtonComponent
+    ],
+    bootstrap: [AppComponent], 
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FontAwesomeModule,
+        ChessGameModule,
+        PlayerInfoModule,
+        BotModule,
+        FontAwesomeModule], 
+    providers: [
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] 
 })
 export class AppModule { }
