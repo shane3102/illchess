@@ -6,12 +6,12 @@ import { BoardView } from '../../../shared/model/game/BoardView';
 import { CheckLegalMovesRequest } from '../../../shared/model/game/CheckLegalMovesRequest';
 import { IllegalMoveResponse } from '../../../shared/model/game/IllegalMoveView';
 import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
-import { PieceDraggedInfo } from '../../../shared/model/game/PieceDraggedInfo';
+import { PieceSelectedInfo } from '../../../shared/model/game/PieceSelectedInfo';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
-import { boardLoaded, checkLegalMoves, draggedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../../shared/state/board/board.actions';
-import { boardGameObtainedInfoView, boardSelector, draggedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../../shared/state/board/board.selectors';
+import { boardLoaded, checkLegalMoves, selectedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../../shared/state/board/board.actions';
+import { boardGameObtainedInfoView, boardSelector, selectedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../../shared/state/board/board.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
 import { GameFinishedView } from '../../../shared/model/player-info/GameFinishedView';
@@ -31,7 +31,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   boardView$: Observable<BoardView> = this.store.select(boardSelector);
   illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
-  draggedPieceInfo$: Observable<PieceDraggedInfo | undefined> = this.store.select(draggedPieceSelector)
+  selectedPieceInfo$: Observable<PieceSelectedInfo | undefined> = this.store.select(selectedPieceSelector)
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
   victoriousPlayerColor$: Observable<string | null | undefined> = this.store.select(victoriousPlayerColorSelector)
   gameState$: Observable<'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
@@ -102,12 +102,12 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
     this.obtainStatusSubscription$.unsubscribe()
   }
 
-  pieceDraggedChange(pieceDraggedInfo: PieceDraggedInfo) {
-    this.store.dispatch(draggedPieceChanged(pieceDraggedInfo))
+  pieceSelectedChange(pieceSelectedInfo: PieceSelectedInfo) {
+    this.store.dispatch(selectedPieceChanged(pieceSelectedInfo))
     let request: CheckLegalMovesRequest = {
       'boardId': this.boardId,
-      'startSquare': pieceDraggedInfo.squareInfo.file + pieceDraggedInfo.squareInfo.rank,
-      'pieceColor': pieceDraggedInfo.pieceInfo.color,
+      'startSquare': pieceSelectedInfo.squareInfo.file + pieceSelectedInfo.squareInfo.rank,
+      'pieceColor': pieceSelectedInfo.pieceInfo.color,
       'username': this.username
     }
     this.store.dispatch(checkLegalMoves(request))

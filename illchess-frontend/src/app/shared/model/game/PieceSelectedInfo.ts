@@ -1,7 +1,7 @@
 import { PieceInfo } from "./PieceInfo";
 import { SquareInfo } from "./SquareInfo";
 
-export class PieceDraggedInfo {
+export class PieceSelectedInfo {
     pieceInfo: PieceInfo;
     squareInfo: SquareInfo;
 

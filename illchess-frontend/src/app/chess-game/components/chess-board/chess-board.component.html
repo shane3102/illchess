@@ -20,7 +20,7 @@
         <div style="display: flex; justify-content: center;">
             <div *ngFor="let file of files">
                 <app-chess-square 
-                    (pieceDraggedInfoEmitter)="pieceDraggedChange($event)"
+                    (pieceSelectedInfoEmitter)="pieceSelectedChange($event)"
                     (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
                     (pieceDraggedReleasedInfoEmitter)="pieceDraggedRelease()" 
                     [boardId]="boardId" 
@@ -30,7 +30,7 @@
                     undefined : 
                     undefined" 
                     [illegalMoveResponse]="illegalMoveResponse$"
-                    [draggedPieceInfo]="draggedPieceInfo$ | async" 
+                    [selectedPieceInfo]="selectedPieceInfo$ | async" 
                     [squareInfo]="{file: file, rank: rank}"
                     [legalMoves]="legalMoves$ | async" 
                     [username]="username"

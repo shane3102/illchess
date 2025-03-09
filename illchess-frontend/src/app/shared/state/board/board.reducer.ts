@@ -2,8 +2,8 @@ import { createReducer, on } from "@ngrx/store";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { BoardView } from "../../model/game/BoardView";
 import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
-import { PieceDraggedInfo } from "../../model/game/PieceDraggedInfo";
-import { boardInitialized, boardLoaded, draggedPieceChanged, draggedPieceReleased, gameFinished, gameFinishedLoaded, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
+import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
+import { boardInitialized, boardLoaded, selectedPieceChanged, draggedPieceReleased, gameFinished, gameFinishedLoaded, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
 import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 
@@ -13,7 +13,7 @@ export interface BoardState {
     error: string;
     illegalMoveHighlightSquare: string
     illegalMoveMessage: string
-    pieceDraggedInfo?: PieceDraggedInfo,
+    pieceSelectedInfo?: PieceSelectedInfo,
     legalMoves?: BoardLegalMovesResponse,
     gameFinishedInfo: {boardGameObtainedInfoView?: BoardGameObtainedInfoView, gameFinishedView?: GameFinishedView}
     status: 'pending' | 'loading' | 'error' | 'success'
@@ -59,13 +59,13 @@ export const boardReducer = createReducer(
         )
     ),
 
-    // dragged piece changed
+    // selected piece changed
     on(
-        draggedPieceChanged,
-        (state: BoardState, content: PieceDraggedInfo) => (
+        selectedPieceChanged,
+        (state: BoardState, content: PieceSelectedInfo) => (
             {
                 ...state,
-                pieceDraggedInfo: content,
+                pieceSelectedInfo: content,
                 illegalMoveHighlightSquare: "",
                 illegalMoveMessage: ""
             }
@@ -89,6 +89,7 @@ export const boardReducer = createReducer(
         (state: BoardState) => (
             {
                 ...state,
+                pieceSelectedInfo: undefined,
                 legalMoves: undefined
             }
         )
@@ -100,6 +101,7 @@ export const boardReducer = createReducer(
         (state: BoardState) => (
             {
                 ...state,
+                pieceSelectedInfo: undefined,
                 legalMoves: undefined
             }
         )

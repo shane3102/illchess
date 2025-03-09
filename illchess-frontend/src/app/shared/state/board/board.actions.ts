@@ -6,7 +6,7 @@ import { IllegalMoveResponse } from "../../model/game/IllegalMoveView";
 import { InitializeBoardRequest } from "../../model/game/InitializeBoardRequest";
 import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
 import { MovePieceRequest } from "../../model/game/MovePieceRequest";
-import { PieceDraggedInfo } from "../../model/game/PieceDraggedInfo";
+import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
@@ -37,9 +37,9 @@ export const illegalMove = createAction(
     props<IllegalMoveResponse>()
 )
 
-export const draggedPieceChanged = createAction(
-    'Dragged piece changed',
-    props<PieceDraggedInfo>()
+export const selectedPieceChanged = createAction(
+    'Selected piece changed',
+    props<PieceSelectedInfo>()
 )
 
 export const legalMovesChanged = createAction(

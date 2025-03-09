@@ -45,7 +45,7 @@ export class BoardEffects {
             switchMap(
                 (movePieceRequest) => from(this.chessBoardService.movePiece(movePieceRequest))
                     .pipe(
-                        switchMap(() => of(draggedPieceReleased({}), refreshBoardWithPreMoves({ boardId: movePieceRequest.boardId, username: movePieceRequest.username }))),
+                        switchMap(() => of(refreshBoardWithPreMoves({ boardId: movePieceRequest.boardId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
                             let body: IllegalMoveResponse = response.error;
                             return of(illegalMove(body))

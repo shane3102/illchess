@@ -20,10 +20,10 @@ export const invalidMoveSelector = createSelector(
     }
 )
 
-export const draggedPieceSelector = createSelector(
+export const selectedPieceSelector = createSelector(
     selectBoard,
     (state: BoardState) => {
-        return state.pieceDraggedInfo
+        return state.pieceSelectedInfo
     }
 )
 
