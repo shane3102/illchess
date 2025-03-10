@@ -8,7 +8,7 @@
 }
 
 .promotion-squares-wrapper-lower {
-    top: -(calc(3*$chess-square-size));
+    top: calc(-3*$chess-square-size);
     flex-direction: column-reverse;
 }
 

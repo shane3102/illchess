@@ -28,6 +28,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
   @Input() victoriousPlayerColor: string | null | undefined
   @Input() currentPlayerColor: string | null | undefined
+  @Input() userColor: 'WHITE' | 'BLACK' | undefined
 
   @Output() pieceSelectedInfoEmitter: EventEmitter<PieceSelectedInfo> = new EventEmitter();
   @Output() pieceDraggedReleasedInfoEmitter: EventEmitter<void> = new EventEmitter();
@@ -75,18 +76,18 @@ export class ChessSquareComponent implements OnInit {
   squareClicked() {
     if (this.selectedPieceInfo) {
       if (
-        (this.selectedPieceInfo?.pieceInfo?.color != this.piece?.color) 
+        (this.selectedPieceInfo?.pieceInfo?.color != this.piece?.color)
         ||
-        (this.preMoves?.length != 0 && this.selectedPieceInfo.squareInfo != this.squareInfo)
+        (this.preMoves != undefined && this.preMoves?.length != 0 && this.selectedPieceInfo.squareInfo != this.squareInfo)
       ) {
         this.pieceDropped()
-      } else {
+      } else if (this.piece?.color == this.userColor) {
         this.pieceSelected()
       }
       if (this.selectedPieceInfo?.pieceInfo == this.piece) {
         this.pieceDraggedRelease()
       }
-    } else {
+    } else if (this.piece?.color == this.userColor) {
       this.pieceSelected()
     }
   }

@@ -1,12 +1,12 @@
-$chess-square-size: 8.5vh;
+$chess-square-size: clamp(20px, 6.5vw, 8.5vh);
 
-$popup-content-height: 3 * $chess-square-size;
-$popup-content-width: 5 * $chess-square-size;
+$popup-content-height: calc(3 * $chess-square-size);
+$popup-content-width: calc(5 * $chess-square-size);
 
 .popup-content {
     position: relative;
-    top: 2.5 * $chess-square-size;
-    left: 1.5 * $chess-square-size;
+    top: calc(2.5 * $chess-square-size);
+    left: calc(1.5 * $chess-square-size);
     border-radius: calc($chess-square-size/2);
     background-color: rgb(128,128,128, 0.75);
     width: $popup-content-width;

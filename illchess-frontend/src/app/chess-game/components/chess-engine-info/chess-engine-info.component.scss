@@ -1,25 +1,27 @@
 @import "../chess-board-style.scss";
 @import "../chess-board-additional-info/chess-board-additional-info.component.scss";
 
-$default-width: 0.30 * $chess-square-size;
-$chess-moves-width: 0.8 * $chess-square-size;
-$show-best-moves-button-width: 0.3 * $chess-square-size;
+$default-width: calc(0.30 * $chess-square-size);
+$default-height: calc(7.95 * $chess-square-size);
+$chess-moves-width: calc(0.8 * $chess-square-size);
+$show-best-moves-button-width: calc(0.3 * $chess-square-size);
+$border-size: calc(0.03 * $chess-square-size);
 
 #chess-engine-info-wrapper {
-    width: 1.5*$chess-square-size;
+    width: calc(1.5*$chess-square-size);
     display: flex;
     justify-content: left;
     align-items: center;
 }
 
 #evaluation-bar {
-    height: 7.95 * $chess-square-size;
+    height: $default-height;
     width: $default-width;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    border: 0.03 * $chess-square-size solid rgb(150, 75, 0)
+    border: $border-size solid rgb(150, 75, 0)
 }
 
 #evaluation-bar-black-part {
@@ -39,13 +41,13 @@ $show-best-moves-button-width: 0.3 * $chess-square-size;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 7.95 * $chess-square-size;
+    height: $default-height;
     width: $chess-moves-width;
     background-color: #F3E5AB;
     border-radius: 0 $default-width $default-width 0;
-    border-top: 0.03 * $chess-square-size solid rgb(150, 75, 0);
-    border-bottom: 0.03 * $chess-square-size solid rgb(150, 75, 0);
-    border-right: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    border-top: $border-size solid rgb(150, 75, 0);
+    border-bottom: $border-size solid rgb(150, 75, 0);
+    border-right: $border-size solid rgb(150, 75, 0);
     transform-origin: left;
     transition: 0.5s transform;
 }
@@ -76,7 +78,7 @@ $show-best-moves-button-width: 0.3 * $chess-square-size;
 .best-move {
     padding: 10%;
     background-color: #F3E5AB;
-    border: 0.03 * $chess-square-size solid rgb(150, 75, 0);
+    border: $border-size solid rgb(150, 75, 0);
     border-radius: calc($chess-square-size/6);
     width: calc($chess-moves-width/2);
     text-align: center;
@@ -86,7 +88,7 @@ $show-best-moves-button-width: 0.3 * $chess-square-size;
 
 .show-best-moves-button {
     width: $show-best-moves-button-width;
-    height: 2 * $chess-square-size;
+    height: calc(2 * $chess-square-size);
     background-color: rgb(150, 75, 0);
     display: flex;
     justify-content: center;
@@ -102,7 +104,7 @@ $show-best-moves-button-width: 0.3 * $chess-square-size;
 }
 
 .show-best-moves-button-inactive {
-    transform: translate(-$chess-moves-width - 0.04 * $chess-square-size, 0);
+    transform: translate(calc(-1 * $chess-moves-width - 0.04 * $chess-square-size), 0);
 }
 
 .show-best-moves-text {

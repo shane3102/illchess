@@ -1,7 +1,7 @@
 @import "../chess-board-style.scss";
 
-$performed-moves-panel-width: 2.5 * $chess-square-size;
-$panel-width: 4 * $chess-square-size;
+$performed-moves-panel-width: calc(2.5 * $chess-square-size);
+$panel-width: calc(4 * $chess-square-size);
 
 .additional-info {
     width: $panel-width;
@@ -31,7 +31,7 @@ $panel-width: 4 * $chess-square-size;
 }
 
 .performed-move {
-    width: 0.75*$chess-square-size;
+    width: calc(0.75 * $chess-square-size);
     height: calc($chess-square-size / 5);
     border-radius: calc($chess-square-size / 5);
     padding: calc($chess-square-size/20) 0 calc($chess-square-size/20) 0;

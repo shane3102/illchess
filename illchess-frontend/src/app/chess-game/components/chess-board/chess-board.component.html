@@ -38,7 +38,8 @@
                     [preMoves]="boardView?.preMoves"
                     [gameState]="gameState$ | async"
                     [currentPlayerColor]="currentPlayerColor$ | async"
-                    [victoriousPlayerColor]="victoriousPlayerColor$ | async">
+                    [victoriousPlayerColor]="victoriousPlayerColor$ | async"
+                    [userColor]="boardView.blackUsername == username ? 'BLACK' : boardView.whiteUsername == username ? 'WHITE' : undefined">
                 </app-chess-square>
             </div>
         </div>

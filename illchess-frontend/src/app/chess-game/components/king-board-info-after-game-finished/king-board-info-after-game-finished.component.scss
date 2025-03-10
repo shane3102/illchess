@@ -11,7 +11,7 @@ $icon-size: calc($chess-square-size / 5);
 .icon {
     position: relative;
     left: calc($chess-square-size - $icon-size/2);
-    top: - calc($icon-size/2);
+    top: calc($icon-size / -2);
     height: $icon-size;
     width: $icon-size;
     border-radius: calc($icon-size / 2);

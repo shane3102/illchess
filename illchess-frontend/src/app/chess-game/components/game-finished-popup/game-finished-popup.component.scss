@@ -58,7 +58,7 @@
 
 @keyframes slide-result-black {
     from {
-        transform: translateX(-$chess-square-size);
+        transform: translateX(calc($chess-square-size * -1));
     }
 
     to {
