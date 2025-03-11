@@ -30,27 +30,6 @@ $panel-width: calc(4 * $chess-square-size);
     padding: calc($chess-square-size / 10);
 }
 
-.performed-move {
-    width: calc(0.75 * $chess-square-size);
-    height: calc($chess-square-size / 5);
-    border-radius: calc($chess-square-size / 5);
-    padding: calc($chess-square-size/20) 0 calc($chess-square-size/20) 0;
-    margin: calc($chess-square-size/40);
-    text-align: center;
-    font-size: calc($chess-square-size/40*7);
-    user-select: none;
-}
-
-.performed-move-black {
-    background-color: black;
-    color: white;
-}
-
-.performed-move-white {
-    background-color: white;
-    color: black;
-}
-
 .player-panel {
     width: $panel-width;
     background-color: rgb(150, 75, 0);

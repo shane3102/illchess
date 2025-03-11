@@ -41,3 +41,25 @@ $popup-content-width: calc(5 * $chess-square-size);
 $chess-piece-size-mini: 1.5vw;
 $chess-square-size-mini: 2vw;
 $board-wrapper-size-mini: 21vw;
+
+.performed-move {
+    width: calc(0.75 * $chess-square-size);
+    height: calc($chess-square-size / 5);
+    border-radius: calc($chess-square-size / 5);
+    padding: calc($chess-square-size/20) 0 calc($chess-square-size/20) 0;
+    margin: calc($chess-square-size/40);
+    text-align: center;
+    font-size: calc($chess-square-size/40*7);
+    user-select: none;
+}
+
+// performed moves
+.performed-move-black {
+    background-color: black;
+    color: white;
+}
+
+.performed-move-white {
+    background-color: white;
+    color: black;
+}
