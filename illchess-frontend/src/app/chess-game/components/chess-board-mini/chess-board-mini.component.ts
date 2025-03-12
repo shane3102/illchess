@@ -1,13 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
-import { SquareInfo } from '../../../shared/model/game/SquareInfo';
-import { ChessBoardMiniStore } from './chess-board-mini.store';
-import { Observable, Subscription } from 'rxjs';
-import { BoardView } from '../../../shared/model/game/BoardView';
-import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
-import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
+import { Component, Input, OnDestroy, OnInit, Signal, inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { Observable, Subscription } from 'rxjs';
+import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
+import { BoardView } from '../../../shared/model/game/BoardView';
+import { SquareInfo } from '../../../shared/model/game/SquareInfo';
+import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
+import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { ChessBoardMiniStore } from './ChessBoardMiniStore';
 
 @Component({
   selector: 'app-chess-board-mini',
@@ -28,8 +29,8 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
   private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
   private store = inject(Store<ChessGameState>)
 
-  boardView$: Observable<BoardView | undefined> = this.chessBoardMiniStore.boardView$
-  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = this.chessBoardMiniStore.boardGameObtainedInfoView$
+  boardView: Signal<BoardView | undefined> = this.chessBoardMiniStore.boardView
+  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = toObservable(this.chessBoardMiniStore.boardGameObtainedInfoView)
   chessTopic$: Subscription
   chessStatus$: Subscription
 
@@ -41,19 +42,19 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
           `/chess-topic/${this.boardId}`,
           (response: any) => {
             let boardView: BoardView = JSON.parse(response)
-            this.chessBoardMiniStore.patchState({ boardView: boardView })
+            this.chessBoardMiniStore.patchBoardPosition(boardView)
           }
         )
         this.chessStatus$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/obtain-status/${this.boardId}`,
           (response: any) => {
             let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
-            this.chessBoardMiniStore.patchState({ boardGameObtainedInfoView: boardGameObtainedInfoView })
+            this.chessBoardMiniStore.patchObtainedInfoView(boardGameObtainedInfoView)
           }
         )
       }
     )
-
+    
     this.boardGameObtainedInfoView$.subscribe(
       boardGameObtainedInfoView => {
         if (boardGameObtainedInfoView?.status == 'SUCCESS') {

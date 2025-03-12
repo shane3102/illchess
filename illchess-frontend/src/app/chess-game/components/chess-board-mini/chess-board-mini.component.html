@@ -1,16 +1,16 @@
 <div class="board-wrapper" [ngClass]="{'board-wrapper-disappear': isBoardFaded}">
-    @if(boardView$ | async; as boardView) {
+    @if(boardView() != undefined) {
         <div class="board">
-            <div class="player-username"><b>{{boardView.blackUsername}}</b></div>
+            <div class="player-username"><b>{{boardView()?.blackUsername}}</b></div>
             <div *ngFor="let rank of ranks">
                 <div style="display: flex; justify-content: center;">
                     <div *ngFor="let file of files">
                         <div class="chess-square"
                             [ngStyle]="{'background-color': calculateSquareColor({file: file, rank: rank})}">
                             <app-chess-piece-mini class="chess-square" [pieceInfo]="
-                                boardView?.piecesLocations ?
-                                boardView?.piecesLocations![file+rank] ?
-                                boardView?.piecesLocations![file+rank] :
+                                boardView()?.piecesLocations ?
+                                boardView()?.piecesLocations![file+rank] ?
+                                boardView()?.piecesLocations![file+rank] :
                                 undefined :
                                 undefined">
                             </app-chess-piece-mini>
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="player-username"><b>{{boardView.whiteUsername}}</b></div>
+            <div class="player-username"><b>{{boardView()?.whiteUsername}}</b></div>
         </div>
     } @else {
         <app-spinner [size]="10"></app-spinner>
