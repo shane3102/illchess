@@ -1,4 +1,4 @@
-@import "../chess-board-style.scss";
+@import "../performed-move-style.scss";
 
 $evaluation-bar-width: calc(0.30 * $chess-square-size);
 $default-height: calc(8 * $chess-square-size - 1px);

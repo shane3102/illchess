@@ -15,6 +15,17 @@
     height: $chess-square-size;
 }
 
+.chess-piece-wrapper {
+    position: absolute;
+    height: $chess-square-size;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // bez tego poza pionkiem można poruszać polem - WTF!?
+    transform: translateX(0);
+}
+
 .chess-piece-wrapper:active {
     background-color: transparent;
 }

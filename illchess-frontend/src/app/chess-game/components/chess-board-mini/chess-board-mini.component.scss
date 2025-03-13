@@ -44,10 +44,6 @@
     height: $chess-square-size-mini;
 }
 
-.chess-piece-wrapper:active {
-    background-color: transparent;
-}
-
 .board-wrapper-disappear {
     animation: disappear-finished-board 1s;
 }

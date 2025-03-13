@@ -1,0 +1,11 @@
+@import '../chess-board-style.scss';
+
+.piece {
+    width: $chess-square-size;
+    height: $chess-square-size;
+}
+
+.piece:hover {
+    width: calc($chess-square-size * 1.1);
+    height: calc($chess-square-size * 1.1);
+}

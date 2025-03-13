@@ -1,5 +1,7 @@
+// chess-square
 $chess-square-size: clamp(20px, 6.5vw, 8.5vh);
 
+// popup
 $popup-content-height: calc(3 * $chess-square-size);
 $popup-content-width: calc(5 * $chess-square-size);
 
@@ -15,54 +17,10 @@ $popup-content-width: calc(5 * $chess-square-size);
     animation: show-username 1s;
 }
 
-.piece {
-    width: $chess-square-size;
-    height: $chess-square-size;
-}
-
-.piece:hover {
-    width: calc($chess-square-size * 1.1);
-    height: calc($chess-square-size * 1.1);
-}
-
-
-.chess-piece-wrapper {
-    position: absolute;
-    height: $chess-square-size;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    // bez tego poza pionkiem można poruszać polem - WTF!?
-    transform: translateX(0);
-}
-
 // mini board
 $chess-piece-size-mini: 1.5vw;
 $chess-square-size-mini: 2vw;
 $board-wrapper-size-mini: 21vw;
-
-.performed-move {
-    width: calc(0.75 * $chess-square-size);
-    height: calc($chess-square-size / 5);
-    border-radius: calc($chess-square-size / 5);
-    padding: calc($chess-square-size/20) 0 calc($chess-square-size/20) 0;
-    margin: calc($chess-square-size/40);
-    text-align: center;
-    font-size: calc($chess-square-size/40*7);
-    user-select: none;
-}
-
-// performed moves
-.performed-move-black {
-    background-color: black;
-    color: white;
-}
-
-.performed-move-white {
-    background-color: white;
-    color: black;
-}
 
 // additional info
 $additional-info-panel-width: calc(4 * $chess-square-size);
