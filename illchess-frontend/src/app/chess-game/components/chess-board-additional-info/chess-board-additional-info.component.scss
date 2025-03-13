@@ -1,8 +1,5 @@
 @import "../chess-board-style.scss";
 
-$performed-moves-panel-width: calc(2.5 * $chess-square-size);
-$player-panel-border-radius: calc(($additional-info-panel-width - $performed-moves-panel-width)/4);
-
 .additional-info {
     width: $additional-info-panel-width;
     display: flex;
@@ -28,49 +25,6 @@ $player-panel-border-radius: calc(($additional-info-panel-width - $performed-mov
     align-items: flex-start;
     flex-wrap: wrap;
     padding: calc($chess-square-size / 10);
-}
-
-.player-panel {
-    width: $additional-info-panel-width;
-    height: calc(3 * $chess-square-size);
-    background-color: rgb(150, 75, 0);
-    display: flex;
-    justify-content: end;
-    flex-direction: column;
-    align-items: center;
-    border-radius: $player-panel-border-radius;
-}
-
-.player-panel-black {
-    justify-content: end;
-}
-
-.player-panel-white {
-    justify-content: start;
-}
-
-.username-and-captured-pieces-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.username-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: calc($additional-info-panel-width / 2);
-    font-size: calc($additional-info-panel-width / 15);
-}
-
-.vertical-line {
-    height: calc($chess-square-size*4/5);
-    border-left: 0.1vw solid gray; 
-}
-
-.horizontal-line {
-    width: 80%;
-    border-bottom: 0.1vh solid gray; 
 }
 
 ::-webkit-scrollbar {

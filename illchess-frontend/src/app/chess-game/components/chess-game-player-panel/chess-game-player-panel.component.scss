@@ -1,0 +1,47 @@
+@import "../chess-board-style.scss";
+
+$player-panel-border-radius: calc(($additional-info-panel-width - $performed-moves-panel-width)/4);
+
+.player-panel {
+    width: $additional-info-panel-width;
+    height: calc(3 * $chess-square-size);
+    background-color: rgb(150, 75, 0);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    border-radius: $player-panel-border-radius;
+}
+
+.player-panel-black {
+    flex-direction: column;
+    justify-content: end;
+}
+
+.player-panel-white {
+    flex-direction: column-reverse;
+    justify-content: start;
+}
+
+.vertical-line {
+    height: calc($chess-square-size*4/5);
+    border-left: 0.1vw solid gray; 
+}
+
+.horizontal-line {
+    width: 80%;
+    border-bottom: 0.1vh solid gray; 
+}
+
+.username-and-captured-pieces-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.username-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc($additional-info-panel-width / 2);
+    font-size: calc($additional-info-panel-width / 15);
+}

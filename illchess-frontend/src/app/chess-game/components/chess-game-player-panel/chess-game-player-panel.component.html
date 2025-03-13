@@ -1,0 +1,36 @@
+<div class="player-panel" [ngClass]="pieceColor == PieceColor.WHITE ? 'player-panel-white' : 'player-panel-black'">
+    <app-chess-game-action-buttons 
+        [boardId]="boardAdditionalInfoView.boardId" 
+        [username]="username"
+        [whitePlayer]="boardAdditionalInfoView.whitePlayer"
+        [blackPlayer]="boardAdditionalInfoView.blackPlayer"
+        [color]="pieceColor"
+        [performedMoves]="boardAdditionalInfoView.performedMoves"
+        [gameState]="boardAdditionalInfoView.gameState"
+    ></app-chess-game-action-buttons>
+
+    <div class="horizontal-line"></div>
+    
+    <div class="username-and-captured-pieces-wrapper">
+        <div class="username-wrapper">
+            @if(pieceColor == PieceColor.WHITE) {
+                <div [ngStyle]="username == boardAdditionalInfoView.whitePlayer?.username ? {'color': 'green'} : {}">
+                    {{boardAdditionalInfoView.whitePlayer?.username}}  
+                </div>
+            } @else {
+                <div [ngStyle]="username == boardAdditionalInfoView.blackPlayer?.username ? {'color': 'green'} : {}">
+                    {{boardAdditionalInfoView.blackPlayer?.username}}               
+                </div>
+            }
+        </div>
+        <div class="vertical-line"></div>
+        <app-captured-pieces 
+            [color]="pieceColor == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE" 
+            [capturedPieces]="
+                pieceColor == PieceColor.WHITE 
+                    ? boardAdditionalInfoView.capturedBlackPieces
+                    : boardAdditionalInfoView.capturedWhitePieces
+        ">
+        </app-captured-pieces>
+    </div>
+</div>
