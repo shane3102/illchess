@@ -2,7 +2,7 @@
 
 .content {
     width: $additional-info-panel-width;
-    height: calc($chess-square-size / 2 * 3 + 1vh);
+    height: calc($chess-square-size * 2);
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
