@@ -1,6 +1,4 @@
-$header-height: 10vh;
-$title-width: 10vw;
-$empty-space-left-width: 10vw;
+@import '../header-style.scss';
 
 .content {
     display: flex;

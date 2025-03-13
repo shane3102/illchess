@@ -5,7 +5,7 @@ $default-height: calc(8 * $chess-square-size - 1px);
 $chess-moves-width: calc(0.8 * $chess-square-size);
 
 #chess-engine-info-wrapper {
-    width: calc(1.5*$chess-square-size);
+    width: calc(1.5 * $chess-square-size);
     display: flex;
     justify-content: left;
     align-items: center;
@@ -59,9 +59,6 @@ $chess-moves-width: calc(0.8 * $chess-square-size);
 }
 
 .best-move-wrapper {
-    transition: all 1s;
-    transition: transform 1s;
-    transform-origin: top;
     height: $chess-square-size;
     width: $chess-moves-width;
     display: flex;

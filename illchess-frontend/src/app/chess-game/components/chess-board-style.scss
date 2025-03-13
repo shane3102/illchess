@@ -63,3 +63,6 @@ $board-wrapper-size-mini: 21vw;
     background-color: white;
     color: black;
 }
+
+// additional info
+$additional-info-panel-width: calc(4 * $chess-square-size);

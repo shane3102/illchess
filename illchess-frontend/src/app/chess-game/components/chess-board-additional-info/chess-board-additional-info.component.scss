@@ -1,10 +1,10 @@
 @import "../chess-board-style.scss";
 
 $performed-moves-panel-width: calc(2.5 * $chess-square-size);
-$panel-width: calc(4 * $chess-square-size);
+$player-panel-border-radius: calc(($additional-info-panel-width - $performed-moves-panel-width)/4);
 
 .additional-info {
-    width: $panel-width;
+    width: $additional-info-panel-width;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +31,7 @@ $panel-width: calc(4 * $chess-square-size);
 }
 
 .player-panel {
-    width: $panel-width;
+    width: $additional-info-panel-width;
     background-color: rgb(150, 75, 0);
     display: flex;
     justify-content: center;
@@ -40,23 +40,23 @@ $panel-width: calc(4 * $chess-square-size);
 }
 
 .player-panel-black {
-    border-radius: 0  0 calc(($panel-width - $performed-moves-panel-width)/4) calc(($panel-width - $performed-moves-panel-width)/4);
+    border-radius: 0 0 $player-panel-border-radius $player-panel-border-radius;
 }
 
 .player-panel-white {
-    border-radius: calc(($panel-width - $performed-moves-panel-width)/4) calc(($panel-width - $performed-moves-panel-width)/4) 0  0;
+    border-radius: $player-panel-border-radius $player-panel-border-radius 0  0;
 }
 
 .player-panel-fading-black {
     background: linear-gradient(white, rgb(150,75,0));
     height: calc($chess-square-size/2);
-    width: $panel-width
+    width: $additional-info-panel-width
 }
 
 .player-panel-fading-white {
     background: linear-gradient(rgb(150,75,0), white);
     height: calc($chess-square-size/2);
-    width: $panel-width
+    width: $additional-info-panel-width
 }
 
 .username-and-captured-pieces-wrapper {
@@ -69,8 +69,8 @@ $panel-width: calc(4 * $chess-square-size);
     display: flex;
     justify-content: center;
     align-items: center;
-    width: calc($panel-width / 2);
-    font-size: calc($panel-width / 15);
+    width: calc($additional-info-panel-width / 2);
+    font-size: calc($additional-info-panel-width / 15);
 }
 
 .vertical-line {

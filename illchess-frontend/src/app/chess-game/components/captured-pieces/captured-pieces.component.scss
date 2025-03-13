@@ -1,6 +1,6 @@
-@import '../chess-board-additional-info/chess-board-additional-info.component.scss';
+@import '../chess-board-style.scss';
 
-$captured-pieces-width: calc($panel-width / 2);
+$captured-pieces-width: calc($additional-info-panel-width / 2);
 
 .captured-pieces-wrapper {
     width: $captured-pieces-width;

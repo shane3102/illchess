@@ -1,7 +1,7 @@
-@import '../chess-board-additional-info/chess-board-additional-info.component.scss';
+@import '../chess-board-style.scss';
 
 .content {
-    width: $panel-width;
+    width: $additional-info-panel-width;
     height: calc($chess-square-size / 2 * 3 + 1vh);
     display: flex;
     flex-direction: column;

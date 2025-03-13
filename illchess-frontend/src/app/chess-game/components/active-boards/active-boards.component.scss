@@ -1,6 +1,7 @@
 @import "../chess-board-style.scss";
 
 $slide-size: 4;
+$slide-width: $slide-size * $board-wrapper-size-mini;
 
 .content {
     padding-top: 0.5vw;
@@ -19,13 +20,13 @@ $slide-size: 4;
     flex-wrap: nowrap;
     margin-left: 8vw;
     margin-right: 8vw;
-    right: calc($slide-size * $board-wrapper-size-mini)
+    right: $slide-width
 }
 
 .empty-boards {
-    width: calc($slide-size * $board-wrapper-size-mini);
+    width: $slide-width;
     height: $board-wrapper-size-mini;
-    left: calc($slide-size * $board-wrapper-size-mini)
+    left: $slide-width
 }
 
 .boards-sliden-left {
@@ -34,11 +35,11 @@ $slide-size: 4;
 
 @keyframes slide-left {
     from {
-        right: calc($slide-size * $board-wrapper-size-mini);
+        right: $slide-width;
     }
 
     to {
-        right: 2 * calc($slide-size * $board-wrapper-size-mini);
+        right: 2 * $slide-width;
     }
 }
 
@@ -48,7 +49,7 @@ $slide-size: 4;
 
 @keyframes slide-right {
     from {
-        right: calc($slide-size * $board-wrapper-size-mini);
+        right: $slide-width;
     }
 
     to {
