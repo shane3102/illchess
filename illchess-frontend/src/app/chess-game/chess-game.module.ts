@@ -23,6 +23,7 @@ import { JoinOrInitializeGameComponent } from './components/join-or-initialize-g
 import { KingBoardInfoAfterGameFinishedComponent } from './components/king-board-info-after-game-finished/king-board-info-after-game-finished.component';
 import { LoadingGameComponent } from './components/loading-game/loading-game.component';
 import { WaitingForBlackPopupComponent } from './components/waiting-for-black-popup/waiting-for-black-popup.component';
+import { ChessGamePlayerPanelComponent } from './components/chess-game-player-panel/chess-game-player-panel.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { WaitingForBlackPopupComponent } from './components/waiting-for-black-po
     GameFinishedPopupComponent,
     GameFinishedPopupUserInfoComponent,
     LoadingGameComponent,
-    WaitingForBlackPopupComponent
+    WaitingForBlackPopupComponent,
+    ChessGamePlayerPanelComponent
   ],
   imports: [
     SharedModule,
