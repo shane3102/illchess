@@ -14,7 +14,7 @@ class InMemoryBotViewRepository(
 
     @field:ConfigProperty(
         name = "bots.max-count",
-        defaultValue = "8"
+        defaultValue = "12"
     )
     lateinit var maxBotCount: String
 

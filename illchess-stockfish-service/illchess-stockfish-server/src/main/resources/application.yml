@@ -10,7 +10,7 @@ urls:
   stockfish-api: "https://stockfish.online/api/s/v2.php"
 
 bots:
-  max-count: 8
+  max-count: 12
   expiration-check-cron: "0 */1 * * * ?"
   expiration-minutes: 5
 
