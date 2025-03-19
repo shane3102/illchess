@@ -10,9 +10,9 @@ import okhttp3.Request
 import okhttp3.Response
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.evaluation.command.out.okhttp.dto.StockfishApiResponseDto
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBestMoveAndContinuation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateTopMoves
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
@@ -25,7 +25,7 @@ import pl.illchess.stockfish.domain.evaluation.exception.UrlOfStockfishEngineNot
 class OkHttpStockfishAdapter(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
     private val objectMapper: ObjectMapper = jacksonObjectMapper()
-) : LoadBoardEvaluation, LoadBestMoveAndContinuation, LoadTopMoves {
+) : CalculateBoardEvaluation, CalculateBestMoveAndContinuation, CalculateTopMoves {
 
     @field:ConfigProperty(
         name = "urls.stockfish-api",
@@ -39,7 +39,7 @@ class OkHttpStockfishAdapter(
     )
     lateinit var defaultDepth: String
 
-    override fun loadBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
+    override fun calculateBoardEvaluation(fenPosition: FenBoardPosition): Evaluation? {
         val response = commonApiCallResponse(fenPosition)
         val result: Evaluation? =
             if (response.body == null) null
@@ -55,7 +55,7 @@ class OkHttpStockfishAdapter(
         return result
     }
 
-    override fun loadBestMoveAndContinuation(
+    override fun calculateBestMoveAndContinuation(
         fenPosition: FenBoardPosition,
         depth: Int?
     ): BestMoveAndContinuation? {
@@ -97,7 +97,7 @@ class OkHttpStockfishAdapter(
         return response
     }
 
-    override fun loadTopMoves(
+    override fun calculateTopMoves(
         fenPosition: FenBoardPosition,
         topMoveCount: Int,
         depth: Int?

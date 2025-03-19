@@ -3,20 +3,27 @@ package pl.illchess.stockfish.server.config
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.ws.rs.Produces
 import org.eclipse.microprofile.config.inject.ConfigProperty
-import pl.illchess.stockfish.application.bot.command.BotService
-import pl.illchess.stockfish.application.bot.command.out.DeleteBot
-import pl.illchess.stockfish.application.bot.command.out.LoadBot
-import pl.illchess.stockfish.application.bot.command.out.SaveBot
-import pl.illchess.stockfish.application.evaluation.command.EvaluateBoardService
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
 import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoard
 import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.application.bot.command.BotService
+import pl.illchess.stockfish.application.bot.command.out.DeleteBot
+import pl.illchess.stockfish.application.bot.command.out.LoadBot
+import pl.illchess.stockfish.application.bot.command.out.SaveBot
+import pl.illchess.stockfish.application.evaluation.command.EvaluateBoardService
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBestMoveAndContinuation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
+import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.SaveBestMoveAndContinuation
+import pl.illchess.stockfish.application.evaluation.command.out.SaveBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.SaveTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.facade.TopMovesFacade
 import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
 
@@ -24,7 +31,7 @@ class QuarkusScopeConfig {
 
     @field:ConfigProperty(
         name = "bots.max-count",
-        defaultValue = "8"
+        defaultValue = "12"
     )
     lateinit var maxBotCount: String
 
@@ -37,12 +44,30 @@ class QuarkusScopeConfig {
     @Produces
     @ApplicationScoped
     fun evaluateBoardService(
-        loadBoardEvaluation: LoadBoardEvaluation,
         loadBoard: LoadBoard,
+
+        calculateBoardEvaluation: CalculateBoardEvaluation,
+        calculateBestMoveAndContinuation: CalculateBestMoveAndContinuation,
+
+        loadBoardEvaluation: LoadBoardEvaluation,
         loadBestMoveAndContinuation: LoadBestMoveAndContinuation,
-        loadTopMoves: LoadTopMoves
+
+        saveBoardEvaluation: SaveBoardEvaluation,
+        saveBestMoveAndContinuation: SaveBestMoveAndContinuation,
+
+        topMovesFacade: TopMovesFacade
+
     ): EvaluateBoardService {
-        return EvaluateBoardService(loadBoard, loadBoardEvaluation, loadBestMoveAndContinuation, loadTopMoves)
+        return EvaluateBoardService(
+            loadBoard,
+            calculateBoardEvaluation,
+            calculateBestMoveAndContinuation,
+            loadBoardEvaluation,
+            loadBestMoveAndContinuation,
+            saveBoardEvaluation,
+            saveBestMoveAndContinuation,
+            topMovesFacade
+        )
     }
 
     @Produces
@@ -54,10 +79,10 @@ class QuarkusScopeConfig {
         joinOrInitializeBoard: JoinOrInitializeBoard,
         loadBoardAdditionalInfo: LoadBoardAdditionalInfo,
         loadBoard: LoadBoard,
-        loadTopMoves: LoadTopMoves,
         botPerformMove: BotPerformMove,
         botResignGame: BotResignGame,
         botQuitNotYetStartedGame: BotQuitNotYetStartedGame,
+        topMovesFacade: TopMovesFacade
     ) = BotService(
         saveBot,
         loadBot,
@@ -65,7 +90,7 @@ class QuarkusScopeConfig {
         joinOrInitializeBoard,
         loadBoard,
         loadBoardAdditionalInfo,
-        loadTopMoves,
+        topMovesFacade,
         botPerformMove,
         botResignGame,
         botQuitNotYetStartedGame,
@@ -75,5 +100,16 @@ class QuarkusScopeConfig {
 
     @Produces
     @ApplicationScoped
+    fun topMovesFacade(
+        loadTopMoves: LoadTopMoves,
+        saveTopMoves: SaveTopMoves,
+        calculateTopMoves: CalculateTopMoves
+    ) = TopMovesFacade(
+        loadTopMoves, saveTopMoves, calculateTopMoves
+    )
+
+    @Produces
+    @ApplicationScoped
     fun botCache(): HashMap<Username, Bot> = hashMapOf()
+
 }
