@@ -108,7 +108,6 @@ class StockfishConnector {
 
         val topMovesList = topMovesByHighestDepth
             .map { it.split("pv")[2].split(" ")[1] }
-            .toSet()
 
         return TopMoves(topMovesList)
     }

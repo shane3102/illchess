@@ -17,8 +17,12 @@ import pl.illchess.stockfish.application.bot.command.`in`.DeleteExpiredBotsUseCa
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateTopMoves
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.SaveTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.facade.TopMovesFacade
 import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
+import pl.illchess.stockfish.domain.board.domain.EvaluationBoardInformation
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.bot.command.PerformMove
@@ -26,6 +30,7 @@ import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
 import pl.illchess.stockfish.domain.bot.exception.BotNotFound
 import pl.illchess.stockfish.domain.bot.exception.TooManyBotsAddedException
+import pl.illchess.stockfish.domain.evaluation.command.EstablishListOfTopMoves
 import pl.illchess.stockfish.domain.evaluation.exception.TopMovesCouldNotBeEstablished
 
 class BotService(
@@ -35,7 +40,7 @@ class BotService(
     private val joinOrInitializeBoard: JoinOrInitializeBoard,
     private val loadBoard: LoadBoard,
     private val loadBoardAdditionalInfo: LoadBoardAdditionalInfo,
-    private val loadTopMoves: LoadTopMoves,
+    private val topMovesFacade: TopMovesFacade,
     private val botPerformMove: BotPerformMove,
     private val botResignGame: BotResignGame,
     private val botQuitNotYetStartedGame: BotQuitNotYetStartedGame,
@@ -131,11 +136,14 @@ class BotService(
         fenBoardPosition: FenBoardPosition,
         bot: Bot
     ) {
-        val loadedTopMoves = loadTopMoves.loadTopMoves(
-            fenBoardPosition,
-            bot.obtainedBestMovesCount,
-            bot.searchedDepth
-        ) ?: throw TopMovesCouldNotBeEstablished(bot.currentBoardId!!)
+        val loadedTopMoves = topMovesFacade.establishAndSaveIfUpdatedTopMoves(
+            EstablishListOfTopMoves(
+                bot.currentBoardId!!,
+                fenBoardPosition,
+                bot.obtainedBestMovesCount,
+                bot.searchedDepth
+            )
+        )
 
         if (loadedTopMoves.topMovesList.isEmpty()) {
             botResignGame.botResignGame(bot)
