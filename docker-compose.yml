@@ -33,8 +33,24 @@ services:
     build: ./illchess-stockfish-service
     ports:
       - 2137:2137
+    depends_on:
+      stockfish-evaluations-db:
+        condition: service_healthy
     environment:
       - URLS_GAME-SERVICE=http://chess-game-service:8080
+      - QUARKUS_MONGODB_CONNECTION-STRING=mongodb://root:example@stockfish-evaluations-db:27017
+      - QUARKUS_MONGODB_DATABASE=stockfish-evaluations
+  stockfish-evaluations-db:
+    container_name: stockfish-evaluations-db
+    image: mongo:6.0.21
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
 
   # Player info service
   player-info-db:

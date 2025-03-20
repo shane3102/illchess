@@ -1,0 +1,9 @@
+package pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.repository
+
+import io.quarkus.mongodb.panache.PanacheMongoRepositoryBase
+import jakarta.enterprise.context.ApplicationScoped
+import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.model.BestMoveAndContinuationEntity
+import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.model.EvaluationBoardInformationEntity
+
+@ApplicationScoped
+class BestMoveAndContinuationRepository: PanacheMongoRepositoryBase<BestMoveAndContinuationEntity, EvaluationBoardInformationEntity>
