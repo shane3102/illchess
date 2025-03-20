@@ -4,6 +4,9 @@ quarkus:
   package:
     jar:
       type: uber-jar
+  mongodb:
+    connection-string: mongodb://root:example@localhost:27017
+    database: stockfish-evaluations
 
 urls:
   game-service: "http://localhost:8080"
