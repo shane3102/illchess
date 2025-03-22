@@ -3,7 +3,6 @@ package pl.illchess.stockfish.adapter.evaluation.command.out.mongodb
 import jakarta.enterprise.context.ApplicationScoped
 import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.mapper.EvaluationBoardInformationMapper
 import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.mapper.TopMovesMapper
-import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.model.EvaluationBoardInformationEntity
 import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.repository.TopMovesRepository
 import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
 import pl.illchess.stockfish.application.evaluation.command.out.SaveTopMoves
@@ -17,11 +16,15 @@ class TopMovesMongodbAdapter(
 
     override fun loadTopMoves(evaluationBoardInformation: EvaluationBoardInformation): TopMoves? {
         val id = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
-        return TopMovesMapper.toDomain(repository.findById(id))
+        val loadedEntity = repository.findByEvaluationBoardInformation(id)
+        return if (loadedEntity == null) null else TopMovesMapper.toDomain(loadedEntity)
     }
 
     override fun saveTopMoves(evaluationBoardInformation: EvaluationBoardInformation, topMoves: TopMoves) {
-        val entity = TopMovesMapper.toEntity(evaluationBoardInformation, topMoves)
+        val evaluationBoardInformationEntity = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
+        val loadedEntity = repository.findByEvaluationBoardInformation(evaluationBoardInformationEntity)
+        val id = loadedEntity?.id
+        val entity = TopMovesMapper.toEntity(evaluationBoardInformation, topMoves, id)
         repository.persistOrUpdate(entity)
     }
 }

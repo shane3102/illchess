@@ -15,15 +15,19 @@ class BestMoveAndContinuationMongodbAdapter(
 ) : LoadBestMoveAndContinuation, SaveBestMoveAndContinuation {
 
     override fun loadBestMoveAndContinuation(evaluationBoardInformation: EvaluationBoardInformation): BestMoveAndContinuation? {
-        val id = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
-        return BestMoveAndEvaluationMapper.toDomain(repository.findById(id))
+        val evaluationBoardInformationEntity = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
+        val loadedEntity = repository.findByEvaluationBoardInformation(evaluationBoardInformationEntity)
+        return if (loadedEntity == null) null else BestMoveAndEvaluationMapper.toDomain(loadedEntity)
     }
 
     override fun saveBestMoveAndContinuation(
         evaluationBoardInformation: EvaluationBoardInformation,
         bestMoveAndContinuation: BestMoveAndContinuation
     ) {
-        val entity = BestMoveAndEvaluationMapper.toEntity(evaluationBoardInformation, bestMoveAndContinuation)
+        val evaluationBoardInformationEntity = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
+        val loadedEntity = repository.findByEvaluationBoardInformation(evaluationBoardInformationEntity)
+        val id = loadedEntity?.id
+        val entity = BestMoveAndEvaluationMapper.toEntity(evaluationBoardInformation, bestMoveAndContinuation, id)
         repository.persistOrUpdate(entity)
     }
 

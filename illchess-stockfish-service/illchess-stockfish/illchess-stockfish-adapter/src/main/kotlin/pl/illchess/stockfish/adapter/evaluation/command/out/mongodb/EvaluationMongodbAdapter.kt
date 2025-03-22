@@ -12,15 +12,19 @@ import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
 @ApplicationScoped
 class EvaluationMongodbAdapter(
     private val repository: EvaluationRepository
-): LoadBoardEvaluation, SaveBoardEvaluation {
+) : LoadBoardEvaluation, SaveBoardEvaluation {
 
     override fun loadBoardEvaluation(evaluationBoardInformation: EvaluationBoardInformation): Evaluation? {
-        val id = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
-        return EvaluationMapper.toDomain(repository.findById(id))
+        val evaluationBoardInformationEntity = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
+        val loadedEntity = repository.findByEvaluationBoardInformation(evaluationBoardInformationEntity)
+        return if (loadedEntity == null) null else EvaluationMapper.toDomain(loadedEntity)
     }
 
     override fun saveBoardEvaluation(evaluationBoardInformation: EvaluationBoardInformation, evaluation: Evaluation) {
-        val entity = EvaluationMapper.toEntity(evaluationBoardInformation, evaluation)
+        val evaluationBoardInformationEntity = EvaluationBoardInformationMapper.toEntity(evaluationBoardInformation)
+        val loadedEntity = repository.findByEvaluationBoardInformation(evaluationBoardInformationEntity)
+        val id = loadedEntity?.id
+        val entity = EvaluationMapper.toEntity(evaluationBoardInformation, evaluation, id)
         repository.persistOrUpdate(entity)
     }
 }
