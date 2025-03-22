@@ -12,6 +12,10 @@ urls:
   game-service: "http://localhost:8080"
   stockfish-api: "https://stockfish.online/api/s/v2.php"
 
+mongodb:
+  caching:
+    enabled: true
+
 bots:
   max-count: 12
   expiration-check-cron: "0 */1 * * * ?"
