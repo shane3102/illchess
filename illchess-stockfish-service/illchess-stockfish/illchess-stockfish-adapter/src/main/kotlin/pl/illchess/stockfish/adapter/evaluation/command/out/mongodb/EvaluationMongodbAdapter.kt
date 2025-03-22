@@ -1,5 +1,6 @@
 package pl.illchess.stockfish.adapter.evaluation.command.out.mongodb
 
+import io.quarkus.arc.properties.IfBuildProperty
 import jakarta.enterprise.context.ApplicationScoped
 import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.mapper.EvaluationBoardInformationMapper
 import pl.illchess.stockfish.adapter.evaluation.command.out.mongodb.mapper.EvaluationMapper
@@ -10,6 +11,7 @@ import pl.illchess.stockfish.domain.board.domain.EvaluationBoardInformation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
 
 @ApplicationScoped
+@IfBuildProperty(name = "mongodb.caching.enabled", stringValue = "true")
 class EvaluationMongodbAdapter(
     private val repository: EvaluationRepository
 ) : LoadBoardEvaluation, SaveBoardEvaluation {
