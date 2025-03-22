@@ -16,7 +16,7 @@ import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
 import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 
 @ApplicationScoped
-@IfBuildProperty(name = "mongodb.caching.enabled", stringValue = "false")
+@IfBuildProperty(name = "calculations.caching.enabled", stringValue = "false")
 class DisabledCachingMongodbAdapter :
     LoadBestMoveAndContinuation,
     SaveBestMoveAndContinuation,

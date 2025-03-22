@@ -12,7 +12,7 @@ urls:
   game-service: "http://localhost:8080"
   stockfish-api: "https://stockfish.online/api/s/v2.php"
 
-mongodb:
+calculations:
   caching:
     enabled: true
 

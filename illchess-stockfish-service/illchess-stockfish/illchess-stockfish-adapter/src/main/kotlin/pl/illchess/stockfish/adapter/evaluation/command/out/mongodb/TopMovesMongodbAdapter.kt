@@ -11,7 +11,7 @@ import pl.illchess.stockfish.domain.board.domain.EvaluationBoardInformation
 import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 
 @ApplicationScoped
-@IfBuildProperty(name = "mongodb.caching.enabled", stringValue = "true")
+@IfBuildProperty(name = "calculations.caching.enabled", stringValue = "true")
 class TopMovesMongodbAdapter(
     private val repository: TopMovesRepository
 ) : LoadTopMoves, SaveTopMoves {
