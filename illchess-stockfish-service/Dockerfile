@@ -30,7 +30,7 @@ COPY illchess-stockfish-server/src illchess-stockfish-server/src
 
 RUN ls
 RUN ./mvnw clean package -DskipTests -N
-RUN ./mvnw clean package -DskipTests -Dnative
+RUN ./mvnw clean package -DskipTests -Dnative -Dquarkus.native.additional-build-args="--initialize-at-run-time=com.sun.jna"
 
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.10 as buildStockfish

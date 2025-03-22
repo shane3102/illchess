@@ -4,9 +4,9 @@ import io.quarkus.arc.properties.IfBuildProperty
 import jakarta.enterprise.context.ApplicationScoped
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.adapter.evaluation.command.out.bash.util.StockfishConnector
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBestMoveAndContinuation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadBoardEvaluation
-import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBestMoveAndContinuation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateBoardEvaluation
+import pl.illchess.stockfish.application.evaluation.command.out.CalculateTopMoves
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.evaluation.domain.BestMoveAndContinuation
 import pl.illchess.stockfish.domain.evaluation.domain.Evaluation
@@ -15,7 +15,7 @@ import pl.illchess.stockfish.domain.evaluation.domain.TopMoves
 
 @ApplicationScoped
 @IfBuildProperty(name = "working.mode", stringValue = "ENGINE")
-class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, LoadTopMoves {
+class BashStockfishAdapter : CalculateBoardEvaluation, CalculateBestMoveAndContinuation, CalculateTopMoves {
 
     @field:ConfigProperty(
         name = "stockfish.default-depth",
@@ -29,7 +29,7 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, L
     )
     lateinit var stockfishPath: String
 
-    override fun loadBoardEvaluation(
+    override fun calculateBoardEvaluation(
         fenPosition: FenBoardPosition,
     ): Evaluation? {
         val stockfishConnector = StockfishConnector()
@@ -39,7 +39,7 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, L
         return result
     }
 
-    override fun loadBestMoveAndContinuation(
+    override fun calculateBestMoveAndContinuation(
         fenPosition: FenBoardPosition,
         depth: Int?
     ): BestMoveAndContinuation? {
@@ -53,7 +53,7 @@ class BashStockfishAdapter : LoadBoardEvaluation, LoadBestMoveAndContinuation, L
         return result
     }
 
-    override fun loadTopMoves(
+    override fun calculateTopMoves(
         fenPosition: FenBoardPosition,
         topMoveCount: Int,
         depth: Int?
