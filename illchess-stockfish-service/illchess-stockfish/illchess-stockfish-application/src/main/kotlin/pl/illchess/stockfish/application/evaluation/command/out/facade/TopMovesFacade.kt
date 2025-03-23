@@ -21,7 +21,7 @@ class TopMovesFacade(
         val savedTopMoves = loadTopMoves.loadTopMoves(evaluationBoardInformation)
         val result: TopMoves
 
-        return if (savedTopMoves == null || savedTopMoves.topMovesList.size <= command.moveCount) {
+        return if (savedTopMoves == null || savedTopMoves.topMovesList.size < command.moveCount) {
             result = calculateTopMoves
                 .calculateTopMoves(
                     command.fenBoardPosition,
