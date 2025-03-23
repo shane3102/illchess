@@ -36,7 +36,7 @@ Service has two modes of operation:
 * **engine** - service is communicating with engine present on host machine 
 * **API** - service is communicating API available here: https://stockfish.online/
 
-Additionally on each stockfish calculation (evaluation, top moves etc.) is also saved to **MongoDB** database.
+Additionally on each stockfish calculation (evaluation, top moves etc.) the result is also saved to **MongoDB** database.
 On each request application at first is checking if calculation has already been done and if so returns saved result.
 If not, calculation is performed and result is saved to database.
 
