@@ -22,7 +22,7 @@
         </app-chess-promoting-piece>
     </div>
     
-    <app-king-board-info-after-game-finished [gameState]="gameState" [victoriousPlayerColor]="victoriousPlayerColor"  [piece]="piece"></app-king-board-info-after-game-finished>
+    <app-king-board-info-after-game-finished [gameState]="gameState" [gameResultCause]="gameResultCause"  [piece]="piece"></app-king-board-info-after-game-finished>
 
     <div *ngIf="piece" draggable="true" (dragstart)="pieceSelected()" (dragend)="pieceDraggedRelease()" class="chess-piece-wrapper">
         <app-chess-piece [pieceInfo]="piece"></app-chess-piece>

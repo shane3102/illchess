@@ -9,9 +9,9 @@ export const boardAdditionalInfoSelector = createSelector(
     (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView
 )
 
-export const victoriousPlayerColorSelector = createSelector(
+export const gameResultCause = createSelector(
     selectBoard,
-    (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView?.victoriousPlayerColor
+    (state: BoardAdditionalInfoState) => state.boardAdditionalInfoView?.gameResultCause
 )
 
 export const gameStateSelector = createSelector(

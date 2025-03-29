@@ -12,7 +12,7 @@ export class GameFinishedPopupComponent {
 
   @Input() boardGameObtainedInfoView: BoardGameObtainedInfoView | undefined | null
   @Input() gameFinishedView: GameFinishedView | undefined | null
-  @Input() gameState: 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW'
+  @Input() gameState: 'WHITE_WON' | 'BLACK_WON' | 'DRAW'
 
   user = faUser
   userWon = faUserPlus

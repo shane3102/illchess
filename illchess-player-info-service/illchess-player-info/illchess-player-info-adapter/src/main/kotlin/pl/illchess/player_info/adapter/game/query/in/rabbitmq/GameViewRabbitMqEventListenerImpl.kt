@@ -13,12 +13,19 @@ import pl.illchess.player_info.domain.game.event.ErrorWhileSavingGameEvent
 import pl.illchess.player_info.domain.game.event.GameSavedEvent
 import pl.illchess.player_info.domain.game.exception.GameNotFoundException
 import java.util.UUID
+import org.eclipse.microprofile.reactive.messaging.OnOverflow
 
 @ApplicationScoped
 class GameViewRabbitMqEventListenerImpl(
     private val gameViewQueryPort: GameViewQueryPort,
-    @Channel("obtain-game-success") private val gameSavedEmitter: Emitter<GameView>,
-    @Channel("obtain-game-failure") private val gameSavingErrorEmitter: Emitter<GameErrorObtainingView>
+    @Channel("obtain-game-success")
+    // TODO think about it
+    @OnOverflow(OnOverflow.Strategy.UNBOUNDED_BUFFER)
+    private val gameSavedEmitter: Emitter<GameView>,
+    @Channel("obtain-game-failure")
+    // TODO think about it
+    @OnOverflow(OnOverflow.Strategy.UNBOUNDED_BUFFER)
+    private val gameSavingErrorEmitter: Emitter<GameErrorObtainingView>
 ) : GameViewRabbitMqEventListener {
 
     @ConsumeEvent("game.saved")
