@@ -2,8 +2,7 @@ package pl.illchess.game.domain.board.model.state;
 
 public enum GameState {
     CONTINUE,
-    CHECKMATE,
-    STALEMATE,
-    RESIGNED,
-    DRAW
+    WHITE_WON,
+    BLACK_WON,
+    DRAW;
 }

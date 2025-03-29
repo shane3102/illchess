@@ -25,8 +25,8 @@ export class ChessSquareComponent implements OnInit {
   @Input() username: string
   @Input() lastPerformedMove: MoveView | undefined
   @Input() preMoves: MoveView[] | undefined
-  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined
-  @Input() victoriousPlayerColor: string | null | undefined
+  @Input() gameState: 'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined
+  @Input() gameResultCause: string | null | undefined
   @Input() currentPlayerColor: string | null | undefined
   @Input() userColor: 'WHITE' | 'BLACK' | undefined
 

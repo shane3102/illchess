@@ -9,7 +9,7 @@ public record BoardAdditionalInfoView(
     PlayerView whitePlayer,
     PlayerView blackPlayer,
     String gameState,
-    String victoriousPlayerColor,
+    String gameResultCause,
     List<String> capturedWhitePieces,
     List<String> capturedBlackPieces,
     List<String> performedMoves

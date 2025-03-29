@@ -1,7 +1,7 @@
 <div *ngIf="boardView$ | async as boardView">
     
     <div style="position: absolute" *ngIf="gameState$ | async as gameState">
-        @if(gameState == 'CHECKMATE' || gameState ==  'STALEMATE' || gameState ==  'RESIGNED' || gameState ==  'DRAW') {
+        @if(gameState == 'WHITE_WON' || gameState ==  'BLACK_WON' || gameState ==  'DRAW') {
             <app-game-finished-popup
                 [boardGameObtainedInfoView]="boardGameObtainedInfoView$ | async" 
                 [gameFinishedView]="gameFinishedView$ | async"
@@ -38,7 +38,7 @@
                     [preMoves]="boardView?.preMoves"
                     [gameState]="gameState$ | async"
                     [currentPlayerColor]="currentPlayerColor$ | async"
-                    [victoriousPlayerColor]="victoriousPlayerColor$ | async"
+                    [gameResultCause]="gameResultCause$ | async"
                     [userColor]="boardView.blackUsername == username ? 'BLACK' : boardView.whiteUsername == username ? 'WHITE' : undefined">
                 </app-chess-square>
             </div>

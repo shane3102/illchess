@@ -1,5 +1,13 @@
 package pl.illchess.game.adapter.board.command.out.redis.mapper;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity;
 import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity.PreMoveEntity;
 import pl.illchess.game.domain.board.model.Board;
@@ -10,8 +18,9 @@ import pl.illchess.game.domain.board.model.history.MoveHistory;
 import pl.illchess.game.domain.board.model.square.PiecesLocations;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.BoardState;
-import pl.illchess.game.domain.board.model.state.GameStartTime;
 import pl.illchess.game.domain.board.model.state.GameState;
+import pl.illchess.game.domain.board.model.state.GameResultCause;
+import pl.illchess.game.domain.board.model.state.GameStartTime;
 import pl.illchess.game.domain.board.model.state.player.IsProposingDraw;
 import pl.illchess.game.domain.board.model.state.player.IsProposingTakingBackMove;
 import pl.illchess.game.domain.board.model.state.player.Player;
@@ -19,15 +28,6 @@ import pl.illchess.game.domain.board.model.state.player.PreMove;
 import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
 import pl.illchess.game.domain.piece.model.info.PieceType;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class BoardMapper {
 
@@ -49,8 +49,8 @@ public class BoardMapper {
             boardState.currentPlayerColor().color().toString(),
             mapToPlayer(boardState.whitePlayer()),
             mapToPlayer(boardState.blackPlayer()),
-            boardState.gameState().toString(),
-            boardState.victoriousPlayerColor() == null ? null : boardState.victoriousPlayerColor().toString(),
+            boardState.gameResult().toString(),
+            boardState.gameResultCause() == null ? null : boardState.gameResultCause().toString(),
             boardState.gameStartTime().value()
         );
     }
@@ -92,9 +92,9 @@ public class BoardMapper {
         return BoardState.of(
             PieceColor.valueOf(boardState.currentPlayerColor()),
             GameState.valueOf(boardState.gameState()),
+            boardState.gameResultCause() == null ? null : GameResultCause.valueOf(boardState.gameResultCause()),
             mapToPlayer(boardState.whitePlayer()),
             mapToPlayer(boardState.blackPlayer()),
-            boardState.victoriousPlayerColor() == null ? null : PieceColor.valueOf(boardState.victoriousPlayerColor()),
             new GameStartTime(boardState.startTime())
         );
     }

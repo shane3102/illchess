@@ -35,7 +35,7 @@ public record BoardEntity(
         PlayerEntity whitePlayer,
         PlayerEntity blackPlayer,
         String gameState,
-        String victoriousPlayerColor,
+        String gameResultCause,
         LocalDateTime startTime
     ) implements Serializable {
 

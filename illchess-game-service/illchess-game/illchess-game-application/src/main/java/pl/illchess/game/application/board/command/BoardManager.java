@@ -52,7 +52,6 @@ import pl.illchess.game.domain.board.model.state.GameState;
 import pl.illchess.game.domain.board.model.state.player.Player;
 import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
-import static pl.illchess.game.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.game.domain.commons.model.MoveType.MOVE;
 
 public class BoardManager implements
@@ -194,7 +193,7 @@ public class BoardManager implements
             .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
         GameState stateOfBoard = board.establishBoardState();
         saveBoard.saveBoard(board);
-        if (stateOfBoard != CONTINUE) {
+        if (stateOfBoard != GameState.CONTINUE) {
             eventPublisher.publishDomainEvent(new GameFinished(board.boardId()));
         }
         log.info("Successfully checked state on board = {}. State is {}", cmd.boardId(), stateOfBoard);

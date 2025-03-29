@@ -71,7 +71,7 @@ public class BoardViewMapper {
                     entity.boardState().blackPlayer().isProposingTakingBackMove()
                 ),
                 entity.boardState().gameState(),
-                entity.boardState().victoriousPlayerColor(),
+                entity.boardState().gameResultCause(),
                 capturedPiecesStreamSupplier.get()
                     .filter(move -> "WHITE".equals(move.capturedPiece().pieceColor()))
                     .map(move -> move.capturedPiece().pieceType())
@@ -95,7 +95,7 @@ public class BoardViewMapper {
                 entity.boardId(),
                 entity.boardState().whitePlayer().username(),
                 entity.boardState().blackPlayer().username(),
-                toGameResult(entity.boardState().victoriousPlayerColor()),
+                entity.boardState().gameState(),
                 LocalDateTime.now(),
                 entity.moveStackData().stream().map(
                     it -> new PerformedMovesGameFinishedView(
@@ -107,14 +107,6 @@ public class BoardViewMapper {
                 ).toList()
             );
         }
-    }
-
-    private static String toGameResult(String victoriousColor) {
-        return victoriousColor == null ? "DRAW" : switch (victoriousColor) {
-            case "WHITE" -> "WHITE_WON";
-            case "BLACK" -> "BLACK_WON";
-            default -> "DRAW";
-        };
     }
 
     private static MoveView toLastPerformedMove(BoardEntity entity) {
