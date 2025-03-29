@@ -9,7 +9,7 @@ import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
 import { PieceSelectedInfo } from '../../../shared/model/game/PieceSelectedInfo';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
-import { currentPlayerColorSelector, gameStateSelector, victoriousPlayerColorSelector } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
+import { currentPlayerColorSelector, gameStateSelector, gameResultCause } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
 import { boardLoaded, checkLegalMoves, selectedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../../shared/state/board/board.actions';
 import { boardGameObtainedInfoView, boardSelector, selectedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../../shared/state/board/board.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
@@ -33,8 +33,8 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   selectedPieceInfo$: Observable<PieceSelectedInfo | undefined> = this.store.select(selectedPieceSelector)
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
-  victoriousPlayerColor$: Observable<string | null | undefined> = this.store.select(victoriousPlayerColorSelector)
-  gameState$: Observable<'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
+  gameState$: Observable<'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
+  gameResultCause$: Observable<string | null | undefined> = this.store.select(gameResultCause)
   currentPlayerColor$: Observable<string | null | undefined> = this.store.select(currentPlayerColorSelector)
   boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
   gameFinishedView$: Observable<GameFinishedView | null | undefined> = this.store.select(gameFinishedView)

@@ -27,16 +27,16 @@ import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.info.CurrentPlayerColor;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
+import static pl.illchess.game.domain.board.model.state.GameResultCause.PLAYER_AGREEMENT;
 import static pl.illchess.game.domain.board.model.state.GameState.CONTINUE;
 import static pl.illchess.game.domain.board.model.state.GameState.DRAW;
-import static pl.illchess.game.domain.board.model.state.GameState.RESIGNED;
 
 public class BoardState {
     private final CurrentPlayerColor currentPlayerColor;
     private final Player whitePlayer;
     private Player blackPlayer;
     private GameState gameState;
-    private PieceColor victoriousPlayerColor;
+    private GameResultCause gameResultCause;
     private final GameStartTime gameStartTime;
 
     private BoardState(
@@ -44,22 +44,20 @@ public class BoardState {
         Player whitePlayer,
         Player blackPlayer,
         GameState gameState,
-        PieceColor victoriousPlayerColor,
+        GameResultCause gameResultCause,
         GameStartTime gameStartTime
     ) {
         this.currentPlayerColor = currentPlayerColor;
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
         this.gameState = gameState;
-        this.victoriousPlayerColor = victoriousPlayerColor;
+        this.gameResultCause = gameResultCause;
         this.gameStartTime = gameStartTime;
     }
 
-    public void changeState(GameState gameState) {
+    public void changeState(GameState gameState, GameResultCause gameResultCause) {
         this.gameState = gameState;
-        if (gameState == GameState.CHECKMATE) {
-            this.victoriousPlayerColor = currentPlayerColor.color().inverted();
-        }
+        this.gameResultCause = gameResultCause;
     }
 
     public void checkIfAllowedToMove(BoardId boardId, Piece movedPiece, Username usernamePerformingMove) {
@@ -112,15 +110,14 @@ public class BoardState {
         if (gameState != CONTINUE) {
             throw new GameIsNotContinuableException(gameState);
         }
+        this.gameResultCause = GameResultCause.RESIGNATION;
         if (Objects.equals(command.username(), blackPlayer.username())) {
-            this.victoriousPlayerColor = PieceColor.WHITE;
+            this.gameState = GameState.WHITE_WON;
         } else if (Objects.equals(command.username(), whitePlayer.username())) {
-            this.victoriousPlayerColor = PieceColor.BLACK;
+            this.gameState = GameState.BLACK_WON;
         } else {
             throw new InvalidUserResigningGameException(command.username());
         }
-
-        this.gameState = RESIGNED;
     }
 
     public void proposeDraw(ProposeDraw command) {
@@ -147,6 +144,7 @@ public class BoardState {
             whitePlayer.resetProposingDraw();
             blackPlayer.resetProposingTakingBackMove();
             whitePlayer.resetProposingTakingBackMove();
+            gameResultCause = PLAYER_AGREEMENT;
             gameState = DRAW;
         } else {
             throw new GameCanNotBeAcceptedOrRejectedAsDrawnException(command.boardId());
@@ -248,14 +246,6 @@ public class BoardState {
         return currentPlayerColor;
     }
 
-    public GameState gameState() {
-        return gameState;
-    }
-
-    public PieceColor victoriousPlayerColor() {
-        return victoriousPlayerColor;
-    }
-
     public Player whitePlayer() {
         return whitePlayer;
     }
@@ -268,12 +258,20 @@ public class BoardState {
         return gameStartTime;
     }
 
+    public GameState gameResult() {
+        return gameState;
+    }
+
+    public GameResultCause gameResultCause() {
+        return gameResultCause;
+    }
+
     public static BoardState of(
         PieceColor currentPlayerColor,
         GameState gameState,
+        GameResultCause gameResultCause,
         Player player1,
         Player player2,
-        PieceColor victoriousPlayerColor,
         GameStartTime gameStartTime
     ) {
         return new BoardState(
@@ -281,7 +279,7 @@ public class BoardState {
             player1,
             player2,
             gameState,
-            victoriousPlayerColor,
+            gameResultCause,
             gameStartTime
         );
     }

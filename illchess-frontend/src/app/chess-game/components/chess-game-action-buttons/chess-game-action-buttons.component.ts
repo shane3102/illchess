@@ -20,7 +20,7 @@ export class ChessGameActionButtonsComponent {
   @Input() blackPlayer: PlayerView | undefined
   @Input() color: PieceColor
   @Input() performedMoves: string[]
-  @Input() gameState: 'CONTINUE' | 'CHECKMATE' | 'STALEMATE' | 'RESIGNED' | 'DRAW'
+  @Input() gameState: 'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW'
 
   handshake = faHandshake
   flag = faFlag

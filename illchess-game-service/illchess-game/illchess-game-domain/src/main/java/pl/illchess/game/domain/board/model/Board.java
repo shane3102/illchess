@@ -28,6 +28,7 @@ import pl.illchess.game.domain.board.model.square.PiecesLocations;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.BoardState;
 import pl.illchess.game.domain.board.model.state.GameState;
+import pl.illchess.game.domain.board.model.state.GameResultCause;
 import pl.illchess.game.domain.board.model.state.player.Player;
 import pl.illchess.game.domain.board.model.state.player.PreMove;
 import pl.illchess.game.domain.board.model.state.player.Username;
@@ -197,17 +198,20 @@ public record Board(
             .anyMatch(piece -> !piece.possibleMoves(piecesLocations, moveHistory).isEmpty());
 
         GameState establishedState;
+        GameResultCause establishedGameResultCause = null;
 
         if (kingIsAttacked && !anyPieceCanMove) {
-            establishedState = GameState.CHECKMATE;
+            establishedState = king.color() == PieceColor.WHITE ? GameState.BLACK_WON : GameState.WHITE_WON;
+            establishedGameResultCause = GameResultCause.CHECKMATE;
         } else if (!kingIsAttacked && !anyPieceCanMove) {
-            establishedState = GameState.STALEMATE;
+            establishedState = GameState.DRAW;
+            establishedGameResultCause = GameResultCause.STALEMATE;
         } else {
             establishedState = GameState.CONTINUE;
         }
 
         if (establishedState != GameState.CONTINUE) {
-            boardState.changeState(establishedState);
+            boardState.changeState(establishedState, establishedGameResultCause);
         }
 
         return establishedState;
