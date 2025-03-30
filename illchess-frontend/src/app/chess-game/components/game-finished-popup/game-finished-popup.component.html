@@ -6,19 +6,24 @@
     } @else {
         @if(boardGameObtainedInfoView.status == 'SUCCESS' && gameFinishedView) {
             <div class="content-obtain">
-                <div class="user-info user-info-white">
-                    <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.whiteUserGameInfo"></app-game-finished-popup-user-info>
+                <div class="main-info">
+                    <div class="user-info user-info-white">
+                        <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.whiteUserGameInfo"></app-game-finished-popup-user-info>
+                    </div>
+                    
+                    <div class="result" [ngClass]="{'result-draw': gameFinishedView.gameResult == 'DRAW'}">
+                        <b>
+                            {{gameFinishedView.gameResult == 'WHITE_WON' ? "1:0" :
+                            (gameFinishedView.gameResult == 'BLACK_WON' ?"0:1" : "0.5:0.5")}}
+                        </b>
+                    </div>
+                
+                    <div class="user-info user-info-black">
+                        <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.blackUserGameInfo"></app-game-finished-popup-user-info>
+                    </div>
                 </div>
-
-                <div class="result" [ngClass]="{'result-draw': gameFinishedView.gameResult == 'DRAW'}">
-                    <b>
-                        {{gameFinishedView.gameResult == 'WHITE_WON' ? "1:0" :
-                        (gameFinishedView.gameResult == 'BLACK_WON' ?"0:1" : "0.5:0.5")}}
-                    </b>
-                </div>
-
-                <div class="user-info user-info-black">
-                    <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.blackUserGameInfo"></app-game-finished-popup-user-info>
+                <div class="cause-info">
+                    Poprzez {{gameFinishedView.gameResultCause | gameResultCausePipe}}
                 </div>
             </div>
         } @else {

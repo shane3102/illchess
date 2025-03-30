@@ -34,7 +34,7 @@ class GameViewRabbitMqEventListenerImpl(
         val result = (gameViewQueryPort.findById(gameSavedEvent.gameId.uuid)
             ?: throw GameNotFoundException(gameSavedEvent.gameId))
         gameSavedEmitter.send(result)
-        log.info("Successfully sent info with game view of game with id: ${gameSavedEvent.gameId.uuid}. Result: $result")
+        log.info("Successfully sent info with game view of game with id: ${gameSavedEvent.gameId.uuid}.")
         return result
     }
 

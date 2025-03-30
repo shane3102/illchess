@@ -12,6 +12,7 @@ data class ObtainNewGameRabbitMqMessage(
     val whiteUsername: String,
     val blackUsername: String,
     val gameResult: String,
+    val gameResultCause: String,
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMovesRabbitMqMessage>
 ) {
@@ -29,6 +30,7 @@ data class ObtainNewGameRabbitMqMessage(
             whiteUsername,
             blackUsername,
             gameResult,
+            gameResultCause,
             endTime,
             performedMoves.map {
                 ObtainNewGameUseCase.PerformedMoveCmd(
@@ -47,6 +49,7 @@ data class ObtainNewGameRabbitMqMessage(
             whiteUsername,
             blackUsername,
             gameResult,
+            gameResultCause,
             endTime,
             performedMoves.map {
                 ObtainNewGameInboxMessage.PerformedMoveInboxMessage(

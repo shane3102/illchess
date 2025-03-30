@@ -24,6 +24,7 @@ import { KingBoardInfoAfterGameFinishedComponent } from './components/king-board
 import { LoadingGameComponent } from './components/loading-game/loading-game.component';
 import { WaitingForBlackPopupComponent } from './components/waiting-for-black-popup/waiting-for-black-popup.component';
 import { ChessGamePlayerPanelComponent } from './components/chess-game-player-panel/chess-game-player-panel.component';
+import { GameResultCausePipePipe } from "./pipes/game-result-cause-pipe.pipe";
 
 
 @NgModule({
@@ -54,8 +55,9 @@ import { ChessGamePlayerPanelComponent } from './components/chess-game-player-pa
   imports: [
     SharedModule,
     CommonModule,
-    FontAwesomeModule
-  ],
+    FontAwesomeModule,
+    GameResultCausePipePipe
+],
   exports: [
     ChessGameComponent,
     JoinOrInitializeGameComponent,

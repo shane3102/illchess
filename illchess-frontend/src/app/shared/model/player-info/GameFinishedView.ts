@@ -3,6 +3,7 @@ export interface GameFinishedView {
     whiteUserGameInfo: UserGameInfoView,
     blackUserGameInfo: UserGameInfoView
     gameResult: 'WHITE_WON' | 'DRAW' | 'BLACK_WON'
+    gameResultCause: 'CHECKMATE' | 'RESIGNATION' | 'STALEMATE' | 'INSUFFICIENT_MATERIAL' | 'PLAYER_AGREEMENT',
     endTime: Date,
     performedMoves: PerformedMoveView[]
 }

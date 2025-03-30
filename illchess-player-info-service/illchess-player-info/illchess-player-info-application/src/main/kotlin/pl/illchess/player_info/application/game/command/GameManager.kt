@@ -34,7 +34,7 @@ class GameManager(
             log.info(
                 """
                 Obtaining new game with id ${cmd.id} of players with given usernames: 
-                WHITE - ${cmd.whiteUsername}, BLACK - ${cmd.blackUsername} with result - ${cmd.gameResult}. 
+                WHITE - ${cmd.whiteUsername}, BLACK - ${cmd.blackUsername} with result - ${cmd.gameResult} and result cause ${cmd.gameResultCause} 
                 Recalculating players ranking points and saving new game to database.
                 """.trimIndent().replace(Regex("(\n*)\n"), "$1")
             )

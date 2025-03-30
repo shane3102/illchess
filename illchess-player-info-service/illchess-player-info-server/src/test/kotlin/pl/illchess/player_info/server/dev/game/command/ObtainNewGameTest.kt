@@ -32,6 +32,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         val blackUsernameText = randomString()
         val blackUserId = UUID.randomUUID()
         val gameResult = "WHITE_WON"
+        val gameResultCause = "RESIGNATION"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
@@ -44,6 +45,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
             whiteUsernameText,
             blackUsernameText,
             gameResult,
+            gameResultCause,
             endTime,
             performedMoves
         )
@@ -72,6 +74,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
         val whiteUsernameText = randomString()
         val blackUsernameText = randomString()
         val gameResult = "WHITE_WON"
+        val gameResultCause = "CHECKMATE"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
@@ -81,6 +84,7 @@ open class ObtainNewGameTest : ObtainNewGameSpecification() {
             whiteUsernameText,
             blackUsernameText,
             gameResult,
+            gameResultCause,
             endTime,
             performedMoves
         )

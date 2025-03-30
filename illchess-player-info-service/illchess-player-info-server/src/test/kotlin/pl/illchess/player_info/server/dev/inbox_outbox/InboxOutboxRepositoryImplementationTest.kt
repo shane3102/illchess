@@ -36,6 +36,7 @@ class InboxOutboxRepositoryImplementationTest : InboxOutboxRepositoryImplementat
         val whiteUsernameText = randomString()
         val blackUsernameText = randomString()
         val gameResult = "WHITE_WON"
+        val gameResultCause = "CHECKMATE"
         val performedMoves = mutableListOf<ObtainNewGameRabbitMqMessage.PerformedMovesRabbitMqMessage>()
         val endTime = LocalDateTime.now()
 
@@ -45,6 +46,7 @@ class InboxOutboxRepositoryImplementationTest : InboxOutboxRepositoryImplementat
             whiteUsernameText,
             blackUsernameText,
             gameResult,
+            gameResultCause,
             endTime,
             performedMoves
         )

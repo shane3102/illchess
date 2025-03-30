@@ -10,6 +10,7 @@ public record BoardGameFinishedView(
     String whiteUsername,
     String blackUsername,
     String gameResult,
+    String gameResultCause,
     LocalDateTime endTime,
     List<PerformedMovesGameFinishedView> performedMoves
 ) implements Serializable {
