@@ -5,11 +5,11 @@ import pl.illchess.game.domain.board.model.BoardId;
 
 import java.util.UUID;
 
-public interface CheckIfCheckmateOrStalemateUseCase {
+public interface CheckBoardStateUseCase {
 
-    void checkIfCheckmateOrStalemate(CheckIsCheckmateOrStaleMateCmd cmd);
+    void checkBoardState(CheckBoardStateCmd cmd);
 
-    record CheckIsCheckmateOrStaleMateCmd(UUID boardId) {
+    record CheckBoardStateCmd(UUID boardId) {
         public CheckIsCheckmateOrStaleMate toCommand() {
             return new CheckIsCheckmateOrStaleMate(new BoardId(boardId));
         }

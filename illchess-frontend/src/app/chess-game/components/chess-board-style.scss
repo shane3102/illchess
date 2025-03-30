@@ -13,7 +13,7 @@ $popup-content-width: calc(5 * $chess-square-size);
     background-color: rgb(128,128,128, 0.75);
     width: $popup-content-width;
     height: $popup-content-height;
-    z-index: 2;
+    z-index: 5;
     animation: show-username 1s;
 }
 

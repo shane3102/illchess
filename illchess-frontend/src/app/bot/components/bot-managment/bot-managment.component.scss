@@ -5,7 +5,7 @@ $management-content-height: 40vh;
 
 .management-content {
     position: absolute;
-    z-index: 5;
+    z-index: 6;
     top: calc($header-height + $header-button-unroll-height - 0.5vh);
     left: calc(50vw - 0.5 * $management-content-width);
     height: $management-content-height;

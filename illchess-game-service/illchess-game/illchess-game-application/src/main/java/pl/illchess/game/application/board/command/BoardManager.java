@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.illchess.game.application.board.command.in.AcceptDrawUseCase;
 import pl.illchess.game.application.board.command.in.AcceptTakingBackLastMoveUseCase;
-import pl.illchess.game.application.board.command.in.CheckIfCheckmateOrStalemateUseCase;
+import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase;
 import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase;
 import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase;
 import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase;
@@ -57,7 +57,7 @@ import static pl.illchess.game.domain.commons.model.MoveType.MOVE;
 public class BoardManager implements
     MovePieceUseCase,
     JoinOrInitializeNewGameUseCase,
-    CheckIfCheckmateOrStalemateUseCase,
+    CheckBoardStateUseCase,
     CheckLegalityMoveUseCase,
     ResignGameUseCase,
     ProposeDrawUseCase,
@@ -186,7 +186,7 @@ public class BoardManager implements
     }
 
     @Override
-    public void checkIfCheckmateOrStalemate(CheckIsCheckmateOrStaleMateCmd cmd) {
+    public void checkBoardState(CheckBoardStateCmd cmd) {
         log.info("Checking if checkmate or stalemate on board  = {}", cmd.boardId());
         CheckIsCheckmateOrStaleMate command = cmd.toCommand();
         Board board = loadBoard.loadBoard(command.boardId())

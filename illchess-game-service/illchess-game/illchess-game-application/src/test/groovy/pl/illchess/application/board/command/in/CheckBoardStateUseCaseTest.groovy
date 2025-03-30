@@ -1,15 +1,16 @@
 package pl.illchess.application.board.command.in
 
 import pl.illchess.application.board.BoardSpecification
-import pl.illchess.game.application.board.command.in.CheckIfCheckmateOrStalemateUseCase
+import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase
 import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
+import static pl.illchess.game.domain.board.model.state.GameResultCause.CHECKMATE
+import static pl.illchess.game.domain.board.model.state.GameResultCause.INSUFFICIENT_MATERIAL
+import static pl.illchess.game.domain.board.model.state.GameResultCause.STALEMATE
 import static pl.illchess.game.domain.board.model.state.GameState.BLACK_WON
 import static pl.illchess.game.domain.board.model.state.GameState.DRAW
 import static pl.illchess.game.domain.board.model.state.GameState.WHITE_WON
-import static pl.illchess.game.domain.board.model.state.GameResultCause.CHECKMATE
-import static pl.illchess.game.domain.board.model.state.GameResultCause.STALEMATE
 
-class CheckIfCheckmateOrStalemateUseCaseTest extends BoardSpecification {
+class CheckBoardStateUseCaseTest extends BoardSpecification {
 
     def "position should be correctly considered as checkmate or stalemate"() {
         given:
@@ -20,9 +21,9 @@ class CheckIfCheckmateOrStalemateUseCaseTest extends BoardSpecification {
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
         )
 
-        def cmd = new CheckIfCheckmateOrStalemateUseCase.CheckIsCheckmateOrStaleMateCmd(boardId.uuid())
+        def cmd = new CheckBoardStateUseCase.CheckBoardStateCmd(boardId.uuid())
         when:
-        checkIfCheckmateOrStalemateUseCase.checkIfCheckmateOrStalemate(cmd)
+        checkIfCheckmateOrStalemateUseCase.checkBoardState(cmd)
 
         def loadedBoard = loadBoard.loadBoard(boardId).orElseThrow(AssertionError::new)
 
@@ -47,5 +48,12 @@ class CheckIfCheckmateOrStalemateUseCaseTest extends BoardSpecification {
         "8/8/8/2p2p1p/2P2P1k/4pP1P/4P1KP/5BNR w"                     | DRAW           | STALEMATE
         "1K6/8/1k6/pPp3p1/P1P2pP1/5P2/7P/8 b"                        | DRAW           | STALEMATE
         "3R1bk1/8/6K1/8/8/2B4P/8/8 b"                                | DRAW           | STALEMATE
+        "1K6/8/8/8/8/8/8/1k6"                                        | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/b7/8/8/8/8/8/1k6"                                       | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/8/8/8/B7/8/8/1k6"                                       | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/8/8/4n3/8/8/8/1k6"                                      | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/8/8/8/8/1N6/8/1k6"                                      | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/8/8/2N5/8/1N6/8/1k6"                                    | DRAW           | INSUFFICIENT_MATERIAL
+        "1K6/nn6/8/8/8/8/8/1k6"                                      | DRAW           | INSUFFICIENT_MATERIAL
     }
 }
