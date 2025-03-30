@@ -17,3 +17,6 @@ databaseChangeLog:
   - include:
       file: changes/006-rename-winning-piece-color-column-to-game-result.yaml
       relativeToChangeLogFile: true
+  - include:
+      file: changes/007-add-game-result-cause-column-to-game.yaml
+      relativeToChangeLogFile: true

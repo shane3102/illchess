@@ -5,6 +5,8 @@ import io.restassured.common.mapper.TypeRef
 import io.smallrye.reactive.messaging.annotations.Merge
 import jakarta.inject.Inject
 import jakarta.transaction.Transactional
+import java.time.LocalDateTime
+import java.util.UUID
 import org.eclipse.microprofile.reactive.messaging.Channel
 import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,8 +18,6 @@ import pl.illchess.player_info.adapter.game.command.out.jpa_streamer.repository.
 import pl.illchess.player_info.adapter.player.command.out.jpa_streamer.repository.PlayerJpaStreamerRepository
 import pl.illchess.player_info.application.commons.query.model.Page
 import pl.illchess.player_info.application.player.query.out.model.PlayerView
-import java.time.LocalDateTime
-import java.util.UUID
 
 @QuarkusTest
 class PlayerViewTest : PlayerViewSpecification() {
@@ -40,6 +40,7 @@ class PlayerViewTest : PlayerViewSpecification() {
 
         val whiteUsernameTrackedText = randomString()
         val gameResult = "BLACK_WON"
+        val gameResultCause = "CHECKMATE"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val generatedGames = 7
         val totalPlayers = generatedGames + 1
@@ -51,6 +52,7 @@ class PlayerViewTest : PlayerViewSpecification() {
                 whiteUsernameTrackedText,
                 randomString(),
                 gameResult,
+                gameResultCause,
                 LocalDateTime.now(),
                 performedMoves
             )
@@ -80,6 +82,7 @@ class PlayerViewTest : PlayerViewSpecification() {
         // given
         val whiteUsernameTrackedText = randomString()
         val gameResult = "WHITE_WON"
+        val gameResultCause = "RESIGNATION"
         val performedMoves = mutableListOf<PerformedMovesRabbitMqMessage>()
         val generatedGames = 10
 
@@ -90,6 +93,7 @@ class PlayerViewTest : PlayerViewSpecification() {
                 whiteUsernameTrackedText,
                 randomString(),
                 gameResult,
+                gameResultCause,
                 LocalDateTime.now(),
                 performedMoves
             )

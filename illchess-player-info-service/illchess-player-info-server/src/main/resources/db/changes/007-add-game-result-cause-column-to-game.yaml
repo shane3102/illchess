@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user
+      author: shane3102
+      changes:
+        - addColumn:
+            tableName: game
+            columns:
+              - column:
+                  name: game_result_cause
+                  type: TEXT
+                  remarks: Powód zakończenia rozgrywki

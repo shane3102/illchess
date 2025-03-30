@@ -50,6 +50,7 @@ class GameViewTest : GameViewSpecification() {
                     randomString(),
                     randomString(),
                     if (Random.Default.nextFloat() > 0.5) "BLACK_WON" else "WHITE_WON",
+                    "CHECKMATE",
                     LocalDateTime.now().plusDays(i.toLong()),
                     performedMoves
                 )

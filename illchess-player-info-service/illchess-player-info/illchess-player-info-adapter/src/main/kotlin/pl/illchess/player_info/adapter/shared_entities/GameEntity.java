@@ -60,6 +60,8 @@ public class GameEntity extends PanacheEntityBase {
     public LocalDateTime endTime;
     @Column(name = "game_result")
     public String gameResult;
+    @Column(name = "game_result_cause")
+    public String gameResultCause;
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "performed_moves")
     public List<PerformedMoveEntity> performedMoves;
@@ -76,6 +78,7 @@ public class GameEntity extends PanacheEntityBase {
             int blackRankingPointsChange,
             LocalDateTime endTime,
             String gameResult,
+            String gameResultCause,
             List<PerformedMoveEntity> performedMoves
     ) {
         this.id = id;
@@ -89,6 +92,7 @@ public class GameEntity extends PanacheEntityBase {
         this.blackRankingPointsChange = blackRankingPointsChange;
         this.endTime = endTime;
         this.gameResult = gameResult;
+        this.gameResultCause = gameResultCause;
         this.performedMoves = performedMoves;
     }
 }

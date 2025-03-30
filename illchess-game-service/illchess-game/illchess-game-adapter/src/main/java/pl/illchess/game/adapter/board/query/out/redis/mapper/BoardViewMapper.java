@@ -96,6 +96,7 @@ public class BoardViewMapper {
                 entity.boardState().whitePlayer().username(),
                 entity.boardState().blackPlayer().username(),
                 entity.boardState().gameState(),
+                entity.boardState().gameResultCause(),
                 LocalDateTime.now(),
                 entity.moveStackData().stream().map(
                     it -> new PerformedMovesGameFinishedView(

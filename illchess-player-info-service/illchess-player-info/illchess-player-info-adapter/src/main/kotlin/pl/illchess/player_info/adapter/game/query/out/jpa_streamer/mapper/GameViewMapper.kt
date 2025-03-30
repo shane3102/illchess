@@ -21,6 +21,7 @@ class GameViewMapper {
                 gameEntity.blackRankingPointsChange
             ),
             gameEntity.gameResult,
+            gameEntity.gameResultCause,
             gameEntity.endTime,
             gameEntity.performedMoves.map { moveEntity ->
                 GameView.PerformedMoveView(

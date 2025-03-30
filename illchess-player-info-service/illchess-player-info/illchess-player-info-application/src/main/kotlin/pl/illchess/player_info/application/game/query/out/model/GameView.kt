@@ -2,12 +2,14 @@ package pl.illchess.player_info.application.game.query.out.model
 
 import java.time.LocalDateTime
 import java.util.UUID
+import pl.illchess.player_info.domain.game.model.GameResultCause
 
 data class GameView(
     val id: UUID,
     val whiteUserGameInfo: UserGameInfoView,
     val blackUserGameInfo: UserGameInfoView,
     val gameResult: String,
+    val gameResultCause: String,
     val endTime: LocalDateTime,
     val performedMoves: List<PerformedMoveView>
 ) {

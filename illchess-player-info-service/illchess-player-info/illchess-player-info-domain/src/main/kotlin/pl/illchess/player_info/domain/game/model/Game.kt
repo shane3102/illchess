@@ -9,6 +9,7 @@ data class Game(
     val whitePlayerGameInfo: PlayerGameInfo,
     val blackPlayerGameInfo: PlayerGameInfo,
     val gameResult: GameResult,
+    val gameResultCause: GameResultCause,
     val endTime: EndTime,
     val performedMoves: List<PerformedMove>
 ) {
@@ -39,6 +40,7 @@ data class Game(
                 whiteUserGameInfo,
                 blackUserGameInfo,
                 command.gameResult,
+                command.gameResultCause,
                 command.endTime,
                 command.performedMoves
             )
