@@ -34,7 +34,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   selectedPieceInfo$: Observable<PieceSelectedInfo | undefined> = this.store.select(selectedPieceSelector)
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
   gameState$: Observable<'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
-  gameResultCause$: Observable<string | null | undefined> = this.store.select(gameResultCause)
+  gameResultCause$: Observable<'CHECKMATE' | 'RESIGNATION' | 'STALEMATE' | 'INSUFFICIENT_MATERIAL' | 'PLAYER_AGREEMENT' | null | undefined> = this.store.select(gameResultCause)
   currentPlayerColor$: Observable<string | null | undefined> = this.store.select(currentPlayerColorSelector)
   boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
   gameFinishedView$: Observable<GameFinishedView | null | undefined> = this.store.select(gameFinishedView)

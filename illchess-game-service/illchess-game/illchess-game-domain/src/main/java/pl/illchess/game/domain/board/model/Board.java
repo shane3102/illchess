@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import pl.illchess.game.domain.board.command.AcceptDraw;
 import pl.illchess.game.domain.board.command.AcceptTakingBackMove;
 import pl.illchess.game.domain.board.command.CheckLegalMoves;
@@ -27,16 +29,19 @@ import pl.illchess.game.domain.board.model.history.MoveHistory;
 import pl.illchess.game.domain.board.model.square.PiecesLocations;
 import pl.illchess.game.domain.board.model.square.Square;
 import pl.illchess.game.domain.board.model.state.BoardState;
-import pl.illchess.game.domain.board.model.state.GameState;
 import pl.illchess.game.domain.board.model.state.GameResultCause;
+import pl.illchess.game.domain.board.model.state.GameState;
 import pl.illchess.game.domain.board.model.state.player.Player;
 import pl.illchess.game.domain.board.model.state.player.PreMove;
 import pl.illchess.game.domain.board.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
 import pl.illchess.game.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.game.domain.piece.model.Piece;
-import pl.illchess.game.domain.piece.model.info.PieceColor;
+import pl.illchess.game.domain.piece.model.type.Bishop;
 import pl.illchess.game.domain.piece.model.type.King;
+import pl.illchess.game.domain.piece.model.type.Knight;
+import static pl.illchess.game.domain.piece.model.info.PieceColor.BLACK;
+import static pl.illchess.game.domain.piece.model.info.PieceColor.WHITE;
 
 public record Board(
     BoardId boardId,
@@ -130,7 +135,7 @@ public record Board(
         Piece movedPiece = clonedBoardBeforePreMove.findPieceOnSquare(command.startSquare())
             .orElseThrow(() -> new PieceNotPresentOnGivenSquare(command.boardId(), command.startSquare()));
 
-        Player ownerOfPiece = movedPiece.color() == PieceColor.WHITE ? boardState.whitePlayer() : boardState.blackPlayer();
+        Player ownerOfPiece = movedPiece.color() == WHITE ? boardState.whitePlayer() : boardState.blackPlayer();
         if (!Objects.equals(ownerOfPiece.username(), command.username())) {
             throw new InvalidUserPerformedMoveException(boardId, command.startSquare(), command.username(), ownerOfPiece.username());
         }
@@ -201,11 +206,14 @@ public record Board(
         GameResultCause establishedGameResultCause = null;
 
         if (kingIsAttacked && !anyPieceCanMove) {
-            establishedState = king.color() == PieceColor.WHITE ? GameState.BLACK_WON : GameState.WHITE_WON;
+            establishedState = king.color() == WHITE ? GameState.BLACK_WON : GameState.WHITE_WON;
             establishedGameResultCause = GameResultCause.CHECKMATE;
         } else if (!kingIsAttacked && !anyPieceCanMove) {
             establishedState = GameState.DRAW;
             establishedGameResultCause = GameResultCause.STALEMATE;
+        } else if(isInsufficientMaterial()) {
+            establishedState = GameState.DRAW;
+            establishedGameResultCause = GameResultCause.INSUFFICIENT_MATERIAL;
         } else {
             establishedState = GameState.CONTINUE;
         }
@@ -215,6 +223,20 @@ public record Board(
         }
 
         return establishedState;
+    }
+
+    public boolean isInsufficientMaterial() {
+        Supplier<Stream<Piece>> piecesLocationsSupplier = () -> piecesLocations.locations().stream();
+
+        List<Piece> whitePieces = piecesLocationsSupplier.get().filter(piece -> piece.color() == WHITE).toList();
+        List<Piece> blackPieces = piecesLocationsSupplier.get().filter(piece -> piece.color() == BLACK).toList();
+
+        boolean isWhiteInsufficientMaterial = whitePieces.size() == 1 || (whitePieces.size() == 2 && whitePieces.stream().anyMatch(piece -> piece instanceof Bishop || piece instanceof Knight));
+        boolean isBlackInsufficientMaterial = blackPieces.size() == 1 || (blackPieces.size() == 2 && blackPieces.stream().anyMatch(piece -> piece instanceof Bishop || piece instanceof Knight));
+        boolean insufficientMaterialSpecialCase = blackPieces.size() == 1 && (whitePieces.size() == 3 && whitePieces.stream().filter(piece -> piece instanceof Knight).count() == 2) ||
+            whitePieces.size() == 1 && (blackPieces.size() == 3 && blackPieces.stream().filter(piece -> piece instanceof Knight).count() == 2);
+
+        return isWhiteInsufficientMaterial && isBlackInsufficientMaterial || insufficientMaterialSpecialCase;
     }
 
     public void assignSecondPlayer(Username username) {
@@ -269,7 +291,7 @@ public record Board(
 
     public FenBoardString establishFenBoardString() {
         String position = piecesLocations().establishFenPosition();
-        String currentPlayerColor = boardState.currentPlayerColor().color() == PieceColor.WHITE ? "w" : "b";
+        String currentPlayerColor = boardState.currentPlayerColor().color() == WHITE ? "w" : "b";
         String castlingAvailability = moveHistory.castlingAvailabilityFen();
         String enPassantPossibleSquare = moveHistory.isEnPassantPossibleFen();
         String halfMoveClock = moveHistory.halfMoveClockFen();

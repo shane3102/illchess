@@ -1,7 +1,7 @@
 package pl.illchess.application.board
 
 import pl.illchess.game.application.board.command.BoardManager
-import pl.illchess.game.application.board.command.in.CheckIfCheckmateOrStalemateUseCase
+import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase
 import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase
 import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase
 import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
@@ -23,7 +23,7 @@ class BoardSpecification extends Specification {
     BoardManager boardManager = new BoardManager(loadBoard, saveBoard, deleteBoard, testEventPublisher)
 
     JoinOrInitializeNewGameUseCase joinOrInitializeNewGameUseCase = boardManager
-    CheckIfCheckmateOrStalemateUseCase checkIfCheckmateOrStalemateUseCase = boardManager
+    CheckBoardStateUseCase checkIfCheckmateOrStalemateUseCase = boardManager
     CheckLegalityMoveUseCase checkLegalityMoveUseCase = boardManager
     MovePieceUseCase movePieceUseCase = boardManager
     EstablishFenStringOfBoardUseCase establishFenStringOfBoardUseCase = boardManager

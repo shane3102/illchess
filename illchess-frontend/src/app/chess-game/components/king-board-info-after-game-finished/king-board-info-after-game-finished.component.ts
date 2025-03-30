@@ -12,7 +12,7 @@ export class KingBoardInfoAfterGameFinishedComponent {
 
   @Input() piece: PieceInfo | undefined;
   @Input() gameState: 'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined
-  @Input() gameResultCause: string | null | undefined
+  @Input() gameResultCause: 'CHECKMATE' | 'RESIGNATION' | 'STALEMATE' | 'INSUFFICIENT_MATERIAL' | 'PLAYER_AGREEMENT' | null | undefined
 
   crownIcon = faCrown
   hashtag = faHashtag
@@ -22,13 +22,13 @@ export class KingBoardInfoAfterGameFinishedComponent {
 
   getShowedIcon(): IconDefinition | undefined {
     if (this.piece?.type == Piece.KING) {
-      if (this.gameResultCause == 'CHECKMATE' || this.gameResultCause == 'RESIGNED') {
+      if (this.gameResultCause == 'CHECKMATE' || this.gameResultCause == 'RESIGNATION') {
         if (this.isGameWon()) {
           return this.crownIcon;
         } else {
           return this.hashtag;
         }
-      } else if (this.gameResultCause == 'STALEMATE' || this.gameResultCause == 'DRAW') {
+      } else if (this.gameResultCause == 'STALEMATE' || this.gameResultCause == 'INSUFFICIENT_MATERIAL' || this.gameResultCause == 'PLAYER_AGREEMENT') {
         return this.equals;
       }
     }
