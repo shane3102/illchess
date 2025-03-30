@@ -1,5 +1,6 @@
 package pl.illchess.player_info.application.game.command
 
+import java.time.LocalDateTime
 import pl.illchess.player_info.application.UnitTestSpecification
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase
 import pl.illchess.player_info.application.game.command.in.ObtainNewGameUseCase.PerformedMoveCmd
@@ -10,10 +11,12 @@ import pl.illchess.player_info.domain.player.model.Player
 import pl.illchess.player_info.domain.player.model.PlayerId
 import pl.illchess.player_info.domain.player.model.PlayerRankingPoints
 import pl.illchess.player_info.domain.player.model.Username
-
-import java.time.LocalDateTime
-
-import static pl.illchess.player_info.domain.game.model.GameResult.*
+import static pl.illchess.player_info.domain.game.model.GameResult.BLACK_WON
+import static pl.illchess.player_info.domain.game.model.GameResult.DRAW
+import static pl.illchess.player_info.domain.game.model.GameResult.WHITE_WON
+import static pl.illchess.player_info.domain.game.model.GameResultCause.CHECKMATE
+import static pl.illchess.player_info.domain.game.model.GameResultCause.PLAYER_AGREEMENT
+import static pl.illchess.player_info.domain.game.model.GameResultCause.RESIGNATION
 import static pl.illchess.player_info.domain.game.model.PieceColor.BLACK
 import static pl.illchess.player_info.domain.game.model.PieceColor.WHITE
 
@@ -44,6 +47,7 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
                 userWhiteUsername.text,
                 userBlackUsername.text,
                 gameResult.name(),
+                gameResultCause.name(),
                 LocalDateTime.now(),
                 performedMoves
         )
@@ -79,10 +83,10 @@ class ObtainNewGameUseCaseTest extends UnitTestSpecification {
         game.blackPlayerGameInfo.rankingPointsBeforeGame.value == userBlackStartingPoints
 
         where:
-        gameResult | userWhiteStartingPoints | userBlackStartingPoints | performedMoves
-        WHITE_WON  | 800                     | 800                     | [new PerformedMoveCmd("A2", "A5", "pA5", "WHITE")]
-        BLACK_WON  | 800                     | 800                     | []
-        DRAW       | 800                     | 800                     | []
+        gameResult | gameResultCause  | userWhiteStartingPoints | userBlackStartingPoints | performedMoves
+        WHITE_WON  | CHECKMATE        | 800                     | 800                     | [new PerformedMoveCmd("A2", "A5", "pA5", "WHITE")]
+        BLACK_WON  | RESIGNATION      | 800                     | 800                     | []
+        DRAW       | PLAYER_AGREEMENT | 800                     | 800                     | []
 
     }
 
