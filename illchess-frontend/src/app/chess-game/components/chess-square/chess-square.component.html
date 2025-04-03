@@ -3,7 +3,7 @@
     (dragover)="pieceDraggedOver($event)"
     (dragleave)="isDraggedOver = false"
     (mousedown)="squareClicked()"
-    [ngStyle]="{'background-color': calculateSquareColor()}"
+    [ngStyle]="{'background-color': squareColor()}"
     [ngClass]="illegalMove ? 'illegal-move-animation-wrapper' : null">
 
     <div 
@@ -31,5 +31,10 @@
     <div (mouseenter)="isDraggedOver=true" (mouseleave)="isDraggedOver=false" *ngIf="isSquareLegalMove()" class="chess-square-highlight">
         <app-chess-legal-move-circle></app-chess-legal-move-circle>
     </div>
+
+    <div class="square-info-file-rank" [ngStyle]="{'color': squareColorInverted()}" >
+        <b>{{squareInfo.file}}{{squareInfo.rank}}</b>
+    </div>
+
 
 </div>

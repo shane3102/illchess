@@ -54,8 +54,16 @@ export class ChessSquareComponent implements OnInit {
     )
   }
 
-  public calculateSquareColor(): string {
-    return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0 ? 'rgba(150, 75, 0)' : '#F3E5AB';
+  public squareColor(): string {
+    return this.squareColorCondition() ? 'rgba(150, 75, 0)' : '#F3E5AB';
+  }
+
+  public squareColorInverted(): string {
+    return !this.squareColorCondition() ? 'rgba(150, 75, 0)' : '#F3E5AB';
+  }
+
+  private squareColorCondition() {
+    return (this.squareInfo.rank + this.fileToNumber()) % 2 == 0
   }
 
   public displayIllegalMoveAnimation() {
