@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs';
@@ -7,6 +7,8 @@ import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest'
 import { initializeBoard, refreshBoard } from '../../../shared/state/board/board.actions';
 import { initializedBoardIdSelector } from '../../../shared/state/board/board.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { username } from 'src/app/shared/state/player-info/player-info.selectors';
 
 @Component({
   selector: 'app-join-or-initialize-game',
@@ -16,14 +18,15 @@ import { ChessGameState } from '../../../shared/state/chess-game.state';
 export class JoinOrInitializeGameComponent implements OnInit {
 
   boardId: string
-  username: string = sessionStorage.getItem('username')!
-
+  
   private store = inject(Store<ChessGameState>)
   private router = inject(Router)
 
+  username: Signal<string | undefined> = toSignal(this.store.select(username))
+
   ngOnInit(): void {
     let initializeNewBoardRequest: InitializeBoardRequest = {
-      'username': this.username
+      'username': this.username()!
     }
     this.store.dispatch(initializeBoard(initializeNewBoardRequest))
 
