@@ -6,6 +6,9 @@
     } @else {
         @if(boardGameObtainedInfoView.status == 'SUCCESS' && gameFinishedView) {
             <div class="content-obtain">
+                <div class="cause-info">
+                    &nbsp;
+                </div>
                 <div class="main-info">
                     <div class="user-info user-info-white">
                         <app-game-finished-popup-user-info [userGameInfoView]="gameFinishedView.whiteUserGameInfo"></app-game-finished-popup-user-info>
@@ -23,7 +26,7 @@
                     </div>
                 </div>
                 <div class="cause-info">
-                    Poprzez {{gameFinishedView.gameResultCause | gameResultCausePipe}}
+                    <b>Poprzez {{gameFinishedView.gameResultCause | gameResultCausePipe}}</b>
                 </div>
             </div>
         } @else {

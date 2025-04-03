@@ -16,12 +16,11 @@ import { username } from 'src/app/shared/state/player-info/player-info.selectors
   styleUrls: ['./join-or-initialize-game.component.scss']
 })
 export class JoinOrInitializeGameComponent implements OnInit {
-
-  boardId: string
   
   private store = inject(Store<ChessGameState>)
   private router = inject(Router)
-
+  
+  boardId: string
   username: Signal<string | undefined> = toSignal(this.store.select(username))
 
   ngOnInit(): void {

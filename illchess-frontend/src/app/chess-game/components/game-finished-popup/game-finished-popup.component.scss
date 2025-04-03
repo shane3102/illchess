@@ -22,7 +22,8 @@
 }
 
 .cause-info {
-    color: rgb(150, 75,0)
+    color: gray;
+    font-size: calc($chess-square-size / 5);
 }
 
 .user-info-white {
