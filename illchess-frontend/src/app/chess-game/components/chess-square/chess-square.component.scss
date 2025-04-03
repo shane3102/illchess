@@ -39,3 +39,16 @@
         background-color: red;
     }
 }
+
+.square-info-file-rank {
+    position: absolute;
+    font-size: calc($chess-square-size / 8);
+    left: 5px;
+    bottom: 5px;
+}
+
+@media (height < 700px) or (width < 1000px) {
+    .square-info-file-rank {
+        display: none;
+    }
+}
