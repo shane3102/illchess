@@ -17,14 +17,14 @@ abstract class InboxOutboxRepositoryImplementationSpecification extends Specific
     @MockitoSpyBean
     GameFinishedQueryPort boardGameFinishedQueryPort
 
-    private static final def BOARD_PATH = "/api/board"
+    private static final def GAME_PATH = "/api/game"
 
     protected MockHttpServletResponse joinOrInitializeGame(InitializeNewGameRequest initializeNewBoardRequest) {
-        putJson("$BOARD_PATH/join-or-initialize", initializeNewBoardRequest)
+        putJson("$GAME_PATH/join-or-initialize", initializeNewBoardRequest)
     }
 
     protected MockHttpServletResponse resignGame(ResignGameRequest request) {
-        putJson("$BOARD_PATH/resign", request)
+        putJson("$GAME_PATH/resign", request)
     }
 
 }
