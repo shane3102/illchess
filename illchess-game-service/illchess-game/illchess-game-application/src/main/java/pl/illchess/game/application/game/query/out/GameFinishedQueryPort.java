@@ -5,5 +5,5 @@ import java.util.UUID;
 import pl.illchess.game.application.game.query.out.model.GameFinishedView;
 
 public interface GameFinishedQueryPort {
-    Optional<GameFinishedView> findById(UUID boardId);
+    Optional<GameFinishedView> findById(UUID gameId);
 }

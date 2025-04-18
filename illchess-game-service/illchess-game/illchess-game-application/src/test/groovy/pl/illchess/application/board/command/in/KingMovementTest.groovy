@@ -13,7 +13,7 @@ class KingMovementTest extends GameSpecification {
     def "check king movement in simple situation"() {
         given:
         def username = "player1"
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
@@ -21,7 +21,7 @@ class KingMovementTest extends GameSpecification {
         )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
-                boardId.uuid(),
+                gameId.uuid(),
                 kingStartSquare.toString(),
                 pieceColor.toString(),
                 username
@@ -67,7 +67,7 @@ class KingMovementTest extends GameSpecification {
     def "check if king can 'hide' behind piece"() {
         given:
         def username = "player1"
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
@@ -75,7 +75,7 @@ class KingMovementTest extends GameSpecification {
         )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
-                boardId.uuid(),
+                gameId.uuid(),
                 kingStartSquare.toString(),
                 pieceColor.toString(),
                 username
@@ -98,7 +98,7 @@ class KingMovementTest extends GameSpecification {
     def "check if can castle"() {
         given:
         def username = "player1"
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username, fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
@@ -106,7 +106,7 @@ class KingMovementTest extends GameSpecification {
         )
 
         def cmd = new CheckLegalityMoveUseCase.MovePieceAttemptCmd(
-                boardId.uuid(),
+                gameId.uuid(),
                 E1.toString(),
                 pieceColor.toString(),
                 username

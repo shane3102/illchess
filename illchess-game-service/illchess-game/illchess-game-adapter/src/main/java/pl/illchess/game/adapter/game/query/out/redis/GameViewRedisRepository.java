@@ -24,8 +24,8 @@ public class GameViewRedisRepository implements GameViewQueryPort, GameViewPreMo
     private final RedisTemplate<String, GameEntity> template;
 
     @Override
-    public Optional<GameView> findById(UUID boardId) {
-        GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
+    public Optional<GameView> findById(UUID gameId) {
+        GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, gameId.toString());
 
         GameView board = GameViewMapper.toView(readGameEntity);
 
@@ -33,8 +33,8 @@ public class GameViewRedisRepository implements GameViewQueryPort, GameViewPreMo
     }
 
     @Override
-    public Optional<GameWithPreMovesView> findByIdAndUsername(UUID boardId, String username) {
-        GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
+    public Optional<GameWithPreMovesView> findByIdAndUsername(UUID gameId, String username) {
+        GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, gameId.toString());
         if (Objects.equals(readGameEntity == null ? null : readGameEntity.gameInfo().whitePlayer().username(), username)) {
             return Optional.ofNullable(getBoardPreMoveViewByPlayer(readGameEntity, readGameEntity.gameInfo().whitePlayer()));
         } else if (Objects.equals(readGameEntity == null ? null : readGameEntity.gameInfo().blackPlayer() == null ? null : readGameEntity.gameInfo().blackPlayer().username(), username)) {

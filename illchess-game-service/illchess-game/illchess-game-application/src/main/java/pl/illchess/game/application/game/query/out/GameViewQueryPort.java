@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface GameViewQueryPort {
 
-    Optional<GameView> findById(UUID boardId);
+    Optional<GameView> findById(UUID gameId);
 }

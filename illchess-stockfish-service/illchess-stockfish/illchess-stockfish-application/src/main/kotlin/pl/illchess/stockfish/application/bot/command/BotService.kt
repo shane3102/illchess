@@ -8,21 +8,17 @@ import org.slf4j.LoggerFactory
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
 import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
-import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeGame
+import pl.illchess.stockfish.application.board.command.out.LoadGame
+import pl.illchess.stockfish.application.board.command.out.LoadGameAdditionalInfo
 import pl.illchess.stockfish.application.bot.command.`in`.AddBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteBotsUseCase
 import pl.illchess.stockfish.application.bot.command.`in`.DeleteExpiredBotsUseCase
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
-import pl.illchess.stockfish.application.evaluation.command.out.CalculateTopMoves
-import pl.illchess.stockfish.application.evaluation.command.out.LoadTopMoves
-import pl.illchess.stockfish.application.evaluation.command.out.SaveTopMoves
 import pl.illchess.stockfish.application.evaluation.command.out.facade.TopMovesFacade
 import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
-import pl.illchess.stockfish.domain.board.domain.EvaluationBoardInformation
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.bot.command.PerformMove
@@ -37,9 +33,9 @@ class BotService(
     private val saveBot: SaveBot,
     private val loadBot: LoadBot,
     private val deleteBot: DeleteBot,
-    private val joinOrInitializeBoard: JoinOrInitializeBoard,
-    private val loadBoard: LoadBoard,
-    private val loadBoardAdditionalInfo: LoadBoardAdditionalInfo,
+    private val joinOrInitializeGame: JoinOrInitializeGame,
+    private val loadGame: LoadGame,
+    private val loadGameAdditionalInfo: LoadGameAdditionalInfo,
     private val topMovesFacade: TopMovesFacade,
     private val botPerformMove: BotPerformMove,
     private val botResignGame: BotResignGame,
@@ -90,20 +86,20 @@ class BotService(
         while (true) {
             try {
                 var bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
-                val currentBoardId = joinOrInitializeBoard.joinOrInitialize(username)
-                bot.currentBoardId = currentBoardId
+                val currentGameId = joinOrInitializeGame.joinOrInitialize(username)
+                bot.currentGameId = currentGameId
                 saveBot.saveBot(bot)
 
                 Thread.sleep((Random.nextDouble() * 2000).toLong())
-                while (bot.currentBoardId != null) {
+                while (bot.currentGameId != null) {
                     try {
                         bot = loadBot.loadBot(username) ?: throw BotNotFound(username)
                         Thread.sleep((Random.nextDouble() * 1000).toLong())
-                        val boardAdditionalInfo = loadBoardAdditionalInfo.loadBoardAdditionalInfo(bot.currentBoardId!!)
-                            ?: throw BoardNotFoundException(bot.currentBoardId!!)
+                        val boardAdditionalInfo = loadGameAdditionalInfo.loadGameAdditionalInfo(bot.currentGameId!!)
+                            ?: throw BoardNotFoundException(bot.currentGameId!!)
 
                         if (isGameFinished(boardAdditionalInfo)) {
-                            bot.currentBoardId = null
+                            bot.currentGameId = null
                             saveBot.saveBot(bot)
                             continue
                         }
@@ -112,16 +108,16 @@ class BotService(
                             continue
                         }
 
-                        val fenBoardPosition = loadBoard.loadBoard(bot.currentBoardId!!)
-                            ?: throw BoardNotFoundException(bot.currentBoardId!!)
+                        val fenBoardPosition = loadGame.loadGame(bot.currentGameId!!)
+                            ?: throw BoardNotFoundException(bot.currentGameId!!)
 
                         loadMovesAndPerformRandomMove(fenBoardPosition, bot)
 
                     } catch (boardNotFound: BoardNotFoundException) {
-                        bot.currentBoardId = null
+                        bot.currentGameId = null
                     } catch (topMovesCouldNotBeEstablished: TopMovesCouldNotBeEstablished) {
                         botResignGame.botResignGame(bot)
-                        bot.currentBoardId = null
+                        bot.currentGameId = null
                     } catch (ignored: InterruptedException) {
                     }
                 }
@@ -138,7 +134,7 @@ class BotService(
     ) {
         val loadedTopMoves = topMovesFacade.establishAndSaveIfUpdatedTopMoves(
             EstablishListOfTopMoves(
-                bot.currentBoardId!!,
+                bot.currentGameId!!,
                 fenBoardPosition,
                 bot.obtainedBestMovesCount,
                 bot.searchedDepth

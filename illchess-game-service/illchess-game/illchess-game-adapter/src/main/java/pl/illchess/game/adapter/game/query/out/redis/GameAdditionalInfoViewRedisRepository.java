@@ -20,8 +20,8 @@ public class GameAdditionalInfoViewRedisRepository implements GameAdditionalInfo
     private final RedisTemplate<String, GameEntity> template;
 
     @Override
-    public Optional<GameAdditionalInfoView> findGameById(UUID boardId) {
-        GameEntity gameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
+    public Optional<GameAdditionalInfoView> findGameById(UUID gameId) {
+        GameEntity gameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, gameId.toString());
         GameAdditionalInfoView resultView = GameViewMapper.toAdditionalInfoView(gameEntity);
         return Optional.ofNullable(resultView);
     }

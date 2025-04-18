@@ -19,8 +19,8 @@ public class GameFinishedRedisRepository implements GameFinishedQueryPort {
     private final RedisTemplate<String, GameEntity> template;
 
     @Override
-    public Optional<GameFinishedView> findById(UUID boardId) {
-        GameEntity gameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
+    public Optional<GameFinishedView> findById(UUID gameId) {
+        GameEntity gameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, gameId.toString());
         GameFinishedView view = GameViewMapper.toBoardWithFinishedGameView(gameEntity);
         return Optional.ofNullable(view);
     }

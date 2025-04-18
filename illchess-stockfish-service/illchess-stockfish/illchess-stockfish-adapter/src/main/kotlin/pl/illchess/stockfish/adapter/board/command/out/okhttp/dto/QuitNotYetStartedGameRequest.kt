@@ -5,6 +5,6 @@ import java.util.UUID
 
 @RegisterForReflection
 data class QuitNotYetStartedGameRequest(
-    val boardId: UUID,
+    val gameId: UUID,
     val username: String
 )

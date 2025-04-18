@@ -1,12 +1,12 @@
 package pl.illchess.stockfish.domain.bot.domain
 
 import java.time.LocalDateTime
-import pl.illchess.stockfish.domain.board.domain.BoardId
+import pl.illchess.stockfish.domain.board.domain.GameId
 
 data class Bot(
     val username: Username,
     val expirationDate: LocalDateTime,
-    var currentBoardId: BoardId?,
+    var currentGameId: GameId?,
     val obtainedBestMovesCount: Int,
     val searchedDepth: Int
 )

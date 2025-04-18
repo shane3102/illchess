@@ -28,12 +28,12 @@ public class GameInfoRabbitMqSupplier implements GameViewRabbitMqSupplier {
     @Override
     public GameFinishedView gameFinishedSupplier(GameFinished gameFinished) {
         try {
-            UUID boardId = gameFinished.gameId().uuid();
-            log.info("Game at board with id = {} was finished, sending info with game view to rabbitmq queue", boardId);
-            GameFinishedView result = gameFinishedQueryPort.findById(boardId)
-                .orElseThrow(() -> new GameNotFoundException(boardId));
+            UUID gameId = gameFinished.gameId().uuid();
+            log.info("Game at board with id = {} was finished, sending info with game view to rabbitmq queue", gameId);
+            GameFinishedView result = gameFinishedQueryPort.findById(gameId)
+                .orElseThrow(() -> new GameNotFoundException(gameId));
             rabbitTemplate.convertAndSend(OBTAIN_GAME_QUEUE, result);
-            log.info("Successfully sent info with finished game with id = {} to rabbitmq queue", boardId);
+            log.info("Successfully sent info with finished game with id = {} to rabbitmq queue", gameId);
             return result;
         } catch (DomainException e) {
             inboxOutbox.saveMessage(new ObtainGameFinishedOutboxMessage(gameFinished.gameId().uuid()));

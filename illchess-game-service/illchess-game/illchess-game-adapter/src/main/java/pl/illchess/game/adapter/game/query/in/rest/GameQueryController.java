@@ -28,21 +28,21 @@ public class GameQueryController implements GameQueryApi {
     private final GameAdditionalInfoViewQueryPort gameAdditionalInfoViewQueryPort;
 
     @Override
-    public ResponseEntity<GameView> refreshBoardView(UUID boardId) {
-        GameView responseView = gameViewQueryPort.findById(boardId).orElseThrow(() -> new GameNotFoundException(boardId));
+    public ResponseEntity<GameView> refreshBoardView(UUID gameId) {
+        GameView responseView = gameViewQueryPort.findById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
         return ResponseEntity.ok(responseView);
     }
 
     @Override
-    public ResponseEntity<GameWithPreMovesView> refreshBoardWithPreMovesView(UUID boardId, String username) {
-        GameWithPreMovesView responseView = gameViewPreMoveByUserQueryPort.findByIdAndUsername(boardId, username)
-            .orElseThrow(() -> new GameWithPreMovesDoesNotExistException(new GameId(boardId), new Username(username)));
+    public ResponseEntity<GameWithPreMovesView> refreshBoardWithPreMovesView(UUID gameId, String username) {
+        GameWithPreMovesView responseView = gameViewPreMoveByUserQueryPort.findByIdAndUsername(gameId, username)
+            .orElseThrow(() -> new GameWithPreMovesDoesNotExistException(new GameId(gameId), new Username(username)));
         return ResponseEntity.ok(responseView);
     }
 
     @Override
-    public ResponseEntity<GameAdditionalInfoView> refreshBoardInfoView(UUID boardId) {
-        GameAdditionalInfoView responseView = gameAdditionalInfoViewQueryPort.findGameById(boardId).orElseThrow(() -> new GameNotFoundException(boardId));
+    public ResponseEntity<GameAdditionalInfoView> refreshBoardInfoView(UUID gameId) {
+        GameAdditionalInfoView responseView = gameAdditionalInfoViewQueryPort.findGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
         return ResponseEntity.ok(responseView);
     }
 

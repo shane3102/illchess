@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GameViewPreMoveByUserQueryPort {
-    Optional<GameWithPreMovesView> findByIdAndUsername(UUID boardId, String username);
+    Optional<GameWithPreMovesView> findByIdAndUsername(UUID gameId, String username);
 }

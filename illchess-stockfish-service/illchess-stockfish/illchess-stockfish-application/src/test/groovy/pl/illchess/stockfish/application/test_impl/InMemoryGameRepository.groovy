@@ -1,20 +1,20 @@
 package pl.illchess.stockfish.application.test_impl
 
 import org.jetbrains.annotations.NotNull
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.domain.board.domain.BoardId
+import pl.illchess.stockfish.application.board.command.out.LoadGame
+import pl.illchess.stockfish.domain.board.domain.GameId
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 
-class InMemoryBoardRepository implements LoadBoard {
+class InMemoryGameRepository implements LoadGame {
 
     def defaultFenBoardPosition
 
-    InMemoryBoardRepository(FenBoardPosition defaultFenBoardPosition) {
+    InMemoryGameRepository(FenBoardPosition defaultFenBoardPosition) {
         this.defaultFenBoardPosition = defaultFenBoardPosition
     }
 
     @Override
-    FenBoardPosition loadBoard(@NotNull BoardId boardId) {
+    FenBoardPosition loadGame(@NotNull GameId gameId) {
         return defaultFenBoardPosition
     }
 }

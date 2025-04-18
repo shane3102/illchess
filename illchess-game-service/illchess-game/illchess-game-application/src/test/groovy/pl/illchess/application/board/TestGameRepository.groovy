@@ -12,12 +12,12 @@ class TestGameRepository implements LoadGame, SaveGame, DeleteGame {
     Map<GameId, Game> repo = new HashMap<>()
 
     @Override
-    Optional<Game> loadBoard(GameId boardId) {
-        return Optional.ofNullable(repo.get(boardId))
+    Optional<Game> loadGame(GameId gameId) {
+        return Optional.ofNullable(repo.get(gameId))
     }
 
     @Override
-    Optional<Game> loadBoardWithoutPlayer() {
+    Optional<Game> loadGameWithoutPlayer() {
         return repo.values()
             .stream()
             .filter {it.gameInfo().blackPlayer() == null}
@@ -25,7 +25,7 @@ class TestGameRepository implements LoadGame, SaveGame, DeleteGame {
     }
 
     @Override
-    Optional<Game> loadBoardByUsername(Username username) {
+    Optional<Game> loadGameByUsername(Username username) {
         return repo.values()
                 .stream()
                 .filter {
@@ -37,13 +37,13 @@ class TestGameRepository implements LoadGame, SaveGame, DeleteGame {
 
     @Override
     GameId saveBoard(Game savedBoard) {
-        def boardId = savedBoard.gameId() == null ? new GameId(UUID.randomUUID()) : savedBoard.gameId()
-        repo.put(boardId, savedBoard)
-        boardId
+        def gameId = savedBoard.gameId() == null ? new GameId(UUID.randomUUID()) : savedBoard.gameId()
+        repo.put(gameId, savedBoard)
+        gameId
     }
 
     @Override
-    void deleteBoard(GameId boardId) {
-        repo.remove(boardId)
+    void deleteBoard(GameId gameId) {
+        repo.remove(gameId)
     }
 }

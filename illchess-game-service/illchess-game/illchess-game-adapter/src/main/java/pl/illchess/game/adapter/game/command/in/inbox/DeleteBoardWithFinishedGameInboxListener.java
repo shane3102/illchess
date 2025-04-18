@@ -21,6 +21,6 @@ public class DeleteBoardWithFinishedGameInboxListener {
         cron = "0 0 * * * *"
     )
     void deleteBoardWithFinishedGame(GameFinishedInboxMessage message) {
-        deleteFinishedGameUseCase.deleteBoardWithFinishedGame(new DeleteBoardWithFinishedGameCmd(message.getBoardId()));
+        deleteFinishedGameUseCase.deleteBoardWithFinishedGame(new DeleteBoardWithFinishedGameCmd(message.getGameId()));
     }
 }

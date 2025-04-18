@@ -18,7 +18,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         given:
         def username1 = "player1"
         def username2 = "player2"
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username1, startPosition)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
@@ -29,7 +29,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         preMovesToPerform.forEach {
             movePieceUseCase.movePiece(
                     new MovePieceUseCase.MovePieceCmd(
-                            boardId.uuid(),
+                            gameId.uuid(),
                             it.first(),
                             it.second(),
                             null,
@@ -41,7 +41,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         movesFollowingPreMoves.forEach {
             movePieceUseCase.movePiece(
                     new MovePieceUseCase.MovePieceCmd(
-                            boardId.uuid(),
+                            gameId.uuid(),
                             it.first(),
                             it.second(),
                             null,
@@ -51,7 +51,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         }
 
         then:
-        def fenBoardString = establishFenStringOfBoardUseCase.establishCurrentFenBoardString(new EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd(boardId.uuid()))
+        def fenBoardString = establishFenStringOfBoardUseCase.establishCurrentFenBoardString(new EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd(gameId.uuid()))
 
         fenBoardString.position() == expectedEndingPosition.split(" ")[0]
         fenBoardString.activeColor() == expectedEndingPosition.split(" ")[1]
@@ -92,7 +92,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         given:
         def username1 = "player1"
         def username2 = "player2"
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd(username1, startPosition)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
@@ -103,7 +103,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         Stream.concat(preMovesPerformed.stream(), preMovesIgnored.stream()).forEach {
             movePieceUseCase.movePiece(
                     new MovePieceUseCase.MovePieceCmd(
-                            boardId.uuid(),
+                            gameId.uuid(),
                             it.first(),
                             it.second(),
                             null,
@@ -115,7 +115,7 @@ class MovementOnPreMoveTest extends GameSpecification {
         movesFollowingPreMoves.forEach {
             movePieceUseCase.movePiece(
                     new MovePieceUseCase.MovePieceCmd(
-                            boardId.uuid(),
+                            gameId.uuid(),
                             it.first(),
                             it.second(),
                             null,
@@ -125,12 +125,12 @@ class MovementOnPreMoveTest extends GameSpecification {
         }
 
         then:
-        def fenBoardString = establishFenStringOfBoardUseCase.establishCurrentFenBoardString(new EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd(boardId.uuid()))
+        def fenBoardString = establishFenStringOfBoardUseCase.establishCurrentFenBoardString(new EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd(gameId.uuid()))
 
         fenBoardString.position() == expectedEndingPosition.split(" ")[0]
         fenBoardString.activeColor() == expectedEndingPosition.split(" ")[1]
 
-        def board = loadBoard.loadBoard(boardId).orElseThrow(AssertionError::new)
+        def board = loadBoard.loadGame(gameId).orElseThrow(AssertionError::new)
         preMovesPerformed.every {
             board.moveHistory().moveStack().any(movePerformed -> {
                 movePerformed.startSquare().toString() == it.first()

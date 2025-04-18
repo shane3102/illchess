@@ -12,10 +12,10 @@ class EvaluateBoardUseCaseTest extends UnitTestSpecification {
     def "should save evaluation on calculation"() {
         given:
         def evaluationBoardInformation = new EvaluationBoardInformation(defaultFenBoardPosition, null)
-        def boardId = UUID.randomUUID()
+        def gameId = UUID.randomUUID()
 
         when:
-        useCase.evaluateBoard(new EvaluateBoardCmd(boardId))
+        useCase.evaluateBoard(new EvaluateBoardCmd(gameId))
 
         then:
         def evaluation = loadBoardEvaluation.loadBoardEvaluation(evaluationBoardInformation)
@@ -30,11 +30,11 @@ class EvaluateBoardUseCaseTest extends UnitTestSpecification {
     def "should not calculate evaluation multiple times if calculation already present"() {
         given:
         def evaluationBoardInformation = new EvaluationBoardInformation(defaultFenBoardPosition, null)
-        def boardId = UUID.randomUUID()
+        def gameId = UUID.randomUUID()
 
         when:
-        useCase.evaluateBoard(new EvaluateBoardCmd(boardId))
-        useCase.evaluateBoard(new EvaluateBoardCmd(boardId))
+        useCase.evaluateBoard(new EvaluateBoardCmd(gameId))
+        useCase.evaluateBoard(new EvaluateBoardCmd(gameId))
 
         then:
         def evaluation = loadBoardEvaluation.loadBoardEvaluation(evaluationBoardInformation)
