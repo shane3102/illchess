@@ -24,7 +24,7 @@ public class GameRedisRepository implements SaveGame, LoadGame, DeleteGame {
     private final RedisTemplate<String, GameEntity> template;
 
     @Override
-    public Optional<Game> loadBoard(GameId gameId) {
+    public Optional<Game> loadGame(GameId gameId) {
 
         GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, gameId.uuid().toString());
 
@@ -34,7 +34,7 @@ public class GameRedisRepository implements SaveGame, LoadGame, DeleteGame {
     }
 
     @Override
-    public Optional<Game> loadBoardWithoutPlayer() {
+    public Optional<Game> loadGameWithoutPlayer() {
         return template.opsForHash()
             .entries(BOARD_HASH_KEY)
             .values()
@@ -46,7 +46,7 @@ public class GameRedisRepository implements SaveGame, LoadGame, DeleteGame {
     }
 
     @Override
-    public Optional<Game> loadBoardByUsername(Username username) {
+    public Optional<Game> loadGameByUsername(Username username) {
         return template.opsForHash()
             .entries(BOARD_HASH_KEY)
             .values()

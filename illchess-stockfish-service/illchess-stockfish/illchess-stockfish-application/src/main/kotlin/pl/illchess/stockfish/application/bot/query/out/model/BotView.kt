@@ -4,5 +4,5 @@ import java.util.UUID
 
 data class BotView(
     val username: String,
-    val currentBoardId: UUID?
+    val currentGameId: UUID?
 )

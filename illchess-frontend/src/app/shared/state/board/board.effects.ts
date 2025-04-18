@@ -5,7 +5,7 @@ import { Observable, catchError, from, map, of, switchMap, tap } from "rxjs";
 import { GameService } from "../../service/GameService";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
-import { IllegalMoveView } from "../../model/game/IllegalMoveView";
+import { IllegalMoveResponse } from "../../model/game/IllegalMoveResponse";
 import { InitializedGameResponse } from "../../model/game/InitializedGameResponse";
 import { GameView } from "../../model/game/BoardView";
 import { RefreshBoardDto as RefreshBoardRequest } from "../../model/game/RefreshBoardRequest";
@@ -47,7 +47,7 @@ export class BoardEffects {
                     .pipe(
                         switchMap(() => of(refreshBoardWithPreMoves({ gameId: movePieceRequest.gameId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
-                            let body: IllegalMoveView = response.error;
+                            let body: IllegalMoveResponse = response.error;
                             return of(illegalMove(body))
                         })
                     )

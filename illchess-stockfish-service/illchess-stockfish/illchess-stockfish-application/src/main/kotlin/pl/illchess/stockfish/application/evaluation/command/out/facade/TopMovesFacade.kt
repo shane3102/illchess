@@ -28,7 +28,7 @@ class TopMovesFacade(
                     command.moveCount,
                     command.depth
                 )
-                ?: throw TopMovesCouldNotBeEstablished(command.boardId)
+                ?: throw TopMovesCouldNotBeEstablished(command.gameId)
             saveTopMoves.saveTopMoves(evaluationBoardInformation, result)
             result
         } else {

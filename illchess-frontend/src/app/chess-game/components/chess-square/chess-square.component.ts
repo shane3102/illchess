@@ -3,7 +3,7 @@ import { faCrown, faEquals, faHashtag } from '@fortawesome/free-solid-svg-icons'
 import { Observable } from 'rxjs';
 import { BoardLegalMovesResponse } from '../../../shared/model/game/BoardLegalMovesResponse';
 import { MoveView } from '../../../shared/model/game/BoardView';
-import { IllegalMoveView } from '../../../shared/model/game/IllegalMoveView';
+import { IllegalMoveResponse } from '../../../shared/model/game/IllegalMoveResponse';
 import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
 import { PieceSelectedInfo } from '../../../shared/model/game/PieceSelectedInfo';
 import { Piece, PieceColor, PieceInfo } from '../../../shared/model/game/PieceInfo';
@@ -19,7 +19,7 @@ export class ChessSquareComponent implements OnInit {
   @Input() gameId: string;
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
-  @Input() illegalMoveResponse: Observable<IllegalMoveView>
+  @Input() illegalMoveResponse: Observable<IllegalMoveResponse>
   @Input() selectedPieceInfo: PieceSelectedInfo | undefined | null;
   @Input() legalMoves: BoardLegalMovesResponse | undefined | null;
   @Input() username: string

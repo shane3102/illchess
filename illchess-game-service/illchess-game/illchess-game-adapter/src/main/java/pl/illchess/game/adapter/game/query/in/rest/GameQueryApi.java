@@ -14,14 +14,14 @@ import java.util.UUID;
 @RequestMapping("/api/game")
 public interface GameQueryApi {
 
-    @GetMapping("/refresh/{boardId}")
-    ResponseEntity<GameView> refreshBoardView(@PathVariable UUID boardId);
+    @GetMapping("/refresh/{gameId}")
+    ResponseEntity<GameView> refreshBoardView(@PathVariable UUID gameId);
 
-    @GetMapping("/refresh/pre-moves/{boardId}/{username}")
-    ResponseEntity<GameWithPreMovesView> refreshBoardWithPreMovesView(@PathVariable UUID boardId, @PathVariable String username);
+    @GetMapping("/refresh/pre-moves/{gameId}/{username}")
+    ResponseEntity<GameWithPreMovesView> refreshBoardWithPreMovesView(@PathVariable UUID gameId, @PathVariable String username);
 
-    @GetMapping("/refresh/info/{boardId}")
-    ResponseEntity<GameAdditionalInfoView> refreshBoardInfoView(@PathVariable UUID boardId);
+    @GetMapping("/refresh/info/{gameId}")
+    ResponseEntity<GameAdditionalInfoView> refreshBoardInfoView(@PathVariable UUID gameId);
 
     @GetMapping("/active")
     ResponseEntity<ActiveGamesView> refreshActiveBoardsView();

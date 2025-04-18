@@ -30,11 +30,11 @@ public class ObtainGameFinishedOutboxListener {
         cron = "*/30 * * * * *"
     )
     void obtainBoardWithGameFinished(ObtainGameFinishedOutboxMessage event) {
-        UUID boardId = event.gameId();
-        log.info("There is unsent finished game with id = {}, sending info with game view to rabbitmq queue", boardId);
-        GameFinishedView result = gameFinishedQueryPort.findById(boardId)
-            .orElseThrow(() -> new GameNotFoundException(boardId));
+        UUID gameId = event.gameId();
+        log.info("There is unsent finished game with id = {}, sending info with game view to rabbitmq queue", gameId);
+        GameFinishedView result = gameFinishedQueryPort.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(gameId));
         rabbitTemplate.convertAndSend(OBTAIN_GAME_QUEUE, result);
-        log.info("Successfully sent info with finished game with id = {} to rabbitmq queue", boardId);
+        log.info("Successfully sent info with finished game with id = {} to rabbitmq queue", gameId);
     }
 }

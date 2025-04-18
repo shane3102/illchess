@@ -20,31 +20,31 @@ import pl.illchess.stockfish.adapter.board.command.out.okhttp.dto.ResignGameRequ
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
 import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
-import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeGame
+import pl.illchess.stockfish.application.board.command.out.LoadGame
+import pl.illchess.stockfish.application.board.command.out.LoadGameAdditionalInfo
 import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
-import pl.illchess.stockfish.domain.board.domain.BoardId
+import pl.illchess.stockfish.domain.board.domain.GameId
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.bot.command.PerformMove
 import pl.illchess.stockfish.domain.bot.domain.Bot
 import pl.illchess.stockfish.domain.bot.domain.Username
 
 @ApplicationScoped
-class OkHttpLoadBoardAdapter(
+class OkHttpLoadGameAdapter(
     private val okHttpClient: OkHttpClient = OkHttpClient(),
     private val objectMapper: ObjectMapper = jacksonObjectMapper().configure(
         DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
         false
     )
-) : LoadBoard, LoadBoardAdditionalInfo, JoinOrInitializeBoard, BotPerformMove, BotResignGame, BotQuitNotYetStartedGame {
+) : LoadGame, LoadGameAdditionalInfo, JoinOrInitializeGame, BotPerformMove, BotResignGame, BotQuitNotYetStartedGame {
 
     @field:ConfigProperty(name = "urls.game-service")
     lateinit var gameServiceUrl: String
 
-    override fun loadBoard(boardId: BoardId): FenBoardPosition? {
+    override fun loadGame(gameId: GameId): FenBoardPosition? {
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/game/fen/${boardId.uuid}")
+            .url("${gameServiceUrl}/api/game/fen/${gameId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
         val response = call.execute()
@@ -61,9 +61,9 @@ class OkHttpLoadBoardAdapter(
         return fenBoardPosition
     }
 
-    override fun loadBoardAdditionalInfo(boardId: BoardId): BoardAdditionalInfo? {
+    override fun loadGameAdditionalInfo(gameId: GameId): BoardAdditionalInfo? {
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/game/refresh/info/${boardId.uuid}")
+            .url("${gameServiceUrl}/api/game/refresh/info/${gameId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
         val response = call.execute()
@@ -75,7 +75,7 @@ class OkHttpLoadBoardAdapter(
                 BoardAdditionalInfoViewResponse::class.java
             ).let {
                 BoardAdditionalInfo(
-                    BoardId(it.gameId),
+                    GameId(it.gameId),
                     it.currentPlayerColor,
                     Username(it.whitePlayer.username),
                     if (it.blackPlayer == null) null else Username(it.blackPlayer.username),
@@ -87,7 +87,7 @@ class OkHttpLoadBoardAdapter(
         return boardAdditionalInfo
     }
 
-    override fun joinOrInitialize(username: Username): BoardId? {
+    override fun joinOrInitialize(username: Username): GameId? {
         val initializeNewBoardRequest = InitializeNewBoardRequest(username.text)
 
         val mediaType: MediaType = "application/json; charset=utf-8".toMediaType()
@@ -100,11 +100,11 @@ class OkHttpLoadBoardAdapter(
         val call = okHttpClient.newCall(request)
         val response = call.execute()
 
-        val initializedBoardId: BoardId? =
+        val initializedGameId: GameId? =
             if (response.body == null || response.code != 200) null
-            else BoardId(objectMapper.readValue(response.body?.string(), InitializedBoardResponse::class.java).id)
+            else GameId(objectMapper.readValue(response.body?.string(), InitializedBoardResponse::class.java).id)
 
-        return initializedBoardId
+        return initializedGameId
     }
 
     override fun performMove(command: PerformMove) {
@@ -122,7 +122,7 @@ class OkHttpLoadBoardAdapter(
     }
 
     override fun botResignGame(bot: Bot) {
-        val resignGameRequest = ResignGameRequest(bot.currentBoardId!!.uuid, bot.username.text)
+        val resignGameRequest = ResignGameRequest(bot.currentGameId!!.uuid, bot.username.text)
 
         val mediaType: MediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = objectMapper.writeValueAsString(resignGameRequest).toRequestBody(mediaType)
@@ -136,7 +136,7 @@ class OkHttpLoadBoardAdapter(
     }
 
     override fun quitNotYetStartedGame(bot: Bot) {
-        val quitNotYetStartedGameRequest = QuitNotYetStartedGameRequest(bot.currentBoardId!!.uuid, bot.username.text)
+        val quitNotYetStartedGameRequest = QuitNotYetStartedGameRequest(bot.currentGameId!!.uuid, bot.username.text)
 
         val mediaType: MediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = objectMapper.writeValueAsString(quitNotYetStartedGameRequest).toRequestBody(mediaType)
@@ -160,7 +160,7 @@ class OkHttpLoadBoardAdapter(
             else -> "QUEEN"
         } else null
         return PerformMoveRequest(
-            command.bot.currentBoardId?.uuid!!,
+            command.bot.currentGameId?.uuid!!,
             startSquare,
             endSquare,
             promotePieceType,

@@ -1,6 +1,6 @@
 package pl.illchess.stockfish.application
 
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
+import pl.illchess.stockfish.application.board.command.out.LoadGame
 import pl.illchess.stockfish.application.evaluation.command.EvaluateBoardService
 import pl.illchess.stockfish.application.evaluation.command.out.CalculateBestMoveAndContinuation
 import pl.illchess.stockfish.application.evaluation.command.out.CalculateBoardEvaluation
@@ -15,7 +15,7 @@ import pl.illchess.stockfish.application.evaluation.command.out.facade.TopMovesF
 import pl.illchess.stockfish.application.test_impl.BoardCalculationsTestImpl
 import pl.illchess.stockfish.application.test_impl.InMemoryBestMoveAndContinuationRepository
 import pl.illchess.stockfish.application.test_impl.InMemoryBoardEvaluationRepository
-import pl.illchess.stockfish.application.test_impl.InMemoryBoardRepository
+import pl.illchess.stockfish.application.test_impl.InMemoryGameRepository
 import pl.illchess.stockfish.application.test_impl.InMemoryTopMovesRepository
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import spock.lang.Specification
@@ -32,13 +32,13 @@ abstract class UnitTestSpecification extends Specification {
             "1"
     )
 
-    def inMemoryBoardRepository = new InMemoryBoardRepository(defaultFenBoardPosition)
+    def inMemoryBoardRepository = new InMemoryGameRepository(defaultFenBoardPosition)
     def inMemoryBoardEvaluationTestImpl = new InMemoryBoardEvaluationRepository()
     def inMemoryBestMoveAndContinuationTestImpl = new InMemoryBestMoveAndContinuationRepository()
     def inMemoryTopMovesTestImpl = new InMemoryTopMovesRepository()
     def boardCalculationsTestImpl = new BoardCalculationsTestImpl()
 
-    LoadBoard loadBoard = inMemoryBoardRepository
+    LoadGame loadBoard = inMemoryBoardRepository
 
     CalculateBoardEvaluation calculateBoardEvaluation = Spy(boardCalculationsTestImpl)
     CalculateBestMoveAndContinuation calculateBestMoveAndContinuation = Spy(boardCalculationsTestImpl)

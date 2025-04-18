@@ -11,13 +11,13 @@ class EstablishListOfTopMovesUseCaseTest extends UnitTestSpecification {
 
     def "should save top moves on calculation"() {
         given:
-        def boardId = UUID.randomUUID()
+        def gameId = UUID.randomUUID()
         def moveCount = 3
         def depth = 1
         def evaluationBoardInformation = new EvaluationBoardInformation(defaultFenBoardPosition, depth)
 
         def cmd = new EstablishListOfTopMovesCmd(
-                boardId,
+                gameId,
                 moveCount,
                 depth
         )
@@ -34,13 +34,13 @@ class EstablishListOfTopMovesUseCaseTest extends UnitTestSpecification {
 
     def "should not calculate top moves if calculation already present"() {
         given:
-        def boardId = UUID.randomUUID()
+        def gameId = UUID.randomUUID()
         def moveCount = 5
         def depth = 1
         def evaluationBoardInformation = new EvaluationBoardInformation(defaultFenBoardPosition, depth)
 
         def cmd = new EstablishListOfTopMovesCmd(
-                boardId,
+                gameId,
                 moveCount,
                 depth
         )

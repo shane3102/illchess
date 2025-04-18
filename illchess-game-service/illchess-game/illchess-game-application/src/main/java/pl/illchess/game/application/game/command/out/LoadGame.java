@@ -7,9 +7,9 @@ import java.util.Optional;
 import pl.illchess.game.domain.game.model.state.player.Username;
 
 public interface LoadGame {
-    Optional<Game> loadBoard(GameId gameId);
+    Optional<Game> loadGame(GameId gameId);
 
-    Optional<Game> loadBoardWithoutPlayer();
+    Optional<Game> loadGameWithoutPlayer();
 
-    Optional<Game> loadBoardByUsername(Username username);
+    Optional<Game> loadGameByUsername(Username username);
 }

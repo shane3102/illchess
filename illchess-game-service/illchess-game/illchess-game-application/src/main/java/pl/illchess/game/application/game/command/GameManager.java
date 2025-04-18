@@ -93,7 +93,7 @@ public class GameManager implements
             cmd.targetSquare()
         );
         GameId gameId = new GameId(cmd.gameId());
-        Game game = loadGame.loadBoard(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        Game game = loadGame.loadGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
         MovePiece command = cmd.toCommand();
         MoveType performedMoveType = game.movePieceOrAddPreMove(command);
@@ -126,7 +126,7 @@ public class GameManager implements
             cmd.startSquare()
         );
         GameId gameId = new GameId(cmd.gameId());
-        Game game = loadGame.loadBoard(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        Game game = loadGame.loadGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
         CheckLegalMoves command = cmd.toCommand();
         Set<Square> legalMoves = game.legalMoves(command);
@@ -151,7 +151,7 @@ public class GameManager implements
 
         JoinOrInitializeNewGame command = cmd.toCommand();
         GameId savedGameId;
-        Optional<Game> currentPlayerBoard = loadGame.loadBoardByUsername(new Username(cmd.username()));
+        Optional<Game> currentPlayerBoard = loadGame.loadGameByUsername(new Username(cmd.username()));
         if (currentPlayerBoard.isPresent()) {
             savedGameId = currentPlayerBoard.get().gameId();
             saveGame.saveBoard(currentPlayerBoard.get());
@@ -160,7 +160,7 @@ public class GameManager implements
                 cmd.username()
             );
         } else {
-            Optional<Game> boardWithoutPlayer = loadGame.loadBoardWithoutPlayer();
+            Optional<Game> boardWithoutPlayer = loadGame.loadGameWithoutPlayer();
             if (boardWithoutPlayer.isPresent()) {
                 savedGameId = boardWithoutPlayer.get().gameId();
                 boardWithoutPlayer.get().assignSecondPlayer(command.username());
@@ -188,7 +188,7 @@ public class GameManager implements
     public void checkBoardState(CheckBoardStateCmd cmd) {
         log.info("Checking if checkmate or stalemate in game with id = {}", cmd.gameId());
         CheckIsCheckmateOrStaleMate command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         GameState stateOfBoard = game.establishBoardState();
         saveGame.saveBoard(game);
@@ -202,7 +202,7 @@ public class GameManager implements
     public void resignGame(ResignGameCmd cmd) {
         log.info("User {} is resigning game with id {}", cmd.username(), cmd.gameId());
         Resign command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.resign(command);
         saveGame.saveBoard(game);
@@ -214,7 +214,7 @@ public class GameManager implements
     public void proposeDraw(ProposeDrawCmd cmd) {
         log.info("User {} is proposing draw in game with id = {}", cmd.username(), cmd.gameId());
         ProposeDraw command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.proposeDraw(command);
         saveGame.saveBoard(game);
@@ -226,7 +226,7 @@ public class GameManager implements
     public void rejectDraw(RejectDrawCmd cmd) {
         log.info("User {} is rejecting draw offer in game with id = {}", cmd.username(), cmd.gameId());
         RejectDraw command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.rejectDraw(command);
         saveGame.saveBoard(game);
@@ -238,7 +238,7 @@ public class GameManager implements
     public void acceptDraw(AcceptDrawCmd cmd) {
         log.info("User {} is accepting draw offer in game with id = {}", cmd.username(), cmd.gameId());
         AcceptDraw command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.acceptDraw(command);
         saveGame.saveBoard(game);
@@ -250,7 +250,7 @@ public class GameManager implements
     public FenBoardString establishCurrentFenBoardString(EstablishFenStringOfBoardCmd cmd) {
         log.info("Establishing fen string of game with id = {}", cmd.gameId());
         EstablishFenStringOfBoard command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         FenBoardString result = game.establishFenBoardString();
         log.info(
@@ -265,7 +265,7 @@ public class GameManager implements
     public void proposeTakingBackMove(ProposeTakingBackMoveCmd cmd) {
         log.info("User {} is proposing taking back move in game with id = {}", cmd.username(), cmd.gameId());
         ProposeTakingBackMove command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.proposeTakingBackMove(command);
         saveGame.saveBoard(game);
@@ -277,7 +277,7 @@ public class GameManager implements
     public void rejectTakingBackLastMove(RejectTakingBackMoveCmd cmd) {
         log.info("User {} is rejecting taking back last move in game with id = {}", cmd.username(), cmd.gameId());
         RejectTakingBackMove command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.rejectTakingBackLastMove(command);
         saveGame.saveBoard(game);
@@ -289,7 +289,7 @@ public class GameManager implements
     public void acceptTakingBackLastMove(AcceptTakingBackMoveCmd cmd) {
         log.info("User {} is accepting offer of taking back last move in game with id = {}", cmd.username(), cmd.gameId());
         AcceptTakingBackMove command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId())
+        Game game = loadGame.loadGame(command.gameId())
             .orElseThrow(() -> new GameNotFoundException(command.gameId()));
         game.acceptTakingBackLastMove(command);
         saveGame.saveBoard(game);
@@ -309,7 +309,7 @@ public class GameManager implements
     public void quitOccupiedBoard(QuitOccupiedBoardCmd cmd) {
         log.info("Quiting occupied game with id: {} by username: {} ", cmd.gameId(), cmd.username());
         QuitOccupiedGame command = cmd.toCommand();
-        Game game = loadGame.loadBoard(command.gameId()).orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        Game game = loadGame.loadGame(command.gameId()).orElseThrow(() -> new GameNotFoundException(command.gameId()));
         Player whitePlayer = game.gameInfo().whitePlayer();
         Player blackPlayer = game.gameInfo().blackPlayer();
         if (Objects.equals(whitePlayer.username(), command.username()) && blackPlayer == null) {

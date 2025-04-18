@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GameAdditionalInfoViewQueryPort {
-    Optional<GameAdditionalInfoView> findGameById(UUID boardId);
+    Optional<GameAdditionalInfoView> findGameById(UUID gameId);
 }

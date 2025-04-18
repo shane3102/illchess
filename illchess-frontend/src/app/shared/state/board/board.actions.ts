@@ -2,7 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { GameView } from "../../model/game/BoardView";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
-import { IllegalMoveView } from "../../model/game/IllegalMoveView";
+import { IllegalMoveResponse } from "../../model/game/IllegalMoveResponse";
 import { InitializeNewGameRequest } from "../../model/game/InitializeNewGameRequest";
 import { InitializedGameResponse } from "../../model/game/InitializedGameResponse";
 import { MovePieceRequest } from "../../model/game/MovePieceRequest";
@@ -34,7 +34,7 @@ export const boardLoadingError = createAction(
 
 export const illegalMove = createAction(
     'Illegal move',
-    props<IllegalMoveView>()
+    props<IllegalMoveResponse>()
 )
 
 export const selectedPieceChanged = createAction(

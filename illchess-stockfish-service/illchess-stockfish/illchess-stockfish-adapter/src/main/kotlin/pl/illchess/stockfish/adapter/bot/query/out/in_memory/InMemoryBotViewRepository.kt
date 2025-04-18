@@ -27,7 +27,7 @@ class InMemoryBotViewRepository(
     override fun listAllCurrentlyRunBots() = botCache.values
         .sortedBy { it.expirationDate }
         .map {
-            BotView(it.username.text, it.currentBoardId?.uuid)
+            BotView(it.username.text, it.currentGameId?.uuid)
         }
 
     override fun getMaxBotCount(): Int {

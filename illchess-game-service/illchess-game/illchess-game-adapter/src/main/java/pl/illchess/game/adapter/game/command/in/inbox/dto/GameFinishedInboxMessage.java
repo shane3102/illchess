@@ -9,11 +9,11 @@ import pl.shane3102.messaging.model.Message;
 @Getter
 public class GameFinishedInboxMessage extends Message {
 
-    private final UUID boardId;
+    private final UUID gameId;
 
-    public GameFinishedInboxMessage(UUID boardId) {
+    public GameFinishedInboxMessage(UUID gameId) {
         super(UUID.randomUUID(), 0, OffsetDateTime.now());
-        this.boardId = boardId;
+        this.gameId = gameId;
     }
 
 }

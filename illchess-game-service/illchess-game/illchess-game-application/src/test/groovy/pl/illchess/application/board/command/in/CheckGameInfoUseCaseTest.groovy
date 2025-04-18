@@ -15,18 +15,18 @@ class CheckGameInfoUseCaseTest extends GameSpecification {
 
     def "position should be correctly considered as checkmate or stalemate"() {
         given:
-        def boardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
+        def gameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player1", fenString)
         )
         joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
         )
 
-        def cmd = new CheckGameStateUseCase.CheckBoardStateCmd(boardId.uuid())
+        def cmd = new CheckGameStateUseCase.CheckBoardStateCmd(gameId.uuid())
         when:
         checkIfCheckmateOrStalemateUseCase.checkBoardState(cmd)
 
-        def loadedBoard = loadBoard.loadBoard(boardId).orElseThrow(AssertionError::new)
+        def loadedBoard = loadBoard.loadGame(gameId).orElseThrow(AssertionError::new)
 
         then:
         loadedBoard.gameInfo().gameResult() == expectedResult

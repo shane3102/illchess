@@ -1,5 +1,5 @@
 package pl.illchess.stockfish.domain.evaluation.command
 
-import pl.illchess.stockfish.domain.board.domain.BoardId
+import pl.illchess.stockfish.domain.board.domain.GameId
 
-data class EvaluateBoard(val boardId: BoardId)
+data class EvaluateBoard(val gameId: GameId)

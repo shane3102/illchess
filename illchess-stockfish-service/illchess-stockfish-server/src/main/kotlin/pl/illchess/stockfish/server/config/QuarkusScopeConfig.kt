@@ -6,9 +6,9 @@ import org.eclipse.microprofile.config.inject.ConfigProperty
 import pl.illchess.stockfish.application.board.command.out.BotPerformMove
 import pl.illchess.stockfish.application.board.command.out.BotQuitNotYetStartedGame
 import pl.illchess.stockfish.application.board.command.out.BotResignGame
-import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoard
-import pl.illchess.stockfish.application.board.command.out.LoadBoardAdditionalInfo
+import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeGame
+import pl.illchess.stockfish.application.board.command.out.LoadGame
+import pl.illchess.stockfish.application.board.command.out.LoadGameAdditionalInfo
 import pl.illchess.stockfish.application.bot.command.BotService
 import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
@@ -44,7 +44,7 @@ class QuarkusScopeConfig {
     @Produces
     @ApplicationScoped
     fun evaluateBoardService(
-        loadBoard: LoadBoard,
+        loadGame: LoadGame,
 
         calculateBoardEvaluation: CalculateBoardEvaluation,
         calculateBestMoveAndContinuation: CalculateBestMoveAndContinuation,
@@ -59,7 +59,7 @@ class QuarkusScopeConfig {
 
     ): EvaluateBoardService {
         return EvaluateBoardService(
-            loadBoard,
+            loadGame,
             calculateBoardEvaluation,
             calculateBestMoveAndContinuation,
             loadBoardEvaluation,
@@ -76,9 +76,9 @@ class QuarkusScopeConfig {
         saveBot: SaveBot,
         loadBot: LoadBot,
         deleteBot: DeleteBot,
-        joinOrInitializeBoard: JoinOrInitializeBoard,
-        loadBoardAdditionalInfo: LoadBoardAdditionalInfo,
-        loadBoard: LoadBoard,
+        joinOrInitializeGame: JoinOrInitializeGame,
+        loadGameAdditionalInfo: LoadGameAdditionalInfo,
+        loadGame: LoadGame,
         botPerformMove: BotPerformMove,
         botResignGame: BotResignGame,
         botQuitNotYetStartedGame: BotQuitNotYetStartedGame,
@@ -87,9 +87,9 @@ class QuarkusScopeConfig {
         saveBot,
         loadBot,
         deleteBot,
-        joinOrInitializeBoard,
-        loadBoard,
-        loadBoardAdditionalInfo,
+        joinOrInitializeGame,
+        loadGame,
+        loadGameAdditionalInfo,
         topMovesFacade,
         botPerformMove,
         botResignGame,

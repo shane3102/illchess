@@ -4,7 +4,7 @@ import { Observable, Subscription, take } from 'rxjs';
 import { BoardLegalMovesResponse } from '../../../shared/model/game/BoardLegalMovesResponse';
 import { GameView } from '../../../shared/model/game/BoardView';
 import { CheckLegalMovesRequest } from '../../../shared/model/game/CheckLegalMovesRequest';
-import { IllegalMoveView } from '../../../shared/model/game/IllegalMoveView';
+import { IllegalMoveResponse } from '../../../shared/model/game/IllegalMoveResponse';
 import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
 import { PieceSelectedInfo } from '../../../shared/model/game/PieceSelectedInfo';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
@@ -30,7 +30,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
   boardView$: Observable<GameView> = this.store.select(boardSelector);
-  illegalMoveResponse$: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
+  illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
   selectedPieceInfo$: Observable<PieceSelectedInfo | undefined> = this.store.select(selectedPieceSelector)
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
   gameState$: Observable<'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
