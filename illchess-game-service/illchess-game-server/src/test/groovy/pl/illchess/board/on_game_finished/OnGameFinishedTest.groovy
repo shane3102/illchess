@@ -1,9 +1,9 @@
 package pl.illchess.board.on_game_finished
 
 import org.springframework.http.HttpStatus
-import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
-import pl.illchess.game.adapter.board.command.in.rest.dto.InitializedBoardResponse
-import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
+import pl.illchess.game.adapter.game.command.in.rest.dto.InitializeNewGameRequest
+import pl.illchess.game.adapter.game.command.in.rest.dto.InitializedGameResponse
+import pl.illchess.game.adapter.game.command.in.rest.dto.ResignGameRequest
 import pl.illchess.game.application.game.query.out.model.GameFinishedView
 
 import java.time.Duration
@@ -22,11 +22,11 @@ class OnGameFinishedTest extends OnGameFinishedSpecification {
         def username1 = generateRandomName()
         def username2 = generateRandomName()
 
-        def initializeBoardResponse = joinOrInitializeGame(new InitializeNewBoardRequest(username1))
+        def initializeBoardResponse = joinOrInitializeGame(new InitializeNewGameRequest(username1))
         assert initializeBoardResponse.status == HttpStatus.OK.value()
-        def initializedBoard = parseJson(initializeBoardResponse, InitializedBoardResponse)
+        def initializedBoard = parseJson(initializeBoardResponse, InitializedGameResponse)
 
-        assert joinOrInitializeGame(new InitializeNewBoardRequest(username2)).status == HttpStatus.OK.value()
+        assert joinOrInitializeGame(new InitializeNewGameRequest(username2)).status == HttpStatus.OK.value()
 
         when:
         assert resignGame(new ResignGameRequest(initializedBoard.id(), username1)).status == HttpStatus.OK.value()

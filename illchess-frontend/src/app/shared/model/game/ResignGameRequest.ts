@@ -1,4 +1,4 @@
 export interface ResignGameRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }

@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { GameView } from "../../model/game/BoardView";
-import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { InitializedGameResponse } from "../../model/game/InitializedGameResponse";
 import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
 import { boardInitialized, boardLoaded, selectedPieceChanged, draggedPieceReleased, gameFinished, gameFinishedLoaded, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
 import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
@@ -110,7 +110,7 @@ export const boardReducer = createReducer(
     // board was initialized
     on(
         boardInitialized,
-        (state: BoardState, content: InitializedBoardResponse) => (
+        (state: BoardState, content: InitializedGameResponse) => (
             {
                 ...state,
                 gameFinishedInfo: {},

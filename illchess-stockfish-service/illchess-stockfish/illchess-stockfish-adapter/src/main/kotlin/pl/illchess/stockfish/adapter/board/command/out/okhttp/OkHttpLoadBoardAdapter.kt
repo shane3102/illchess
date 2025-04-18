@@ -44,7 +44,7 @@ class OkHttpLoadBoardAdapter(
 
     override fun loadBoard(boardId: BoardId): FenBoardPosition? {
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/fen/${boardId.uuid}")
+            .url("${gameServiceUrl}/api/game/fen/${boardId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
         val response = call.execute()
@@ -63,7 +63,7 @@ class OkHttpLoadBoardAdapter(
 
     override fun loadBoardAdditionalInfo(boardId: BoardId): BoardAdditionalInfo? {
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/refresh/info/${boardId.uuid}")
+            .url("${gameServiceUrl}/api/game/refresh/info/${boardId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
         val response = call.execute()
@@ -94,7 +94,7 @@ class OkHttpLoadBoardAdapter(
         val requestBody = objectMapper.writeValueAsString(initializeNewBoardRequest).toRequestBody(mediaType)
 
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/join-or-initialize")
+            .url("${gameServiceUrl}/api/game/join-or-initialize")
             .put(requestBody)
             .build()
         val call = okHttpClient.newCall(request)
@@ -114,7 +114,7 @@ class OkHttpLoadBoardAdapter(
         val requestBody = objectMapper.writeValueAsString(movePieceRequest).toRequestBody(mediaType)
 
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/move-piece")
+            .url("${gameServiceUrl}/api/game/move-piece")
             .put(requestBody)
             .build()
         val call = okHttpClient.newCall(request)
@@ -128,7 +128,7 @@ class OkHttpLoadBoardAdapter(
         val requestBody = objectMapper.writeValueAsString(resignGameRequest).toRequestBody(mediaType)
 
         val request: Request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/resign")
+            .url("${gameServiceUrl}/api/game/resign")
             .put(requestBody)
             .build()
         val call = okHttpClient.newCall(request)
@@ -142,7 +142,7 @@ class OkHttpLoadBoardAdapter(
         val requestBody = objectMapper.writeValueAsString(quitNotYetStartedGameRequest).toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("${gameServiceUrl}/api/board/quit-not-yet-started")
+            .url("${gameServiceUrl}/api/game/quit-not-yet-started")
             .put(requestBody)
             .build()
         val call = okHttpClient.newCall(request)

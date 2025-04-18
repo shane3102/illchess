@@ -5,7 +5,7 @@ import java.util.UUID
 
 @RegisterForReflection
 data class PerformMoveRequest(
-    val boardId: UUID,
+    val gameId: UUID,
     val startSquare: String,
     val targetSquare: String,
     val pawnPromotedToPieceType: String?,

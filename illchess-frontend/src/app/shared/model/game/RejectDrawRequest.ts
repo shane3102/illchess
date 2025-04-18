@@ -1,4 +1,4 @@
 export interface RejectDrawRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }

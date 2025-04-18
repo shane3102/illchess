@@ -3,14 +3,14 @@ import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesRespons
 import { GameView } from "../../model/game/BoardView";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
 import { IllegalMoveView } from "../../model/game/IllegalMoveView";
-import { InitializeBoardRequest } from "../../model/game/InitializeBoardRequest";
-import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { InitializeNewGameRequest } from "../../model/game/InitializeNewGameRequest";
+import { InitializedGameResponse } from "../../model/game/InitializedGameResponse";
 import { MovePieceRequest } from "../../model/game/MovePieceRequest";
 import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
-import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
+import { QuitOccupiedGameRequest } from "../../model/game/QuitOccupiedGameRequest";
 
 export const movePiece = createAction(
     'Move piece',
@@ -19,7 +19,7 @@ export const movePiece = createAction(
 
 export const initializeBoard = createAction(
     'Initialize board',
-    props<InitializeBoardRequest>()
+    props<InitializeNewGameRequest>()
 )
 
 export const boardLoaded = createAction(
@@ -59,7 +59,7 @@ export const draggedPieceReleased = createAction(
 
 export const boardInitialized = createAction(
     'User joined, initialized or joined as spectator to game',
-    props<InitializedBoardResponse>()
+    props<InitializedGameResponse>()
 )
 
 export const refreshBoard = createAction(
@@ -84,6 +84,6 @@ export const gameFinishedLoaded = createAction(
 
 export const quitNotYetStartedGame = createAction(
     'Quit game that is not yet started',
-    props<QuitOccupiedBoardRequest>()
+    props<QuitOccupiedGameRequest>()
 )
 

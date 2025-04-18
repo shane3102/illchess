@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import pl.illchess.SpecificationIT
-import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
-import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
+import pl.illchess.game.adapter.game.command.in.rest.dto.InitializeNewGameRequest
+import pl.illchess.game.adapter.game.command.in.rest.dto.ResignGameRequest
 import pl.illchess.game.application.game.query.out.GameFinishedQueryPort
 import pl.shane3102.messaging.repository.LoadMessages
 
@@ -19,7 +19,7 @@ abstract class InboxOutboxRepositoryImplementationSpecification extends Specific
 
     private static final def BOARD_PATH = "/api/board"
 
-    protected MockHttpServletResponse joinOrInitializeGame(InitializeNewBoardRequest initializeNewBoardRequest) {
+    protected MockHttpServletResponse joinOrInitializeGame(InitializeNewGameRequest initializeNewBoardRequest) {
         putJson("$BOARD_PATH/join-or-initialize", initializeNewBoardRequest)
     }
 

@@ -8,27 +8,27 @@ import { GameAdditionalInfoView } from "../model/game/BoardAdditionalInfoView";
 import { BoardLegalMovesResponse } from "../model/game/BoardLegalMovesResponse";
 import { GameView } from "../model/game/BoardView";
 import { CheckLegalMovesRequest } from "../model/game/CheckLegalMovesRequest";
-import { InitializeBoardRequest } from "../model/game/InitializeBoardRequest";
-import { InitializedBoardResponse } from "../model/game/InitializedBoardResponse";
+import { InitializeNewGameRequest } from "../model/game/InitializeNewGameRequest";
+import { InitializedGameResponse } from "../model/game/InitializedGameResponse";
 import { MovePieceRequest } from "../model/game/MovePieceRequest";
 import { ProposeDrawRequest } from "../model/game/ProposeDrawRequest";
 import { ProposeTakingBackMoveRequest } from "../model/game/ProposeTakingBackMoveRequest";
 import { RejectDrawRequest } from "../model/game/RejectDrawRequest";
 import { RejectTakingBackMoveRequest } from "../model/game/RejectTakingBackMoveRequest";
 import { ResignGameRequest } from "../model/game/ResignGameRequest";
-import { QuitOccupiedBoardRequest } from "../model/game/QuitOccupiedBoardRequest";
+import { QuitOccupiedGameRequest } from "../model/game/QuitOccupiedGameRequest";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GameService {
 
-    readonly PATH: string = `/gateway/game/api/board`
+    readonly PATH: string = `/gateway/game/api/game`
 
     private httpService = inject(HttpClient)
 
-    async initializeBoard(initializeBoardRequest: InitializeBoardRequest): Promise<InitializedBoardResponse> {
-        return firstValueFrom(this.httpService.put<InitializedBoardResponse>(this.PATH + "/join-or-initialize", initializeBoardRequest))
+    async initializeBoard(initializeBoardRequest: InitializeNewGameRequest): Promise<InitializedGameResponse> {
+        return firstValueFrom(this.httpService.put<InitializedGameResponse>(this.PATH + "/join-or-initialize", initializeBoardRequest))
     }
 
     async movePiece(movePieceRequest: MovePieceRequest): Promise<void> {
@@ -83,7 +83,7 @@ export class GameService {
         return firstValueFrom(this.httpService.put<void>(`${this.PATH}/accept-take-back-move`, acceptTakingBackMove))
     }
 
-    async quitNotYetStartedGame(quitOccupiedBoardRequest: QuitOccupiedBoardRequest): Promise<void> {
+    async quitNotYetStartedGame(quitOccupiedBoardRequest: QuitOccupiedGameRequest): Promise<void> {
         return firstValueFrom(this.httpService.put<void>(`${this.PATH}/quit-not-yet-started`, quitOccupiedBoardRequest))
     }
 

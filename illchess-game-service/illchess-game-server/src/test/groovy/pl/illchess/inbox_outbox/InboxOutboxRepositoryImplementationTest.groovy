@@ -3,10 +3,10 @@ package pl.illchess.inbox_outbox
 import org.awaitility.Awaitility
 import org.mockito.Mockito
 import org.springframework.http.HttpStatus
-import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
-import pl.illchess.game.adapter.board.command.in.rest.dto.InitializedBoardResponse
-import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
-import pl.illchess.game.adapter.board.query.in.outbox.dto.ObtainBoardGameFinishedOutboxMessage
+import pl.illchess.game.adapter.game.command.in.rest.dto.InitializeNewGameRequest
+import pl.illchess.game.adapter.game.command.in.rest.dto.InitializedGameResponse
+import pl.illchess.game.adapter.game.command.in.rest.dto.ResignGameRequest
+import pl.illchess.game.adapter.game.query.in.outbox.dto.ObtainGameFinishedOutboxMessage
 import pl.illchess.game.domain.commons.exception.DomainException
 
 import java.time.Duration
@@ -23,11 +23,11 @@ class InboxOutboxRepositoryImplementationTest extends InboxOutboxRepositoryImple
         def username1 = generateRandomName()
         def username2 = generateRandomName()
 
-        def initializeBoardResponse = joinOrInitializeGame(new InitializeNewBoardRequest(username1))
+        def initializeBoardResponse = joinOrInitializeGame(new InitializeNewGameRequest(username1))
         assert initializeBoardResponse.status == HttpStatus.OK.value()
-        def initializedBoard = parseJson(initializeBoardResponse, InitializedBoardResponse)
+        def initializedBoard = parseJson(initializeBoardResponse, InitializedGameResponse)
 
-        assert joinOrInitializeGame(new InitializeNewBoardRequest(username2)).status == HttpStatus.OK.value()
+        assert joinOrInitializeGame(new InitializeNewGameRequest(username2)).status == HttpStatus.OK.value()
 
         when:
         try {
@@ -38,11 +38,11 @@ class InboxOutboxRepositoryImplementationTest extends InboxOutboxRepositoryImple
         then:
         Awaitility.await().pollInterval(Duration.ofSeconds(1)).atMost(5, TimeUnit.SECONDS)
                 .untilAsserted {
-                    List<ObtainBoardGameFinishedOutboxMessage> inboxOutboxMessagesOfBoardFinished = loadMessages.loadLatestByTypeNonExpired(
-                            ObtainBoardGameFinishedOutboxMessage.class.toString(),
+                    List<ObtainGameFinishedOutboxMessage> inboxOutboxMessagesOfBoardFinished = loadMessages.loadLatestByTypeNonExpired(
+                            ObtainGameFinishedOutboxMessage.class.toString(),
                             100,
                             100
-                    ).collect { it as ObtainBoardGameFinishedOutboxMessage }
+                    ).collect { it as ObtainGameFinishedOutboxMessage }
 
                     inboxOutboxMessagesOfBoardFinished.size() == 1
                     inboxOutboxMessagesOfBoardFinished[0].gameId() == initializedBoard.id()

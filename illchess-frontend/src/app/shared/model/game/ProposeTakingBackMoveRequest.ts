@@ -1,4 +1,4 @@
 export interface ProposeTakingBackMoveRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }
