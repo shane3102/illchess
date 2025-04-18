@@ -7,14 +7,14 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
-import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
-import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
-import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView.PerformedMovesGameFinishedView;
-import pl.illchess.game.application.board.query.out.model.BoardView;
-import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
-import pl.illchess.game.application.board.query.out.model.MoveView;
-import pl.illchess.game.application.board.query.out.model.PieceView;
-import pl.illchess.game.application.board.query.out.model.PlayerView;
+import pl.illchess.game.application.game.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView;
+import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView.PerformedMovesGameFinishedView;
+import pl.illchess.game.application.game.query.out.model.BoardView;
+import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.model.MoveView;
+import pl.illchess.game.application.game.query.out.model.PieceView;
+import pl.illchess.game.application.game.query.out.model.PlayerView;
 import pl.illchess.game.domain.piece.model.info.PieceType;
 
 public class BoardViewMapper {

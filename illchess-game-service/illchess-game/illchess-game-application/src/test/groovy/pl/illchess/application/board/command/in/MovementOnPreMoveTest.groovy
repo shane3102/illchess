@@ -2,9 +2,9 @@ package pl.illchess.application.board.command.in
 
 
 import pl.illchess.application.board.GameSpecification
-import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase
-import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
-import pl.illchess.game.application.board.command.in.MovePieceUseCase
+import pl.illchess.game.application.game.command.in.EstablishFenStringOfBoardUseCase
+import pl.illchess.game.application.game.command.in.JoinOrInitializeNewGameUseCase
+import pl.illchess.game.application.game.command.in.MovePieceUseCase
 
 import java.util.stream.Stream
 

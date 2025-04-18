@@ -6,7 +6,7 @@ import org.springframework.mock.web.MockHttpServletResponse
 import pl.illchess.SpecificationIT
 import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
-import pl.illchess.game.application.board.query.out.BoardGameFinishedQueryPort
+import pl.illchess.game.application.game.query.out.BoardGameFinishedQueryPort
 import pl.shane3102.messaging.repository.LoadMessages
 
 abstract class InboxOutboxRepositoryImplementationSpecification extends SpecificationIT {

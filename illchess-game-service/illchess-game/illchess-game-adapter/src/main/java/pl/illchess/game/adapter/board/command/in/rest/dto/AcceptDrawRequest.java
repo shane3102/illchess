@@ -1,6 +1,6 @@
 package pl.illchess.game.adapter.board.command.in.rest.dto;
 
-import pl.illchess.game.application.board.command.in.AcceptDrawUseCase;
+import pl.illchess.game.application.game.command.in.AcceptDrawUseCase;
 
 import java.util.UUID;
 

@@ -1,14 +1,14 @@
 package pl.illchess.application.board
 
-import pl.illchess.game.application.board.command.BoardManager
-import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase
-import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase
-import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase
-import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
-import pl.illchess.game.application.board.command.in.MovePieceUseCase
-import pl.illchess.game.application.board.command.out.DeleteBoard
-import pl.illchess.game.application.board.command.out.LoadBoard
-import pl.illchess.game.application.board.command.out.SaveBoard
+import pl.illchess.game.application.game.command.GameManager
+import pl.illchess.game.application.game.command.in.CheckGameStateUseCase
+import pl.illchess.game.application.game.command.in.CheckLegalityMoveUseCase
+import pl.illchess.game.application.game.command.in.EstablishFenStringOfBoardUseCase
+import pl.illchess.game.application.game.command.in.JoinOrInitializeNewGameUseCase
+import pl.illchess.game.application.game.command.in.MovePieceUseCase
+import pl.illchess.game.application.game.command.out.DeleteGame
+import pl.illchess.game.application.game.command.out.LoadGame
+import pl.illchess.game.application.game.command.out.SaveGame
 import spock.lang.Specification
 
 class GameSpecification extends Specification {
@@ -16,14 +16,14 @@ class GameSpecification extends Specification {
     TestGameRepository testGameRepository = new TestGameRepository()
     TestEventPublisher testEventPublisher = new TestEventPublisher()
 
-    LoadBoard loadBoard = testGameRepository
-    SaveBoard saveBoard = testGameRepository
-    DeleteBoard deleteBoard = testGameRepository
+    LoadGame loadBoard = testGameRepository
+    SaveGame saveBoard = testGameRepository
+    DeleteGame deleteBoard = testGameRepository
 
-    BoardManager boardManager = new BoardManager(loadBoard, saveBoard, deleteBoard, testEventPublisher)
+    GameManager boardManager = new GameManager(loadBoard, saveBoard, deleteBoard, testEventPublisher)
 
     JoinOrInitializeNewGameUseCase joinOrInitializeNewGameUseCase = boardManager
-    CheckBoardStateUseCase checkIfCheckmateOrStalemateUseCase = boardManager
+    CheckGameStateUseCase checkIfCheckmateOrStalemateUseCase = boardManager
     CheckLegalityMoveUseCase checkLegalityMoveUseCase = boardManager
     MovePieceUseCase movePieceUseCase = boardManager
     EstablishFenStringOfBoardUseCase establishFenStringOfBoardUseCase = boardManager

@@ -7,8 +7,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.board.query.out.redis.mapper.BoardViewMapper;
-import pl.illchess.game.application.board.query.out.BoardGameFinishedQueryPort;
-import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
+import pl.illchess.game.application.game.query.out.BoardGameFinishedQueryPort;
+import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView;
 
 @Repository
 @RequiredArgsConstructor

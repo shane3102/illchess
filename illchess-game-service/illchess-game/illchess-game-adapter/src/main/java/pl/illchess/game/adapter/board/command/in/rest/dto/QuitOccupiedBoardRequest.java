@@ -1,7 +1,7 @@
 package pl.illchess.game.adapter.board.command.in.rest.dto;
 
 import java.util.UUID;
-import pl.illchess.game.application.board.command.in.QuitOccupiedBoardUseCase.QuitOccupiedBoardCmd;
+import pl.illchess.game.application.game.command.in.QuitOccupiedGameUseCase.QuitOccupiedBoardCmd;
 
 public record QuitOccupiedBoardRequest(
     UUID boardId,

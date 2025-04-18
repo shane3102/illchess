@@ -5,16 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import pl.illchess.game.application.board.query.out.ActiveBoardsQueryPort;
-import pl.illchess.game.application.board.query.out.BoardAdditionalInfoViewQueryPort;
-import pl.illchess.game.application.board.query.out.BoardViewPreMoveByUserQueryPort;
-import pl.illchess.game.application.board.query.out.BoardViewQueryPort;
-import pl.illchess.game.application.board.query.out.model.ActiveBoardNewView;
-import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
-import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
-import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus;
-import pl.illchess.game.application.board.query.out.model.BoardView;
-import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.ActiveBoardsQueryPort;
+import pl.illchess.game.application.game.query.out.BoardAdditionalInfoViewQueryPort;
+import pl.illchess.game.application.game.query.out.BoardViewPreMoveByUserQueryPort;
+import pl.illchess.game.application.game.query.out.BoardViewQueryPort;
+import pl.illchess.game.application.game.query.out.model.ActiveBoardNewView;
+import pl.illchess.game.application.game.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.game.query.out.model.BoardGameObtainedInfoView;
+import pl.illchess.game.application.game.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus;
+import pl.illchess.game.application.game.query.out.model.BoardView;
+import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.game.event.GameAdditionalInfoUpdated;
 import pl.illchess.game.domain.game.event.GameStarted;
 import pl.illchess.game.domain.game.event.GameUpdated;
@@ -23,8 +23,8 @@ import pl.illchess.game.domain.game.event.delete.GameDeleted;
 import pl.illchess.game.domain.game.event.pre_moves.GameWithPreMovesUpdated;
 import pl.illchess.game.domain.game.exception.GameNotFoundException;
 import pl.illchess.game.domain.game.exception.GameWithPreMovesDoesNotExistException;
-import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.ERROR;
-import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.SUCCESS;
+import static pl.illchess.game.application.game.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.ERROR;
+import static pl.illchess.game.application.game.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.SUCCESS;
 
 @Service
 @AllArgsConstructor

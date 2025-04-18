@@ -2,8 +2,8 @@ package pl.illchess.application.board.command.in
 
 
 import pl.illchess.application.board.GameSpecification
-import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase
-import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
+import pl.illchess.game.application.game.command.in.CheckGameStateUseCase
+import pl.illchess.game.application.game.command.in.JoinOrInitializeNewGameUseCase
 import static pl.illchess.game.domain.game.model.state.GameResultCause.CHECKMATE
 import static pl.illchess.game.domain.game.model.state.GameResultCause.INSUFFICIENT_MATERIAL
 import static pl.illchess.game.domain.game.model.state.GameResultCause.STALEMATE
@@ -22,7 +22,7 @@ class CheckGameInfoUseCaseTest extends GameSpecification {
                 new JoinOrInitializeNewGameUseCase.JoinOrInitializeNewGameCmd("player2", fenString)
         )
 
-        def cmd = new CheckBoardStateUseCase.CheckBoardStateCmd(boardId.uuid())
+        def cmd = new CheckGameStateUseCase.CheckBoardStateCmd(boardId.uuid())
         when:
         checkIfCheckmateOrStalemateUseCase.checkBoardState(cmd)
 

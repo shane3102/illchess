@@ -19,19 +19,19 @@ import pl.illchess.game.adapter.board.command.in.rest.dto.QuitOccupiedBoardReque
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectDrawRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.RejectTakingBackMoveRequest;
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest;
-import pl.illchess.game.application.board.command.in.AcceptDrawUseCase;
-import pl.illchess.game.application.board.command.in.AcceptTakingBackLastMoveUseCase;
-import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase;
-import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase;
-import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd;
-import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase;
-import pl.illchess.game.application.board.command.in.MovePieceUseCase;
-import pl.illchess.game.application.board.command.in.ProposeDrawUseCase;
-import pl.illchess.game.application.board.command.in.ProposeTakingBackLastMoveUseCase;
-import pl.illchess.game.application.board.command.in.QuitOccupiedBoardUseCase;
-import pl.illchess.game.application.board.command.in.RejectDrawUseCase;
-import pl.illchess.game.application.board.command.in.RejectTakingBackLastMoveUseCase;
-import pl.illchess.game.application.board.command.in.ResignGameUseCase;
+import pl.illchess.game.application.game.command.in.AcceptDrawUseCase;
+import pl.illchess.game.application.game.command.in.AcceptTakingBackLastMoveUseCase;
+import pl.illchess.game.application.game.command.in.CheckLegalityMoveUseCase;
+import pl.illchess.game.application.game.command.in.EstablishFenStringOfBoardUseCase;
+import pl.illchess.game.application.game.command.in.EstablishFenStringOfBoardUseCase.EstablishFenStringOfBoardCmd;
+import pl.illchess.game.application.game.command.in.JoinOrInitializeNewGameUseCase;
+import pl.illchess.game.application.game.command.in.MovePieceUseCase;
+import pl.illchess.game.application.game.command.in.ProposeDrawUseCase;
+import pl.illchess.game.application.game.command.in.ProposeTakingBackLastMoveUseCase;
+import pl.illchess.game.application.game.command.in.QuitOccupiedGameUseCase;
+import pl.illchess.game.application.game.command.in.RejectDrawUseCase;
+import pl.illchess.game.application.game.command.in.RejectTakingBackLastMoveUseCase;
+import pl.illchess.game.application.game.command.in.ResignGameUseCase;
 import pl.illchess.game.domain.game.model.GameId;
 import pl.illchess.game.domain.game.model.FenBoardString;
 import pl.illchess.game.domain.game.model.square.Square;
@@ -52,7 +52,7 @@ public class BoardCommandController implements BoardCommandApi {
     private final ProposeTakingBackLastMoveUseCase proposeTakingBackLastMoveUseCase;
     private final AcceptTakingBackLastMoveUseCase acceptTakingBackLastMoveUseCase;
     private final RejectTakingBackLastMoveUseCase rejectTakingBackLastMoveUseCase;
-    private final QuitOccupiedBoardUseCase quitOccupiedBoardUseCase;
+    private final QuitOccupiedGameUseCase quitOccupiedGameUseCase;
 
     @Override
     public ResponseEntity<InitializedBoardResponse> initializeNewBoard(InitializeNewBoardRequest initializeNewBoardRequest) {
@@ -139,7 +139,7 @@ public class BoardCommandController implements BoardCommandApi {
 
     @Override
     public ResponseEntity<Void> quitNotYetStartedGame(QuitOccupiedBoardRequest request) {
-        quitOccupiedBoardUseCase.quitOccupiedBoard(request.toCmd());
+        quitOccupiedGameUseCase.quitOccupiedBoard(request.toCmd());
         return new ResponseEntity<>(OK);
     }
 }

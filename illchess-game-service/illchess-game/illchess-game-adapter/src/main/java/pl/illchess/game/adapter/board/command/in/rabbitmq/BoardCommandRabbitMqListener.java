@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import pl.illchess.game.adapter.board.command.in.inbox.dto.GameFinishedInboxMessage;
 import pl.illchess.game.adapter.board.command.in.rabbitmq.dto.GameFinishedRabbitMqMessage;
 import pl.illchess.game.adapter.board.command.in.rabbitmq.dto.GameObtainingErrorRabbitMqMessage;
-import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase;
-import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase.DeleteBoardWithFinishedGameCmd;
+import pl.illchess.game.application.game.command.in.DeleteFinishedGameUseCase;
+import pl.illchess.game.application.game.command.in.DeleteFinishedGameUseCase.DeleteBoardWithFinishedGameCmd;
 import pl.illchess.game.application.commons.command.out.PublishEvent;
 import pl.illchess.game.domain.game.event.delete.GameDeleteError;
 import pl.illchess.game.domain.game.event.delete.GameDeleted;
@@ -24,14 +24,14 @@ public class BoardCommandRabbitMqListener {
 
     private final InboxOutbox inboxOutbox;
     private final PublishEvent publishEvent;
-    private final DeleteBoardWithFinishedGameUseCase deleteBoardWithFinishedGameUseCase;
+    private final DeleteFinishedGameUseCase deleteFinishedGameUseCase;
 
     @RabbitListener(queues = {OBTAIN_GAME_SUCCESS_QUEUE})
     public void deleteBoardWithFinishedGameOrSaveAsInboxMessage(GameFinishedRabbitMqMessage gameFinishedRabbitMqMessage) {
         try {
             DeleteBoardWithFinishedGameCmd cmd = new DeleteBoardWithFinishedGameCmd(gameFinishedRabbitMqMessage.id());
-            deleteBoardWithFinishedGameUseCase.deleteBoardWithFinishedGame(cmd);
-            publishEvent.publishDomainEvent(new GameDeleted(new GameId(cmd.boardId())));
+            deleteFinishedGameUseCase.deleteBoardWithFinishedGame(cmd);
+            publishEvent.publishDomainEvent(new GameDeleted(new GameId(cmd.gameId())));
         }  catch (DomainException domainException) {
             inboxOutbox.saveMessage(new GameFinishedInboxMessage(gameFinishedRabbitMqMessage.id()));
         }

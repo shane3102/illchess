@@ -1,8 +1,8 @@
 package pl.illchess.application.board.command.in
 
 import pl.illchess.application.board.GameSpecification
-import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase
-import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
+import pl.illchess.game.application.game.command.in.CheckLegalityMoveUseCase
+import pl.illchess.game.application.game.command.in.JoinOrInitializeNewGameUseCase
 import pl.illchess.game.domain.game.model.square.Square
 
 import static pl.illchess.game.domain.game.model.square.Square.*

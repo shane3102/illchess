@@ -1,11 +1,11 @@
 package pl.illchess.game.adapter.board.query.in.websocket;
 
 import org.springframework.context.event.EventListener;
-import pl.illchess.game.application.board.query.out.model.ActiveBoardNewView;
-import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
-import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
-import pl.illchess.game.application.board.query.out.model.BoardView;
-import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.model.ActiveBoardNewView;
+import pl.illchess.game.application.game.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.game.query.out.model.BoardGameObtainedInfoView;
+import pl.illchess.game.application.game.query.out.model.BoardView;
+import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
 import pl.illchess.game.domain.game.event.GameAdditionalInfoUpdated;
 import pl.illchess.game.domain.game.event.GameStarted;
 import pl.illchess.game.domain.game.event.GameUpdated;
