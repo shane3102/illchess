@@ -14,7 +14,7 @@ import { PlayerView } from '../../../shared/model/game/BoardAdditionalInfoView';
 })
 export class ChessGameActionButtonsComponent {
 
-  @Input() boardId: string
+  @Input() gameId: string
   @Input() username: string;
   @Input() whitePlayer: PlayerView | undefined
   @Input() blackPlayer: PlayerView | undefined
@@ -31,32 +31,32 @@ export class ChessGameActionButtonsComponent {
   private store = inject(Store<ChessGameState>)
 
   resignGame() {
-    let dto: ResignGameRequest = {'gameId': this.boardId, 'username': this.username}
+    let dto: ResignGameRequest = {'gameId': this.gameId, 'username': this.username}
     this.store.dispatch(resignGame(dto))
   }
 
   proposeDraw() {
-    this.store.dispatch(proposeDraw({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(proposeDraw({gameId: this.gameId, username: this.username}))
   }
 
   acceptDraw() {
-    this.store.dispatch(acceptDraw({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(acceptDraw({gameId: this.gameId, username: this.username}))
   }
 
   rejectDraw() {
-    this.store.dispatch(rejectDraw({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(rejectDraw({gameId: this.gameId, username: this.username}))
   }
 
   proposeTakeBackMove() {
-    this.store.dispatch(proposeTakingBackMove({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(proposeTakingBackMove({gameId: this.gameId, username: this.username}))
   }
 
   acceptTakingBackMove() {
-    this.store.dispatch(acceptTakingBackMove({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(acceptTakingBackMove({gameId: this.gameId, username: this.username}))
   }
 
   rejectTakingBackMove() {
-    this.store.dispatch(rejectTakingBackMove({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(rejectTakingBackMove({gameId: this.gameId, username: this.username}))
   }
 
 }

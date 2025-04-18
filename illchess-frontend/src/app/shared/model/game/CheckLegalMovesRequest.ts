@@ -1,7 +1,7 @@
-import { Piece, PieceColor } from "./PieceInfo";
+import { PieceColor } from "./PieceInfo";
 
 export interface CheckLegalMovesRequest{
-    boardId: string,
+    gameId: string,
     startSquare: string,
     pieceColor: PieceColor,
     username: string

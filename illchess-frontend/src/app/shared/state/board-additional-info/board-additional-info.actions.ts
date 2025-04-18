@@ -58,7 +58,7 @@ export const acceptTakingBackMove = createAction(
 
 export const establishEvaluation = createAction(
     'Establish board evaluation of engine',
-    props<{boardId: string}>()
+    props<{gameId: string}>()
 )
 
 export const evaluationLoaded = createAction(
@@ -68,7 +68,7 @@ export const evaluationLoaded = createAction(
 
 export const establishBestMoveAndContinuation = createAction(
     'Establish best move and following continuation',
-    props<{boardId: string}>()
+    props<{gameId: string}>()
 )
 
 export const bestMoveAndContinuationLoaded = createAction(

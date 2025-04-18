@@ -5,7 +5,7 @@ import { takeWhile } from 'rxjs';
 import { InitializeNewGameRequest } from '../../../shared/model/game/InitializeNewGameRequest';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
 import { initializeBoard, refreshBoard } from '../../../shared/state/board/board.actions';
-import { initializedBoardIdSelector } from '../../../shared/state/board/board.selectors';
+import { initializedGameIdSelector } from '../../../shared/state/board/board.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { username } from 'src/app/shared/state/player-info/player-info.selectors';
@@ -20,7 +20,7 @@ export class JoinOrInitializeGameComponent implements OnInit {
   private store = inject(Store<ChessGameState>)
   private router = inject(Router)
   
-  boardId: string
+  gameId: string
   username: Signal<string | undefined> = toSignal(this.store.select(username))
 
   ngOnInit(): void {
@@ -29,14 +29,14 @@ export class JoinOrInitializeGameComponent implements OnInit {
     }
     this.store.dispatch(initializeBoard(initializeNewBoardRequest))
 
-    this.store.select(initializedBoardIdSelector)
-      .pipe(takeWhile(() => !this.boardId))
+    this.store.select(initializedGameIdSelector)
+      .pipe(takeWhile(() => !this.gameId))
       .subscribe(
         (dto: RefreshBoardDto) => {
-          if (dto.boardId) {
+          if (dto.gameId) {
             this.store.dispatch(refreshBoard(dto))
-            this.router.navigateByUrl(`/game/${dto.boardId}`)
-            this.boardId = dto.boardId
+            this.router.navigateByUrl(`/game/${dto.gameId}`)
+            this.gameId = dto.gameId
           }
         }
       )

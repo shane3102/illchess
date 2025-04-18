@@ -45,7 +45,7 @@ export class BoardEffects {
             switchMap(
                 (movePieceRequest) => from(this.chessBoardService.movePiece(movePieceRequest))
                     .pipe(
-                        switchMap(() => of(refreshBoardWithPreMoves({ boardId: movePieceRequest.gameId, username: movePieceRequest.username }))),
+                        switchMap(() => of(refreshBoardWithPreMoves({ gameId: movePieceRequest.gameId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
                             let body: IllegalMoveView = response.error;
                             return of(illegalMove(body))
@@ -71,7 +71,7 @@ export class BoardEffects {
         () => this.actions$.pipe(
             ofType(refreshBoard),
             switchMap(
-                (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoard(dto.boardId))
+                (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoard(dto.gameId))
                     .pipe(
                         map((response: GameView) => boardLoaded(response)),
                         catchError(() => of(boardLoadingError({})))
@@ -84,7 +84,7 @@ export class BoardEffects {
         () => this.actions$.pipe(
             ofType(refreshBoardWithPreMoves),
             switchMap(
-                (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoardWithPremoves(dto.boardId, dto.username!))
+                (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoardWithPremoves(dto.gameId, dto.username!))
                     .pipe(
                         map(
                             ((response: GameView) => boardLoaded(response))

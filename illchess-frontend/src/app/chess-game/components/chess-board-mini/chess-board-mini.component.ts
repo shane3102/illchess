@@ -18,7 +18,7 @@ import { ChessBoardMiniStore } from './ChessBoardMiniStore';
 })
 export class ChessBoardMiniComponent implements OnInit, OnDestroy {
 
-  @Input() boardId: string
+  @Input() gameId: string
 
   isBoardFaded: boolean = false
 
@@ -35,18 +35,18 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
   chessStatus$: Subscription
 
   ngOnInit(): void {
-    this.chessBoardMiniStore.refresh(this.boardId)
+    this.chessBoardMiniStore.refresh(this.gameId)
     setTimeout(
       async () => {
         this.chessTopic$ = await this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/${this.boardId}`,
+          `/chess-topic/${this.gameId}`,
           (response: any) => {
             let boardView: GameView = JSON.parse(response)
             this.chessBoardMiniStore.patchBoardPosition(boardView)
           }
         )
         this.chessStatus$ = await this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/obtain-status/${this.boardId}`,
+          `/chess-topic/obtain-status/${this.gameId}`,
           (response: any) => {
             let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             this.chessBoardMiniStore.patchObtainedInfoView(boardGameObtainedInfoView)
@@ -77,7 +77,7 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
     this.isBoardFaded = true
     setTimeout(
       () => {
-        this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: this.boardId }))
+        this.store.dispatch(removeFinishedBoardFromActiveBoard({ gameId: this.gameId }))
       },
       950
     )

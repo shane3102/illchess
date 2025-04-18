@@ -15,7 +15,7 @@ import { ChessGameState } from '../../../shared/state/chess-game.state';
 })
 export class ChessEngineInfoComponent implements OnInit {
 
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() username: string;
   @Input() boardAdditionalInfoView: GameAdditionalInfoView | undefined | null;
 
@@ -35,8 +35,8 @@ export class ChessEngineInfoComponent implements OnInit {
           boardAdditionalInfoView?.blackPlayer?.username != this.username &&
           boardAdditionalInfoView.gameId
         ) {
-          this.store.dispatch(establishEvaluation({ boardId: this.boardId }))
-          this.store.dispatch(establishBestMoveAndContinuation({ boardId: this.boardId }))
+          this.store.dispatch(establishEvaluation({ gameId: this.gameId }))
+          this.store.dispatch(establishBestMoveAndContinuation({ gameId: this.gameId }))
         }
       }
     )

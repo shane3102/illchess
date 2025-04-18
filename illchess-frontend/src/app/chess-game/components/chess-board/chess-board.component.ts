@@ -23,7 +23,7 @@ import { GameFinishedView } from '../../../shared/model/player-info/GameFinished
 })
 export class ChessBoardComponent implements OnInit, OnDestroy {
 
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() username: string
   
   private store = inject(Store<ChessGameState>)
@@ -58,7 +58,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
             this.sendChessBoardWithPreMovesRefreshRequest()
           }
           this.chessTopicWithPreMovesSubscription$ = await this.chessBoardWebSocketService.subscribe(
-            `/chess-topic/${this.boardId}/${this.username}`,
+            `/chess-topic/${this.gameId}/${this.username}`,
             (response: any) => {
               let boardView: GameView = JSON.parse(response)
               this.store.dispatch(boardLoaded(boardView))
@@ -72,7 +72,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
       setTimeout(
         async () => {
           this.chessTopicSubscription$ = await this.chessBoardWebSocketService.subscribe(
-            `/chess-topic/${this.boardId}`,
+            `/chess-topic/${this.gameId}`,
             (response: any) => {
               let boardView: GameView = JSON.parse(response)
               this.store.dispatch(boardLoaded(boardView))
@@ -85,7 +85,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
     setTimeout(
       async () => {
         this.obtainStatusSubscription$ = await this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/obtain-status/${this.boardId}`,
+          `/chess-topic/obtain-status/${this.gameId}`,
           (response: any) => {
             let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             this.store.dispatch(gameFinished(boardGameObtainedInfoView))
@@ -105,7 +105,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   pieceSelectedChange(pieceSelectedInfo: PieceSelectedInfo) {
     this.store.dispatch(selectedPieceChanged(pieceSelectedInfo))
     let request: CheckLegalMovesRequest = {
-      'boardId': this.boardId,
+      'gameId': this.gameId,
       'startSquare': pieceSelectedInfo.squareInfo.file + pieceSelectedInfo.squareInfo.rank,
       'pieceColor': pieceSelectedInfo.pieceInfo.color,
       'username': this.username
@@ -123,7 +123,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   sendChessBoardWithPreMovesRefreshRequest() {
     let refreshBoardDto: RefreshBoardDto = {
-      'boardId': this.boardId,
+      'gameId': this.gameId,
       'username': this.username
     }
     this.store.dispatch(refreshBoardWithPreMoves(refreshBoardDto))

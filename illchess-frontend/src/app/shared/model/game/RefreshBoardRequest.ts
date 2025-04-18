@@ -1,4 +1,4 @@
 export interface RefreshBoardDto {
-    boardId: string,
+    gameId: string,
     username?: string
 }

@@ -55,7 +55,7 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
           (response: any) => {
             let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             setTimeout(
-              () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.gameId })) },
+              () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ gameId: boardGameObtainedInfoView.gameId })) },
               1000
             )
           }
@@ -69,8 +69,8 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
     this.obtainStatusSubscription$.unsubscribe()
   }
 
-  spectateBoard(boardId: string) {
-    this.router.navigateByUrl(`/game/${boardId}`)
+  spectateBoard(gameId: string) {
+    this.router.navigateByUrl(`/game/${gameId}`)
   }
 
   isDisabled(side: 'left' | 'right', numberOfBoards: number) {

@@ -19,5 +19,5 @@ export const newActiveBoardObtained = createAction(
 
 export const removeFinishedBoardFromActiveBoard = createAction(
     'Game on board was finished, remove board from active boards',
-    props<{boardId: string}>()
+    props<{gameId: string}>()
 )

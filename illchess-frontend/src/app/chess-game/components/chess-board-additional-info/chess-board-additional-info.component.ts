@@ -17,7 +17,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit, OnDestroy {
 
   PieceColor = PieceColor
 
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() username: string;
   @Input() boardAdditionalInfoView: GameAdditionalInfoView | undefined | null
 
@@ -30,7 +30,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit, OnDestroy {
     setTimeout(
       async () => {
         this.boardAdditionalInfoSubscription$ = await this.chessBoardWebSocketService.subscribe(
-          `/chess-topic/additional-info/${this.boardId}`,
+          `/chess-topic/additional-info/${this.gameId}`,
           (response: any) => {
             let boardAdditionalInfoView: GameAdditionalInfoView = JSON.parse(response)
             this.store.dispatch(boardAdditionalInfoLoaded(boardAdditionalInfoView))
@@ -46,7 +46,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit, OnDestroy {
 
   sendChessBoardAdditionalInfoRefreshRequest() {
     let refreshBoardDto: RefreshBoardDto = {
-      'boardId': this.boardId
+      'gameId': this.gameId
     }
     this.store.dispatch(refreshAdditionalInfoOfBoard(refreshBoardDto))
   }

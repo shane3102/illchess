@@ -14,7 +14,7 @@
     
     <div *ngIf="displayPiecePromotingComponent">
         <app-chess-promoting-piece
-            [boardId]="boardId"
+            [gameId]="gameId"
             [squareInfo]="squareInfo"
             [selectedPieceInfo]="selectedPieceInfo"
             (pieceDroppedInfoEmitter)="piecePromotion($event)"

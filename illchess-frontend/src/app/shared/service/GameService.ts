@@ -39,20 +39,20 @@ export class GameService {
         return firstValueFrom(this.httpService.put<BoardLegalMovesResponse>(this.PATH + "/legal-moves", request))
     }
 
-    async refreshBoard(boardId: string): Promise<GameView> {
-        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/${boardId}`))
+    async refreshBoard(gameId: string): Promise<GameView> {
+        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/${gameId}`))
     }
 
-    async refreshBoardWithPremoves(boardId: string, username: string): Promise<GameView> {
-        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/pre-moves/${boardId}/${username}`))
+    async refreshBoardWithPremoves(gameId: string, username: string): Promise<GameView> {
+        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/pre-moves/${gameId}/${username}`))
     }
 
     async refreshActiveBoards(): Promise<ActiveGamesView> {
         return firstValueFrom(this.httpService.get<ActiveGamesView>(`${this.PATH}/active`))
     }
 
-    async refreshBoardAdditionalInfo(boardId: string): Promise<GameAdditionalInfoView> {
-        return firstValueFrom(this.httpService.get<GameAdditionalInfoView>(`${this.PATH}/refresh/info/${boardId}`))
+    async refreshBoardAdditionalInfo(gameId: string): Promise<GameAdditionalInfoView> {
+        return firstValueFrom(this.httpService.get<GameAdditionalInfoView>(`${this.PATH}/refresh/info/${gameId}`))
     }
 
     async resignGame(resignGame: ResignGameRequest): Promise<void> {
