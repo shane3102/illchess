@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
-import pl.illchess.game.application.board.query.out.ActiveBoardsQueryPort;
-import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
+import pl.illchess.game.application.game.query.out.ActiveBoardsQueryPort;
+import pl.illchess.game.application.game.query.out.model.ActiveBoardsView;
 
 @Repository
 @RequiredArgsConstructor

@@ -5,8 +5,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.board.query.out.redis.mapper.BoardViewMapper;
-import pl.illchess.game.application.board.query.out.BoardAdditionalInfoViewQueryPort;
-import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
+import pl.illchess.game.application.game.query.out.BoardAdditionalInfoViewQueryPort;
+import pl.illchess.game.application.game.query.out.model.BoardAdditionalInfoView;
 
 import java.util.Optional;
 import java.util.UUID;

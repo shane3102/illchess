@@ -5,10 +5,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.board.query.out.redis.mapper.BoardViewMapper;
-import pl.illchess.game.application.board.query.out.BoardViewPreMoveByUserQueryPort;
-import pl.illchess.game.application.board.query.out.BoardViewQueryPort;
-import pl.illchess.game.application.board.query.out.model.BoardView;
-import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.BoardViewPreMoveByUserQueryPort;
+import pl.illchess.game.application.game.query.out.BoardViewQueryPort;
+import pl.illchess.game.application.game.query.out.model.BoardView;
+import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
 
 import java.util.List;
 import java.util.Objects;

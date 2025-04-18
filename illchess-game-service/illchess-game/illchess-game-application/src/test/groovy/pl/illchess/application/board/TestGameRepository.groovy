@@ -1,13 +1,13 @@
 package pl.illchess.application.board
 
-import pl.illchess.game.application.board.command.out.DeleteBoard
-import pl.illchess.game.application.board.command.out.LoadBoard
-import pl.illchess.game.application.board.command.out.SaveBoard
+import pl.illchess.game.application.game.command.out.DeleteGame
+import pl.illchess.game.application.game.command.out.LoadGame
+import pl.illchess.game.application.game.command.out.SaveGame
 import pl.illchess.game.domain.game.model.Game
 import pl.illchess.game.domain.game.model.GameId
 import pl.illchess.game.domain.game.model.state.player.Username
 
-class TestGameRepository implements LoadBoard, SaveBoard, DeleteBoard {
+class TestGameRepository implements LoadGame, SaveGame, DeleteGame {
 
     Map<GameId, Game> repo = new HashMap<>()
 
