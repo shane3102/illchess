@@ -114,7 +114,7 @@ export class ChessSquareComponent implements OnInit {
         this.displayPiecePromotingComponent = true;
       } else {
         let moveRequest: MovePieceRequest = {
-          'boardId': this.boardId,
+          'gameId': this.boardId,
           'startSquare': this.selectedPieceInfo.squareInfo.file + this.selectedPieceInfo.squareInfo.rank,
           'targetSquare': this.squareInfo.file + this.squareInfo.rank,
           'username': this.username

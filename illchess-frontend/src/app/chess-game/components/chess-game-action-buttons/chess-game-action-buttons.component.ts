@@ -31,32 +31,32 @@ export class ChessGameActionButtonsComponent {
   private store = inject(Store<ChessGameState>)
 
   resignGame() {
-    let dto: ResignGameRequest = {'boardId': this.boardId, 'username': this.username}
+    let dto: ResignGameRequest = {'gameId': this.boardId, 'username': this.username}
     this.store.dispatch(resignGame(dto))
   }
 
   proposeDraw() {
-    this.store.dispatch(proposeDraw({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(proposeDraw({gameId: this.boardId, username: this.username}))
   }
 
   acceptDraw() {
-    this.store.dispatch(acceptDraw({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(acceptDraw({gameId: this.boardId, username: this.username}))
   }
 
   rejectDraw() {
-    this.store.dispatch(rejectDraw({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(rejectDraw({gameId: this.boardId, username: this.username}))
   }
 
   proposeTakeBackMove() {
-    this.store.dispatch(proposeTakingBackMove({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(proposeTakingBackMove({gameId: this.boardId, username: this.username}))
   }
 
   acceptTakingBackMove() {
-    this.store.dispatch(acceptTakingBackMove({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(acceptTakingBackMove({gameId: this.boardId, username: this.username}))
   }
 
   rejectTakingBackMove() {
-    this.store.dispatch(rejectTakingBackMove({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(rejectTakingBackMove({gameId: this.boardId, username: this.username}))
   }
 
 }

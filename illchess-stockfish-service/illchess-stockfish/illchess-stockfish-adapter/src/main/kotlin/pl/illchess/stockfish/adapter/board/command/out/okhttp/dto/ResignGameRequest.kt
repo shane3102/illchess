@@ -5,6 +5,6 @@ import java.util.UUID
 
 @RegisterForReflection
 data class ResignGameRequest(
-    val boardId: UUID,
+    val gameId: UUID,
     val username: String
 )

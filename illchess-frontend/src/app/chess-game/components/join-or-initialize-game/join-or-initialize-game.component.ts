@@ -2,7 +2,7 @@ import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs';
-import { InitializeBoardRequest } from '../../../shared/model/game/InitializeBoardRequest';
+import { InitializeNewGameRequest } from '../../../shared/model/game/InitializeNewGameRequest';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
 import { initializeBoard, refreshBoard } from '../../../shared/state/board/board.actions';
 import { initializedBoardIdSelector } from '../../../shared/state/board/board.selectors';
@@ -24,7 +24,7 @@ export class JoinOrInitializeGameComponent implements OnInit {
   username: Signal<string | undefined> = toSignal(this.store.select(username))
 
   ngOnInit(): void {
-    let initializeNewBoardRequest: InitializeBoardRequest = {
+    let initializeNewBoardRequest: InitializeNewGameRequest = {
       'username': this.username()!
     }
     this.store.dispatch(initializeBoard(initializeNewBoardRequest))

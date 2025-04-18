@@ -1,4 +1,4 @@
 export interface RejectTakingBackMoveRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }

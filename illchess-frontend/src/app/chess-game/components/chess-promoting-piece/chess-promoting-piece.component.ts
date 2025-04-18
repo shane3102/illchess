@@ -23,7 +23,7 @@ export class ChessPromotingPieceComponent {
   piecePromotion(piece: Piece.QUEEN | Piece.KNIGHT | Piece.ROOK | Piece.BISHOP) {
     if (this.selectedPieceInfo) {
       let moveRequest: MovePieceRequest = {
-        'boardId': this.boardId,
+        'gameId': this.boardId,
         'startSquare': this.selectedPieceInfo.squareInfo.file + this.selectedPieceInfo.squareInfo.rank,
         'targetSquare': this.squareInfo.file + this.squareInfo.rank,
         'pawnPromotedToPieceType': piece,

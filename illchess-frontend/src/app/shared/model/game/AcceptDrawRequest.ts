@@ -1,4 +1,4 @@
 export interface AcceptDrawRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }

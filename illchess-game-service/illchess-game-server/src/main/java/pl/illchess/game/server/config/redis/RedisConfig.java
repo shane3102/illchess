@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
+import pl.illchess.game.adapter.game.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.model.InboxOutboxMessageEntity;
 
 @Configuration

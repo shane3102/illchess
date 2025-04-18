@@ -17,6 +17,6 @@ export class WaitingForBlackPopupComponent {
   private store = inject(Store<ChessGameState>)
 
   quitNotYetStartedGame() {
-    this.store.dispatch(quitNotYetStartedGame({boardId: this.boardId, username: this.username}))
+    this.store.dispatch(quitNotYetStartedGame({gameId: this.boardId, username: this.username}))
   }
 }

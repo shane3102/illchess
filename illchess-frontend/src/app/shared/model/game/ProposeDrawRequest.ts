@@ -1,4 +1,4 @@
 export interface ProposeDrawRequest {
-    boardId: string,
+    gameId: string,
     username: string
 }

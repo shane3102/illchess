@@ -6,14 +6,14 @@ import { GameService } from "../../service/GameService";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
 import { IllegalMoveView } from "../../model/game/IllegalMoveView";
-import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
+import { InitializedGameResponse } from "../../model/game/InitializedGameResponse";
 import { GameView } from "../../model/game/BoardView";
 import { RefreshBoardDto as RefreshBoardRequest } from "../../model/game/RefreshBoardRequest";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
 import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 import { Router } from "@angular/router";
-import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
+import { QuitOccupiedGameRequest } from "../../model/game/QuitOccupiedGameRequest";
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +33,7 @@ export class BoardEffects {
                     this.chessBoardService.initializeBoard(initializeBoardRequest)
                 )
                     .pipe(
-                        map((response: InitializedBoardResponse) => boardInitialized(response))
+                        map((response: InitializedGameResponse) => boardInitialized(response))
                     )
             )
         )
@@ -45,7 +45,7 @@ export class BoardEffects {
             switchMap(
                 (movePieceRequest) => from(this.chessBoardService.movePiece(movePieceRequest))
                     .pipe(
-                        switchMap(() => of(refreshBoardWithPreMoves({ boardId: movePieceRequest.boardId, username: movePieceRequest.username }))),
+                        switchMap(() => of(refreshBoardWithPreMoves({ boardId: movePieceRequest.gameId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
                             let body: IllegalMoveView = response.error;
                             return of(illegalMove(body))
@@ -124,7 +124,7 @@ export class BoardEffects {
         () => this.actions$.pipe(
             ofType(quitNotYetStartedGame),
             tap(
-                (dto: QuitOccupiedBoardRequest) => {
+                (dto: QuitOccupiedGameRequest) => {
                     this.chessBoardService.quitNotYetStartedGame(dto)
                     this.router.navigateByUrl('')
                 }

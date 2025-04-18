@@ -11,9 +11,9 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static pl.illchess.game.adapter.board.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_FAILURE_QUEUE;
-import static pl.illchess.game.adapter.board.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_SUCCESS_QUEUE;
-import static pl.illchess.game.adapter.board.query.in.rabbitmq.BoardInfoRabbitMqSupplier.OBTAIN_GAME_QUEUE;
+import static pl.illchess.game.adapter.game.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_FAILURE_QUEUE;
+import static pl.illchess.game.adapter.game.command.in.rabbitmq.BoardCommandRabbitMqListener.OBTAIN_GAME_SUCCESS_QUEUE;
+import static pl.illchess.game.adapter.game.query.in.rabbitmq.GameInfoRabbitMqSupplier.OBTAIN_GAME_QUEUE;
 
 @Configuration
 public class RabbitMqConfig {
