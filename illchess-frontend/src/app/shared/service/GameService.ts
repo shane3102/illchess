@@ -3,10 +3,10 @@ import { Injectable, inject } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { AcceptDrawRequest } from "../model/game/AcceptDrawRequest";
 import { AcceptTakingBackMoveRequest } from "../model/game/AcceptTakingBackMoveRequest";
-import { ActiveBoardsView } from "../model/game/ActiveBoardsView";
-import { BoardAdditionalInfoView } from "../model/game/BoardAdditionalInfoView";
+import { ActiveGamesView } from "../model/game/ActiveBoardsView";
+import { GameAdditionalInfoView } from "../model/game/BoardAdditionalInfoView";
 import { BoardLegalMovesResponse } from "../model/game/BoardLegalMovesResponse";
-import { BoardView } from "../model/game/BoardView";
+import { GameView } from "../model/game/BoardView";
 import { CheckLegalMovesRequest } from "../model/game/CheckLegalMovesRequest";
 import { InitializeBoardRequest } from "../model/game/InitializeBoardRequest";
 import { InitializedBoardResponse } from "../model/game/InitializedBoardResponse";
@@ -39,20 +39,20 @@ export class GameService {
         return firstValueFrom(this.httpService.put<BoardLegalMovesResponse>(this.PATH + "/legal-moves", request))
     }
 
-    async refreshBoard(boardId: string): Promise<BoardView> {
-        return firstValueFrom(this.httpService.get<BoardView>(`${this.PATH}/refresh/${boardId}`))
+    async refreshBoard(boardId: string): Promise<GameView> {
+        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/${boardId}`))
     }
 
-    async refreshBoardWithPremoves(boardId: string, username: string): Promise<BoardView> {
-        return firstValueFrom(this.httpService.get<BoardView>(`${this.PATH}/refresh/pre-moves/${boardId}/${username}`))
+    async refreshBoardWithPremoves(boardId: string, username: string): Promise<GameView> {
+        return firstValueFrom(this.httpService.get<GameView>(`${this.PATH}/refresh/pre-moves/${boardId}/${username}`))
     }
 
-    async refreshActiveBoards(): Promise<ActiveBoardsView> {
-        return firstValueFrom(this.httpService.get<ActiveBoardsView>(`${this.PATH}/active`))
+    async refreshActiveBoards(): Promise<ActiveGamesView> {
+        return firstValueFrom(this.httpService.get<ActiveGamesView>(`${this.PATH}/active`))
     }
 
-    async refreshBoardAdditionalInfo(boardId: string): Promise<BoardAdditionalInfoView> {
-        return firstValueFrom(this.httpService.get<BoardAdditionalInfoView>(`${this.PATH}/refresh/info/${boardId}`))
+    async refreshBoardAdditionalInfo(boardId: string): Promise<GameAdditionalInfoView> {
+        return firstValueFrom(this.httpService.get<GameAdditionalInfoView>(`${this.PATH}/refresh/info/${boardId}`))
     }
 
     async resignGame(resignGame: ResignGameRequest): Promise<void> {

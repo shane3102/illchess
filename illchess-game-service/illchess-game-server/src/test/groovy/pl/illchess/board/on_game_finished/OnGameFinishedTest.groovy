@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
 import pl.illchess.game.adapter.board.command.in.rest.dto.InitializedBoardResponse
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
-import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView
+import pl.illchess.game.application.game.query.out.model.GameFinishedView
 
 import java.time.Duration
 
@@ -34,7 +34,7 @@ class OnGameFinishedTest extends OnGameFinishedSpecification {
         then:
         await().pollInterval(Duration.ofSeconds(1)).atMost(5, SECONDS)
             .untilAsserted {
-                verify(rabbitTemplate, times(1)).convertAndSend(anyString(), any(BoardGameFinishedView))
+                verify(rabbitTemplate, times(1)).convertAndSend(anyString(), any(GameFinishedView))
             }
     }
 

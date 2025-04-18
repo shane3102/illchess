@@ -1,6 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { AcceptDrawRequest } from "../../model/game/AcceptDrawRequest";
-import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { GameAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
 import { ProposeDrawRequest } from "../../model/game/ProposeDrawRequest";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
 import { RejectDrawRequest } from "../../model/game/RejectDrawRequest";
@@ -18,7 +18,7 @@ export const refreshAdditionalInfoOfBoard = createAction(
 
 export const boardAdditionalInfoLoaded = createAction(
     'Board additional info was loaded',
-    props<BoardAdditionalInfoView>()
+    props<GameAdditionalInfoView>()
 )
 
 export const resignGame = createAction(

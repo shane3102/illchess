@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { faCaretLeft, faCaretRight, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { BoardGameObtainedInfoView } from 'src/app/shared/model/game/BoardGameObtainedInfoView';
-import { ActiveBoardNewView } from '../../../shared/model/game/ActiveBoardNewView';
-import { ActiveBoardsView } from '../../../shared/model/game/ActiveBoardsView';
+import { GameObtainedInfoView } from 'src/app/shared/model/game/BoardGameObtainedInfoView';
+import { ActiveGameNewView } from '../../../shared/model/game/ActiveBoardNewView';
+import { ActiveGamesView } from '../../../shared/model/game/ActiveBoardsView';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { newActiveBoardObtained, refreshActiveBoards, removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
 import { selectActiveBoards } from '../../../shared/state/active-boards/active-boards.selectors';
@@ -34,7 +34,7 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
 
   page = 0
 
-  activeBoardsView$: Observable<ActiveBoardsView> = this.store.select(selectActiveBoards)
+  activeBoardsView$: Observable<ActiveGamesView> = this.store.select(selectActiveBoards)
   newActiveBoardSubscription$: Subscription
   obtainStatusSubscription$: Subscription
 
@@ -45,7 +45,7 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
         this.newActiveBoardSubscription$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/new-active-board`,
           (response: any) => {
-            let activeBoardNewView: ActiveBoardNewView = JSON.parse(response)
+            let activeBoardNewView: ActiveGameNewView = JSON.parse(response)
             this.store.dispatch(newActiveBoardObtained(activeBoardNewView))
           }
         )
@@ -53,9 +53,9 @@ export class ActiveBoardsComponent implements OnInit, OnDestroy {
         this.obtainStatusSubscription$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/obtain-status`,
           (response: any) => {
-            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             setTimeout(
-              () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.boardId })) },
+              () => { this.store.dispatch(removeFinishedBoardFromActiveBoard({ boardId: boardGameObtainedInfoView.gameId })) },
               1000
             )
           }

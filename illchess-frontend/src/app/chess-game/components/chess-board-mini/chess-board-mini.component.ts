@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit, Signal, inject } from '@angular/co
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
-import { BoardView } from '../../../shared/model/game/BoardView';
+import { GameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
+import { GameView } from '../../../shared/model/game/BoardView';
 import { SquareInfo } from '../../../shared/model/game/SquareInfo';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
 import { removeFinishedBoardFromActiveBoard } from '../../../shared/state/active-boards/active-boards.actions';
@@ -29,8 +29,8 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
   private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
   private store = inject(Store<ChessGameState>)
 
-  boardView: Signal<BoardView | undefined> = this.chessBoardMiniStore.boardView
-  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | undefined> = toObservable(this.chessBoardMiniStore.boardGameObtainedInfoView)
+  boardView: Signal<GameView | undefined> = this.chessBoardMiniStore.boardView
+  boardGameObtainedInfoView$: Observable<GameObtainedInfoView | undefined> = toObservable(this.chessBoardMiniStore.boardGameObtainedInfoView)
   chessTopic$: Subscription
   chessStatus$: Subscription
 
@@ -41,14 +41,14 @@ export class ChessBoardMiniComponent implements OnInit, OnDestroy {
         this.chessTopic$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/${this.boardId}`,
           (response: any) => {
-            let boardView: BoardView = JSON.parse(response)
+            let boardView: GameView = JSON.parse(response)
             this.chessBoardMiniStore.patchBoardPosition(boardView)
           }
         )
         this.chessStatus$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/obtain-status/${this.boardId}`,
           (response: any) => {
-            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             this.chessBoardMiniStore.patchObtainedInfoView(boardGameObtainedInfoView)
           }
         )

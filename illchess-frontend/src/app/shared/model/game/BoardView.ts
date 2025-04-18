@@ -1,7 +1,7 @@
 import { PieceInfo } from "./PieceInfo"
 
-export interface BoardView {
-    boardId: string
+export interface GameView {
+    gameId: string
     piecesLocations: PiecesLocations
     lastPerformedMove?: MoveView,
     preMoves?: MoveView[]

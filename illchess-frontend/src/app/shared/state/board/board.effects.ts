@@ -5,12 +5,12 @@ import { Observable, catchError, from, map, of, switchMap, tap } from "rxjs";
 import { GameService } from "../../service/GameService";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
-import { IllegalMoveResponse } from "../../model/game/IllegalMoveView";
+import { IllegalMoveView } from "../../model/game/IllegalMoveView";
 import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
-import { BoardView } from "../../model/game/BoardView";
+import { GameView } from "../../model/game/BoardView";
 import { RefreshBoardDto as RefreshBoardRequest } from "../../model/game/RefreshBoardRequest";
 import { PlayerInfoService } from "../../service/PlayerInfoService";
-import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 import { Router } from "@angular/router";
 import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
@@ -47,7 +47,7 @@ export class BoardEffects {
                     .pipe(
                         switchMap(() => of(refreshBoardWithPreMoves({ boardId: movePieceRequest.boardId, username: movePieceRequest.username }))),
                         catchError((response: any) => {
-                            let body: IllegalMoveResponse = response.error;
+                            let body: IllegalMoveView = response.error;
                             return of(illegalMove(body))
                         })
                     )
@@ -73,7 +73,7 @@ export class BoardEffects {
             switchMap(
                 (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoard(dto.boardId))
                     .pipe(
-                        map((response: BoardView) => boardLoaded(response)),
+                        map((response: GameView) => boardLoaded(response)),
                         catchError(() => of(boardLoadingError({})))
                     )
             )
@@ -87,7 +87,7 @@ export class BoardEffects {
                 (dto: RefreshBoardRequest) => from(this.chessBoardService.refreshBoardWithPremoves(dto.boardId, dto.username!))
                     .pipe(
                         map(
-                            ((response: BoardView) => boardLoaded(response))
+                            ((response: GameView) => boardLoaded(response))
                         )
                     )
             )
@@ -98,7 +98,7 @@ export class BoardEffects {
         () => this.actions$.pipe(
             ofType(gameFinished),
             switchMap(
-                (dto: BoardGameObtainedInfoView) => from(this.playerInfoService.getFinishedGameById(dto.boardId))
+                (dto: GameObtainedInfoView) => from(this.playerInfoService.getFinishedGameById(dto.gameId))
                 .pipe(
                     map(
                         ((response: GameFinishedView) => gameFinishedLoaded(response))

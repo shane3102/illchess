@@ -2,5 +2,5 @@ package pl.illchess.game.application.game.query.out.model;
 
 import java.util.UUID;
 
-public record IllegalMoveView(UUID boardId, String highlightSquare, String message) {
+public record IllegalMoveView(UUID gameId, String highlightSquare, String message) {
 }

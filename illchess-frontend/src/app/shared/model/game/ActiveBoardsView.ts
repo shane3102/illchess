@@ -1,3 +1,3 @@
-export interface ActiveBoardsView {
-    activeBoardsIds: string[]
+export interface ActiveGamesView {
+    activeGameIds: string[]
 }

@@ -1,12 +1,12 @@
 import { inject } from "@angular/core";
 import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
-import { BoardGameObtainedInfoView } from "src/app/shared/model/game/BoardGameObtainedInfoView";
-import { BoardView } from "src/app/shared/model/game/BoardView";
+import { GameObtainedInfoView } from "src/app/shared/model/game/BoardGameObtainedInfoView";
+import { GameView } from "src/app/shared/model/game/BoardView";
 import { GameService } from "src/app/shared/service/GameService";
 
 interface ChessBoardMiniState {
-    boardView: BoardView | undefined,
-    boardGameObtainedInfoView: BoardGameObtainedInfoView | undefined
+    boardView: GameView | undefined,
+    boardGameObtainedInfoView: GameObtainedInfoView | undefined
 }
 
 const initialState: ChessBoardMiniState = {
@@ -22,10 +22,10 @@ export const ChessBoardMiniStore = signalStore(
                 const boardView = await gameService.refreshBoard(boardId)
                 patchState(store, {boardView: boardView})
             },
-            patchBoardPosition: (boardView: BoardView) => {
+            patchBoardPosition: (boardView: GameView) => {
                 patchState(store, { boardView: boardView })
             },
-            patchObtainedInfoView: (boardGameObtainedInfoView: BoardGameObtainedInfoView) => {
+            patchObtainedInfoView: (boardGameObtainedInfoView: GameObtainedInfoView) => {
                 patchState(store, { boardGameObtainedInfoView: boardGameObtainedInfoView })
             }
         })

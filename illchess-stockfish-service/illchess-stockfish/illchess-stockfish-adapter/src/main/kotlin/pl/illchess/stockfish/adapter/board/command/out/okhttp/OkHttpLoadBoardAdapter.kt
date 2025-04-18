@@ -75,7 +75,7 @@ class OkHttpLoadBoardAdapter(
                 BoardAdditionalInfoViewResponse::class.java
             ).let {
                 BoardAdditionalInfo(
-                    BoardId(it.boardId),
+                    BoardId(it.gameId),
                     it.currentPlayerColor,
                     Username(it.whitePlayer.username),
                     if (it.blackPlayer == null) null else Username(it.blackPlayer.username),

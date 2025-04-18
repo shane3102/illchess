@@ -1,3 +1,3 @@
-export interface ActiveBoardNewView {
-    boardId: string
+export interface ActiveGameNewView {
+    gameId: string
 }

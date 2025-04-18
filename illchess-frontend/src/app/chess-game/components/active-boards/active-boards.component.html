@@ -1,15 +1,15 @@
 <div *ngIf="activeBoardsView$ | async as activeBoardsView" class="content">
     <div class="caret-wrapper caret-wrapper-left">
         <fa-icon [icon]="caretLeft"
-            (click)="isDisabled('left', activeBoardsView.activeBoardsIds.length) ? null : slideLeft()"
+            (click)="isDisabled('left', activeBoardsView.activeGameIds.length) ? null : slideLeft()"
             class="caret caret-left"
-            [ngClass]="{'caret-disabled': isDisabled('left', activeBoardsView.activeBoardsIds.length)}">
+            [ngClass]="{'caret-disabled': isDisabled('left', activeBoardsView.activeGameIds.length)}">
         </fa-icon>
     </div>
-    @if (activeBoardsView.activeBoardsIds.length != 0) {
+    @if (activeBoardsView.activeGameIds.length != 0) {
     <div class="boards" [ngClass]="{'boards-sliden-left' : clickedLeft}"
         [ngClass]="{'boards-sliden-right' : clickedRight}">
-        <div style="position: relative; display: flex; align-items: left; flex-wrap: nowrap;" *ngFor="let boardId of activeBoardsView.activeBoardsIds |
+        <div style="position: relative; display: flex; align-items: left; flex-wrap: nowrap;" *ngFor="let boardId of activeBoardsView.activeGameIds |
             slice: getSliceFrom():getSliceTo();
             first as isFirst;
             let i = index">
@@ -31,9 +31,9 @@
 
     <div class="caret-wrapper caret-wrapper-right">
         <fa-icon [icon]="caretRight"
-            (click)="isDisabled('right', activeBoardsView.activeBoardsIds.length) ?  null : slideRight()"
+            (click)="isDisabled('right', activeBoardsView.activeGameIds.length) ?  null : slideRight()"
             class="caret caret-right"
-            [ngClass]="{'caret-disabled': isDisabled('right', activeBoardsView.activeBoardsIds.length)}">
+            [ngClass]="{'caret-disabled': isDisabled('right', activeBoardsView.activeGameIds.length)}">
         </fa-icon>
     </div>
 </div>

@@ -2,9 +2,9 @@ import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, take } from 'rxjs';
 import { BoardLegalMovesResponse } from '../../../shared/model/game/BoardLegalMovesResponse';
-import { BoardView } from '../../../shared/model/game/BoardView';
+import { GameView } from '../../../shared/model/game/BoardView';
 import { CheckLegalMovesRequest } from '../../../shared/model/game/CheckLegalMovesRequest';
-import { IllegalMoveResponse } from '../../../shared/model/game/IllegalMoveView';
+import { IllegalMoveView } from '../../../shared/model/game/IllegalMoveView';
 import { MovePieceRequest } from '../../../shared/model/game/MovePieceRequest';
 import { PieceSelectedInfo } from '../../../shared/model/game/PieceSelectedInfo';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
@@ -13,7 +13,7 @@ import { currentPlayerColorSelector, gameStateSelector, gameResultCause } from '
 import { boardLoaded, checkLegalMoves, selectedPieceChanged, draggedPieceReleased, gameFinished, movePiece, refreshBoard, refreshBoardWithPreMoves } from '../../../shared/state/board/board.actions';
 import { boardGameObtainedInfoView, boardSelector, selectedPieceSelector, gameFinishedView, invalidMoveSelector, legalMovesSelector } from '../../../shared/state/board/board.selectors';
 import { ChessGameState } from '../../../shared/state/chess-game.state';
-import { BoardGameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
+import { GameObtainedInfoView } from '../../../shared/model/game/BoardGameObtainedInfoView';
 import { GameFinishedView } from '../../../shared/model/player-info/GameFinishedView';
 
 @Component({
@@ -29,14 +29,14 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   private store = inject(Store<ChessGameState>)
   private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
 
-  boardView$: Observable<BoardView> = this.store.select(boardSelector);
-  illegalMoveResponse$: Observable<IllegalMoveResponse> = this.store.select(invalidMoveSelector);
+  boardView$: Observable<GameView> = this.store.select(boardSelector);
+  illegalMoveResponse$: Observable<IllegalMoveView> = this.store.select(invalidMoveSelector);
   selectedPieceInfo$: Observable<PieceSelectedInfo | undefined> = this.store.select(selectedPieceSelector)
   legalMoves$: Observable<BoardLegalMovesResponse | null | undefined> = this.store.select(legalMovesSelector)
   gameState$: Observable<'CONTINUE' | 'WHITE_WON' | 'BLACK_WON' | 'DRAW' | null | undefined> = this.store.select(gameStateSelector)
   gameResultCause$: Observable<'CHECKMATE' | 'RESIGNATION' | 'STALEMATE' | 'INSUFFICIENT_MATERIAL' | 'PLAYER_AGREEMENT' | null | undefined> = this.store.select(gameResultCause)
   currentPlayerColor$: Observable<string | null | undefined> = this.store.select(currentPlayerColorSelector)
-  boardGameObtainedInfoView$: Observable<BoardGameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
+  boardGameObtainedInfoView$: Observable<GameObtainedInfoView | null | undefined> = this.store.select(boardGameObtainedInfoView)
   gameFinishedView$: Observable<GameFinishedView | null | undefined> = this.store.select(gameFinishedView)
 
   private chessTopicWithPreMovesSubscription$: Subscription
@@ -60,7 +60,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
           this.chessTopicWithPreMovesSubscription$ = await this.chessBoardWebSocketService.subscribe(
             `/chess-topic/${this.boardId}/${this.username}`,
             (response: any) => {
-              let boardView: BoardView = JSON.parse(response)
+              let boardView: GameView = JSON.parse(response)
               this.store.dispatch(boardLoaded(boardView))
             }
           )
@@ -74,7 +74,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
           this.chessTopicSubscription$ = await this.chessBoardWebSocketService.subscribe(
             `/chess-topic/${this.boardId}`,
             (response: any) => {
-              let boardView: BoardView = JSON.parse(response)
+              let boardView: GameView = JSON.parse(response)
               this.store.dispatch(boardLoaded(boardView))
             }
           )
@@ -87,7 +87,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
         this.obtainStatusSubscription$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/obtain-status/${this.boardId}`,
           (response: any) => {
-            let boardGameObtainedInfoView: BoardGameObtainedInfoView = JSON.parse(response)
+            let boardGameObtainedInfoView: GameObtainedInfoView = JSON.parse(response)
             this.store.dispatch(gameFinished(boardGameObtainedInfoView))
           } 
         )

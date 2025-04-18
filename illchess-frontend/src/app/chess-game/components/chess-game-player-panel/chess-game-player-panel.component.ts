@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BoardAdditionalInfoView } from 'src/app/shared/model/game/BoardAdditionalInfoView';
+import { GameAdditionalInfoView } from 'src/app/shared/model/game/BoardAdditionalInfoView';
 import { PieceColor } from 'src/app/shared/model/game/PieceInfo';
 
 @Component({
@@ -13,5 +13,5 @@ export class ChessGamePlayerPanelComponent {
 
   @Input() username: string;
   @Input() pieceColor: PieceColor
-  @Input() boardAdditionalInfoView: BoardAdditionalInfoView
+  @Input() boardAdditionalInfoView: GameAdditionalInfoView
 }

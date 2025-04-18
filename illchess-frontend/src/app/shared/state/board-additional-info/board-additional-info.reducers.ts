@@ -1,19 +1,19 @@
 import { createReducer, on } from "@ngrx/store";
-import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { GameAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
 import { BestMoveAndContinuationResponse } from "../../model/stockfish/BestMoveAndContinuationResponse";
 import { EvaluationResponse } from "../../model/stockfish/EvaluationResponse";
 import { boardInitialized } from "../board/board.actions";
 import { bestMoveAndContinuationLoaded, boardAdditionalInfoLoaded, establishBestMoveAndContinuation, evaluationLoaded } from "./board-additional-info.actions";
 
 export interface BoardAdditionalInfoState {
-    boardAdditionalInfoView: BoardAdditionalInfoView,
+    boardAdditionalInfoView: GameAdditionalInfoView,
     evaluation: EvaluationResponse,
     bestMoveAndContinuation: BestMoveAndContinuationResponse 
 }
 
 export const initialState: BoardAdditionalInfoState = {
     boardAdditionalInfoView: {
-        boardId:'',
+        gameId:'',
         currentPlayerColor: '',
         gameState: 'CONTINUE',
         capturedWhitePieces: [],
@@ -35,7 +35,7 @@ export const boardAdditionalInfoReducer = createReducer(
     // update board additional info
     on(
         boardAdditionalInfoLoaded,
-        (state: BoardAdditionalInfoState, view: BoardAdditionalInfoView) => (
+        (state: BoardAdditionalInfoState, view: GameAdditionalInfoView) => (
             {
                 ...state,
                 boardAdditionalInfoView: view

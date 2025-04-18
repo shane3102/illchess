@@ -13,7 +13,7 @@ export const invalidMoveSelector = createSelector(
     selectBoard,
     (state: BoardState) => {
         return {
-            "boardId": state.boardView.boardId,
+            "gameId": state.boardView.gameId,
             "highlightSquare": state.illegalMoveHighlightSquare,
             "message": state.illegalMoveMessage
         }
@@ -37,7 +37,7 @@ export const legalMovesSelector = createSelector(
 export const initializedBoardIdSelector = createSelector(
     selectBoard,
     (state: BoardState) => {
-        return { "boardId": state.boardView.boardId } as RefreshBoardDto
+        return { "boardId": state.boardView.gameId } as RefreshBoardDto
     }
 )
 

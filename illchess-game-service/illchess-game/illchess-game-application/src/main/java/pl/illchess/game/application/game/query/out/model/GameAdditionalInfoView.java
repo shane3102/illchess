@@ -3,8 +3,8 @@ package pl.illchess.game.application.game.query.out.model;
 import java.util.List;
 import java.util.UUID;
 
-public record BoardAdditionalInfoView(
-    UUID boardId,
+public record GameAdditionalInfoView(
+    UUID gameId,
     String currentPlayerColor,
     PlayerView whitePlayer,
     PlayerView blackPlayer,

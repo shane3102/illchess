@@ -1,10 +1,10 @@
 import { createAction, props } from "@ngrx/store";
-import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
-import { ActiveBoardNewView } from "../../model/game/ActiveBoardNewView";
+import { ActiveGamesView } from "../../model/game/ActiveBoardsView";
+import { ActiveGameNewView } from "../../model/game/ActiveBoardNewView";
 
 export const activeBoardsRefreshed = createAction(
     'Refreshed list with active boards',
-    props<ActiveBoardsView>()
+    props<ActiveGamesView>()
 )
 
 export const refreshActiveBoards = createAction(
@@ -14,7 +14,7 @@ export const refreshActiveBoards = createAction(
 
 export const newActiveBoardObtained = createAction(
     'New active board obtained',
-    props<ActiveBoardNewView>()
+    props<ActiveGameNewView>()
 )
 
 export const removeFinishedBoardFromActiveBoard = createAction(
