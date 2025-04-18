@@ -1,9 +1,9 @@
 package pl.illchess.game.domain.piece.model;
 
-import pl.illchess.game.domain.board.model.history.Move;
-import pl.illchess.game.domain.board.model.history.MoveHistory;
-import pl.illchess.game.domain.board.model.square.PiecesLocations;
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.history.Move;
+import pl.illchess.game.domain.game.model.history.MoveHistory;
+import pl.illchess.game.domain.game.model.square.Board;
+import pl.illchess.game.domain.game.model.square.Square;
 import pl.illchess.game.domain.piece.exception.KingNotFoundOnBoardException;
 import pl.illchess.game.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
@@ -23,7 +23,7 @@ public interface Piece {
     Set<Square> cachedReachableSquares();
 
     default Set<Square> possibleMoves(
-        PiecesLocations piecesLocations,
+        Board board,
         MoveHistory moveHistory
     ) {
         if (cachedReachableSquares() != null && !cachedReachableSquares().isEmpty()) {
@@ -32,26 +32,26 @@ public interface Piece {
 
         Move lastPerformedMove = moveHistory.peekLastMove();
 
-        Set<Square> reachableSquares = standardLegalMoves(piecesLocations, lastPerformedMove);
+        Set<Square> reachableSquares = standardLegalMoves(board, lastPerformedMove);
 
-        King king = (King) piecesLocations.getPieceByTypeAndColor(King.class, color())
+        King king = (King) board.getPieceByTypeAndColor(King.class, color())
             .orElseThrow(KingNotFoundOnBoardException::new);
 
-        Set<PieceCapableOfPinning> enemyPiecesCapableOfPinning = piecesLocations.getEnemyPiecesCapableOfPinning(color());
+        Set<PieceCapableOfPinning> enemyPiecesCapableOfPinning = board.getEnemyPiecesCapableOfPinning(color());
         Set<Square> availableSquaresAsPinnedPiece = enemyPiecesCapableOfPinning.stream()
-            .map(piece -> piece.pinningRayIfImPinning(this, king, piecesLocations))
+            .map(piece -> piece.pinningRayIfImPinning(this, king, board))
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
 
-        Set<Piece> enemyPieces = piecesLocations.getEnemyPieces(color());
+        Set<Piece> enemyPieces = board.getEnemyPieces(color());
         Set<Square> kingDefendingSquareMoves = enemyPieces.stream()
-            .map(piece -> piece.attackingRayOfSquare(king.square(), piecesLocations, lastPerformedMove))
+            .map(piece -> piece.attackingRayOfSquare(king.square(), board, lastPerformedMove))
             .filter(foundRay -> !foundRay.squaresInRay().isAttackingRayEmpty())
             .map(PieceAttackingRay::fullAttackingRayWithOccupiedSquare)
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
 
-        Set<Square> alliedOccupiedSquares = piecesLocations.getAlliedPieces(color())
+        Set<Square> alliedOccupiedSquares = board.getAlliedPieces(color())
             .stream()
             .map(Piece::square)
             .collect(Collectors.toSet());
@@ -68,27 +68,27 @@ public interface Piece {
     }
 
     default Set<Square> possibleMovesOnPreMove(
-        PiecesLocations piecesLocations,
+        Board board,
         MoveHistory moveHistory
     ) {
-        return standardLegalMoves(piecesLocations, moveHistory.peekLastMove());
+        return standardLegalMoves(board, moveHistory.peekLastMove());
     }
 
     Set<Square> standardLegalMoves(
-        PiecesLocations piecesLocations,
+        Board board,
         Move lastPerformedMove
     );
 
     PieceType typeName();
 
-    PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove);
+    PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, Board board, Move lastPerformedMove);
 
-    default boolean isAttackingSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return !attackingRayOfSquare(possibleAttackedSquare, piecesLocations, lastPerformedMove).squaresInRay().isAttackingRayEmpty();
+    default boolean isAttackingSquare(Square possibleAttackedSquare, Board board, Move lastPerformedMove) {
+        return !attackingRayOfSquare(possibleAttackedSquare, board, lastPerformedMove).squaresInRay().isAttackingRayEmpty();
     }
 
-    default boolean isAttackingAnyOfSquares(Set<Square> possibleAttackedSquares, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return possibleAttackedSquares.stream().anyMatch(square -> isAttackingSquare(square, piecesLocations, lastPerformedMove));
+    default boolean isAttackingAnyOfSquares(Set<Square> possibleAttackedSquares, Board board, Move lastPerformedMove) {
+        return possibleAttackedSquares.stream().anyMatch(square -> isAttackingSquare(square, board, lastPerformedMove));
     }
 
     default void resetCachedReachableSquares() {

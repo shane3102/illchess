@@ -15,14 +15,14 @@ import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoV
 import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
-import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
-import pl.illchess.game.domain.board.event.BoardGameStarted;
-import pl.illchess.game.domain.board.event.BoardUpdated;
-import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
-import pl.illchess.game.domain.board.event.delete.BoardDeleted;
-import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesUpdated;
-import pl.illchess.game.domain.board.exception.BoardNotFoundException;
-import pl.illchess.game.domain.board.exception.BoardWithPreMovesDoesNotExistException;
+import pl.illchess.game.domain.game.event.GameAdditionalInfoUpdated;
+import pl.illchess.game.domain.game.event.GameStarted;
+import pl.illchess.game.domain.game.event.GameUpdated;
+import pl.illchess.game.domain.game.event.delete.GameDeleteInfo;
+import pl.illchess.game.domain.game.event.delete.GameDeleted;
+import pl.illchess.game.domain.game.event.pre_moves.GameWithPreMovesUpdated;
+import pl.illchess.game.domain.game.exception.GameNotFoundException;
+import pl.illchess.game.domain.game.exception.GameWithPreMovesDoesNotExistException;
 import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.ERROR;
 import static pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView.BoardGameObtainedStatus.SUCCESS;
 
@@ -39,69 +39,69 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public BoardView updateBoardView(BoardUpdated event) {
+    public BoardView updateBoardView(GameUpdated event) {
         log.info(
             "Update event of board with id = {} was caught, sending update of chess board view",
-            event.boardId()
+            event.gameId()
         );
-        BoardView boardView = boardViewQueryPort.findById(event.boardId().uuid())
-            .orElseThrow(() -> new BoardNotFoundException(event.boardId()));
+        BoardView boardView = boardViewQueryPort.findById(event.gameId().uuid())
+            .orElseThrow(() -> new GameNotFoundException(event.gameId()));
         messagingTemplate.convertAndSend(
-            "/chess-topic/%s".formatted(event.boardId().uuid()),
+            "/chess-topic/%s".formatted(event.gameId().uuid()),
             boardView
         );
         log.info(
             "Update board view with id = {} was successfully send",
-            event.boardId()
+            event.gameId()
         );
         return boardView;
     }
 
     @Override
-    public BoardAdditionalInfoView updateBoardAdditionalInfoView(BoardAdditionalInfoUpdated event) {
+    public BoardAdditionalInfoView updateBoardAdditionalInfoView(GameAdditionalInfoUpdated event) {
         log.info(
             "Update event of board with id = {} was caught, sending update of chess board additional info view",
-            event.boardId()
+            event.gameId()
         );
-        BoardAdditionalInfoView boardAdditionalInfoView = boardAdditionalInfoViewQueryPort.findBoardById(event.boardId().uuid())
-            .orElseThrow(() -> new BoardNotFoundException(event.boardId()));
+        BoardAdditionalInfoView boardAdditionalInfoView = boardAdditionalInfoViewQueryPort.findBoardById(event.gameId().uuid())
+            .orElseThrow(() -> new GameNotFoundException(event.gameId()));
         messagingTemplate.convertAndSend(
-            "/chess-topic/additional-info/%s".formatted(event.boardId().uuid()),
+            "/chess-topic/additional-info/%s".formatted(event.gameId().uuid()),
             boardAdditionalInfoView
         );
         log.info(
             "Update board additional info view with id = {} was successfully send",
-            event.boardId()
+            event.gameId()
         );
         return boardAdditionalInfoView;
     }
 
     @Override
-    public BoardWithPreMovesView updateBoardWithPreMovesView(BoardWithPreMovesUpdated event) {
+    public BoardWithPreMovesView updateBoardWithPreMovesView(GameWithPreMovesUpdated event) {
         log.info(
             "Update event of board with id = {} and pre-moves performed by username {} was cached, sending update of chess board view with pre-moves",
-            event.boardId(), event.username()
+            event.gameId(), event.username()
         );
         BoardWithPreMovesView boardWithPreMovesView = boardViewPreMoveByUserQueryPort.findByIdAndUsername(
-                event.boardId().uuid(),
+                event.gameId().uuid(),
                 event.username().text()
             )
-            .orElseThrow(() -> new BoardWithPreMovesDoesNotExistException(event.boardId(), event.username()));
+            .orElseThrow(() -> new GameWithPreMovesDoesNotExistException(event.gameId(), event.username()));
         messagingTemplate.convertAndSend(
-            "/chess-topic/%s/%s".formatted(event.boardId().uuid(), event.username().text()),
+            "/chess-topic/%s/%s".formatted(event.gameId().uuid(), event.username().text()),
             boardWithPreMovesView
         );
         log.info(
             "Update event of board with id = {} and pre-moves performed by username {} was successfully send",
-            event.boardId(), event.username()
+            event.gameId(), event.username()
         );
         return boardWithPreMovesView;
     }
 
     @Override
-    public ActiveBoardNewView activeBoardsChanged(BoardGameStarted event) {
+    public ActiveBoardNewView activeBoardsChanged(GameStarted event) {
         log.info("State off active boards has changed. Sending update info with ids off active boards");
-        ActiveBoardNewView view = new ActiveBoardNewView(event.boardId().uuid());
+        ActiveBoardNewView view = new ActiveBoardNewView(event.gameId().uuid());
         messagingTemplate.convertAndSend(
             "/chess-topic/new-active-board",
             view
@@ -111,11 +111,11 @@ public class BoardInfoSupplier implements BoardViewSupplier {
     }
 
     @Override
-    public BoardGameObtainedInfoView sendInfoOnGameObtained(BoardDeleteInfo boardDeleteInfo) {
-        BoardGameObtainedStatus status = boardDeleteInfo instanceof BoardDeleted ? SUCCESS : ERROR;
+    public BoardGameObtainedInfoView sendInfoOnGameObtained(GameDeleteInfo gameDeleteInfo) {
+        BoardGameObtainedStatus status = gameDeleteInfo instanceof GameDeleted ? SUCCESS : ERROR;
         log.info("Sending info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
-        BoardGameObtainedInfoView result = new BoardGameObtainedInfoView(boardDeleteInfo.boardId().uuid(), status);
-        messagingTemplate.convertAndSend("/chess-topic/obtain-status/%s".formatted(boardDeleteInfo.boardId().uuid()), result);
+        BoardGameObtainedInfoView result = new BoardGameObtainedInfoView(gameDeleteInfo.gameId().uuid(), status);
+        messagingTemplate.convertAndSend("/chess-topic/obtain-status/%s".formatted(gameDeleteInfo.gameId().uuid()), result);
         messagingTemplate.convertAndSend("/chess-topic/obtain-status", result);
         log.info("Sent info on board delete when deletion was {}", status == SUCCESS ? "successful" : "unsuccessful");
         return result;

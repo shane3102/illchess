@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase;
 import pl.illchess.game.application.board.command.in.CheckBoardStateUseCase.CheckBoardStateCmd;
-import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
+import pl.illchess.game.domain.game.event.GamePiecesLocationsUpdated;
 
 @Component
 @RequiredArgsConstructor
@@ -13,8 +13,8 @@ public class BoardEventListenerImpl implements BoardEventListener {
     private final CheckBoardStateUseCase checkBoardStateUseCase;
 
     @Override
-    public void checkGameState(BoardPiecesLocationsUpdated boardUpdated) {
-        CheckBoardStateCmd cmd = new CheckBoardStateCmd(boardUpdated.boardId().uuid());
+    public void checkGameState(GamePiecesLocationsUpdated boardUpdated) {
+        CheckBoardStateCmd cmd = new CheckBoardStateCmd(boardUpdated.gameId().uuid());
         checkBoardStateUseCase.checkBoardState(cmd);
     }
 

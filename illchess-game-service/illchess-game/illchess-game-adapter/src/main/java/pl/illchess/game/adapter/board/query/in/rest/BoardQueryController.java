@@ -11,10 +11,10 @@ import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
 import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
-import pl.illchess.game.domain.board.exception.BoardNotFoundException;
-import pl.illchess.game.domain.board.exception.BoardWithPreMovesDoesNotExistException;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.domain.game.exception.GameNotFoundException;
+import pl.illchess.game.domain.game.exception.GameWithPreMovesDoesNotExistException;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.state.player.Username;
 
 import java.util.UUID;
 
@@ -29,20 +29,20 @@ public class BoardQueryController implements BoardQueryApi {
 
     @Override
     public ResponseEntity<BoardView> refreshBoardView(UUID boardId) {
-        BoardView responseView = boardViewQueryPort.findById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        BoardView responseView = boardViewQueryPort.findById(boardId).orElseThrow(() -> new GameNotFoundException(boardId));
         return ResponseEntity.ok(responseView);
     }
 
     @Override
     public ResponseEntity<BoardWithPreMovesView> refreshBoardWithPreMovesView(UUID boardId, String username) {
         BoardWithPreMovesView responseView = boardViewPreMoveByUserQueryPort.findByIdAndUsername(boardId, username)
-            .orElseThrow(() -> new BoardWithPreMovesDoesNotExistException(new BoardId(boardId), new Username(username)));
+            .orElseThrow(() -> new GameWithPreMovesDoesNotExistException(new GameId(boardId), new Username(username)));
         return ResponseEntity.ok(responseView);
     }
 
     @Override
     public ResponseEntity<BoardAdditionalInfoView> refreshBoardInfoView(UUID boardId) {
-        BoardAdditionalInfoView responseView = boardAdditionalInfoViewQueryPort.findBoardById(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        BoardAdditionalInfoView responseView = boardAdditionalInfoViewQueryPort.findBoardById(boardId).orElseThrow(() -> new GameNotFoundException(boardId));
         return ResponseEntity.ok(responseView);
     }
 

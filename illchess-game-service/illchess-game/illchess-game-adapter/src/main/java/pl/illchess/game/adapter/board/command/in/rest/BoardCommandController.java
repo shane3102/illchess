@@ -32,9 +32,9 @@ import pl.illchess.game.application.board.command.in.QuitOccupiedBoardUseCase;
 import pl.illchess.game.application.board.command.in.RejectDrawUseCase;
 import pl.illchess.game.application.board.command.in.RejectTakingBackLastMoveUseCase;
 import pl.illchess.game.application.board.command.in.ResignGameUseCase;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.FenBoardString;
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.FenBoardString;
+import pl.illchess.game.domain.game.model.square.Square;
 import static org.springframework.http.HttpStatus.OK;
 
 @Controller
@@ -56,8 +56,8 @@ public class BoardCommandController implements BoardCommandApi {
 
     @Override
     public ResponseEntity<InitializedBoardResponse> initializeNewBoard(InitializeNewBoardRequest initializeNewBoardRequest) {
-        BoardId newBoardId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(initializeNewBoardRequest.toCmd());
-        InitializedBoardResponse response = new InitializedBoardResponse(newBoardId.uuid());
+        GameId newGameId = joinOrInitializeNewGameUseCase.joinOrInitializeNewGame(initializeNewBoardRequest.toCmd());
+        InitializedBoardResponse response = new InitializedBoardResponse(newGameId.uuid());
         return ResponseEntity.ok(response);
     }
 

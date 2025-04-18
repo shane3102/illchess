@@ -1,9 +1,9 @@
 package pl.illchess.game.application.board.command.in;
 
 import java.util.UUID;
-import pl.illchess.game.domain.board.command.AcceptTakingBackMove;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.domain.game.command.AcceptTakingBackMove;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.state.player.Username;
 
 public interface AcceptTakingBackLastMoveUseCase {
 
@@ -12,7 +12,7 @@ public interface AcceptTakingBackLastMoveUseCase {
     record AcceptTakingBackMoveCmd(UUID boardId, String username) {
         public AcceptTakingBackMove toCommand() {
             return new AcceptTakingBackMove(
-                new BoardId(boardId),
+                new GameId(boardId),
                 new Username(username)
             );
         }

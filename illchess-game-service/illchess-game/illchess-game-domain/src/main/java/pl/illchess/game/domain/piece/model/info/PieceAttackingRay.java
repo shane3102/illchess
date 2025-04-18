@@ -1,6 +1,6 @@
 package pl.illchess.game.domain.piece.model.info;
 
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.square.Square;
 
 import java.util.Set;
 import java.util.stream.Collectors;

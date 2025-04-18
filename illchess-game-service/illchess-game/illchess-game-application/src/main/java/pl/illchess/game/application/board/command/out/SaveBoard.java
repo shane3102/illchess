@@ -1,9 +1,9 @@
 package pl.illchess.game.application.board.command.out;
 
-import pl.illchess.game.domain.board.model.Board;
-import pl.illchess.game.domain.board.model.BoardId;
+import pl.illchess.game.domain.game.model.Game;
+import pl.illchess.game.domain.game.model.GameId;
 
 public interface SaveBoard {
 
-    BoardId saveBoard(Board savedBoard);
+    GameId saveBoard(Game savedGame);
 }

@@ -1,11 +1,11 @@
 package pl.illchess.game.adapter.board.command.in.event;
 
 import org.springframework.context.event.EventListener;
-import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
+import pl.illchess.game.domain.game.event.GamePiecesLocationsUpdated;
 
 public interface BoardEventListener {
 
-    @EventListener(BoardPiecesLocationsUpdated.class)
-    void checkGameState(BoardPiecesLocationsUpdated boardUpdated);
+    @EventListener(GamePiecesLocationsUpdated.class)
+    void checkGameState(GamePiecesLocationsUpdated boardUpdated);
 
 }

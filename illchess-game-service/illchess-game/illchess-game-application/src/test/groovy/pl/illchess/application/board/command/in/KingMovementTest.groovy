@@ -1,14 +1,14 @@
 package pl.illchess.application.board.command.in
 
-import pl.illchess.application.board.BoardSpecification
+import pl.illchess.application.board.GameSpecification
 import pl.illchess.game.application.board.command.in.CheckLegalityMoveUseCase
 import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
-import pl.illchess.game.domain.board.model.square.Square
+import pl.illchess.game.domain.game.model.square.Square
 
-import static pl.illchess.game.domain.board.model.square.Square.*
+import static pl.illchess.game.domain.game.model.square.Square.*
 import static pl.illchess.game.domain.piece.model.info.PieceColor.WHITE
 
-class KingMovementTest extends BoardSpecification {
+class KingMovementTest extends GameSpecification {
 
     def "check king movement in simple situation"() {
         given:

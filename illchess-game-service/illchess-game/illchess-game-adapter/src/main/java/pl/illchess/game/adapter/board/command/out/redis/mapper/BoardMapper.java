@@ -8,57 +8,57 @@ import java.util.Stack;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity;
-import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity.PreMoveEntity;
-import pl.illchess.game.domain.board.model.Board;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.FenBoardString;
-import pl.illchess.game.domain.board.model.history.Move;
-import pl.illchess.game.domain.board.model.history.MoveHistory;
-import pl.illchess.game.domain.board.model.square.PiecesLocations;
-import pl.illchess.game.domain.board.model.square.Square;
-import pl.illchess.game.domain.board.model.state.BoardState;
-import pl.illchess.game.domain.board.model.state.GameState;
-import pl.illchess.game.domain.board.model.state.GameResultCause;
-import pl.illchess.game.domain.board.model.state.GameStartTime;
-import pl.illchess.game.domain.board.model.state.player.IsProposingDraw;
-import pl.illchess.game.domain.board.model.state.player.IsProposingTakingBackMove;
-import pl.illchess.game.domain.board.model.state.player.Player;
-import pl.illchess.game.domain.board.model.state.player.PreMove;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
+import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity.PreMoveEntity;
+import pl.illchess.game.domain.game.model.Game;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.FenBoardString;
+import pl.illchess.game.domain.game.model.history.Move;
+import pl.illchess.game.domain.game.model.history.MoveHistory;
+import pl.illchess.game.domain.game.model.square.Board;
+import pl.illchess.game.domain.game.model.square.Square;
+import pl.illchess.game.domain.game.model.state.GameInfo;
+import pl.illchess.game.domain.game.model.state.GameState;
+import pl.illchess.game.domain.game.model.state.GameResultCause;
+import pl.illchess.game.domain.game.model.state.GameStartTime;
+import pl.illchess.game.domain.game.model.state.player.IsProposingDraw;
+import pl.illchess.game.domain.game.model.state.player.IsProposingTakingBackMove;
+import pl.illchess.game.domain.game.model.state.player.Player;
+import pl.illchess.game.domain.game.model.state.player.PreMove;
+import pl.illchess.game.domain.game.model.state.player.Username;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
 import pl.illchess.game.domain.piece.model.info.PieceType;
 
 public class BoardMapper {
 
-    public static BoardEntity toEntity(Board board) {
-        if (board == null) {
+    public static GameEntity toEntity(Game game) {
+        if (game == null) {
             return null;
         } else {
-            return new BoardEntity(
-                board.boardId() == null ? UUID.randomUUID() : board.boardId().uuid(),
-                toPiecesLocationsEntity(board.piecesLocations()),
-                toMoveHistoryEntity(board.moveHistory()),
-                toBoardStateEntity(board.boardState())
+            return new GameEntity(
+                game.gameId() == null ? UUID.randomUUID() : game.gameId().uuid(),
+                toPiecesLocationsEntity(game.board()),
+                toMoveHistoryEntity(game.moveHistory()),
+                toBoardStateEntity(game.gameInfo())
             );
         }
     }
 
-    private static BoardEntity.BoardStateEntity toBoardStateEntity(BoardState boardState) {
-        return new BoardEntity.BoardStateEntity(
-            boardState.currentPlayerColor().color().toString(),
-            mapToPlayer(boardState.whitePlayer()),
-            mapToPlayer(boardState.blackPlayer()),
-            boardState.gameResult().toString(),
-            boardState.gameResultCause() == null ? null : boardState.gameResultCause().toString(),
-            boardState.gameStartTime().value()
+    private static GameEntity.GameInfoEntity toBoardStateEntity(GameInfo gameInfo) {
+        return new GameEntity.GameInfoEntity(
+            gameInfo.currentPlayerColor().color().toString(),
+            mapToPlayer(gameInfo.whitePlayer()),
+            mapToPlayer(gameInfo.blackPlayer()),
+            gameInfo.gameResult().toString(),
+            gameInfo.gameResultCause() == null ? null : gameInfo.gameResultCause().toString(),
+            gameInfo.gameStartTime().value()
         );
     }
 
-    private static BoardEntity.PlayerEntity mapToPlayer(Player player) {
+    private static GameEntity.PlayerEntity mapToPlayer(Player player) {
         return player == null
             ? null
-            : new BoardEntity.PlayerEntity(
+            : new GameEntity.PlayerEntity(
                 player.username().text(),
                 player.isProposingDraw().value(),
                 player.isProposingTakingBackMove().value(),
@@ -67,20 +67,20 @@ public class BoardMapper {
                         it.startSquare().name(),
                         it.targetSquare().name(),
                         it.pawnPromotedToPieceType() == null ? null : it.pawnPromotedToPieceType().text(),
-                        toPiecesLocationsEntity(it.piecesLocationsAfterPreMove())
+                        toPiecesLocationsEntity(it.boardAfterPreMove())
                     )
                 )
                 .toList()
         );
     }
 
-    public static Board toDomain(BoardEntity entity) {
+    public static Game toDomain(GameEntity entity) {
 
         if (entity == null) {
             return null;
         } else {
-            return new Board(
-                new BoardId(entity.boardId()),
+            return new Game(
+                new GameId(entity.gameId()),
                 toPiecesLocations(entity.piecesLocations()),
                 toMoveHistory(entity.moveStackData()),
                 toBoardState(entity.boardState())
@@ -88,8 +88,8 @@ public class BoardMapper {
         }
     }
 
-    private static BoardState toBoardState(BoardEntity.BoardStateEntity boardState) {
-        return BoardState.of(
+    private static GameInfo toBoardState(GameEntity.GameInfoEntity boardState) {
+        return GameInfo.of(
             PieceColor.valueOf(boardState.currentPlayerColor()),
             GameState.valueOf(boardState.gameState()),
             boardState.gameResultCause() == null ? null : GameResultCause.valueOf(boardState.gameResultCause()),
@@ -99,7 +99,7 @@ public class BoardMapper {
         );
     }
 
-    private static Player mapToPlayer(BoardEntity.PlayerEntity player) {
+    private static Player mapToPlayer(GameEntity.PlayerEntity player) {
         return player == null
             ? null
             :
@@ -122,8 +122,8 @@ public class BoardMapper {
             );
     }
 
-    private static PiecesLocations toPiecesLocations(List<BoardEntity.PieceEntity> piecesLocationsInEntity) {
-        return new PiecesLocations(
+    private static Board toPiecesLocations(List<GameEntity.PieceEntity> piecesLocationsInEntity) {
+        return new Board(
             piecesLocationsInEntity.stream()
                 .map(
                     piece -> PieceType.getPieceByPieceType(
@@ -137,12 +137,12 @@ public class BoardMapper {
         );
     }
 
-    private static MoveHistory toMoveHistory(List<BoardEntity.MoveEntity> moveHistoryList) {
+    private static MoveHistory toMoveHistory(List<GameEntity.MoveEntity> moveHistoryList) {
         Stack<Move> moveStack = new Stack<>();
         Stream.iterate(0, i -> i + 1)
             .limit(moveHistoryList.size())
             .forEach(i -> {
-                BoardEntity.MoveEntity moveEntity = moveHistoryList.get(i);
+                GameEntity.MoveEntity moveEntity = moveHistoryList.get(i);
 
                 Move move = new Move(
                     Square.valueOf(moveEntity.startSquare()),
@@ -172,11 +172,11 @@ public class BoardMapper {
         return new MoveHistory(moveStack);
     }
 
-    private static List<BoardEntity.PieceEntity> toPiecesLocationsEntity(PiecesLocations piecesLocations) {
-        return piecesLocations.locations()
+    private static List<GameEntity.PieceEntity> toPiecesLocationsEntity(Board board) {
+        return board.piecesLocations()
             .stream()
             .map(
-                piece -> new BoardEntity.PieceEntity(
+                piece -> new GameEntity.PieceEntity(
                     piece.square().toString(),
                     piece.color().toString(),
                     piece.typeName().text(),
@@ -186,14 +186,14 @@ public class BoardMapper {
             .toList();
     }
 
-    private static List<BoardEntity.MoveEntity> toMoveHistoryEntity(MoveHistory moveHistory) {
+    private static List<GameEntity.MoveEntity> toMoveHistoryEntity(MoveHistory moveHistory) {
         return moveHistory.moveStack()
             .stream()
             .map(
-                move -> new BoardEntity.MoveEntity(
+                move -> new GameEntity.MoveEntity(
                     move.startSquare().toString(),
                     move.targetSquare().toString(),
-                    new BoardEntity.PieceEntity(
+                    new GameEntity.PieceEntity(
                         move.movedPiece().square().toString(),
                         move.movedPiece().color().toString(),
                         move.movedPiece().typeName().text(),
@@ -201,7 +201,7 @@ public class BoardMapper {
                     ),
                     move.capturedPiece() == null ?
                         null :
-                        new BoardEntity.PieceEntity(
+                        new GameEntity.PieceEntity(
                             move.capturedPiece().square().toString(),
                             move.capturedPiece().color().toString(),
                             move.capturedPiece().typeName().text(),

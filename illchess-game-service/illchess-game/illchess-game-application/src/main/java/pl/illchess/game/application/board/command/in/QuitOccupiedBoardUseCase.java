@@ -1,9 +1,9 @@
 package pl.illchess.game.application.board.command.in;
 
 import java.util.UUID;
-import pl.illchess.game.domain.board.command.QuitOccupiedBoard;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.domain.game.command.QuitOccupiedGame;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.state.player.Username;
 
 public interface QuitOccupiedBoardUseCase {
 
@@ -13,9 +13,9 @@ public interface QuitOccupiedBoardUseCase {
         UUID boardId,
         String username
     ) {
-        public QuitOccupiedBoard toCommand() {
-            return new QuitOccupiedBoard(
-                new BoardId(boardId),
+        public QuitOccupiedGame toCommand() {
+            return new QuitOccupiedGame(
+                new GameId(boardId),
                 new Username(username)
             );
         }

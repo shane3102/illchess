@@ -6,32 +6,32 @@ import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoVie
 import pl.illchess.game.application.board.query.out.model.BoardGameObtainedInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardView;
 import pl.illchess.game.application.board.query.out.model.BoardWithPreMovesView;
-import pl.illchess.game.domain.board.event.BoardAdditionalInfoUpdated;
-import pl.illchess.game.domain.board.event.BoardGameStarted;
-import pl.illchess.game.domain.board.event.BoardUpdated;
-import pl.illchess.game.domain.board.event.delete.BoardDeleteError;
-import pl.illchess.game.domain.board.event.delete.BoardDeleteInfo;
-import pl.illchess.game.domain.board.event.delete.BoardDeleted;
-import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesUpdated;
+import pl.illchess.game.domain.game.event.GameAdditionalInfoUpdated;
+import pl.illchess.game.domain.game.event.GameStarted;
+import pl.illchess.game.domain.game.event.GameUpdated;
+import pl.illchess.game.domain.game.event.delete.GameDeleteError;
+import pl.illchess.game.domain.game.event.delete.GameDeleteInfo;
+import pl.illchess.game.domain.game.event.delete.GameDeleted;
+import pl.illchess.game.domain.game.event.pre_moves.GameWithPreMovesUpdated;
 
 public interface BoardViewSupplier {
 
-    @EventListener(BoardUpdated.class)
-    BoardView updateBoardView(BoardUpdated event);
+    @EventListener(GameUpdated.class)
+    BoardView updateBoardView(GameUpdated event);
 
-    @EventListener(BoardAdditionalInfoUpdated.class)
-    BoardAdditionalInfoView updateBoardAdditionalInfoView(BoardAdditionalInfoUpdated event);
+    @EventListener(GameAdditionalInfoUpdated.class)
+    BoardAdditionalInfoView updateBoardAdditionalInfoView(GameAdditionalInfoUpdated event);
 
-    @EventListener(BoardWithPreMovesUpdated.class)
-    BoardWithPreMovesView updateBoardWithPreMovesView(BoardWithPreMovesUpdated event);
+    @EventListener(GameWithPreMovesUpdated.class)
+    BoardWithPreMovesView updateBoardWithPreMovesView(GameWithPreMovesUpdated event);
 
-    @EventListener(BoardGameStarted.class)
-    ActiveBoardNewView activeBoardsChanged(BoardGameStarted event);
+    @EventListener(GameStarted.class)
+    ActiveBoardNewView activeBoardsChanged(GameStarted event);
 
     @EventListener({
-        BoardDeleted.class,
-        BoardDeleteError.class
+        GameDeleted.class,
+        GameDeleteError.class
     })
-    BoardGameObtainedInfoView sendInfoOnGameObtained(BoardDeleteInfo boardDeleteInfo);
+    BoardGameObtainedInfoView sendInfoOnGameObtained(GameDeleteInfo gameDeleteInfo);
 
 }
