@@ -1,8 +1,8 @@
 package pl.illchess.inbox_outbox
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import pl.illchess.SpecificationIT
 import pl.illchess.game.adapter.board.command.in.rest.dto.InitializeNewBoardRequest
 import pl.illchess.game.adapter.board.command.in.rest.dto.ResignGameRequest
@@ -14,7 +14,7 @@ abstract class InboxOutboxRepositoryImplementationSpecification extends Specific
     @Autowired
     protected LoadMessages loadMessages
 
-    @SpyBean
+    @MockitoSpyBean
     BoardGameFinishedQueryPort boardGameFinishedQueryPort
 
     private static final def BOARD_PATH = "/api/board"
