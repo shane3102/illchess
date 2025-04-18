@@ -45,11 +45,11 @@ export const activeBoardsReducer = createReducer(
     // Game on board finished, remove board from active boards
     on(
         removeFinishedBoardFromActiveBoard,
-        (state: ActiveBoardsState, content: {boardId: string}) => (
+        (state: ActiveBoardsState, content: {gameId: string}) => (
             {
                 ...state,
                 activeBoardsView: {
-                    activeGameIds: state.activeBoardsView.activeGameIds.filter(it => it != content.boardId)
+                    activeGameIds: state.activeBoardsView.activeGameIds.filter(it => it != content.gameId)
                 }
             }
         )

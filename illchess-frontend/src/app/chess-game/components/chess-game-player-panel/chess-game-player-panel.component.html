@@ -1,6 +1,6 @@
 <div class="player-panel" [ngClass]="pieceColor == PieceColor.WHITE ? 'player-panel-white' : 'player-panel-black'">
     <app-chess-game-action-buttons 
-        [boardId]="boardAdditionalInfoView.gameId" 
+        [gameId]="boardAdditionalInfoView.gameId" 
         [username]="username"
         [whitePlayer]="boardAdditionalInfoView.whitePlayer"
         [blackPlayer]="boardAdditionalInfoView.blackPlayer"

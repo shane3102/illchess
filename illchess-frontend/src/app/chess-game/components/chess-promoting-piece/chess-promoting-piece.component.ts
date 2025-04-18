@@ -10,7 +10,7 @@ import { SquareInfo } from '../../../shared/model/game/SquareInfo';
   styleUrls: ['./chess-promoting-piece.component.scss']
 })
 export class ChessPromotingPieceComponent {
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() squareInfo: SquareInfo;
   @Input() selectedPieceInfo: PieceSelectedInfo | undefined | null;
   @Input() username: string
@@ -23,7 +23,7 @@ export class ChessPromotingPieceComponent {
   piecePromotion(piece: Piece.QUEEN | Piece.KNIGHT | Piece.ROOK | Piece.BISHOP) {
     if (this.selectedPieceInfo) {
       let moveRequest: MovePieceRequest = {
-        'gameId': this.boardId,
+        'gameId': this.gameId,
         'startSquare': this.selectedPieceInfo.squareInfo.file + this.selectedPieceInfo.squareInfo.rank,
         'targetSquare': this.squareInfo.file + this.squareInfo.rank,
         'pawnPromotedToPieceType': piece,

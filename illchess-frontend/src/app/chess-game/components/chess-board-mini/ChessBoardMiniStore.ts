@@ -18,8 +18,8 @@ export const ChessBoardMiniStore = signalStore(
     withState(initialState),
     withMethods(
         (store, gameService = inject(GameService)) => ({
-            async refresh(boardId: string): Promise<void> {
-                const boardView = await gameService.refreshBoard(boardId)
+            async refresh(gameId: string): Promise<void> {
+                const boardView = await gameService.refreshBoard(gameId)
                 patchState(store, {boardView: boardView})
             },
             patchBoardPosition: (boardView: GameView) => {

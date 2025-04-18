@@ -29,7 +29,7 @@ export class BoardAdditionalInfoEffects {
         () => this.actions$.pipe(
             ofType(refreshAdditionalInfoOfBoard),
             switchMap(
-                (dto: RefreshBoardDto) => from(this.chessBoardService.refreshBoardAdditionalInfo(dto.boardId))
+                (dto: RefreshBoardDto) => from(this.chessBoardService.refreshBoardAdditionalInfo(dto.gameId))
                     .pipe(
                         map((response: GameAdditionalInfoView) => boardAdditionalInfoLoaded(response))
                     )
@@ -125,7 +125,7 @@ export class BoardAdditionalInfoEffects {
         () => this.actions$.pipe(
             ofType(establishEvaluation),
             switchMap(
-                (dto: { boardId: string }) => from(this.chessBoardStockfishService.evaluateBoard(dto.boardId))
+                (dto: { gameId: string }) => from(this.chessBoardStockfishService.evaluateBoard(dto.gameId))
                     .pipe(
                         map((response: EvaluationResponse) => evaluationLoaded(response))
                     )
@@ -137,7 +137,7 @@ export class BoardAdditionalInfoEffects {
         () => this.actions$.pipe(
             ofType(establishBestMoveAndContinuation),
             switchMap(
-                (dto: { boardId: string }) => from(this.chessBoardStockfishService.establishBestMoveAndContinuation(dto.boardId))
+                (dto: { gameId: string }) => from(this.chessBoardStockfishService.establishBestMoveAndContinuation(dto.gameId))
                     .pipe(
                         map((response: BestMoveAndContinuationResponse) => bestMoveAndContinuationLoaded(response))
                     )

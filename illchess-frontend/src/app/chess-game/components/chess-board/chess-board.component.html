@@ -12,7 +12,7 @@
 
     <div style="position: absolute;">
         @if(!boardView.blackUsername) {
-            <app-waiting-for-black-popup [boardId]="boardId" [username]="username"></app-waiting-for-black-popup>
+            <app-waiting-for-black-popup [gameId]="gameId" [username]="username"></app-waiting-for-black-popup>
         }
     </div>
 
@@ -23,7 +23,7 @@
                     (pieceSelectedInfoEmitter)="pieceSelectedChange($event)"
                     (pieceDroppedInfoEmitter)="pieceDroppedChange($event)"
                     (pieceDraggedReleasedInfoEmitter)="pieceDraggedRelease()" 
-                    [boardId]="boardId" 
+                    [gameId]="gameId" 
                     [piece]="boardView?.piecesLocations ? 
                     boardView?.piecesLocations![file+rank] ? 
                     boardView?.piecesLocations![file+rank] : 

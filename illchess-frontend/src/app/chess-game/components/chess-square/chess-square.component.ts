@@ -16,7 +16,7 @@ import { SquareInfo } from '../../../shared/model/game/SquareInfo';
 })
 export class ChessSquareComponent implements OnInit {
 
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() piece: PieceInfo | undefined;
   @Input() squareInfo: SquareInfo;
   @Input() illegalMoveResponse: Observable<IllegalMoveView>
@@ -114,7 +114,7 @@ export class ChessSquareComponent implements OnInit {
         this.displayPiecePromotingComponent = true;
       } else {
         let moveRequest: MovePieceRequest = {
-          'gameId': this.boardId,
+          'gameId': this.gameId,
           'startSquare': this.selectedPieceInfo.squareInfo.file + this.selectedPieceInfo.squareInfo.rank,
           'targetSquare': this.squareInfo.file + this.squareInfo.rank,
           'username': this.username

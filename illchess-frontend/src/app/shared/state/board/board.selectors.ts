@@ -34,10 +34,10 @@ export const legalMovesSelector = createSelector(
     }
 )
 
-export const initializedBoardIdSelector = createSelector(
+export const initializedGameIdSelector = createSelector(
     selectBoard,
     (state: BoardState) => {
-        return { "boardId": state.boardView.gameId } as RefreshBoardDto
+        return { "gameId": state.boardView.gameId } as RefreshBoardDto
     }
 )
 

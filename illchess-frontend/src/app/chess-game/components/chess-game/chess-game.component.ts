@@ -18,7 +18,7 @@ import { username } from 'src/app/shared/state/player-info/player-info.selectors
 })
 export class ChessGameComponent implements OnInit {
 
-  boardId: string
+  gameId: string
   
   private store = inject(Store<ChessGameState>)
   private route = inject(ActivatedRoute)
@@ -30,7 +30,7 @@ export class ChessGameComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(
       params => {
-        this.boardId = params['boardId']
+        this.gameId = params['gameId']
       }
     )
     this.sendChessBoardRefreshRequest()
@@ -38,7 +38,7 @@ export class ChessGameComponent implements OnInit {
 
   sendChessBoardRefreshRequest() {
     let refreshBoardDto: RefreshBoardDto = {
-      'boardId': this.boardId
+      'gameId': this.gameId
     }
     this.store.dispatch(refreshBoard(refreshBoardDto))
   }

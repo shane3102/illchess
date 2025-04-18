@@ -1,6 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GameView } from 'src/app/shared/model/game/BoardView';
 import { quitNotYetStartedGame } from 'src/app/shared/state/board/board.actions';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 
@@ -11,12 +10,12 @@ import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 })
 export class WaitingForBlackPopupComponent {
 
-  @Input() boardId: string;
+  @Input() gameId: string;
   @Input() username: string
 
   private store = inject(Store<ChessGameState>)
 
   quitNotYetStartedGame() {
-    this.store.dispatch(quitNotYetStartedGame({gameId: this.boardId, username: this.username}))
+    this.store.dispatch(quitNotYetStartedGame({gameId: this.gameId, username: this.username}))
   }
 }
