@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import pl.illchess.game.adapter.board.query.in.outbox.dto.ObtainBoardGameFinishedOutboxMessage;
 import pl.illchess.game.application.board.query.out.BoardGameFinishedQueryPort;
 import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
-import pl.illchess.game.domain.board.exception.BoardNotFoundException;
+import pl.illchess.game.domain.game.exception.GameNotFoundException;
 import pl.shane3102.messaging.annotation.InboxOutboxListener;
 import pl.shane3102.messaging.annotation.MessagingAwareComponent;
 import static pl.illchess.game.adapter.board.query.in.rabbitmq.BoardInfoRabbitMqSupplier.OBTAIN_GAME_QUEUE;
@@ -33,7 +33,7 @@ public class ObtainBoardGameFinishedOutboxListener {
         UUID boardId = event.gameId();
         log.info("There is unsent finished game with id = {}, sending info with game view to rabbitmq queue", boardId);
         BoardGameFinishedView result = boardGameFinishedQueryPort.findById(boardId)
-            .orElseThrow(() -> new BoardNotFoundException(boardId));
+            .orElseThrow(() -> new GameNotFoundException(boardId));
         rabbitTemplate.convertAndSend(OBTAIN_GAME_QUEUE, result);
         log.info("Successfully sent info with finished game with id = {} to rabbitmq queue", boardId);
     }

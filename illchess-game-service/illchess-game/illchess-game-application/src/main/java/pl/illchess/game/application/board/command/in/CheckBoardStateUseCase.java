@@ -1,7 +1,7 @@
 package pl.illchess.game.application.board.command.in;
 
-import pl.illchess.game.domain.board.command.CheckIsCheckmateOrStaleMate;
-import pl.illchess.game.domain.board.model.BoardId;
+import pl.illchess.game.domain.game.command.CheckIsCheckmateOrStaleMate;
+import pl.illchess.game.domain.game.model.GameId;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ public interface CheckBoardStateUseCase {
 
     record CheckBoardStateCmd(UUID boardId) {
         public CheckIsCheckmateOrStaleMate toCommand() {
-            return new CheckIsCheckmateOrStaleMate(new BoardId(boardId));
+            return new CheckIsCheckmateOrStaleMate(new GameId(boardId));
         }
     }
 }

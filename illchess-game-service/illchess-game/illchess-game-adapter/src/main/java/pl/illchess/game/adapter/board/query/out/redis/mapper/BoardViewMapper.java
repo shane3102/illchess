@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.application.board.query.out.model.BoardAdditionalInfoView;
 import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView;
 import pl.illchess.game.application.board.query.out.model.BoardGameFinishedView.PerformedMovesGameFinishedView;
@@ -19,12 +19,12 @@ import pl.illchess.game.domain.piece.model.info.PieceType;
 
 public class BoardViewMapper {
 
-    public static BoardWithPreMovesView toViewAsPreMove(BoardEntity entity, List<BoardEntity.PreMoveEntity> userPreMoves, List<BoardEntity.PieceEntity> pieces) {
+    public static BoardWithPreMovesView toViewAsPreMove(GameEntity entity, List<GameEntity.PreMoveEntity> userPreMoves, List<GameEntity.PieceEntity> pieces) {
         if (entity == null) {
             return null;
         } else {
             return new BoardWithPreMovesView(
-                entity.boardId(),
+                entity.gameId(),
                 toPiecesLocations(pieces),
                 toLastPerformedMove(entity),
                 userPreMoves.stream().map(preMoveEntity -> new MoveView(preMoveEntity.startSquare(), preMoveEntity.targetSquare())).toList(),
@@ -34,12 +34,12 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardView toView(BoardEntity entity) {
+    public static BoardView toView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
             return new BoardView(
-                entity.boardId(),
+                entity.gameId(),
                 toPiecesLocations(entity.piecesLocations()),
                 toLastPerformedMove(entity),
                 entity.boardState().whitePlayer().username(),
@@ -48,15 +48,15 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardAdditionalInfoView toAdditionalInfoView(BoardEntity entity) {
+    public static BoardAdditionalInfoView toAdditionalInfoView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
 
-            Supplier<Stream<BoardEntity.MoveEntity>> capturedPiecesStreamSupplier = () -> entity.moveStackData().stream().filter(it -> it.capturedPiece() != null);
+            Supplier<Stream<GameEntity.MoveEntity>> capturedPiecesStreamSupplier = () -> entity.moveStackData().stream().filter(it -> it.capturedPiece() != null);
 
             return new BoardAdditionalInfoView(
-                entity.boardId(),
+                entity.gameId(),
                 entity.boardState().currentPlayerColor(),
                 new PlayerView(
                     entity.boardState().whitePlayer().username(),
@@ -87,12 +87,12 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardGameFinishedView toBoardWithFinishedGameView(BoardEntity entity) {
+    public static BoardGameFinishedView toBoardWithFinishedGameView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
             return new BoardGameFinishedView(
-                entity.boardId(),
+                entity.gameId(),
                 entity.boardState().whitePlayer().username(),
                 entity.boardState().blackPlayer().username(),
                 entity.boardState().gameState(),
@@ -110,7 +110,7 @@ public class BoardViewMapper {
         }
     }
 
-    private static MoveView toLastPerformedMove(BoardEntity entity) {
+    private static MoveView toLastPerformedMove(GameEntity entity) {
         return entity.moveStackData() == null || entity.moveStackData().isEmpty()
             ? null
             : new MoveView(
@@ -120,7 +120,7 @@ public class BoardViewMapper {
     }
 
     private static Map<String, PieceView> toPiecesLocations(
-        List<BoardEntity.PieceEntity> piecesLocationsInEntity
+        List<GameEntity.PieceEntity> piecesLocationsInEntity
     ) {
         return piecesLocationsInEntity.stream()
             .map(
@@ -135,11 +135,11 @@ public class BoardViewMapper {
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private static List<String> toPerformedMoves(List<BoardEntity.MoveEntity> moveEntities) {
+    private static List<String> toPerformedMoves(List<GameEntity.MoveEntity> moveEntities) {
         return moveEntities.stream().map(BoardViewMapper::toPerformedMove).toList();
     }
 
-    private static String toPerformedMove(BoardEntity.MoveEntity moveEntity) {
+    private static String toPerformedMove(GameEntity.MoveEntity moveEntity) {
 
         String startSquareLower = moveEntity.startSquare().toLowerCase();
         String targetSquareLower = moveEntity.targetSquare().toLowerCase();

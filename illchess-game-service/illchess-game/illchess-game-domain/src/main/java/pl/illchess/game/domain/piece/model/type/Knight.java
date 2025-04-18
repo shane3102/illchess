@@ -1,8 +1,8 @@
 package pl.illchess.game.domain.piece.model.type;
 
-import pl.illchess.game.domain.board.model.history.Move;
-import pl.illchess.game.domain.board.model.square.PiecesLocations;
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.history.Move;
+import pl.illchess.game.domain.game.model.square.Board;
+import pl.illchess.game.domain.game.model.square.Square;
 import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.info.PieceAttackingRay;
 import pl.illchess.game.domain.piece.model.info.PieceColor;
@@ -36,12 +36,12 @@ public final class Knight implements Piece {
     }
 
     @Override
-    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public Set<Square> standardLegalMoves(Board board, Move lastPerformedMove) {
         return extractStandardKnightMovement();
     }
 
     @Override
-    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, Board board, Move lastPerformedMove) {
         if (extractStandardKnightMovement().contains(possibleAttackedSquare)) {
             return new PieceAttackingRay(square, Set.of(possibleAttackedSquare));
         } else {

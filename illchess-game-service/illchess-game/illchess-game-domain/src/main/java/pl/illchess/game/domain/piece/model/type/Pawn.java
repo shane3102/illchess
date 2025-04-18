@@ -5,10 +5,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import pl.illchess.game.domain.board.model.history.Move;
-import pl.illchess.game.domain.board.model.history.MoveHistory;
-import pl.illchess.game.domain.board.model.square.PiecesLocations;
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.history.Move;
+import pl.illchess.game.domain.game.model.history.MoveHistory;
+import pl.illchess.game.domain.game.model.square.Board;
+import pl.illchess.game.domain.game.model.square.Square;
 import pl.illchess.game.domain.piece.exception.PromotedPieceTargetTypeNotSupported;
 import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.info.PieceAttackingRay;
@@ -39,21 +39,21 @@ public final class Pawn implements Piece {
     }
 
     @Override
-    public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
+    public Set<Square> possibleMovesOnPreMove(Board board, MoveHistory moveHistory) {
         return Stream.concat(
-                standardLegalMoves(piecesLocations, moveHistory.peekLastMove()).stream(),
+                standardLegalMoves(board, moveHistory.peekLastMove()).stream(),
                 getStandardPawnCaptureSquares().stream().filter(this::filterByPawnColor)
             )
             .collect(Collectors.toSet());
     }
 
     @Override
-    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return extractPawnMoves(piecesLocations, lastPerformedMove);
+    public Set<Square> standardLegalMoves(Board board, Move lastPerformedMove) {
+        return extractPawnMoves(board, lastPerformedMove);
     }
 
     @Override
-    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, Board board, Move lastPerformedMove) {
         Set<Square> pawnAttackingRay = Stream.concat(
                 this.square.getSquareDiagonal1().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name())),
                 this.square.getSquareDiagonal2().getContainedSquares().getClosestNeighbours(this.square).stream().filter(capturableSquare -> Objects.equals(capturableSquare.name(), possibleAttackedSquare.name()))
@@ -127,10 +127,10 @@ public final class Pawn implements Piece {
         return pieceByPieceType;
     }
 
-    private Set<Square> extractPawnMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        Set<Square> standardPawnMovement = getStandardPawnMovement(piecesLocations);
+    private Set<Square> extractPawnMoves(Board board, Move lastPerformedMove) {
+        Set<Square> standardPawnMovement = getStandardPawnMovement(board);
 
-        Set<Square> standardCaptures = getStandardPawnPossibleCaptures(piecesLocations);
+        Set<Square> standardCaptures = getStandardPawnPossibleCaptures(board);
 
         Set<Square> enPassantPossibleCaptures = getEnPassantPossibleCaptures(lastPerformedMove);
 
@@ -144,15 +144,15 @@ public final class Pawn implements Piece {
             .collect(Collectors.toSet());
     }
 
-    private Set<Square> getStandardPawnMovement(PiecesLocations piecesLocations) {
-        Set<Square> result = square.getFile().getContainedSquares().getClosestNonOccupiedNeighbours(square, piecesLocations);
+    private Set<Square> getStandardPawnMovement(Board board) {
+        Set<Square> result = square.getFile().getContainedSquares().getClosestNonOccupiedNeighbours(square, board);
         if (isOnStartingSquare()) {
             result = Stream.concat(
                     Stream.of(result),
                     result.stream().map(
                         it -> it.getFile()
                             .getContainedSquares()
-                            .getClosestNonOccupiedNeighbours(it, piecesLocations)
+                            .getClosestNonOccupiedNeighbours(it, board)
                     )
                 )
                 .flatMap(Collection::stream)
@@ -166,10 +166,10 @@ public final class Pawn implements Piece {
             (this.square.getRank().getNumber() == 7 && Objects.equals(this.color, PieceColor.BLACK));
     }
 
-    private Set<Square> getStandardPawnPossibleCaptures(PiecesLocations piecesLocations) {
+    private Set<Square> getStandardPawnPossibleCaptures(Board board) {
         return Stream.concat(
-                square.getSquareDiagonal1().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream(),
-                square.getSquareDiagonal2().getContainedSquares().getClosestOccupiedNeighbours(square, piecesLocations).stream()
+                square.getSquareDiagonal1().getContainedSquares().getClosestOccupiedNeighbours(square, board).stream(),
+                square.getSquareDiagonal2().getContainedSquares().getClosestOccupiedNeighbours(square, board).stream()
             )
             .collect(Collectors.toSet());
     }

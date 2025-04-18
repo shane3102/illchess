@@ -9,9 +9,9 @@ import pl.illchess.game.adapter.board.command.in.rabbitmq.dto.GameObtainingError
 import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase;
 import pl.illchess.game.application.board.command.in.DeleteBoardWithFinishedGameUseCase.DeleteBoardWithFinishedGameCmd;
 import pl.illchess.game.application.commons.command.out.PublishEvent;
-import pl.illchess.game.domain.board.event.delete.BoardDeleteError;
-import pl.illchess.game.domain.board.event.delete.BoardDeleted;
-import pl.illchess.game.domain.board.model.BoardId;
+import pl.illchess.game.domain.game.event.delete.GameDeleteError;
+import pl.illchess.game.domain.game.event.delete.GameDeleted;
+import pl.illchess.game.domain.game.model.GameId;
 import pl.illchess.game.domain.commons.exception.DomainException;
 import pl.shane3102.messaging.aggregator.InboxOutbox;
 
@@ -31,7 +31,7 @@ public class BoardCommandRabbitMqListener {
         try {
             DeleteBoardWithFinishedGameCmd cmd = new DeleteBoardWithFinishedGameCmd(gameFinishedRabbitMqMessage.id());
             deleteBoardWithFinishedGameUseCase.deleteBoardWithFinishedGame(cmd);
-            publishEvent.publishDomainEvent(new BoardDeleted(new BoardId(cmd.boardId())));
+            publishEvent.publishDomainEvent(new GameDeleted(new GameId(cmd.boardId())));
         }  catch (DomainException domainException) {
             inboxOutbox.saveMessage(new GameFinishedInboxMessage(gameFinishedRabbitMqMessage.id()));
         }
@@ -39,6 +39,6 @@ public class BoardCommandRabbitMqListener {
 
     @RabbitListener(queues = {OBTAIN_GAME_FAILURE_QUEUE})
     public void publishEventOfErrorWhenObtainingGame(GameObtainingErrorRabbitMqMessage message) {
-        publishEvent.publishDomainEvent(new BoardDeleteError(new BoardId(message.id())));
+        publishEvent.publishDomainEvent(new GameDeleteError(new GameId(message.id())));
     }
 }

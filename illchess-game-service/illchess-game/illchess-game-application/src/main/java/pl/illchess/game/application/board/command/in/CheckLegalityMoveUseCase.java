@@ -1,9 +1,9 @@
 package pl.illchess.game.application.board.command.in;
 
-import pl.illchess.game.domain.board.command.CheckLegalMoves;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.square.Square;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.domain.game.command.CheckLegalMoves;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.square.Square;
+import pl.illchess.game.domain.game.model.state.player.Username;
 
 import java.util.Set;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public interface CheckLegalityMoveUseCase {
     ) {
         public CheckLegalMoves toCommand() {
             return new CheckLegalMoves(
-                new BoardId(boardId),
+                new GameId(boardId),
                 Square.valueOf(startSquare),
                 new Username(username)
             );

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.application.board.query.out.ActiveBoardsQueryPort;
 import pl.illchess.game.application.board.query.out.model.ActiveBoardsView;
 
@@ -14,7 +14,7 @@ public class ActiveBoardsRedisRepository implements ActiveBoardsQueryPort {
 
     private static final String BOARD_HASH_KEY = "BOARD";
 
-    private final RedisTemplate<String, BoardEntity> template;
+    private final RedisTemplate<String, GameEntity> template;
 
     @Override
     public ActiveBoardsView activeBoards() {
@@ -23,10 +23,10 @@ public class ActiveBoardsRedisRepository implements ActiveBoardsQueryPort {
                 .entries(BOARD_HASH_KEY)
                 .values()
                 .stream()
-                .map(board -> (BoardEntity) board)
+                .map(board -> (GameEntity) board)
                 .filter(board -> board.boardState().blackPlayer() != null)
                 .sorted(Comparator.comparing(b -> b.boardState().startTime()))
-                .map(BoardEntity::boardId)
+                .map(GameEntity::gameId)
                 .toList()
         );
     }

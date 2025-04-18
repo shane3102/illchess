@@ -1,7 +1,7 @@
 package pl.illchess.application.board.command.in
 
 
-import pl.illchess.application.board.BoardSpecification
+import pl.illchess.application.board.GameSpecification
 import pl.illchess.game.application.board.command.in.EstablishFenStringOfBoardUseCase
 import pl.illchess.game.application.board.command.in.JoinOrInitializeNewGameUseCase
 import pl.illchess.game.application.board.command.in.MovePieceUseCase
@@ -12,7 +12,7 @@ import static org.spockframework.util.Pair.of
 import static pl.illchess.game.domain.piece.model.info.PieceColor.BLACK
 import static pl.illchess.game.domain.piece.model.info.PieceColor.WHITE
 
-class MovementOnPreMoveTest extends BoardSpecification {
+class MovementOnPreMoveTest extends GameSpecification {
 
     def "basic pre-move cases"() {
         given:

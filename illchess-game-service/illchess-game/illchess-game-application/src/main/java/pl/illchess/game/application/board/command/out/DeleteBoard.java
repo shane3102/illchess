@@ -1,7 +1,7 @@
 package pl.illchess.game.application.board.command.out;
 
-import pl.illchess.game.domain.board.model.BoardId;
+import pl.illchess.game.domain.game.model.GameId;
 
 public interface DeleteBoard {
-    void deleteBoard(BoardId boardId);
+    void deleteBoard(GameId gameId);
 }

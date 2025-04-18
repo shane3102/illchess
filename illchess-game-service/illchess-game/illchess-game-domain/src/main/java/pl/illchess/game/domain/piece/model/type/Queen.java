@@ -1,9 +1,9 @@
 package pl.illchess.game.domain.piece.model.type;
 
-import pl.illchess.game.domain.board.model.history.Move;
-import pl.illchess.game.domain.board.model.history.MoveHistory;
-import pl.illchess.game.domain.board.model.square.PiecesLocations;
-import pl.illchess.game.domain.board.model.square.Square;
+import pl.illchess.game.domain.game.model.history.Move;
+import pl.illchess.game.domain.game.model.history.MoveHistory;
+import pl.illchess.game.domain.game.model.square.Board;
+import pl.illchess.game.domain.game.model.square.Square;
 import pl.illchess.game.domain.piece.model.Piece;
 import pl.illchess.game.domain.piece.model.PieceCapableOfPinning;
 import pl.illchess.game.domain.piece.model.info.PieceAttackingRay;
@@ -38,7 +38,7 @@ public final class Queen implements PieceCapableOfPinning {
     }
 
     @Override
-    public Set<Square> possibleMovesOnPreMove(PiecesLocations piecesLocations, MoveHistory moveHistory) {
+    public Set<Square> possibleMovesOnPreMove(Board board, MoveHistory moveHistory) {
         return Stream.of(
                 square.getSquareDiagonal1().getContainedSquares().getFullRay(),
                 square.getSquareDiagonal2().getContainedSquares().getFullRay(),
@@ -50,19 +50,19 @@ public final class Queen implements PieceCapableOfPinning {
     }
 
     @Override
-    public Set<Square> standardLegalMoves(PiecesLocations piecesLocations, Move lastPerformedMove) {
-        return extractStandardQueenMoves(piecesLocations);
+    public Set<Square> standardLegalMoves(Board board, Move lastPerformedMove) {
+        return extractStandardQueenMoves(board);
     }
 
     @Override
-    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations, Move lastPerformedMove) {
-        SquaresInRay queenAttackingRayOfSquare = getQueenAttackingRayOfSquare(possibleAttackedSquare, piecesLocations);
+    public PieceAttackingRay attackingRayOfSquare(Square possibleAttackedSquare, Board board, Move lastPerformedMove) {
+        SquaresInRay queenAttackingRayOfSquare = getQueenAttackingRayOfSquare(possibleAttackedSquare, board);
         return new PieceAttackingRay(square, queenAttackingRayOfSquare);
     }
 
     @Override
-    public Set<Square> pinningRayIfImPinning(Piece askingPiece, King enemyKing, PiecesLocations piecesLocations) {
-        return getQueenPinningRay(askingPiece, enemyKing, piecesLocations);
+    public Set<Square> pinningRayIfImPinning(Piece askingPiece, King enemyKing, Board board) {
+        return getQueenPinningRay(askingPiece, enemyKing, board);
     }
 
     public PieceColor color() {
@@ -114,24 +114,24 @@ public final class Queen implements PieceCapableOfPinning {
             "square=" + square + ']';
     }
 
-    private Set<Square> extractStandardQueenMoves(PiecesLocations piecesLocations) {
+    private Set<Square> extractStandardQueenMoves(Board board) {
         return Stream.of(
-                square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations),
-                square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, piecesLocations)
+                square.getFile().getContainedSquares().getConnectedUntilPieceEncountered(square, color, board),
+                square.getRank().getContainedSquares().getConnectedUntilPieceEncountered(square, color, board),
+                square.getSquareDiagonal1().getContainedSquares().getConnectedUntilPieceEncountered(square, color, board),
+                square.getSquareDiagonal2().getContainedSquares().getConnectedUntilPieceEncountered(square, color, board)
             )
             .flatMap(Collection::stream)
             .collect(Collectors.toSet());
     }
 
-    private SquaresInRay getQueenAttackingRayOfSquare(Square possibleAttackedSquare, PiecesLocations piecesLocations) {
+    private SquaresInRay getQueenAttackingRayOfSquare(Square possibleAttackedSquare, Board board) {
 
         return Stream.of(
-                square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations),
-                square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, piecesLocations)
+                square.getFile().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, board),
+                square.getRank().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, board),
+                square.getSquareDiagonal1().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, board),
+                square.getSquareDiagonal2().getContainedSquares().getAttackRayOnGivenSquare(square, possibleAttackedSquare, color, board)
             )
             .filter(it -> !it.isEmpty())
             .findFirst()
@@ -141,7 +141,7 @@ public final class Queen implements PieceCapableOfPinning {
     private Set<Square> getQueenPinningRay(
         Piece askingPiece,
         King enemyKing,
-        PiecesLocations piecesLocations
+        Board board
     ) {
         return Stream.of(
                 askingPiece.square().getRank().getContainedSquares().getPinningRayBySquare(
@@ -149,7 +149,7 @@ public final class Queen implements PieceCapableOfPinning {
                         this.square,
                         enemyKing.square(),
                         askingPiece.color(),
-                        piecesLocations
+                        board
                     )
                     .stream(),
                 askingPiece.square().getFile().getContainedSquares().getPinningRayBySquare(
@@ -157,7 +157,7 @@ public final class Queen implements PieceCapableOfPinning {
                         this.square,
                         enemyKing.square(),
                         askingPiece.color(),
-                        piecesLocations
+                        board
                     )
                     .stream(),
                 askingPiece.square().getSquareDiagonal1().getContainedSquares().getPinningRayBySquare(
@@ -165,7 +165,7 @@ public final class Queen implements PieceCapableOfPinning {
                         this.square,
                         enemyKing.square(),
                         askingPiece.color(),
-                        piecesLocations
+                        board
                     )
                     .stream(),
                 askingPiece.square().getSquareDiagonal2().getContainedSquares().getPinningRayBySquare(
@@ -173,7 +173,7 @@ public final class Queen implements PieceCapableOfPinning {
                         this.square,
                         enemyKing.square(),
                         askingPiece.color(),
-                        piecesLocations
+                        board
                     )
                     .stream()
             )

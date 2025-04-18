@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import pl.illchess.game.adapter.board.command.out.redis.model.BoardEntity;
+import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.inbox_outbox.out.redis.model.InboxOutboxMessageEntity;
 
 @Configuration
@@ -31,10 +31,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, BoardEntity> boardRedisTemplate(
+    public RedisTemplate<String, GameEntity> boardRedisTemplate(
         JedisConnectionFactory connectionFactory
     ) {
-        RedisTemplate<String, BoardEntity> boardTemplate = new RedisTemplate<>();
+        RedisTemplate<String, GameEntity> boardTemplate = new RedisTemplate<>();
         boardTemplate.setConnectionFactory(connectionFactory);
 
         boardTemplate.setKeySerializer(new StringRedisSerializer());

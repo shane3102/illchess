@@ -23,34 +23,34 @@ import pl.illchess.game.application.board.command.out.DeleteBoard;
 import pl.illchess.game.application.board.command.out.LoadBoard;
 import pl.illchess.game.application.board.command.out.SaveBoard;
 import pl.illchess.game.application.commons.command.out.PublishEvent;
-import pl.illchess.game.domain.board.command.AcceptDraw;
-import pl.illchess.game.domain.board.command.AcceptTakingBackMove;
-import pl.illchess.game.domain.board.command.CheckIsCheckmateOrStaleMate;
-import pl.illchess.game.domain.board.command.CheckLegalMoves;
-import pl.illchess.game.domain.board.command.DeleteBoardWithFinishedGame;
-import pl.illchess.game.domain.board.command.EstablishFenStringOfBoard;
-import pl.illchess.game.domain.board.command.JoinOrInitializeNewGame;
-import pl.illchess.game.domain.board.command.MovePiece;
-import pl.illchess.game.domain.board.command.ProposeDraw;
-import pl.illchess.game.domain.board.command.ProposeTakingBackMove;
-import pl.illchess.game.domain.board.command.QuitOccupiedBoard;
-import pl.illchess.game.domain.board.command.RejectDraw;
-import pl.illchess.game.domain.board.command.RejectTakingBackMove;
-import pl.illchess.game.domain.board.command.Resign;
-import pl.illchess.game.domain.board.event.BoardGameStarted;
-import pl.illchess.game.domain.board.event.BoardPiecesLocationsUpdated;
-import pl.illchess.game.domain.board.event.BoardStateUpdated;
-import pl.illchess.game.domain.board.event.GameFinished;
-import pl.illchess.game.domain.board.event.pre_moves.BoardWithPreMovesOfUsernameUpdated;
-import pl.illchess.game.domain.board.exception.BoardCanNotBeQuitAsAlreadyStartedException;
-import pl.illchess.game.domain.board.exception.BoardNotFoundException;
-import pl.illchess.game.domain.board.model.Board;
-import pl.illchess.game.domain.board.model.BoardId;
-import pl.illchess.game.domain.board.model.FenBoardString;
-import pl.illchess.game.domain.board.model.square.Square;
-import pl.illchess.game.domain.board.model.state.GameState;
-import pl.illchess.game.domain.board.model.state.player.Player;
-import pl.illchess.game.domain.board.model.state.player.Username;
+import pl.illchess.game.domain.game.command.AcceptDraw;
+import pl.illchess.game.domain.game.command.AcceptTakingBackMove;
+import pl.illchess.game.domain.game.command.CheckIsCheckmateOrStaleMate;
+import pl.illchess.game.domain.game.command.CheckLegalMoves;
+import pl.illchess.game.domain.game.command.DeleteGameWithFinishedGame;
+import pl.illchess.game.domain.game.command.EstablishFenStringOfBoard;
+import pl.illchess.game.domain.game.command.JoinOrInitializeNewGame;
+import pl.illchess.game.domain.game.command.MovePiece;
+import pl.illchess.game.domain.game.command.ProposeDraw;
+import pl.illchess.game.domain.game.command.ProposeTakingBackMove;
+import pl.illchess.game.domain.game.command.QuitOccupiedGame;
+import pl.illchess.game.domain.game.command.RejectDraw;
+import pl.illchess.game.domain.game.command.RejectTakingBackMove;
+import pl.illchess.game.domain.game.command.Resign;
+import pl.illchess.game.domain.game.event.GameStarted;
+import pl.illchess.game.domain.game.event.GamePiecesLocationsUpdated;
+import pl.illchess.game.domain.game.event.GameStateUpdated;
+import pl.illchess.game.domain.game.event.GameFinished;
+import pl.illchess.game.domain.game.event.pre_moves.GameWithPreMovesOfUsernameUpdated;
+import pl.illchess.game.domain.game.exception.GameCanNotBeQuitAsAlreadyStartedException;
+import pl.illchess.game.domain.game.exception.GameNotFoundException;
+import pl.illchess.game.domain.game.model.Game;
+import pl.illchess.game.domain.game.model.GameId;
+import pl.illchess.game.domain.game.model.FenBoardString;
+import pl.illchess.game.domain.game.model.square.Square;
+import pl.illchess.game.domain.game.model.state.GameState;
+import pl.illchess.game.domain.game.model.state.player.Player;
+import pl.illchess.game.domain.game.model.state.player.Username;
 import pl.illchess.game.domain.commons.model.MoveType;
 import static pl.illchess.game.domain.commons.model.MoveType.MOVE;
 
@@ -93,13 +93,13 @@ public class BoardManager implements
             cmd.startSquare(),
             cmd.targetSquare()
         );
-        BoardId boardId = new BoardId(cmd.boardId());
-        Board board = loadBoard.loadBoard(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        GameId gameId = new GameId(cmd.boardId());
+        Game game = loadBoard.loadBoard(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
         MovePiece command = cmd.toCommand();
-        MoveType performedMoveType = board.movePieceOrAddPreMove(command);
+        MoveType performedMoveType = game.movePieceOrAddPreMove(command);
 
-        saveBoard.saveBoard(board);
+        saveBoard.saveBoard(game);
 
         log.info(
             "{} at board with id = {} was successfully performed",
@@ -108,13 +108,13 @@ public class BoardManager implements
         );
 
         if (performedMoveType == MOVE) {
-            eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(new BoardId(cmd.boardId())));
+            eventPublisher.publishDomainEvent(new GamePiecesLocationsUpdated(new GameId(cmd.boardId())));
         }
-        if (!board.boardState().whitePlayer().preMoves().isEmpty()) {
-            eventPublisher.publishDomainEvent(new BoardWithPreMovesOfUsernameUpdated(boardId, board.boardState().whitePlayer().username()));
+        if (!game.gameInfo().whitePlayer().preMoves().isEmpty()) {
+            eventPublisher.publishDomainEvent(new GameWithPreMovesOfUsernameUpdated(gameId, game.gameInfo().whitePlayer().username()));
         }
-        if (board.boardState().blackPlayer() != null && !board.boardState().blackPlayer().preMoves().isEmpty()) {
-            eventPublisher.publishDomainEvent(new BoardWithPreMovesOfUsernameUpdated(boardId, board.boardState().blackPlayer().username()));
+        if (game.gameInfo().blackPlayer() != null && !game.gameInfo().blackPlayer().preMoves().isEmpty()) {
+            eventPublisher.publishDomainEvent(new GameWithPreMovesOfUsernameUpdated(gameId, game.gameInfo().blackPlayer().username()));
         }
     }
 
@@ -126,12 +126,12 @@ public class BoardManager implements
             cmd.pieceColor(),
             cmd.startSquare()
         );
-        BoardId boardId = new BoardId(cmd.boardId());
-        Board board = loadBoard.loadBoard(boardId).orElseThrow(() -> new BoardNotFoundException(boardId));
+        GameId gameId = new GameId(cmd.boardId());
+        Game game = loadBoard.loadBoard(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
 
         CheckLegalMoves command = cmd.toCommand();
-        Set<Square> legalMoves = board.legalMoves(command);
-        saveBoard.saveBoard(board);
+        Set<Square> legalMoves = game.legalMoves(command);
+        saveBoard.saveBoard(game);
         log.info(
             "At board with id = {} piece of color = {} is allowed to move from square = {} to squares = {}",
             cmd.boardId(),
@@ -143,7 +143,7 @@ public class BoardManager implements
     }
 
     @Override
-    public BoardId joinOrInitializeNewGame(JoinOrInitializeNewGameCmd cmd) {
+    public GameId joinOrInitializeNewGame(JoinOrInitializeNewGameCmd cmd) {
 
         log.info(
             "Username {} is joining or initializing new game",
@@ -151,29 +151,29 @@ public class BoardManager implements
         );
 
         JoinOrInitializeNewGame command = cmd.toCommand();
-        BoardId savedBoardId;
-        Optional<Board> currentPlayerBoard = loadBoard.loadBoardByUsername(new Username(cmd.username()));
+        GameId savedGameId;
+        Optional<Game> currentPlayerBoard = loadBoard.loadBoardByUsername(new Username(cmd.username()));
         if (currentPlayerBoard.isPresent()) {
-            savedBoardId = currentPlayerBoard.get().boardId();
+            savedGameId = currentPlayerBoard.get().gameId();
             saveBoard.saveBoard(currentPlayerBoard.get());
             log.info(
                 "Username {} has rejoined played game",
                 cmd.username()
             );
         } else {
-            Optional<Board> boardWithoutPlayer = loadBoard.loadBoardWithoutPlayer();
+            Optional<Game> boardWithoutPlayer = loadBoard.loadBoardWithoutPlayer();
             if (boardWithoutPlayer.isPresent()) {
-                savedBoardId = boardWithoutPlayer.get().boardId();
+                savedGameId = boardWithoutPlayer.get().gameId();
                 boardWithoutPlayer.get().assignSecondPlayer(command.username());
                 saveBoard.saveBoard(boardWithoutPlayer.get());
-                eventPublisher.publishDomainEvent(new BoardGameStarted(savedBoardId));
+                eventPublisher.publishDomainEvent(new GameStarted(savedGameId));
                 log.info(
                     "Username {} has joined existing game",
                     cmd.username()
                 );
             } else {
-                Board initializedBoard = Board.generateNewBoard(command);
-                savedBoardId = saveBoard.saveBoard(initializedBoard);
+                Game initializedGame = Game.generateNewBoard(command);
+                savedGameId = saveBoard.saveBoard(initializedGame);
                 log.info(
                     "Username {} initialized new game",
                     cmd.username()
@@ -181,20 +181,20 @@ public class BoardManager implements
             }
         }
 
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(savedBoardId));
-        return savedBoardId;
+        eventPublisher.publishDomainEvent(new GamePiecesLocationsUpdated(savedGameId));
+        return savedGameId;
     }
 
     @Override
     public void checkBoardState(CheckBoardStateCmd cmd) {
         log.info("Checking if checkmate or stalemate on board  = {}", cmd.boardId());
         CheckIsCheckmateOrStaleMate command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        GameState stateOfBoard = board.establishBoardState();
-        saveBoard.saveBoard(board);
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        GameState stateOfBoard = game.establishBoardState();
+        saveBoard.saveBoard(game);
         if (stateOfBoard != GameState.CONTINUE) {
-            eventPublisher.publishDomainEvent(new GameFinished(board.boardId()));
+            eventPublisher.publishDomainEvent(new GameFinished(game.gameId()));
         }
         log.info("Successfully checked state on board = {}. State is {}", cmd.boardId(), stateOfBoard);
     }
@@ -203,11 +203,11 @@ public class BoardManager implements
     public void resignGame(ResignGameCmd cmd) {
         log.info("User {} is resigning game on board with id {}", cmd.username(), cmd.boardId());
         Resign command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.resign(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new GameFinished(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.resign(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GameFinished(command.gameId()));
         log.info("User {} successfully resigned game on board with id {}", cmd.username(), cmd.boardId());
     }
 
@@ -215,11 +215,11 @@ public class BoardManager implements
     public void proposeDraw(ProposeDrawCmd cmd) {
         log.info("User {} is proposing draw on board with id = {}", cmd.username(), cmd.boardId());
         ProposeDraw command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.proposeDraw(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.proposeDraw(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GameStateUpdated(command.gameId()));
         log.info("User {} successfully proposed draw on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -227,11 +227,11 @@ public class BoardManager implements
     public void rejectDraw(RejectDrawCmd cmd) {
         log.info("User {} is rejecting draw offer on board with id = {}", cmd.username(), cmd.boardId());
         RejectDraw command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.rejectDraw(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardStateUpdated(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.rejectDraw(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GameStateUpdated(command.gameId()));
         log.info("User {} successfully rejected draw offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -239,11 +239,11 @@ public class BoardManager implements
     public void acceptDraw(AcceptDrawCmd cmd) {
         log.info("User {} is accepting draw offer on board with id = {}", cmd.username(), cmd.boardId());
         AcceptDraw command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.acceptDraw(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new GameFinished(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.acceptDraw(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GameFinished(command.gameId()));
         log.info("User {} successfully accepted draw offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -251,9 +251,9 @@ public class BoardManager implements
     public FenBoardString establishCurrentFenBoardString(EstablishFenStringOfBoardCmd cmd) {
         log.info("Establishing fen string of board with id = {}", cmd.boardId());
         EstablishFenStringOfBoard command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        FenBoardString result = board.establishFenBoardString();
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        FenBoardString result = game.establishFenBoardString();
         log.info(
             "Successfully established fen string of board with id = {}. Result is {}",
             cmd.boardId(),
@@ -266,11 +266,11 @@ public class BoardManager implements
     public void proposeTakingBackMove(ProposeTakingBackMoveCmd cmd) {
         log.info("User {} is proposing taking back move on board with id = {}", cmd.username(), cmd.boardId());
         ProposeTakingBackMove command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.proposeTakingBackMove(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.proposeTakingBackMove(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GamePiecesLocationsUpdated(command.gameId()));
         log.info("User {} successfully proposed taking back move on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -278,11 +278,11 @@ public class BoardManager implements
     public void rejectTakingBackLastMove(RejectTakingBackMoveCmd cmd) {
         log.info("User {} is rejecting taking back last move on board with id = {}", cmd.username(), cmd.boardId());
         RejectTakingBackMove command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.rejectTakingBackLastMove(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.rejectTakingBackLastMove(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GamePiecesLocationsUpdated(command.gameId()));
         log.info("User {} successfully rejected taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
@@ -290,33 +290,33 @@ public class BoardManager implements
     public void acceptTakingBackLastMove(AcceptTakingBackMoveCmd cmd) {
         log.info("User {} is accepting offer of taking back last move on board with id = {}", cmd.username(), cmd.boardId());
         AcceptTakingBackMove command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId())
-            .orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        board.acceptTakingBackLastMove(command);
-        saveBoard.saveBoard(board);
-        eventPublisher.publishDomainEvent(new BoardPiecesLocationsUpdated(command.boardId()));
+        Game game = loadBoard.loadBoard(command.gameId())
+            .orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        game.acceptTakingBackLastMove(command);
+        saveBoard.saveBoard(game);
+        eventPublisher.publishDomainEvent(new GamePiecesLocationsUpdated(command.gameId()));
         log.info("User {} successfully accepted taking back last move offer on board with id = {}", cmd.username(), cmd.boardId());
     }
 
     @Override
     public void deleteBoardWithFinishedGame(DeleteBoardWithFinishedGameCmd cmd) {
         log.info("Deleting board with finished game with id = {}", cmd.boardId());
-        DeleteBoardWithFinishedGame command = cmd.toCommand();
-        deleteBoard.deleteBoard(command.boardId());
+        DeleteGameWithFinishedGame command = cmd.toCommand();
+        deleteBoard.deleteBoard(command.gameId());
         log.info("Successfully deleted board with finished game with id = {}", cmd.boardId());
     }
 
     @Override
     public void quitOccupiedBoard(QuitOccupiedBoardCmd cmd) {
         log.info("Quiting occupied board with id: {} by username: {} ", cmd.boardId(), cmd.username());
-        QuitOccupiedBoard command = cmd.toCommand();
-        Board board = loadBoard.loadBoard(command.boardId()).orElseThrow(() -> new BoardNotFoundException(command.boardId()));
-        Player whitePlayer = board.boardState().whitePlayer();
-        Player blackPlayer = board.boardState().blackPlayer();
+        QuitOccupiedGame command = cmd.toCommand();
+        Game game = loadBoard.loadBoard(command.gameId()).orElseThrow(() -> new GameNotFoundException(command.gameId()));
+        Player whitePlayer = game.gameInfo().whitePlayer();
+        Player blackPlayer = game.gameInfo().blackPlayer();
         if (Objects.equals(whitePlayer.username(), command.username()) && blackPlayer == null) {
-            deleteBoard.deleteBoard(command.boardId());
+            deleteBoard.deleteBoard(command.gameId());
         } else {
-            throw new BoardCanNotBeQuitAsAlreadyStartedException(command.boardId());
+            throw new GameCanNotBeQuitAsAlreadyStartedException(command.gameId());
         }
         log.info("Player with username: {} successfully quit not yet started game on board with id: {}", cmd.username(), cmd.boardId());
     }
