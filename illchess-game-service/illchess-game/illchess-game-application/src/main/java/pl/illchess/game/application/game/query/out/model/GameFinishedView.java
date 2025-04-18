@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public record BoardGameFinishedView(
+public record GameFinishedView(
     UUID gameId,
     String whiteUsername,
     String blackUsername,

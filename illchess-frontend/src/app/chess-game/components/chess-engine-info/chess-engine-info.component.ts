@@ -2,7 +2,7 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { BestMoveAndContinuationResponse } from '../../../shared/model/stockfish/BestMoveAndContinuationResponse';
-import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
+import { GameAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
 import { EvaluationResponse } from '../../../shared/model/stockfish/EvaluationResponse';
 import { establishBestMoveAndContinuation, establishEvaluation } from '../../../shared/state/board-additional-info/board-additional-info.actions';
 import { bestMoveAndContinuation, boardAdditionalInfoSelector, evaluation } from '../../../shared/state/board-additional-info/board-additional-info.selectors';
@@ -17,13 +17,13 @@ export class ChessEngineInfoComponent implements OnInit {
 
   @Input() boardId: string;
   @Input() username: string;
-  @Input() boardAdditionalInfoView: BoardAdditionalInfoView | undefined | null;
+  @Input() boardAdditionalInfoView: GameAdditionalInfoView | undefined | null;
 
   showBestMoves: boolean = false
 
   store = inject(Store<ChessGameState>)
 
-  boardAdditionalInfoView$: Observable<BoardAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
+  boardAdditionalInfoView$: Observable<GameAdditionalInfoView> = this.store.select(boardAdditionalInfoSelector)
   boardEvaluation$: Observable<EvaluationResponse> = this.store.select(evaluation)
   bestMoveAndContinuation$: Observable<BestMoveAndContinuationResponse> = this.store.select(bestMoveAndContinuation)
 
@@ -33,7 +33,7 @@ export class ChessEngineInfoComponent implements OnInit {
         if (
           boardAdditionalInfoView?.whitePlayer?.username != this.username &&
           boardAdditionalInfoView?.blackPlayer?.username != this.username &&
-          boardAdditionalInfoView.boardId
+          boardAdditionalInfoView.gameId
         ) {
           this.store.dispatch(establishEvaluation({ boardId: this.boardId }))
           this.store.dispatch(establishBestMoveAndContinuation({ boardId: this.boardId }))

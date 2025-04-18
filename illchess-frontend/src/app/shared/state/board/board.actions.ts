@@ -1,14 +1,14 @@
 import { createAction, props } from "@ngrx/store";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
-import { BoardView } from "../../model/game/BoardView";
+import { GameView } from "../../model/game/BoardView";
 import { CheckLegalMovesRequest } from "../../model/game/CheckLegalMovesRequest";
-import { IllegalMoveResponse } from "../../model/game/IllegalMoveView";
+import { IllegalMoveView } from "../../model/game/IllegalMoveView";
 import { InitializeBoardRequest } from "../../model/game/InitializeBoardRequest";
 import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
 import { MovePieceRequest } from "../../model/game/MovePieceRequest";
 import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
-import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 import { QuitOccupiedBoardRequest } from "../../model/game/QuitOccupiedBoardRequest";
 
@@ -24,7 +24,7 @@ export const initializeBoard = createAction(
 
 export const boardLoaded = createAction(
     'Board loaded',
-    props<BoardView>()
+    props<GameView>()
 )
 
 export const boardLoadingError = createAction(
@@ -34,7 +34,7 @@ export const boardLoadingError = createAction(
 
 export const illegalMove = createAction(
     'Illegal move',
-    props<IllegalMoveResponse>()
+    props<IllegalMoveView>()
 )
 
 export const selectedPieceChanged = createAction(
@@ -74,7 +74,7 @@ export const refreshBoardWithPreMoves = createAction(
 
 export const gameFinished = createAction(
     'Game finished',
-    props<BoardGameObtainedInfoView>()
+    props<GameObtainedInfoView>()
 )
 
 export const gameFinishedLoaded = createAction(

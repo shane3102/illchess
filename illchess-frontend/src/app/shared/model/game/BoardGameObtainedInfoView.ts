@@ -1,4 +1,4 @@
-export interface BoardGameObtainedInfoView {
-    boardId: string
+export interface GameObtainedInfoView {
+    gameId: string
     status: 'SUCCESS' | 'ERROR'
 }

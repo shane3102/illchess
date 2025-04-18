@@ -1,15 +1,15 @@
 import { createReducer, on } from "@ngrx/store";
-import { ActiveBoardsView } from "../../model/game/ActiveBoardsView";
+import { ActiveGamesView } from "../../model/game/ActiveBoardsView";
 import { activeBoardsRefreshed, newActiveBoardObtained, removeFinishedBoardFromActiveBoard } from "../../../shared/state/active-boards/active-boards.actions";
-import { ActiveBoardNewView } from "../../model/game/ActiveBoardNewView";
+import { ActiveGameNewView } from "../../model/game/ActiveBoardNewView";
 
 export interface ActiveBoardsState {
-    activeBoardsView: ActiveBoardsView
+    activeBoardsView: ActiveGamesView
 }
 
 export const initialState: ActiveBoardsState = {
     activeBoardsView: {
-        activeBoardsIds: []
+        activeGameIds: []
     }
 }
 
@@ -19,7 +19,7 @@ export const activeBoardsReducer = createReducer(
     // Full list of active boards obtained
     on(
         activeBoardsRefreshed,
-        (state:  ActiveBoardsState, content: ActiveBoardsView) => (
+        (state:  ActiveBoardsState, content: ActiveGamesView) => (
             {
                 ...state,
                 activeBoardsView: content
@@ -30,13 +30,13 @@ export const activeBoardsReducer = createReducer(
     // New active board obtained
     on(
         newActiveBoardObtained,
-        (state: ActiveBoardsState, content: ActiveBoardNewView) => (
+        (state: ActiveBoardsState, content: ActiveGameNewView) => (
             {
                 ...state,
                 activeBoardsView: {
-                    activeBoardsIds: state.activeBoardsView.activeBoardsIds.includes(content.boardId) 
-                        ? state.activeBoardsView.activeBoardsIds 
-                        :  [...state.activeBoardsView.activeBoardsIds, content.boardId]
+                    activeGameIds: state.activeBoardsView.activeGameIds.includes(content.gameId) 
+                        ? state.activeBoardsView.activeGameIds 
+                        :  [...state.activeBoardsView.activeGameIds, content.gameId]
                 }
             }
         )
@@ -49,7 +49,7 @@ export const activeBoardsReducer = createReducer(
             {
                 ...state,
                 activeBoardsView: {
-                    activeBoardsIds: state.activeBoardsView.activeBoardsIds.filter(it => it != content.boardId)
+                    activeGameIds: state.activeBoardsView.activeGameIds.filter(it => it != content.boardId)
                 }
             }
         )

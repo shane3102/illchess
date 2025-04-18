@@ -1,5 +1,5 @@
-export interface BoardAdditionalInfoView {
-    boardId: string,
+export interface GameAdditionalInfoView {
+    gameId: string,
     currentPlayerColor: string,
     whitePlayer?: PlayerView,
     blackPlayer?: PlayerView,

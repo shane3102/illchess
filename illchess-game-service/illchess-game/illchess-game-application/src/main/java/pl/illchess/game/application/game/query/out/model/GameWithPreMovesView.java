@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public record BoardWithPreMovesView(
-    UUID boardId,
+public record GameWithPreMovesView(
+    UUID gameId,
     Map<String, PieceView> piecesLocations,
     MoveView lastPerformedMove,
     List<MoveView> preMoves,

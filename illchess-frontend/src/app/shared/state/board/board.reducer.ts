@@ -1,26 +1,26 @@
 import { createReducer, on } from "@ngrx/store";
 import { BoardLegalMovesResponse } from "../../model/game/BoardLegalMovesResponse";
-import { BoardView } from "../../model/game/BoardView";
+import { GameView } from "../../model/game/BoardView";
 import { InitializedBoardResponse } from "../../model/game/InitializedBoardResponse";
 import { PieceSelectedInfo } from "../../model/game/PieceSelectedInfo";
 import { boardInitialized, boardLoaded, selectedPieceChanged, draggedPieceReleased, gameFinished, gameFinishedLoaded, illegalMove, initializeBoard, legalMovesChanged, movePiece } from "./board.actions";
-import { BoardGameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
+import { GameObtainedInfoView } from "../../model/game/BoardGameObtainedInfoView";
 import { GameFinishedView } from "../../model/player-info/GameFinishedView";
 
 
 export interface BoardState {
-    boardView: BoardView;
+    boardView: GameView;
     error: string;
     illegalMoveHighlightSquare: string
     illegalMoveMessage: string
     pieceSelectedInfo?: PieceSelectedInfo,
     legalMoves?: BoardLegalMovesResponse,
-    gameFinishedInfo: {boardGameObtainedInfoView?: BoardGameObtainedInfoView, gameFinishedView?: GameFinishedView}
+    gameFinishedInfo: {boardGameObtainedInfoView?: GameObtainedInfoView, gameFinishedView?: GameFinishedView}
     status: 'pending' | 'loading' | 'error' | 'success'
 }
 
 export const initialState: BoardState = {
-    boardView: { boardId: '', piecesLocations: {}},
+    boardView: { gameId: '', piecesLocations: {}},
     error: '',
     illegalMoveHighlightSquare: '',
     illegalMoveMessage: '',
@@ -35,7 +35,7 @@ export const boardReducer = createReducer(
     // update board
     on(
         boardLoaded,
-        (state: BoardState, content: BoardView) => (
+        (state: BoardState, content: GameView) => (
             {
                 ...state,
                 boardView: content,
@@ -116,7 +116,7 @@ export const boardReducer = createReducer(
                 gameFinishedInfo: {},
                 boardView: {
                     ...state.boardView,
-                    "boardId": content.id
+                    "gameId": content.id
                 }
             }
         )
@@ -128,7 +128,7 @@ export const boardReducer = createReducer(
         (state: BoardState) => (
             {
                 ...state,
-                boardView: { boardId: '', piecesLocations: {}}
+                boardView: { gameId: '', piecesLocations: {}}
             }
         )
     ),
@@ -136,7 +136,7 @@ export const boardReducer = createReducer(
     // game finished info obtained
     on(
         gameFinished,
-        (state: BoardState, content: BoardGameObtainedInfoView) => (
+        (state: BoardState, content: GameObtainedInfoView) => (
             {
                 ...state,
                 gameFinishedInfo: {...state.gameFinishedInfo, boardGameObtainedInfoView: content}

@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BoardAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
+import { GameAdditionalInfoView } from '../../../shared/model/game/BoardAdditionalInfoView';
 import { PieceColor } from '../../../shared/model/game/PieceInfo';
 import { RefreshBoardDto } from '../../../shared/model/game/RefreshBoardRequest';
 import { ChessBoardWebsocketService } from '../../../shared/service/GameWebsocketService';
@@ -19,7 +19,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit, OnDestroy {
 
   @Input() boardId: string;
   @Input() username: string;
-  @Input() boardAdditionalInfoView: BoardAdditionalInfoView | undefined | null
+  @Input() boardAdditionalInfoView: GameAdditionalInfoView | undefined | null
 
   private store = inject(Store<ChessGameState>)
   private chessBoardWebSocketService = inject(ChessBoardWebsocketService)
@@ -32,7 +32,7 @@ export class ChessBoardAdditionalInfoComponent implements OnInit, OnDestroy {
         this.boardAdditionalInfoSubscription$ = await this.chessBoardWebSocketService.subscribe(
           `/chess-topic/additional-info/${this.boardId}`,
           (response: any) => {
-            let boardAdditionalInfoView: BoardAdditionalInfoView = JSON.parse(response)
+            let boardAdditionalInfoView: GameAdditionalInfoView = JSON.parse(response)
             this.store.dispatch(boardAdditionalInfoLoaded(boardAdditionalInfoView))
           }
         )

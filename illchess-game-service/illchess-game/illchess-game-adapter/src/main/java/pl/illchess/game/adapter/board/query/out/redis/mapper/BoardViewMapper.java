@@ -7,11 +7,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
-import pl.illchess.game.application.game.query.out.model.BoardAdditionalInfoView;
-import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView;
-import pl.illchess.game.application.game.query.out.model.BoardGameFinishedView.PerformedMovesGameFinishedView;
-import pl.illchess.game.application.game.query.out.model.BoardView;
-import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.model.GameAdditionalInfoView;
+import pl.illchess.game.application.game.query.out.model.GameFinishedView;
+import pl.illchess.game.application.game.query.out.model.GameFinishedView.PerformedMovesGameFinishedView;
+import pl.illchess.game.application.game.query.out.model.GameView;
+import pl.illchess.game.application.game.query.out.model.GameWithPreMovesView;
 import pl.illchess.game.application.game.query.out.model.MoveView;
 import pl.illchess.game.application.game.query.out.model.PieceView;
 import pl.illchess.game.application.game.query.out.model.PlayerView;
@@ -19,11 +19,11 @@ import pl.illchess.game.domain.piece.model.info.PieceType;
 
 public class BoardViewMapper {
 
-    public static BoardWithPreMovesView toViewAsPreMove(GameEntity entity, List<GameEntity.PreMoveEntity> userPreMoves, List<GameEntity.PieceEntity> pieces) {
+    public static GameWithPreMovesView toViewAsPreMove(GameEntity entity, List<GameEntity.PreMoveEntity> userPreMoves, List<GameEntity.PieceEntity> pieces) {
         if (entity == null) {
             return null;
         } else {
-            return new BoardWithPreMovesView(
+            return new GameWithPreMovesView(
                 entity.gameId(),
                 toPiecesLocations(pieces),
                 toLastPerformedMove(entity),
@@ -34,11 +34,11 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardView toView(GameEntity entity) {
+    public static GameView toView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
-            return new BoardView(
+            return new GameView(
                 entity.gameId(),
                 toPiecesLocations(entity.piecesLocations()),
                 toLastPerformedMove(entity),
@@ -48,14 +48,14 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardAdditionalInfoView toAdditionalInfoView(GameEntity entity) {
+    public static GameAdditionalInfoView toAdditionalInfoView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
 
             Supplier<Stream<GameEntity.MoveEntity>> capturedPiecesStreamSupplier = () -> entity.moveStackData().stream().filter(it -> it.capturedPiece() != null);
 
-            return new BoardAdditionalInfoView(
+            return new GameAdditionalInfoView(
                 entity.gameId(),
                 entity.boardState().currentPlayerColor(),
                 new PlayerView(
@@ -87,11 +87,11 @@ public class BoardViewMapper {
         }
     }
 
-    public static BoardGameFinishedView toBoardWithFinishedGameView(GameEntity entity) {
+    public static GameFinishedView toBoardWithFinishedGameView(GameEntity entity) {
         if (entity == null) {
             return null;
         } else {
-            return new BoardGameFinishedView(
+            return new GameFinishedView(
                 entity.gameId(),
                 entity.boardState().whitePlayer().username(),
                 entity.boardState().blackPlayer().username(),

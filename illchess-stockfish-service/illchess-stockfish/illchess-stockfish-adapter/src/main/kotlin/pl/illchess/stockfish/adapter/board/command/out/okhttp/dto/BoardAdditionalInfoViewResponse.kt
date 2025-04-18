@@ -5,7 +5,7 @@ import java.util.UUID
 
 @RegisterForReflection
 data class BoardAdditionalInfoViewResponse(
-    val boardId: UUID,
+    val gameId: UUID,
     val currentPlayerColor: String,
     val whitePlayer: PlayerView,
     val blackPlayer: PlayerView?,

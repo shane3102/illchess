@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { from, map, switchMap } from "rxjs";
 import { AcceptDrawRequest } from "../../model/game/AcceptDrawRequest";
 import { AcceptTakingBackMoveRequest } from "../../model/game/AcceptTakingBackMoveRequest";
-import { BoardAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
+import { GameAdditionalInfoView } from "../../model/game/BoardAdditionalInfoView";
 import { ProposeDrawRequest } from "../../model/game/ProposeDrawRequest";
 import { ProposeTakingBackMoveRequest } from "../../model/game/ProposeTakingBackMoveRequest";
 import { RefreshBoardDto } from "../../model/game/RefreshBoardRequest";
@@ -31,7 +31,7 @@ export class BoardAdditionalInfoEffects {
             switchMap(
                 (dto: RefreshBoardDto) => from(this.chessBoardService.refreshBoardAdditionalInfo(dto.boardId))
                     .pipe(
-                        map((response: BoardAdditionalInfoView) => boardAdditionalInfoLoaded(response))
+                        map((response: GameAdditionalInfoView) => boardAdditionalInfoLoaded(response))
                     )
             )
         )

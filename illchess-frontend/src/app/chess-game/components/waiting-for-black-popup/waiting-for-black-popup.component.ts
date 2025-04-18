@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BoardView } from 'src/app/shared/model/game/BoardView';
+import { GameView } from 'src/app/shared/model/game/BoardView';
 import { quitNotYetStartedGame } from 'src/app/shared/state/board/board.actions';
 import { ChessGameState } from 'src/app/shared/state/chess-game.state';
 

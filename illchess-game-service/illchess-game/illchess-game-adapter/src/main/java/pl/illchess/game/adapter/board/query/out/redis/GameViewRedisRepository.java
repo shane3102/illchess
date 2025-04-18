@@ -5,10 +5,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import pl.illchess.game.adapter.board.command.out.redis.model.GameEntity;
 import pl.illchess.game.adapter.board.query.out.redis.mapper.BoardViewMapper;
-import pl.illchess.game.application.game.query.out.BoardViewPreMoveByUserQueryPort;
-import pl.illchess.game.application.game.query.out.BoardViewQueryPort;
-import pl.illchess.game.application.game.query.out.model.BoardView;
-import pl.illchess.game.application.game.query.out.model.BoardWithPreMovesView;
+import pl.illchess.game.application.game.query.out.GameViewPreMoveByUserQueryPort;
+import pl.illchess.game.application.game.query.out.GameViewQueryPort;
+import pl.illchess.game.application.game.query.out.model.GameView;
+import pl.illchess.game.application.game.query.out.model.GameWithPreMovesView;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,23 +17,23 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class BoardViewRedisRepository implements BoardViewQueryPort, BoardViewPreMoveByUserQueryPort {
+public class GameViewRedisRepository implements GameViewQueryPort, GameViewPreMoveByUserQueryPort {
 
     private static final String BOARD_HASH_KEY = "BOARD";
 
     private final RedisTemplate<String, GameEntity> template;
 
     @Override
-    public Optional<BoardView> findById(UUID boardId) {
+    public Optional<GameView> findById(UUID boardId) {
         GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
 
-        BoardView board = BoardViewMapper.toView(readGameEntity);
+        GameView board = BoardViewMapper.toView(readGameEntity);
 
         return Optional.ofNullable(board);
     }
 
     @Override
-    public Optional<BoardWithPreMovesView> findByIdAndUsername(UUID boardId, String username) {
+    public Optional<GameWithPreMovesView> findByIdAndUsername(UUID boardId, String username) {
         GameEntity readGameEntity = (GameEntity) template.opsForHash().get(BOARD_HASH_KEY, boardId.toString());
         if (Objects.equals(readGameEntity == null ? null : readGameEntity.boardState().whitePlayer().username(), username)) {
             return Optional.ofNullable(getBoardPreMoveViewByPlayer(readGameEntity, readGameEntity.boardState().whitePlayer()));
@@ -44,7 +44,7 @@ public class BoardViewRedisRepository implements BoardViewQueryPort, BoardViewPr
         }
     }
 
-    private static BoardWithPreMovesView getBoardPreMoveViewByPlayer(GameEntity readGameEntity, GameEntity.PlayerEntity player) {
+    private static GameWithPreMovesView getBoardPreMoveViewByPlayer(GameEntity readGameEntity, GameEntity.PlayerEntity player) {
         List<GameEntity.PreMoveEntity> userPreMoves = player.preMoves();
         if (userPreMoves.isEmpty()) {
             return null;
