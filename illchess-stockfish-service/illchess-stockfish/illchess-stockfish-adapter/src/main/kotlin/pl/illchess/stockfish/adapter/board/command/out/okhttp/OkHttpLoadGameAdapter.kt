@@ -79,8 +79,7 @@ class OkHttpLoadGameAdapter(
                     it.currentPlayerColor,
                     Username(it.whitePlayer.username),
                     if (it.blackPlayer == null) null else Username(it.blackPlayer.username),
-                    it.gameState,
-                    it.victoriousPlayerColor
+                    it.gameState
                 )
             }
 
