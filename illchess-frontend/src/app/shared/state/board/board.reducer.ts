@@ -101,7 +101,6 @@ export const boardReducer = createReducer(
         (state: BoardState) => (
             {
                 ...state,
-                pieceSelectedInfo: undefined,
                 legalMoves: undefined
             }
         )

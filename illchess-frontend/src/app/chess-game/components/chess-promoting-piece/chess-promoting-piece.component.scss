@@ -16,9 +16,12 @@
     width: $chess-square-size;
     height: $chess-square-size;
     display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: rgba(150, 75, 0, 0.5);
     border-radius: calc($chess-square-size/2);
     z-index: 2;
+    overflow: visible;
 }
 
 .promotion-square-background {
