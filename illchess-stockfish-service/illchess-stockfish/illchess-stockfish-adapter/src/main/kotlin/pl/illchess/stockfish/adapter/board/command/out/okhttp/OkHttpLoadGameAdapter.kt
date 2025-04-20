@@ -23,7 +23,7 @@ import pl.illchess.stockfish.application.board.command.out.BotResignGame
 import pl.illchess.stockfish.application.board.command.out.JoinOrInitializeGame
 import pl.illchess.stockfish.application.board.command.out.LoadGame
 import pl.illchess.stockfish.application.board.command.out.LoadGameAdditionalInfo
-import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
+import pl.illchess.stockfish.domain.board.domain.GameAdditionalInfo
 import pl.illchess.stockfish.domain.board.domain.GameId
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.bot.command.PerformMove
@@ -61,20 +61,20 @@ class OkHttpLoadGameAdapter(
         return fenBoardPosition
     }
 
-    override fun loadGameAdditionalInfo(gameId: GameId): BoardAdditionalInfo? {
+    override fun loadGameAdditionalInfo(gameId: GameId): GameAdditionalInfo? {
         val request: Request = Request.Builder()
             .url("${gameServiceUrl}/api/game/refresh/info/${gameId.uuid}")
             .build()
         val call = okHttpClient.newCall(request)
         val response = call.execute()
 
-        val boardAdditionalInfo: BoardAdditionalInfo? =
+        val gameAdditionalInfo: GameAdditionalInfo? =
             if (response.body == null || response.code != 200) null
             else objectMapper.readValue(
                 response.body?.string(),
                 BoardAdditionalInfoViewResponse::class.java
             ).let {
-                BoardAdditionalInfo(
+                GameAdditionalInfo(
                     GameId(it.gameId),
                     it.currentPlayerColor,
                     Username(it.whitePlayer.username),
@@ -84,7 +84,7 @@ class OkHttpLoadGameAdapter(
                 )
             }
 
-        return boardAdditionalInfo
+        return gameAdditionalInfo
     }
 
     override fun joinOrInitialize(username: Username): GameId? {

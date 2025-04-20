@@ -14,20 +14,20 @@ class BoardCommandController(
     private val establishListOfTopMovesUseCase: EstablishListOfTopMovesUseCase
 ) : BoardCommandApi {
 
-    override fun evaluateBoard(boardId: UUID): EvaluationResponse {
-        val cmd = EvaluateBoardUseCase.EvaluateBoardCmd(boardId)
+    override fun evaluateBoard(gameId: UUID): EvaluationResponse {
+        val cmd = EvaluateBoardUseCase.EvaluateBoardCmd(gameId)
         val result = evaluateBoardUseCase.evaluateBoard(cmd)
         return EvaluationResponse(result.value)
     }
 
-    override fun establishBestMoveAndContinuation(boardId: UUID, depth: Int?): BestMoveAndContinuationResponse {
-        val cmd = EstablishBestMoveAndContinuationUseCase.EstablishBestMoveAndContinuationCmd(boardId, depth)
+    override fun establishBestMoveAndContinuation(gameId: UUID, depth: Int?): BestMoveAndContinuationResponse {
+        val cmd = EstablishBestMoveAndContinuationUseCase.EstablishBestMoveAndContinuationCmd(gameId, depth)
         val result = bestMoveAndContinuationUseCase.establishBestMoveAndContinuation(cmd)
         return BestMoveAndContinuationResponse(result.bestMove, result.continuation)
     }
 
-    override fun establishTopMoves(moveCount: Int, boardId: UUID, depth: Int?): TopMovesResponse {
-        val cmd = EstablishListOfTopMovesUseCase.EstablishListOfTopMovesCmd(boardId, moveCount, depth)
+    override fun establishTopMoves(moveCount: Int, gameId: UUID, depth: Int?): TopMovesResponse {
+        val cmd = EstablishListOfTopMovesUseCase.EstablishListOfTopMovesCmd(gameId, moveCount, depth)
         val result = establishListOfTopMovesUseCase.establishListOfTopMoves(cmd)
         return TopMovesResponse(result.topMovesList)
     }

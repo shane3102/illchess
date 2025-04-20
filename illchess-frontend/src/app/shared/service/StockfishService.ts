@@ -16,15 +16,15 @@ export class StockfishService {
 
     private http: HttpClient = inject(HttpClient)
 
-    async evaluateBoard(boardId: string): Promise<EvaluationResponse> {
+    async evaluateBoard(gameId: string): Promise<EvaluationResponse> {
         return firstValueFrom(
-            this.http.get<EvaluationResponse>(`${this.PATH}/board/${boardId}/evaluate`)
+            this.http.get<EvaluationResponse>(`${this.PATH}/board/${gameId}/evaluate`)
         )
     }
 
-    async establishBestMoveAndContinuation(boardId: string): Promise<BestMoveAndContinuationResponse> {
+    async establishBestMoveAndContinuation(gameId: string): Promise<BestMoveAndContinuationResponse> {
         return firstValueFrom(
-            this.http.get<BestMoveAndContinuationResponse>(`${this.PATH}/board/${boardId}/best-move-and-continuation`)
+            this.http.get<BestMoveAndContinuationResponse>(`${this.PATH}/board/${gameId}/best-move-and-continuation`)
         )
     }
 
