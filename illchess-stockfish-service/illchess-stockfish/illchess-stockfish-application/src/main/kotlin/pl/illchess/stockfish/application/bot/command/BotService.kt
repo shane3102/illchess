@@ -18,7 +18,7 @@ import pl.illchess.stockfish.application.bot.command.out.DeleteBot
 import pl.illchess.stockfish.application.bot.command.out.LoadBot
 import pl.illchess.stockfish.application.bot.command.out.SaveBot
 import pl.illchess.stockfish.application.evaluation.command.out.facade.TopMovesFacade
-import pl.illchess.stockfish.domain.board.domain.BoardAdditionalInfo
+import pl.illchess.stockfish.domain.board.domain.GameAdditionalInfo
 import pl.illchess.stockfish.domain.board.domain.FenBoardPosition
 import pl.illchess.stockfish.domain.board.exception.BoardNotFoundException
 import pl.illchess.stockfish.domain.bot.command.PerformMove
@@ -150,19 +150,19 @@ class BotService(
         }
     }
 
-    private fun isMyTurn(bot: Bot, boardAdditionalInfoView: BoardAdditionalInfo): Boolean {
-        return boardAdditionalInfoView.currentPlayerColor == "WHITE"
-                && bot.username.text == boardAdditionalInfoView.whitePlayerUsername.text
+    private fun isMyTurn(bot: Bot, gameAdditionalInfoView: GameAdditionalInfo): Boolean {
+        return gameAdditionalInfoView.currentPlayerColor == "WHITE"
+                && bot.username.text == gameAdditionalInfoView.whitePlayerUsername.text
                 ||
-                boardAdditionalInfoView.currentPlayerColor == "BLACK"
-                && bot.username.text == boardAdditionalInfoView.blackPlayerUsername!!.text
+                gameAdditionalInfoView.currentPlayerColor == "BLACK"
+                && bot.username.text == gameAdditionalInfoView.blackPlayerUsername!!.text
     }
 
-    private fun isBlackPlayerPresent(boardAdditionalInfoView: BoardAdditionalInfo) =
-        boardAdditionalInfoView.blackPlayerUsername != null
+    private fun isBlackPlayerPresent(gameAdditionalInfoView: GameAdditionalInfo) =
+        gameAdditionalInfoView.blackPlayerUsername != null
 
-    private fun isGameFinished(boardAdditionalInfoView: BoardAdditionalInfo) =
-        boardAdditionalInfoView.victoriousPlayerColor != null
+    private fun isGameFinished(gameAdditionalInfoView: GameAdditionalInfo) =
+        gameAdditionalInfoView.victoriousPlayerColor != null
 
     private fun wipeOutBotExistence(bot: Bot) {
         botResignGame.botResignGame(bot)

@@ -2,7 +2,7 @@ package pl.illchess.stockfish.domain.board.domain
 
 import pl.illchess.stockfish.domain.bot.domain.Username
 
-data class BoardAdditionalInfo(
+data class GameAdditionalInfo(
     val gameId: GameId,
     val currentPlayerColor: String,
     val whitePlayerUsername: Username,
