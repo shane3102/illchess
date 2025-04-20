@@ -7,6 +7,5 @@ data class GameAdditionalInfo(
     val currentPlayerColor: String,
     val whitePlayerUsername: Username,
     val blackPlayerUsername: Username?,
-    val gameState: String,
-    val victoriousPlayerColor: String?
+    val gameState: String
 )

@@ -162,7 +162,7 @@ class BotService(
         gameAdditionalInfoView.blackPlayerUsername != null
 
     private fun isGameFinished(gameAdditionalInfoView: GameAdditionalInfo) =
-        gameAdditionalInfoView.victoriousPlayerColor != null
+        gameAdditionalInfoView.gameState != "CONTINUE"
 
     private fun wipeOutBotExistence(bot: Bot) {
         botResignGame.botResignGame(bot)

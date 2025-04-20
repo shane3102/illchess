@@ -9,8 +9,7 @@ data class BoardAdditionalInfoViewResponse(
     val currentPlayerColor: String,
     val whitePlayer: PlayerView,
     val blackPlayer: PlayerView?,
-    val gameState: String,
-    val victoriousPlayerColor: String?
+    val gameState: String
 ) {
     @RegisterForReflection
     data class PlayerView(
