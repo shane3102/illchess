@@ -1,5 +1,6 @@
 package pl.illchess.stockfish.adapter.bot.command.`in`.rest
 
+import jakarta.validation.Valid
 import jakarta.ws.rs.DELETE
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
@@ -14,6 +15,6 @@ interface BotCommandApi {
     fun deleteBots(request: DeleteBotRequest): RestResponse<Void>
 
     @POST
-    fun addBots(request: AddBotRequest): RestResponse<Void>
+    fun addBots(@Valid request: AddBotRequest): RestResponse<Void>
 
 }

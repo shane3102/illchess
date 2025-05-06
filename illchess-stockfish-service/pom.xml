@@ -34,6 +34,7 @@
         <mockito.version>5.16.1</mockito.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.2.5</surefire-plugin.version>
+        <jakarta.validation.version>3.1.1</jakarta.validation.version>
     </properties>
 
 

@@ -32,8 +32,10 @@ export class BotManagmentComponent {
   added: string
 
   addBot() {
-    this.store.dispatch(addBots({ username: this.added }))
-    this.added = ""
+    if(this.added != "") {
+      this.store.dispatch(addBots({ username: this.added }))
+      this.added = ""
+    }
   }
 
   deleteBot(username: string) {
